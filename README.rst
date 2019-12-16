@@ -2,6 +2,32 @@
 python-varname
 ==============
 
+`
+.. image:: https://img.shields.io/pypi/v/python-varname?style=flat-square
+   :target: https://img.shields.io/pypi/v/python-varname?style=flat-square
+   :alt: Pypi
+ <https://pypi.org/project/python-varname/>`_ `
+.. image:: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
+   :target: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
+   :alt: Github
+ <https://github.com/pwwang/python-varname>`_ `
+.. image:: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
+   :target: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
+   :alt: PythonVers
+ <https://pypi.org/project/python-varname/>`_ `
+.. image:: https://img.shields.io/travis/pwwang/python-varname?style=flat-square
+   :target: https://img.shields.io/travis/pwwang/python-varname?style=flat-square
+   :alt: Travis building
+ <https://travis-ci.org/pwwang/python-varname>`_ `
+.. image:: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+   :target: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+   :alt: Codacy
+ <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_ `
+.. image:: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+   :target: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+   :alt: Codacy coverage
+ <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_
+
 Retrieving variable names of function or class calls
 
 Installation
