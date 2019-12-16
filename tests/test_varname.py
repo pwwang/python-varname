@@ -24,6 +24,16 @@ def test_function():
 	func = [function()]
 	assert func == ['var_1']
 
+def test_function_debug(caplog):
+	def function():
+		return varname(debug = True)
+	func = function()
+	assert '- Handing case:' in caplog.text
+	assert '(where varname() was called)' in caplog.text
+	assert 'Desired function/class was called in:' in caplog.text
+	assert 'Looking for where exactly' in caplog.text
+	assert 'Found at' in caplog.text
+
 def test_function_context():
 
 	def function(*args):
