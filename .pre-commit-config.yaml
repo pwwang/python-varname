@@ -1,0 +1,41 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+fail_fast: false
+exclude: '^README.rst$|^tests/|^setup.py$|^examples/'
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 5df1a4bf6f04a1ed3a643167b38d502575e29aef
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+-   repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.4.4
+    hooks:
+    -   id: pylint
+        files: ^varname.py$
+        pass_filenames: false
+        types: [python]
+        args: [varname]
+-   repo: local
+    hooks:
+    -   id: poetry2setuppy
+        name: Convert pyproject.toml to setup.py
+        entry: dephell deps convert --from=poetry --to=setup.py
+        language: system
+        files: pyproject.toml
+        pass_filenames: false
+    -   id: poetry2requirements
+        name: Convert pyproject.toml to requirements.txt
+        entry: dephell deps convert --from=poetry --to=requirements.txt
+        language: system
+        files: pyproject.toml
+        pass_filenames: false
+    -   id: pytest
+        name: Run pytest
+        entry: pytest
+        language: system
+        args: [tests/]
+        pass_filenames: false
+        files: ^tests/.+$|^varname.py$
