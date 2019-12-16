@@ -39,4 +39,4 @@ def varname(context = 20, caller = 1):
 			break
 		return match.group(1)
 	VARNAME_INDEX += 1
-	return f'var_{VARNAME_INDEX}'
+	return 'var_{}'.format(VARNAME_INDEX)
