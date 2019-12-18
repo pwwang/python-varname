@@ -139,6 +139,14 @@ func = function \
 - Context have to be estimated in advance, especially for functions with long argument list
 - You have to know at which stack the function/class will be called
 - For performance, since inspection is involved, better cache the name
+- Aliases are not supported
+  ```python
+  def function():
+    return varname()
+  func = function
+  
+  x = func() # unable to detect
+  ```
 
 [1]: https://github.com/pwwang/python-varname
 [3]: https://img.shields.io/pypi/v/python-varname?style=flat-square
