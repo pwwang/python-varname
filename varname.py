@@ -43,17 +43,24 @@ def varname(context = 20, caller = 1, debug = False):
 
 	if debug:
 		LOGGER.info('  Looking for where exactly %r was called ...', function)
+		LOGGER.info('  Code context (index = %s):', caller.index)
+		codelen = len(str(len(caller.code_context)))
+		for i, code in enumerate(caller.code_context):
+			LOGGER.info('  %s. %s', str(i).rjust(codelen), code.rstrip())
 	for i in reversed(range(caller.index + 1)):
 		line = caller.code_context[i]
-
+		if debug:
+			LOGGER.info('  Searching %d: %s', i, line.rstrip())
 		if '=' not in line or function not in line:
 			# it not something like 'a = func()'
 			continue
-		match = re.search(r'([\w_]+)\s*=\s*[\w_.]*' + function + r'\s*\(', line)
+		match = re.search(r'^\s*([\w_]+)\s*=\s*(?:\w+\.)*' + function + r'\s*(?:\(|$)', line)
 		if not match:
-			break
+			continue
 		if debug:
 			LOGGER.info('  Found at %r', line)
 		return match.group(1)
+	if debug:
+		LOGGER.info('  Not found.')
 	VARNAME_INDEX += 1
 	return 'var_{}'.format(VARNAME_INDEX)

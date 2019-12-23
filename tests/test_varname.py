@@ -17,12 +17,12 @@ def test_function():
 		function()
 	assert func == 'func'
 
-	func = function\
+	func = function \
 		()
-	assert func == 'var_0'
+	assert func == 'func'
 
 	func = [function()]
-	assert func == ['var_1']
+	assert func == ['var_0']
 
 def test_function_debug(caplog):
 	def function():
@@ -47,7 +47,7 @@ def test_function_context():
 		5, # argument
 		6, # list
 	)
-	assert func == 'var_2'
+	assert func == 'var_1'
 
 	def function(*args):
 		return varname(context = 20)
@@ -115,25 +115,32 @@ def test_class_deep():
 	k2 = k.copy()
 	assert k2 == 'k2'
 
-def test_two_in_one():
+def test_false():
 
-	def func(*args):
-		return varname()
+	def func(**kwargs):
+		return varname(debug = True)
 
 	def func2():
-		fun1 = func(
-			1,
-			2,
-			3,
-			4
+		return func(
+			x = func()
 		)
-		fun2 = func(
-			1,
-			2,
-			3,
-			4,
-			5
-		)
-		return fun1, fun2
+	assert func2() == 'x'
 
-	assert func2() == ('fun1', 'fun2')
+def test_referring():
+
+	def Proc(**kwargs):
+		return varname(debug = True)
+
+	def func2():
+		pProc1 = Proc(
+			input = {'infile:file': ['infile']},
+			output = 'outfile:file:{{i.infile|__import__("pathlib").Path|.stem}}.txt',
+			script = """cat {{i.infile}} > {{o.outfile}}""")
+		pProc2 = Proc(
+			input = 'infile:file',
+			output = 'outfile:file:{{i.infile|__import__("pathlib").Path|.stem}}.txt',
+			script = """echo world >> {{o.outfile}}""",
+			depends = pProc1)
+		return pProc1, pProc2
+
+	assert func2() == ('pProc1', 'pProc2')

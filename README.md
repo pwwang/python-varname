@@ -29,9 +29,9 @@ func = function(
 func = \
     function()
 
-# calls lead to failure of retrieving
 func = function \
     ()
+# calls lead to failure of retrieving
 func = [function()]
 ```
 
@@ -144,8 +144,17 @@ func = function \
   def function():
     return varname()
   func = function
-  
+
   x = func() # unable to detect
+  ```
+- False positives
+  ```python
+  def func(**kwargs):
+      return varname()
+  x = func(
+      y = func()
+  )
+  # x == 'y'
   ```
 
 [1]: https://github.com/pwwang/python-varname
