@@ -115,3 +115,25 @@ def test_class_deep():
 	k2 = k.copy()
 	assert k2 == 'k2'
 
+def test_two_in_one():
+
+	def func(*args):
+		return varname()
+
+	def func2():
+		fun1 = func(
+			1,
+			2,
+			3,
+			4
+		)
+		fun2 = func(
+			1,
+			2,
+			3,
+			4,
+			5
+		)
+		return fun1, fun2
+
+	assert func2() == ('fun1', 'fun2')
