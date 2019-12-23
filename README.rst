@@ -60,9 +60,9 @@ Retrieving the variable name inside a function
    func = \
        function()
 
-   # calls lead to failure of retrieving
    func = function \
        ()
+   # calls lead to failure of retrieving
    func = [function()]
 
 Function with long argument list
@@ -181,3 +181,30 @@ Limitations
 * Context have to be estimated in advance, especially for functions with long argument list
 * You have to know at which stack the function/class will be called
 * For performance, since inspection is involved, better cache the name
+* 
+  Aliases are not supported
+
+  .. code-block:: python
+
+     def function():
+       return varname()
+     func = function
+
+     x = func() # unable to detect
+
+* 
+  False positives
+
+  .. code-block:: python
+
+     def func(**kwargs):
+         return varname()
+     x = func(
+         y = func()
+     )
+     # x == 'y'
+
+     # to avoid this, you have to write the kwargs
+     # in the same line where the is called
+     x = func(y=func())
+     # x == 'x'

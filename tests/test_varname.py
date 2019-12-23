@@ -118,18 +118,23 @@ def test_class_deep():
 def test_false():
 
 	def func(**kwargs):
-		return varname(debug = True)
+		return varname()
 
-	def func2():
-		return func(
-			x = func()
-		)
-	assert func2() == 'x'
+	x = func(
+		y = func()
+	)
+	assert x == 'y'
+
+	def func(**kwargs):
+		return varname()
+
+	x = func(y = func())
+	assert x == 'x'
 
 def test_referring():
 
 	def Proc(**kwargs):
-		return varname(debug = True)
+		return varname()
 
 	def func2():
 		pProc1 = Proc(

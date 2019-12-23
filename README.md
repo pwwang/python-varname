@@ -155,6 +155,11 @@ func = function \
       y = func()
   )
   # x == 'y'
+
+  # to avoid this, you have to write the kwargs
+  # in the same line where the is called
+  x = func(y=func())
+  # x == 'x'
   ```
 
 [1]: https://github.com/pwwang/python-varname

@@ -3,7 +3,7 @@ import re
 import inspect
 import logging
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 VARNAME_INDEX = -1
 LOGGER = logging.getLogger(__name__)
