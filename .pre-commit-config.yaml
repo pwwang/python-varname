@@ -10,6 +10,14 @@ repos:
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: check-added-large-files
+-   repo: local
+    hooks:
+    -   id: masterpylintrc
+        name: Overwrite local .pylintrc by master one
+        entry: cp ../.pylintrc ./.pylintrc
+        pass_filenames: false
+        always_run: true
+        language: system
 -   repo: https://github.com/pre-commit/mirrors-pylint
     rev: v2.4.4
     hooks:
