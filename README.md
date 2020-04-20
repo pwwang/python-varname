@@ -132,7 +132,10 @@ from varname import Wrapper
 foo = Wrapper(True)
 bar = Wrapper(False)
 
-my_dict = {val.name: val.value for val in (foo, bar)}
+def values_to_dict(*args):
+    return {val.name: val.value for val in args}
+
+mydict = values_to_dict(foo, bar)
 # {'foo': True, 'bar': False}
 ```
 
