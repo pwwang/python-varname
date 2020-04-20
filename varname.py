@@ -49,3 +49,17 @@ def varname(caller=1):
     warnings.warn(f"var_{VARNAME_INDEX[0]} used.",
                   UnableToRetrieveVarnameWarning)
     return f"var_{VARNAME_INDEX[0]}"
+
+class Wrapper:
+    """A wrapper with ability to retrieve the variable name"""
+
+    def __init__(self, value):
+        self.name = varname()
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+    def __repr__(self):
+        return (f"<{self.__class__.__name__} "
+                f"(name={self.name!r}, value={self.value!r})>")

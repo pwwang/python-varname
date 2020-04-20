@@ -1,5 +1,5 @@
 import pytest
-from varname import varname, VarnameAssignedToInvalidVariable, MultipleTargetAssignmentWarning
+from varname import varname, VarnameAssignedToInvalidVariable, MultipleTargetAssignmentWarning, Wrapper
 
 def test_function():
 
@@ -193,3 +193,11 @@ def test_unusual():
     x = func()
     assert x == 'x'
 
+def test_wrapper():
+
+    val1 = Wrapper(True)
+    assert val1.name == 'val1'
+    assert val1.value is True
+
+    assert str(val1) == 'True'
+    assert repr(val1) == "<Wrapper (name='val1', value=True)>"

@@ -124,6 +124,18 @@ func = function2()
 # func == 'func'
 ```
 
+## A value wrapper
+
+```python
+from varname import Wrapper
+
+foo = Wrapper(True)
+bar = Wrapper(False)
+
+my_dict = {val.name: val.value for val in (foo, bar)}
+# {'foo': True, 'bar': False}
+```
+
 ## Limitations
 - Not working in `REPL`
 - ~~Calls have to be written in desired format~~ (they don't have to since `v0.1.0`)
