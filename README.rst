@@ -1,3 +1,6 @@
+.. role:: raw-html-m2r(raw)
+   :format: html
+
 
 python-varname
 ==============
@@ -62,41 +65,9 @@ Retrieving the variable name inside a function
 
    func = function \
        ()
-   # calls lead to failure of retrieving
-   func = [function()]
 
-Function with long argument list
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   def function(*args):
-       return varname()
-
-   func = function(
-       1, # I
-       2, # have
-       3, # a
-       4, # long
-       5, # argument
-       6, # list
-   )
-
-   # func == 'var_0'
-
-   def function(*args):
-       return varname(context = 20)
-
-   func = function(
-       1, # I
-       2, # have
-       3, # a
-       4, # long
-       5, # argument
-       6, # list
-   )
-
-   # func == 'func'
+   func = (function
+           ())
 
 ``varname`` calls being buried deeply
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -105,7 +76,7 @@ Function with long argument list
 
    def function():
        # I know that at which stack this will be called
-       return varname(caller = 3)
+       return varname(caller=3)
 
    def function1():
        return function()
@@ -143,7 +114,7 @@ Retrieving instance name of a class object
            self.id = self.some_internal()
 
        def some_internal(self):
-           return varname(caller = 2)
+           return varname(caller=2)
 
        def copy(self):
            return self.copy_id()
@@ -152,7 +123,7 @@ Retrieving instance name of a class object
            return self.copy_id_internal()
 
        def copy_id_internal(self):
-           return varname(caller = 3)
+           return varname(caller=3)
 
    k = Klass()
    # k.id == 'k'
@@ -160,51 +131,71 @@ Retrieving instance name of a class object
    k2 = k.copy()
    # k2 == 'k2'
 
-In case of failure to retrieve the name
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-``varname`` has a static index starts from ``0`` to mark the variable name with failure.
+Some unusual use
+----------------
 
 .. code-block:: python
 
    func = [function()]
-   # func == ['var_0']
-   func = function \
-       ()
-   # func == 'var_1'
+   # func == ['func']
+
+   func = [function(), function()]
+   # func == ['func', 'func']
+
+   func = function(), function()
+   # func = ('func', 'func')
+
+   func = func1 = function()
+   # func == func1 == 'func1'
+   # a warning will be printed
+
+   x = func(
+       y = func()
+   )
+   # x == 'x'
+
+   # This is heresy
+   func_abc = function()[-3:]
+   # func_abc == 'abc'
+
+   # function alias supported now
+   function2 = function
+   func = function2()
+   # func == 'func'
 
 Limitations
 -----------
 
 
-* Calls have to be written in desired format
-* Context have to be estimated in advance, especially for functions with long argument list
+* Not working in ``REPL``
+* :raw-html-m2r:`<del>Calls have to be written in desired format</del>` (they don't have to since ``v0.1.0``\ )
+* :raw-html-m2r:`<del>Context has to be estimated in advance, especially for functions with long argument list</del>` (it doesn't have to since ``v0.1.0``\ )
 * You have to know at which stack the function/class will be called
 * For performance, since inspection is involved, better cache the name
 * 
-  Aliases are not supported
+  :raw-html-m2r:`<del>Aliases are not supported</del>` (supported since ``v0.1.0``\ )
 
-  .. code-block:: python
+  .. code-block:: diff
 
-     def function():
-       return varname()
-     func = function
+     - def function():
+     -   return varname()
+     - func = function
 
-     x = func() # unable to detect
+     - x = func() # unable to detect
 
 * 
-  False positives
+  :raw-html-m2r:`<del>False positives</del>` (Able to detect since ``v0.1.0``\ )
 
-  .. code-block:: python
+  .. code-block:: diff
 
-     def func(**kwargs):
-         return varname()
-     x = func(
-         y = func()
-     )
-     # x == 'y'
+     - def func(**kwargs):
+     -     return varname()
+     - x = func(
+     -     y = func()
+     - )
+     - # x == 'y'
 
-     # to avoid this, you have to write the kwargs
-     # in the same line where the is called
-     x = func(y=func())
-     # x == 'x'
+     - # to avoid this, you have to write the kwargs
+     - # in the same line where the is called
+     - x = func(y=func())
+     - # x == 'x'

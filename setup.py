@@ -23,7 +23,7 @@ setup(
     name='python-varname',
     version='0.0.3',
     description='Retrieving variable names of function or class calls.',
-    python_requires='==3.*,>=3.5.0',
+    python_requires='==3.*,>=3.6.0',
     project_urls={
         "homepage": "https://github.com/pwwang/python-varname",
         "repository": "https://github.com/pwwang/python-varname"

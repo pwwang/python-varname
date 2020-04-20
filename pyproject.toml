@@ -15,7 +15,7 @@ repository = "https://github.com/pwwang/python-varname"
 include = "varname.py"
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 executing = "*"
 
 [tool.poetry.dev-dependencies]
