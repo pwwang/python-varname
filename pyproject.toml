@@ -16,6 +16,7 @@ include = "varname.py"
 
 [tool.poetry.dependencies]
 python = "^3.5"
+executing = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
