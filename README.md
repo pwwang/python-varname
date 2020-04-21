@@ -140,7 +140,7 @@ mydict = values_to_dict(foo, bar)
 ```
 
 ## Limitations
-- Not working in `REPL`
+- Working in `ipython REPL` but not standard `python console`
 - ~~Calls have to be written in desired format~~ (they don't have to since `v0.1.0`)
 - ~~Context has to be estimated in advance, especially for functions with long argument list~~ (it doesn't have to since `v0.1.0`)
 - You have to know at which stack the function/class will be called
