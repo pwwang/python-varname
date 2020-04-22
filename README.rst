@@ -163,11 +163,27 @@ Some unusual use
    func = function2()
    # func == 'func'
 
+A value wrapper
+---------------
+
+.. code-block:: python
+
+   from varname import Wrapper
+
+   foo = Wrapper(True)
+   bar = Wrapper(False)
+
+   def values_to_dict(*args):
+       return {val.name: val.value for val in args}
+
+   mydict = values_to_dict(foo, bar)
+   # {'foo': True, 'bar': False}
+
 Limitations
 -----------
 
 
-* Not working in ``REPL``
+* Working in ``ipython REPL`` but not standard ``python console``
 * :raw-html-m2r:`<del>Calls have to be written in desired format</del>` (they don't have to since ``v0.1.0``\ )
 * :raw-html-m2r:`<del>Context has to be estimated in advance, especially for functions with long argument list</del>` (it doesn't have to since ``v0.1.0``\ )
 * You have to know at which stack the function/class will be called
