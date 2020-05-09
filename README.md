@@ -114,7 +114,7 @@ x = func(
 )
 # x == 'x'
 
-# This is heresy
+# get part of the name
 func_abc = function()[-3:]
 # func_abc == 'abc'
 
@@ -124,7 +124,7 @@ func = function2()
 # func == 'func'
 ```
 
-## A value wrapper
+## A value wrapper (added in v0.1.1)
 
 ```python
 from varname import Wrapper
@@ -137,6 +137,28 @@ def values_to_dict(*args):
 
 mydict = values_to_dict(foo, bar)
 # {'foo': True, 'bar': False}
+```
+
+## Getting variable names directly (added in v0.2.0)
+
+```python
+from varname import varname, nameof
+
+a = 1
+aname = nameof(a)
+# aname == 'a
+
+b = 2
+aname, bname = nameof(a, b)
+# aname == 'a', bname == 'b'
+
+def func():
+    return varname() + '_suffix'
+
+f = func()
+# f == 'f_suffix'
+fname = nameof(f)
+# fname == 'f'
 ```
 
 ## Limitations
@@ -166,6 +188,15 @@ mydict = values_to_dict(foo, bar)
   - # in the same line where the is called
   - x = func(y=func())
   - # x == 'x'
+  ```
+- `nameof` cannot be used in statements
+  ```
+  a = 1
+  assert nameof(a) == 'a'
+  # IncorrectUseOfNameof: Should not use nameof it in statements.
+  # The right way:
+  aname = nameof(a)
+  assert aname == 'a'
   ```
 
 [1]: https://github.com/pwwang/python-varname

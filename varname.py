@@ -17,6 +17,9 @@ class MultipleTargetAssignmentWarning(Warning):
 class UnableToRetrieveVarnameWarning(Warning):
     """When multiple-target assignment found, i.e. y = x = func()"""
 
+class IncorrectUseOfNameof(Exception):
+    """When nameof is used in statement"""
+
 def varname(caller=1):
     """Get the variable name that assigned by function/class calls
     @params:
@@ -49,6 +52,30 @@ def varname(caller=1):
     warnings.warn(f"var_{VARNAME_INDEX[0]} used.",
                   UnableToRetrieveVarnameWarning)
     return f"var_{VARNAME_INDEX[0]}"
+
+def nameof(*args):
+    """Get the names of the variables passed in"""
+    frame = inspect.stack()[1].frame
+    exe = executing.Source.executing(frame)
+
+    if not exe.node:
+        # we cannot do: assert nameof(a) == 'a'
+        raise IncorrectUseOfNameof("Should not use nameof it in statements.")
+
+    assert isinstance(exe.node, ast.Call)
+
+    ret = []
+    for node in exe.node.args:
+        if not isinstance(node, ast.Name):
+            raise IncorrectUseOfNameof("Only variables should "
+                                       "be passed to nameof")
+        ret.append(node.id)
+
+    if not ret:
+        raise IncorrectUseOfNameof("At least one variable should be "
+                                   "passed to nameof")
+
+    return ret[0] if len(args) == 1 else tuple(ret)
 
 class Wrapper:
     """A wrapper with ability to retrieve the variable name"""

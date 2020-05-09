@@ -1,5 +1,10 @@
 import pytest
-from varname import varname, VarnameAssignedToInvalidVariable, MultipleTargetAssignmentWarning, Wrapper
+from varname import (varname,
+                     VarnameAssignedToInvalidVariable,
+                     MultipleTargetAssignmentWarning,
+                     IncorrectUseOfNameof,
+                     Wrapper,
+                     nameof)
 
 def test_function():
 
@@ -201,3 +206,30 @@ def test_wrapper():
 
     assert str(val1) == 'True'
     assert repr(val1) == "<Wrapper (name='val1', value=True)>"
+
+def test_nameof():
+    a = 1
+    b = nameof(a)
+    assert b == 'a'
+    nameof2 = nameof
+    c = nameof2(a, b)
+    assert b == 'a'
+    assert c == ('a', 'b')
+
+    def func():
+        return varname() + 'abc'
+
+    f = func()
+    assert f == 'fabc'
+
+    with pytest.raises(IncorrectUseOfNameof):
+        assert nameof(f)
+
+    fname1 = fname = nameof(f)
+    assert fname1 == fname == 'f'
+
+    with pytest.raises(IncorrectUseOfNameof):
+        nameof(a==1)
+
+    with pytest.raises(IncorrectUseOfNameof):
+        nameof()
