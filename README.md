@@ -2,7 +2,7 @@
 
 [![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13]
 
-Retrieving variable names of function or class calls
+Dark magics about variable names in python
 
 ## Installation
 ```shell
@@ -130,7 +130,11 @@ func = function2()
 from varname import Wrapper
 
 foo = Wrapper(True)
+# foo.name == 'foo'
+# foo.value == True
 bar = Wrapper(False)
+# bar.name == 'bar'
+# bar.value == False
 
 def values_to_dict(*args):
     return {val.name: val.value for val in args}
@@ -162,33 +166,9 @@ fname = nameof(f)
 ```
 
 ## Limitations
-- Working in `ipython REPL` but not standard `python console`
-- ~~Calls have to be written in desired format~~ (they don't have to since `v0.1.0`)
-- ~~Context has to be estimated in advance, especially for functions with long argument list~~ (it doesn't have to since `v0.1.0`)
+- Working in `ipython REPL` but not in standard `python console`
 - You have to know at which stack the function/class will be called
 - For performance, since inspection is involved, better cache the name
-- ~~Aliases are not supported~~ (supported since `v0.1.0`)
-  ```diff
-  - def function():
-  -   return varname()
-  - func = function
-
-  - x = func() # unable to detect
-  ```
-- ~~False positives~~ (Able to detect since `v0.1.0`)
-  ```diff
-  - def func(**kwargs):
-  -     return varname()
-  - x = func(
-  -     y = func()
-  - )
-  - # x == 'y'
-
-  - # to avoid this, you have to write the kwargs
-  - # in the same line where the is called
-  - x = func(y=func())
-  - # x == 'x'
-  ```
 - `nameof` cannot be used in statements
   ```
   a = 1
