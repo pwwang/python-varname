@@ -1,6 +1,3 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
-
 
 python-varname
 ==============
@@ -31,7 +28,7 @@ python-varname
    :alt: Codacy coverage
  <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_
 
-Retrieving variable names of function or class calls
+Dark magics about variable names in python
 
 Installation
 ------------
@@ -154,7 +151,7 @@ Some unusual use
    )
    # x == 'x'
 
-   # This is heresy
+   # get part of the name
    func_abc = function()[-3:]
    # func_abc == 'abc'
 
@@ -163,15 +160,19 @@ Some unusual use
    func = function2()
    # func == 'func'
 
-A value wrapper
----------------
+A value wrapper (added in v0.1.1)
+---------------------------------
 
 .. code-block:: python
 
    from varname import Wrapper
 
    foo = Wrapper(True)
+   # foo.name == 'foo'
+   # foo.value == True
    bar = Wrapper(False)
+   # bar.name == 'bar'
+   # bar.value == False
 
    def values_to_dict(*args):
        return {val.name: val.value for val in args}
@@ -179,39 +180,42 @@ A value wrapper
    mydict = values_to_dict(foo, bar)
    # {'foo': True, 'bar': False}
 
+Getting variable names directly (added in v0.2.0)
+-------------------------------------------------
+
+.. code-block:: python
+
+   from varname import varname, nameof
+
+   a = 1
+   aname = nameof(a)
+   # aname == 'a
+
+   b = 2
+   aname, bname = nameof(a, b)
+   # aname == 'a', bname == 'b'
+
+   def func():
+       return varname() + '_suffix'
+
+   f = func()
+   # f == 'f_suffix'
+   fname = nameof(f)
+   # fname == 'f'
+
 Limitations
 -----------
 
 
-* Working in ``ipython REPL`` but not standard ``python console``
-* :raw-html-m2r:`<del>Calls have to be written in desired format</del>` (they don't have to since ``v0.1.0``\ )
-* :raw-html-m2r:`<del>Context has to be estimated in advance, especially for functions with long argument list</del>` (it doesn't have to since ``v0.1.0``\ )
+* Working in ``ipython REPL`` but not in standard ``python console``
 * You have to know at which stack the function/class will be called
 * For performance, since inspection is involved, better cache the name
-* 
-  :raw-html-m2r:`<del>Aliases are not supported</del>` (supported since ``v0.1.0``\ )
+* ``nameof`` cannot be used in statements
+  .. code-block::
 
-  .. code-block:: diff
-
-     - def function():
-     -   return varname()
-     - func = function
-
-     - x = func() # unable to detect
-
-* 
-  :raw-html-m2r:`<del>False positives</del>` (Able to detect since ``v0.1.0``\ )
-
-  .. code-block:: diff
-
-     - def func(**kwargs):
-     -     return varname()
-     - x = func(
-     -     y = func()
-     - )
-     - # x == 'y'
-
-     - # to avoid this, you have to write the kwargs
-     - # in the same line where the is called
-     - x = func(y=func())
-     - # x == 'x'
+     a = 1
+     assert nameof(a) == 'a'
+     # IncorrectUseOfNameof: Should not use nameof it in statements.
+     # The right way:
+     aname = nameof(a)
+     assert aname == 'a'
