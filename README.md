@@ -143,7 +143,7 @@ mydict = values_to_dict(foo, bar)
 # {'foo': True, 'bar': False}
 ```
 
-## Getting variable names directly (added in v0.2.0)
+## Getting variable names directly (added in v0.1.2)
 
 ```python
 from varname import varname, nameof
