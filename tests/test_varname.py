@@ -1,8 +1,8 @@
 import pytest
 from varname import (varname,
-                     VarnameAssignedToInvalidVariable,
+                     VarnameRetrievingWarning,
                      MultipleTargetAssignmentWarning,
-                     IncorrectUseOfNameof,
+                     VarnameRetrievingError,
                      Wrapper,
                      nameof)
 
@@ -163,11 +163,11 @@ def test_only_one():
     def function():
         return varname()
 
-    with pytest.raises(VarnameAssignedToInvalidVariable):
+    with pytest.raises(VarnameRetrievingError):
         x, y = function()
-    with pytest.raises(VarnameAssignedToInvalidVariable):
+    with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
-    with pytest.raises(VarnameAssignedToInvalidVariable):
+    with pytest.raises(VarnameRetrievingError):
         [x] = function()
 
 
@@ -189,9 +189,9 @@ def test_unusual():
     xyz = function()[-1:]
     assert xyz == 'z'
 
-
     x = 'a'
-    x += function()
+    with pytest.warns(VarnameRetrievingWarning):
+        x += function()
     assert x == 'avar_0'
 
     func = function
@@ -222,14 +222,14 @@ def test_nameof():
     f = func()
     assert f == 'fabc'
 
-    with pytest.raises(IncorrectUseOfNameof):
+    with pytest.raises(VarnameRetrievingError):
         assert nameof(f)
 
     fname1 = fname = nameof(f)
     assert fname1 == fname == 'f'
 
-    with pytest.raises(IncorrectUseOfNameof):
+    with pytest.raises(VarnameRetrievingError):
         nameof(a==1)
 
-    with pytest.raises(IncorrectUseOfNameof):
+    with pytest.raises(VarnameRetrievingError):
         nameof()

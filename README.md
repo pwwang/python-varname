@@ -169,7 +169,7 @@ fname = nameof(f)
 - Working in `ipython REPL` but not in standard `python console`
 - You have to know at which stack the function/class will be called
 - For performance, since inspection is involved, better cache the name
-- `nameof` cannot be used in statements
+- `nameof` cannot be used in statements in `pytest`
   ```
   a = 1
   assert nameof(a) == 'a'

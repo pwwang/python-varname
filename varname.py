@@ -8,22 +8,21 @@ __version__ = "0.1.2"
 
 VARNAME_INDEX = [-1]
 
-class VarnameAssignedToInvalidVariable(Exception):
-    """If left-hand side is not a variable"""
-
 class MultipleTargetAssignmentWarning(Warning):
     """When multiple-target assignment found, i.e. y = x = func()"""
 
-class UnableToRetrieveVarnameWarning(Warning):
-    """When multiple-target assignment found, i.e. y = x = func()"""
+class VarnameRetrievingWarning(Warning):
+    """When varname retrieving failed for whatever reason"""
 
-class IncorrectUseOfNameof(Exception):
-    """When nameof is used in statement"""
+class VarnameRetrievingError(Exception):
+    """When failed to retrieve the varname"""
 
-def varname(caller=1):
+def varname(caller=1, raise_exc=False):
     """Get the variable name that assigned by function/class calls
     @params:
         caller (int): The call stack index
+        raise_exc (bool): Whether we should raise an exception if failed
+                          to retrieve the name
     @returns:
         (str): The variable name, or `var_<index>` if failed
     """
@@ -44,13 +43,16 @@ def varname(caller=1):
             if isinstance(target, ast.Name):
                 return target.id
 
-            raise VarnameAssignedToInvalidVariable(
+            raise VarnameRetrievingError(
                 f"Invaid variable assigned: {ast.dump(target)!r}"
             )
 
+    if raise_exc:
+        raise VarnameRetrievingError('Failed to retrieve the variable name.')
+
     VARNAME_INDEX[0] += 1
     warnings.warn(f"var_{VARNAME_INDEX[0]} used.",
-                  UnableToRetrieveVarnameWarning)
+                  VarnameRetrievingWarning)
     return f"var_{VARNAME_INDEX[0]}"
 
 def nameof(*args):
@@ -59,21 +61,21 @@ def nameof(*args):
     exe = executing.Source.executing(frame)
 
     if not exe.node:
-        # we cannot do: assert nameof(a) == 'a'
-        raise IncorrectUseOfNameof("Should not use nameof it in statements.")
+        # we cannot do: assert nameof(a) == 'a' in pytest
+        raise VarnameRetrievingError("Callee's node cannot be detected.")
 
     assert isinstance(exe.node, ast.Call)
 
     ret = []
     for node in exe.node.args:
         if not isinstance(node, ast.Name):
-            raise IncorrectUseOfNameof("Only variables should "
-                                       "be passed to nameof")
+            raise VarnameRetrievingError("Only variables should "
+                                         "be passed to nameof.")
         ret.append(node.id)
 
     if not ret:
-        raise IncorrectUseOfNameof("At least one variable should be "
-                                   "passed to nameof")
+        raise VarnameRetrievingError("At least one variable should be "
+                                     "passed to nameof")
 
     return ret[0] if len(args) == 1 else tuple(ret)
 
