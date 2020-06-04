@@ -4,6 +4,7 @@ from varname import (varname,
                      MultipleTargetAssignmentWarning,
                      VarnameRetrievingError,
                      Wrapper,
+                     will,
                      nameof)
 
 def test_function():
@@ -170,6 +171,13 @@ def test_only_one():
     with pytest.raises(VarnameRetrievingError):
         [x] = function()
 
+def test_raise():
+
+    def get_name():
+        return varname(raise_exc=True)
+
+    with pytest.raises(VarnameRetrievingError):
+        get_name()
 
 def test_multiple_targets():
 
@@ -233,3 +241,69 @@ def test_nameof():
 
     with pytest.raises(VarnameRetrievingError):
         nameof()
+
+
+def test_class_property():
+    class C:
+        @property
+        def var(self):
+            return varname()
+
+    c = C()
+    v1 = c.var
+    assert v1 == 'v1'
+
+def test_will():
+    def i_will():
+        iwill = will()
+        func = lambda: 0
+        func.will = iwill
+        # return the function itself
+        # so that we can retrieve it after the attribute call
+        func.abc = func
+        return func
+
+    func = i_will().abc
+    assert func.will == 'abc'
+
+def test_will_deep():
+
+    def get_will():
+        return will(2)
+
+    def i_will():
+        iwill = get_will()
+        func = lambda: 0
+        func.will = iwill
+        # return the function itself
+        # so that we can retrieve it after the attribute call
+        func.abc = func
+        return func
+
+    func = i_will().abc
+    assert func.will == 'abc'
+
+def test_will_property():
+
+    class C:
+        def __init__(self):
+            self.will = None
+
+        @property
+        def iwill(self):
+            self.will = will()
+            return self
+
+        def do(self):
+            return 'I will do something'
+
+    c = C()
+    assert c.iwill.do() == 'I will do something'
+
+def test_will_fail():
+
+    def get_will():
+        return {'a': will(raise_exc=True)}
+
+    with pytest.raises(VarnameRetrievingError):
+        get_will()['a']

@@ -105,7 +105,7 @@ func = function(), function()
 # func = ('func', 'func')
 
 func = func1 = function()
-# func == func1 == 'func1'
+# func == func1 == 'func'
 # a warning will be printed
 
 x = func(
@@ -177,6 +177,31 @@ f = func()
 # f == 'f_suffix'
 fname = nameof(f)
 # fname == 'f'
+```
+
+## Detecting next immediate attribute name (added in `v0.1.4`)
+```python
+from varname import will
+class AwesomeClass:
+    def __init__(self):
+        self.will = None
+
+    def permit(self):
+        self.will = will()
+        if self.will == 'do':
+            # let self handle do
+            return self
+        raise AttributeError('Should do something with AwesomeClass object')
+
+    def do(self):
+        if self.will != 'do':
+            raise AttributeError("You don't have permission to do")
+        return 'I am doing!'
+
+awesome = AwesomeClass()
+awesome.do() # AttributeError: Should do something with AwesomeClass object
+awesome.permit() # AttributeError: You don't have permission to do
+awesome.permit().do() == 'I am doing!'
 ```
 
 ## Limitations
