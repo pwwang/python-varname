@@ -4,7 +4,7 @@ import inspect
 import warnings
 import executing
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 VARNAME_INDEX = [-1]
 
