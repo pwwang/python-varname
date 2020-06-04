@@ -36,7 +36,6 @@ func = (function
         ())
 ```
 
-
 ### `varname` calls being buried deeply
 ```python
 def function():
@@ -122,6 +121,21 @@ func_abc = function()[-3:]
 function2 = function
 func = function2()
 # func == 'func'
+
+# Since v0.1.3
+# We can ask varname to raise exceptions
+# if it fails to detect the variable name
+
+from varname import VarnameRetrievingError
+def get_name():
+    try:
+        # if raise_exc is False
+        # "var_<index>" will be returned
+        return varname(raise_exc=True)
+    except VarnameRetrieveingError:
+        return None
+
+a.b = get_name() # None
 ```
 
 ## A value wrapper (added in v0.1.1)
@@ -173,7 +187,7 @@ fname = nameof(f)
   ```
   a = 1
   assert nameof(a) == 'a'
-  # IncorrectUseOfNameof: Should not use nameof it in statements.
+  # Retrieving failure.
   # The right way:
   aname = nameof(a)
   assert aname == 'a'
