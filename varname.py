@@ -102,7 +102,9 @@ def will(caller=1, raise_exc=False):
     try:
         node = source.node
         # have to be used in a call
-        assert isinstance(node, ast.Call), ("Invalid use of function `will`")
+        assert isinstance(node, (ast.Attribute, ast.Call)), (
+            "Invalid use of function `will`"
+        )
         node = node.parent
     except (AssertionError, AttributeError):
         pass
