@@ -199,8 +199,8 @@ class AwesomeClass:
         return 'I am doing!'
 
 awesome = AwesomeClass()
-awesome.do() # AttributeError: Should do something with AwesomeClass object
-awesome.permit() # AttributeError: You don't have permission to do
+awesome.do() # AttributeError: You don't have permission to do
+awesome.permit() # AttributeError: Should do something with AwesomeClass object
 awesome.permit().do() == 'I am doing!'
 ```
 
