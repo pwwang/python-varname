@@ -204,6 +204,17 @@ awesome.permit() # AttributeError: You don't have permission to do
 awesome.permit().do() == 'I am doing!'
 ```
 
+## Shortcut for `collections.namedtuple` (addedin `v0.1.6`)
+```python
+# instead of
+from collections import namedtuple
+Name = namedtuple('Name', ['first', 'last'])
+
+# we can do:
+from varname import namedtuple
+Name = namedtuple(['first', 'last'])
+```
+
 ## Limitations
 - Working in `ipython REPL` but not in standard `python console`
 - You have to know at which stack the function/class will be called

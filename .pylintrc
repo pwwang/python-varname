@@ -211,7 +211,7 @@ ignore-comments=yes
 ignore-docstrings=yes
 
 # Ignore imports when computing similarities.
-ignore-imports=no
+ignore-imports=yes
 
 # Minimum lines number of a similarity.
 min-similarity-lines=4
@@ -298,7 +298,7 @@ good-names=i,
            j,
            k,
            x,
-		   y,
+           y,
            z,
            np,
            nn,
@@ -310,6 +310,7 @@ good-names=i,
            do,
            by,
            tf,
+           op,
            Run,
            _
 

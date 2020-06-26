@@ -5,7 +5,22 @@ from varname import (varname,
                      VarnameRetrievingError,
                      Wrapper,
                      will,
+                     namedtuple,
+                     _get_executing,
                      nameof)
+
+@pytest.fixture
+def monkey_patch():
+    """Monkey-patch inspect.stack to get only one frame,
+    which happens in R package reticulate."""
+    from varname import inspect
+
+    orig_stack = inspect.stack
+    inspect.stack = lambda *args, **kwargs: orig_stack(*args, **kwargs)[:1]
+
+    yield
+
+    inspect.stack = orig_stack
 
 def test_function():
 
@@ -307,3 +322,46 @@ def test_will_fail():
 
     with pytest.raises(VarnameRetrievingError):
         get_will()['a']
+
+def test_frame_fail(monkey_patch):
+    """Test when failed to retrieve the frame"""
+    # Let's monkey-patch inspect.stack to do this
+    assert _get_executing(1) is None
+
+def test_frame_fail_varname(monkey_patch):
+
+    def func(raise_exc):
+        return varname(raise_exc=raise_exc)
+
+    with pytest.raises(VarnameRetrievingError):
+        a = func(True)
+
+    with pytest.warns(VarnameRetrievingWarning):
+        b = func(False)
+    assert b.startswith('var_')
+
+def test_frame_fail_nameof(monkey_patch):
+
+    a = 1
+    with pytest.raises(VarnameRetrievingError):
+        nameof(a)
+
+def test_frame_fail_will(monkey_patch):
+
+    def func(raise_exc):
+        wil = will(raise_exc=raise_exc)
+        ret = lambda: None
+        ret.a = 1
+        ret.will = wil
+        return ret
+
+    with pytest.raises(VarnameRetrievingError):
+        func(True).a
+
+    assert func(False).a == 1
+    assert func(False).will is None
+
+def test_namedtuple():
+    Name = namedtuple(['first', 'last'])
+    name = Name('Bill', 'Gates')
+    assert isinstance(name, Name)

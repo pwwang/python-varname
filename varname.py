@@ -2,6 +2,7 @@
 import ast
 import inspect
 import warnings
+from collections import namedtuple as standard_namedtuple
 import executing
 
 __version__ = "0.1.5"
@@ -16,6 +17,19 @@ class VarnameRetrievingWarning(Warning):
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
+
+def _get_executing(caller):
+    """Try to get the executing object
+    This can fail when a frame is failed to retrieve.
+    One case should be when python code is executed in
+    R pacakge `reticulate`, where only first frame is kept.
+    """
+    try:
+        frame = inspect.stack()[caller+2].frame
+    except IndexError:
+        return None
+    else:
+        return executing.Source.executing(frame)
 
 def varname(caller=1, raise_exc=False):
     """Get the variable name that assigned by function/class calls
@@ -39,8 +53,16 @@ def varname(caller=1, raise_exc=False):
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    frame = inspect.stack()[caller+1].frame
-    node = executing.Source.executing(frame).node
+    exec_obj = _get_executing(caller)
+    if not exec_obj:
+        if raise_exc:
+            raise VarnameRetrievingError("Unable to retrieve the frame.")
+        VARNAME_INDEX[0] += 1
+        warnings.warn(f"var_{VARNAME_INDEX[0]} used.",
+                      VarnameRetrievingWarning)
+        return f"var_{VARNAME_INDEX[0]}"
+
+    node = exec_obj.node
     while hasattr(node, 'parent'):
         node = node.parent
 
@@ -96,11 +118,15 @@ def will(caller=1, raise_exc=False):
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    frame = inspect.stack()[caller+1].frame
-    source = executing.Source.executing(frame)
+    exec_obj = _get_executing(caller)
+    if not exec_obj:
+        if raise_exc:
+            raise VarnameRetrievingError("Unable to retrieve the frame.")
+        return None
+
     ret = None
     try:
-        node = source.node
+        node = exec_obj.node
         # have to be used in a call
         assert isinstance(node, (ast.Attribute, ast.Call)), (
             "Invalid use of function `will`"
@@ -127,17 +153,18 @@ def nameof(*args):
     Returns:
         tuple|str:
     """
-    frame = inspect.stack()[1].frame
-    exe = executing.Source.executing(frame)
+    exec_obj = _get_executing(0)
+    if not exec_obj:
+        raise VarnameRetrievingError("Unable to retrieve the frame.")
 
-    if not exe.node:
+    if not exec_obj.node:
         # we cannot do: assert nameof(a) == 'a' in pytest
         raise VarnameRetrievingError("Callee's node cannot be detected.")
 
-    assert isinstance(exe.node, ast.Call)
+    assert isinstance(exec_obj.node, ast.Call)
 
     ret = []
-    for node in exe.node.args:
+    for node in exec_obj.node.args:
         if not isinstance(node, ast.Name):
             raise VarnameRetrievingError("Only variables should "
                                          "be passed to nameof.")
@@ -148,6 +175,23 @@ def nameof(*args):
                                      "passed to nameof")
 
     return ret[0] if len(args) == 1 else tuple(ret)
+
+def namedtuple(*args, **kwargs):
+    """A shortcut for namedtuple
+
+    You don't need to specify the typename, which will be fetched from
+    the variable name.
+
+    So instead of:
+    >>> from collections import namedtuple
+    >>> Name = namedtuple('Name', ['first', 'last'])
+
+    You can do:
+    >>> from variables import namedtuple
+    >>> Name = namedtuple(['first', 'last'])
+    """
+    typename = varname(raise_exc=True)
+    return standard_namedtuple(typename, *args, **kwargs)
 
 class Wrapper:
     """A wrapper with ability to retrieve the variable name"""
