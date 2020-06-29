@@ -13,7 +13,7 @@ pip install python-varname
 
 - Fetching variable names from inside the function/class call
 - Fetching variable names directly (added in `v0.1.2`)
-- A value wrapper to store the value name that a value is assigned to (added in `v0.1.1`)
+- A value wrapper to store the variable name that a value is assigned to (added in `v0.1.1`)
 - Detecting next immediate attribute name (added in `v0.1.4`)
 - Shortcut for `collections.namedtuple` (added in `v0.1.6`)
 
