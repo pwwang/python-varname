@@ -188,7 +188,7 @@ Name = namedtuple(['first', 'last'])
 ## Limitations
 - Working in `ipython REPL` but not in standard `python console`
 - You have to know at which stack the function/class will be called
-- For performance, since inspection is involved, better cache the name
+- Not working with `reticulate` from `R` since it cuts stacks to the most recent one.
 - `nameof` cannot be used in statements in `pytest`
   ```
   a = 1
