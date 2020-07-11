@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "python-varname"
-version = "0.1.6"
+version = "0.1.7"
 description = "Retrieving variable names of function or class calls."
 authors = [ "pwwang <pwwang@pwwang.com>",]
 license = "MIT"

@@ -1,6 +1,9 @@
 
-python-varname
-==============
+
+.. image:: logo.png
+   :target: logo.png
+   :alt: python-varname
+
 
 `
 .. image:: https://img.shields.io/pypi/v/python-varname?style=flat-square
@@ -37,146 +40,121 @@ Installation
 
    pip install python-varname
 
+Features
+--------
+
+
+* Fetching variable names from inside the function/class call
+* Fetching variable names directly (added in ``v0.1.2``\ )
+* A value wrapper to store the variable name that a value is assigned to (added in ``v0.1.1``\ )
+* Detecting next immediate attribute name (added in ``v0.1.4``\ )
+* Shortcut for ``collections.namedtuple`` (added in ``v0.1.6``\ )
+* Injecting ``__varname__`` to objects (added in ``v0.1.7``\ )
+
 Usage
 -----
 
-Retrieving the variable name inside a function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Retrieving the variable names from inside a function call/class instantiation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: python
 
-   from varname import varname
-   def function():
-       return varname()
+* 
+  From insdie a function call
 
-   func = function()
-   # func == 'func'
+  .. code-block:: python
 
-   # available calls to retrieve
-   func = function(
-       # ...
-   )
-
-   func = \
-       function()
-
-   func = function \
-       ()
-
-   func = (function
-           ())
-
-``varname`` calls being buried deeply
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   def function():
-       # I know that at which stack this will be called
-       return varname(caller=3)
-
-   def function1():
-       return function()
-
-   def function2():
-       return function1()
-
-   func = function2()
-   # func == 'func'
-
-Retrieving instance name of a class object
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   class Klass:
-       def __init__(self):
-           self.id = varname()
-       def copy(self):
+       from varname import varname
+       def function():
            return varname()
 
-   k = Klass()
-   # k.id == 'k'
+       func = function()
+       # func == 'func'
 
-   k2 = k.copy()
-   # k2 == 'k2'
+* 
+  ``varname`` calls being buried deeply
 
-``varname`` calls being buried deeply for classes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  .. code-block:: python
 
-.. code-block:: python
+      def function():
+          # I know that at which stack this will be called
+          return varname(caller=3)
 
-   class Klass:
-       def __init__(self):
-           self.id = self.some_internal()
+      def function1():
+          return function()
 
-       def some_internal(self):
-           return varname(caller=2)
+      def function2():
+          return function1()
 
-       def copy(self):
-           return self.copy_id()
+      func = function2()
+      # func == 'func'
 
-       def copy_id(self):
-           return self.copy_id_internal()
+* 
+  Retrieving instance name of a class
 
-       def copy_id_internal(self):
-           return varname(caller=3)
+  .. code-block:: python
 
-   k = Klass()
-   # k.id == 'k'
+       class Klass:
+           def __init__(self):
+               self.id = varname()
 
-   k2 = k.copy()
-   # k2 == 'k2'
+           def copy(self):
+               # also able to fetch inside a member call
+               return varname()
 
-Some unusual use
-----------------
+       k = Klass()
+       # k.id == 'k'
 
-.. code-block:: python
+       k2 = k.copy()
+       # k2 == 'k2'
 
-   func = [function()]
-   # func == ['func']
+* 
+  Some unusual use
 
-   func = [function(), function()]
-   # func == ['func', 'func']
+  .. code-block:: python
 
-   func = function(), function()
-   # func = ('func', 'func')
+       func = [function()]
+       # func == ['func']
 
-   func = func1 = function()
-   # func == func1 == 'func'
-   # a warning will be printed
+       func = [function(), function()]
+       # func == ['func', 'func']
 
-   x = func(
-       y = func()
-   )
-   # x == 'x'
+       func = function(), function()
+       # func = ('func', 'func')
 
-   # get part of the name
-   func_abc = function()[-3:]
-   # func_abc == 'abc'
+       func = func1 = function()
+       # func == func1 == 'func'
+       # a warning will be printed
+       # since you may not want func1 to be 'func'
 
-   # function alias supported now
-   function2 = function
-   func = function2()
-   # func == 'func'
+       x = func(y = func())
+       # x == 'x'
 
-   # Since v0.1.3
-   # We can ask varname to raise exceptions
-   # if it fails to detect the variable name
+       # get part of the name
+       func_abc = function()[-3:]
+       # func_abc == 'abc'
 
-   from varname import VarnameRetrievingError
-   def get_name():
-       try:
-           # if raise_exc is False
-           # "var_<index>" will be returned
-           return varname(raise_exc=True)
-       except VarnameRetrieveingError:
-           return None
+       # function alias supported now
+       function2 = function
+       func = function2()
+       # func == 'func'
 
-   a.b = get_name() # None
+       # Since v0.1.3
+       # We can ask varname to raise exceptions
+       # if it fails to detect the variable name
 
-A value wrapper (added in v0.1.1)
----------------------------------
+       from varname import VarnameRetrievingError
+       def get_name():
+           try:
+               # if raise_exc is False
+               # "var_<index>" will be returned
+               return varname(raise_exc=True)
+           except VarnameRetrieveingError:
+               return None
+
+       a.b = get_name() # None
+
+Value wrapper
+^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -195,8 +173,8 @@ A value wrapper (added in v0.1.1)
    mydict = values_to_dict(foo, bar)
    # {'foo': True, 'bar': False}
 
-Getting variable names directly (added in v0.1.2)
--------------------------------------------------
+Getting variable names directly
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -218,8 +196,8 @@ Getting variable names directly (added in v0.1.2)
    fname = nameof(f)
    # fname == 'f'
 
-Detecting next immediate attribute name (added in ``v0.1.4``\ )
------------------------------------------------------------------
+Detecting next immediate attribute name
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -241,12 +219,12 @@ Detecting next immediate attribute name (added in ``v0.1.4``\ )
            return 'I am doing!'
 
    awesome = AwesomeClass()
-   awesome.do() # AttributeError: Should do something with AwesomeClass object
-   awesome.permit() # AttributeError: You don't have permission to do
+   awesome.do() # AttributeError: You don't have permission to do
+   awesome.permit() # AttributeError: Should do something with AwesomeClass object
    awesome.permit().do() == 'I am doing!'
 
-Shortcut for ``collections.namedtuple`` (addedin ``v0.1.6``\ )
---------------------------------------------------------------------
+Shortcut for ``collections.namedtuple``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -258,13 +236,36 @@ Shortcut for ``collections.namedtuple`` (addedin ``v0.1.6``\ )
    from varname import namedtuple
    Name = namedtuple(['first', 'last'])
 
+Injecting ``__varname__``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   from varname import inject
+
+   class MyList(list):
+       pass
+
+   a = inject(MyList())
+   b = inject(MyList())
+
+   a.__varname__ == 'a'
+   b.__varname__ == 'b'
+
+   a == b
+
+   # other methods not affected
+   a.append(1)
+   b.append(1)
+   a == b
+
 Limitations
 -----------
 
 
 * Working in ``ipython REPL`` but not in standard ``python console``
 * You have to know at which stack the function/class will be called
-* For performance, since inspection is involved, better cache the name
+* Not working with ``reticulate`` from ``R`` since it cuts stacks to the most recent one.
 * ``nameof`` cannot be used in statements in ``pytest``
   .. code-block::
 

@@ -5,7 +5,7 @@ import warnings
 from collections import namedtuple as standard_namedtuple
 import executing
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 VARNAME_INDEX = [-1]
 
