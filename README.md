@@ -1,4 +1,4 @@
-# python-varname
+![python-varname][7]
 
 [![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13]
 
@@ -204,6 +204,7 @@ Name = namedtuple(['first', 'last'])
 [4]: https://pypi.org/project/python-varname/
 [5]: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
 [6]: https://github.com/pwwang/python-varname
+[7]: logo.png
 [8]: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
 [10]: https://img.shields.io/travis/pwwang/python-varname?style=flat-square
 [11]: https://travis-ci.org/pwwang/python-varname
