@@ -144,6 +144,29 @@ def will(caller=1, raise_exc=False):
 
     return ret
 
+def inject(obj):
+    """Inject attribute `__varname__` to an object
+
+    Args:
+        obj: An object that can be injected
+
+    Warns:
+        VarnameRetrievingWarning: When `__varname__` already exists
+
+    Raises:
+        VarnameRetrievingError: When `__varname__` is unable to
+            be set as an attribute
+
+    Returns:
+        obj: The object with __varname__ injected
+    """
+    vname = varname()
+    try:
+        setattr(obj, '__varname__', vname)
+    except AttributeError:
+        raise VarnameRetrievingError('Unable to inject __varname__.')
+    return obj
+
 def nameof(*args):
     """Get the names of the variables passed in
 

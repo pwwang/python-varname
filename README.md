@@ -16,6 +16,7 @@ pip install python-varname
 - A value wrapper to store the variable name that a value is assigned to (added in `v0.1.1`)
 - Detecting next immediate attribute name (added in `v0.1.4`)
 - Shortcut for `collections.namedtuple` (added in `v0.1.6`)
+- Injecting `__varname__` to objects (added in `v0.1.7`)
 
 ## Usage
 
@@ -183,6 +184,28 @@ Name = namedtuple('Name', ['first', 'last'])
 # we can do:
 from varname import namedtuple
 Name = namedtuple(['first', 'last'])
+```
+
+### Injecting `__varname__`
+
+```python
+from varname import inject
+
+class MyList(list):
+    pass
+
+a = inject(MyList())
+b = inject(MyList())
+
+a.__varname__ == 'a'
+b.__varname__ == 'b'
+
+a == b
+
+# other methods not affected
+a.append(1)
+b.append(1)
+a == b
 ```
 
 ## Limitations

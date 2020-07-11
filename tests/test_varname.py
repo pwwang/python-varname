@@ -5,6 +5,7 @@ from varname import (varname,
                      VarnameRetrievingError,
                      Wrapper,
                      will,
+                     inject,
                      namedtuple,
                      _get_executing,
                      nameof)
@@ -365,3 +366,20 @@ def test_namedtuple():
     Name = namedtuple(['first', 'last'])
     name = Name('Bill', 'Gates')
     assert isinstance(name, Name)
+
+def test_inject():
+
+    with pytest.raises(VarnameRetrievingError):
+        a = inject(1)
+
+    class A(list):
+        pass
+
+    a = inject(A())
+    b = inject(A())
+    assert a.__varname__ == 'a'
+    assert b.__varname__ == 'b'
+    assert a == b
+    a.append(1)
+    b.append(1)
+    assert a == b
