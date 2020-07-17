@@ -210,16 +210,16 @@ a == b
 
 ## Limitations
 - Working in `ipython REPL` but not in standard `python console`
-- You have to know at which stack the function/class will be called
+- You have to know at which stack the function/class will be called (caller's depth)
 - Not working with `reticulate` from `R` since it cuts stacks to the most recent one.
-- `nameof` cannot be used in statements in `pytest`
-  ```
-  a = 1
-  assert nameof(a) == 'a'
-  # Retrieving failure.
-  # The right way:
-  aname = nameof(a)
-  assert aname == 'a'
+- ~~`nameof` cannot be used in statements in `pytest`~~ (supported in `v0.2.0`)
+  ```diff
+  -a = 1
+  +assert nameof(a) == 'a'
+  -# Retrieving failure.
+  -# The right way:
+  -aname = nameof(a)
+  -assert aname == 'a'
   ```
 
 [1]: https://github.com/pwwang/python-varname

@@ -7,7 +7,7 @@ from varname import (varname,
                      will,
                      inject,
                      namedtuple,
-                     _get_executing,
+                     _get_node,
                      nameof)
 
 @pytest.fixture
@@ -246,8 +246,9 @@ def test_nameof():
     f = func()
     assert f == 'fabc'
 
-    with pytest.raises(VarnameRetrievingError):
-        assert nameof(f)
+    assert nameof(f) == 'f'
+    assert 'f' == nameof(f)
+    assert len(nameof(f)) == 1
 
     fname1 = fname = nameof(f)
     assert fname1 == fname == 'f'
@@ -258,6 +259,44 @@ def test_nameof():
     with pytest.raises(VarnameRetrievingError):
         nameof()
 
+def test_nameof_statements():
+    a = {'test': 1}
+    test = {}
+    del a[nameof(test)]
+    assert a == {}
+
+    def func():
+        return nameof(test)
+
+    assert func() == 'test'
+
+    def func2():
+        yield nameof(test)
+
+    assert list(func2()) == ['test']
+
+    def func3():
+        raise ValueError(nameof(test))
+
+    with pytest.raises(ValueError) as verr:
+        func3()
+    assert str(verr.value) == 'test'
+
+    for i in [0]:
+        assert nameof(test) == 'test'
+        assert len(nameof(test)) == 4
+
+def test_nameof_expr():
+    import varname
+    test = {}
+    assert len(varname.nameof(test)) == 4
+
+    lam = lambda: 0
+    lam.a = 1
+    with pytest.raises(VarnameRetrievingError) as vrerr:
+        varname.nameof(test, lam.a)
+    assert str(vrerr.value) == ("Only variables should "
+                                "be passed to nameof.")
 
 def test_class_property():
     class C:
@@ -327,7 +366,7 @@ def test_will_fail():
 def test_frame_fail(monkey_patch):
     """Test when failed to retrieve the frame"""
     # Let's monkey-patch inspect.stack to do this
-    assert _get_executing(1) is None
+    assert _get_node(1) is None
 
 def test_frame_fail_varname(monkey_patch):
 

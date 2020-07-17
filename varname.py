@@ -18,18 +18,83 @@ class VarnameRetrievingWarning(Warning):
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
-def _get_executing(caller):
-    """Try to get the executing object
+def _get_node(caller):
+    """Try to get node from the executing object.
+
     This can fail when a frame is failed to retrieve.
     One case should be when python code is executed in
     R pacakge `reticulate`, where only first frame is kept.
+
+    When the node can not be retrieved, try to return the first statement.
     """
     try:
         frame = inspect.stack()[caller+2].frame
     except IndexError:
         return None
     else:
-        return executing.Source.executing(frame)
+        exet = executing.Source.executing(frame)
+
+    if exet.node:
+        return exet.node
+
+    return list(exet.statements)[0]
+
+def _lookfor_parent_assign(node):
+    """Look for an ast.Assign node in the parents"""
+    while hasattr(node, 'parent'):
+        node = node.parent
+
+        if isinstance(node, ast.Assign):
+            return node
+    return None
+
+def _lookfor_child_nameof(node):
+    """Look for ast.Call with func=Name(id='nameof',...)"""
+    # pylint: disable=too-many-return-statements
+    if isinstance(node, ast.Call):
+        # if node.func.id == 'nameof':
+        #     return node
+
+        # We want to support alias for nameof, i.e. nameof2
+        # Or called like: varname.nameof(test)
+        # If all args are ast.Name, then if must be alias of nameof
+        # Since this is originated from it, and there is no other
+        # ast.Call node in args
+        if not any(isinstance(arg, ast.Call) for arg in node.args):
+            return node
+
+        # print(nameof(test))
+        for arg in node.args:
+            found = _lookfor_child_nameof(arg)
+            if found:
+                return found
+
+    elif isinstance(node, ast.Compare):
+        # nameof(test) == 'test'
+        found = _lookfor_child_nameof(node.left)
+        if found:
+            return found
+        # 'test' == nameof(test)
+        for comp in node.comparators:
+            found = _lookfor_child_nameof(comp)
+            if found:
+                return found
+
+    elif isinstance(node, ast.Assert):
+        # assert nameof(test) == 'test'
+        found = _lookfor_child_nameof(node.test)
+        if found:
+            return found
+
+    elif isinstance(node, ast.Expr): # pragma: no cover
+        # print(nameof(test)) in ipython's forloop
+        # issue #5
+        found = _lookfor_child_nameof(node.value)
+        if found:
+            return found
+
+    return None
+
 
 def varname(caller=1, raise_exc=False):
     """Get the variable name that assigned by function/class calls
@@ -53,42 +118,40 @@ def varname(caller=1, raise_exc=False):
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    exec_obj = _get_executing(caller)
-    if not exec_obj:
+    node = _get_node(caller)
+    if not node:
         if raise_exc:
-            raise VarnameRetrievingError("Unable to retrieve the frame.")
+            raise VarnameRetrievingError("Unable to retrieve the ast node.")
         VARNAME_INDEX[0] += 1
         warnings.warn(f"var_{VARNAME_INDEX[0]} used.",
                       VarnameRetrievingWarning)
         return f"var_{VARNAME_INDEX[0]}"
 
-    node = exec_obj.node
-    while hasattr(node, 'parent'):
-        node = node.parent
-
-        if isinstance(node, ast.Assign):
-            # Need to actually check that there's just one
-            if len(node.targets) > 1:
-                warnings.warn("Multiple targets in assignment, variable name "
-                              "on the very left will be used.",
-                              MultipleTargetAssignmentWarning)
-            target = node.targets[0]
-
-            # Need to check that it's a variable
-            if isinstance(target, ast.Name):
-                return target.id
-
+    node = _lookfor_parent_assign(node)
+    if not node:
+        if raise_exc:
             raise VarnameRetrievingError(
-                f"Invaid variable assigned: {ast.dump(target)!r}"
+                'Failed to retrieve the variable name.'
             )
+        VARNAME_INDEX[0] += 1
+        warnings.warn(f"var_{VARNAME_INDEX[0]} used.", VarnameRetrievingWarning)
+        return f"var_{VARNAME_INDEX[0]}"
 
-    if raise_exc:
-        raise VarnameRetrievingError('Failed to retrieve the variable name.')
+    # Need to actually check that there's just one
+    # give warnings if: a = b = func()
+    if len(node.targets) > 1:
+        warnings.warn("Multiple targets in assignment, variable name "
+                      "on the very left will be used.",
+                      MultipleTargetAssignmentWarning)
+    target = node.targets[0]
 
-    VARNAME_INDEX[0] += 1
-    warnings.warn(f"var_{VARNAME_INDEX[0]} used.",
-                  VarnameRetrievingWarning)
-    return f"var_{VARNAME_INDEX[0]}"
+    # must be a variable
+    if isinstance(target, ast.Name):
+        return target.id
+
+    raise VarnameRetrievingError(
+        f"Invaid variable assigned: {ast.dump(target)!r}"
+    )
 
 def will(caller=1, raise_exc=False):
     """Detect the attribute name right immediately after a function call.
@@ -118,15 +181,14 @@ def will(caller=1, raise_exc=False):
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    exec_obj = _get_executing(caller)
-    if not exec_obj:
+    node = _get_node(caller)
+    if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the frame.")
         return None
 
     ret = None
     try:
-        node = exec_obj.node
         # have to be used in a call
         assert isinstance(node, (ast.Attribute, ast.Call)), (
             "Invalid use of function `will`"
@@ -174,24 +236,19 @@ def nameof(*args):
         *args: A couple of variables passed in
 
     Returns:
-        tuple|str:
+        tuple|str: The names of variables passed in
     """
-    exec_obj = _get_executing(0)
-    if not exec_obj:
-        raise VarnameRetrievingError("Unable to retrieve the frame.")
-
-    if not exec_obj.node:
-        # we cannot do: assert nameof(a) == 'a' in pytest
-        raise VarnameRetrievingError("Callee's node cannot be detected.")
-
-    assert isinstance(exec_obj.node, ast.Call)
+    node = _get_node(0)
+    node = _lookfor_child_nameof(node)
+    if not node:
+        raise VarnameRetrievingError("Unable to retrieve callee's node.")
 
     ret = []
-    for node in exec_obj.node.args:
-        if not isinstance(node, ast.Name):
+    for arg in node.args:
+        if not isinstance(arg, ast.Name):
             raise VarnameRetrievingError("Only variables should "
                                          "be passed to nameof.")
-        ret.append(node.id)
+        ret.append(arg.id)
 
     if not ret:
         raise VarnameRetrievingError("At least one variable should be "
