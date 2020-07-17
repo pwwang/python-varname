@@ -1,3 +1,6 @@
+.. role:: raw-html-m2r(raw)
+   :format: html
+
 
 
 .. image:: logo.png
@@ -264,14 +267,14 @@ Limitations
 
 
 * Working in ``ipython REPL`` but not in standard ``python console``
-* You have to know at which stack the function/class will be called
+* You have to know at which stack the function/class will be called (caller's depth)
 * Not working with ``reticulate`` from ``R`` since it cuts stacks to the most recent one.
-* ``nameof`` cannot be used in statements in ``pytest``
-  .. code-block::
+* :raw-html-m2r:`<del>\ ``nameof`` cannot be used in statements in ``pytest``\ </del>` (supported in ``v0.2.0``\ )
+  .. code-block:: diff
 
-     a = 1
-     assert nameof(a) == 'a'
-     # Retrieving failure.
-     # The right way:
-     aname = nameof(a)
-     assert aname == 'a'
+     -a = 1
+     +assert nameof(a) == 'a'
+     -# Retrieving failure.
+     -# The right way:
+     -aname = nameof(a)
+     -assert aname == 'a'
