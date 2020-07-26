@@ -9,6 +9,10 @@ from varname import (varname,
                      namedtuple,
                      _get_node,
                      nameof)
+import varname as varname_module
+
+varname_module.TESTING = True
+
 
 @pytest.fixture
 def monkey_patch():
@@ -380,11 +384,13 @@ def test_frame_fail_varname(monkey_patch):
         b = func(False)
     assert b.startswith('var_')
 
-def test_frame_fail_nameof(monkey_patch):
 
+def test_frame_fail_nameof(monkey_patch):
     a = 1
-    with pytest.raises(VarnameRetrievingError):
-        nameof(a)
+    with pytest.raises(ValueError):
+        assert nameof(a) == 'a'
+        raise ValueError
+
 
 def test_frame_fail_will(monkey_patch):
 
