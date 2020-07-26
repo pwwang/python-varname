@@ -27,12 +27,10 @@ def _get_node(caller):
 
     When the node can not be retrieved, try to return the first statement.
     """
-    try:
-        frame = inspect.stack()[caller+2].frame
-    except IndexError:
-        return None
-    else:
-        exet = executing.Source.executing(frame)
+    frame = inspect.currentframe().f_back.f_back
+    for _ in range(caller):
+        frame = frame.f_back
+    exet = executing.Source.executing(frame)
 
     if exet.node:
         return exet.node
