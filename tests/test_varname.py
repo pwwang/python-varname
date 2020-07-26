@@ -10,6 +10,10 @@ from varname import (varname,
                      namedtuple,
                      _get_node,
                      nameof)
+import varname as varname_module
+
+varname_module.TESTING = True
+
 
 
 @pytest.fixture
@@ -391,8 +395,10 @@ def test_frame_fail_varname(no_getframe):
 
 def test_frame_fail_nameof(no_getframe):
     a = 1
-    with pytest.raises(VarnameRetrievingError):
-        nameof(a)
+    with pytest.raises(ValueError):
+        assert nameof(a) == 'a'
+        raise ValueError
+
 
 
 def test_frame_fail_will(no_getframe):
