@@ -1,3 +1,4 @@
+import sys
 import pytest
 from varname import (varname,
                      VarnameRetrievingWarning,
@@ -10,18 +11,24 @@ from varname import (varname,
                      _get_node,
                      nameof)
 
+
 @pytest.fixture
-def monkey_patch():
-    """Monkey-patch inspect.stack to get only one frame,
-    which happens in R package reticulate."""
-    from varname import inspect
+def no_getframe():
+    """
+    Monkey-patch sys._getframe to fail,
+    simulating environments that don't support varname
+    """
 
-    orig_stack = inspect.stack
-    inspect.stack = lambda *args, **kwargs: orig_stack(*args, **kwargs)[:1]
+    def getframe(_context):
+        raise ValueError
 
-    yield
+    orig_getframe = sys._getframe
+    try:
+        sys._getframe = getframe
+        yield
+    finally:
+        sys._getframe = orig_getframe
 
-    inspect.stack = orig_stack
 
 def test_function():
 
@@ -363,13 +370,14 @@ def test_will_fail():
     with pytest.raises(VarnameRetrievingError):
         get_will()['a']
 
-def test_frame_fail(monkey_patch):
+
+def test_frame_fail(no_getframe):
     """Test when failed to retrieve the frame"""
     # Let's monkey-patch inspect.stack to do this
     assert _get_node(1) is None
 
-def test_frame_fail_varname(monkey_patch):
 
+def test_frame_fail_varname(no_getframe):
     def func(raise_exc):
         return varname(raise_exc=raise_exc)
 
@@ -380,14 +388,14 @@ def test_frame_fail_varname(monkey_patch):
         b = func(False)
     assert b.startswith('var_')
 
-def test_frame_fail_nameof(monkey_patch):
 
+def test_frame_fail_nameof(no_getframe):
     a = 1
     with pytest.raises(VarnameRetrievingError):
         nameof(a)
 
-def test_frame_fail_will(monkey_patch):
 
+def test_frame_fail_will(no_getframe):
     def func(raise_exc):
         wil = will(raise_exc=raise_exc)
         ret = lambda: None
