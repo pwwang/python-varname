@@ -1,13 +1,17 @@
 """Get the variable name that assigned by function/class calls"""
 import ast
+import dis
 import sys
 import warnings
 from collections import namedtuple as standard_namedtuple
+from functools import lru_cache
+
 import executing
 
 __version__ = "0.2.0"
 
 VARNAME_INDEX = [-1]
+
 
 class MultipleTargetAssignmentWarning(Warning):
     """When multiple-target assignment found, i.e. y = x = func()"""
@@ -17,6 +21,14 @@ class VarnameRetrievingWarning(Warning):
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
+
+
+def _get_frame(caller):
+    try:
+        return sys._getframe(caller + 1)
+    except Exception as e:
+        raise VarnameRetrievingError from e
+
 
 def _get_node(caller):
     """Try to get node from the executing object.
@@ -28,16 +40,20 @@ def _get_node(caller):
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        frame = sys._getframe(caller + 2)
-    except Exception:
+        frame = _get_frame(caller + 2)
+    except VarnameRetrievingError:
         return None
-    else:
-        exet = executing.Source.executing(frame)
+
+    exet = executing.Source.executing(frame)
 
     if exet.node:
         return exet.node
 
-    return list(exet.statements)[0]
+    if exet.source.text and exet.source.tree:
+        return list(exet.statements)[0]
+
+    return None
+
 
 def _lookfor_parent_assign(node):
     """Look for an ast.Assign node in the parents"""
@@ -229,7 +245,7 @@ def inject(obj):
         raise VarnameRetrievingError('Unable to inject __varname__.')
     return obj
 
-def nameof(*args):
+def nameof(*args, caller=1):
     """Get the names of the variables passed in
 
     Args:
@@ -238,9 +254,11 @@ def nameof(*args):
     Returns:
         tuple|str: The names of variables passed in
     """
-    node = _get_node(0)
+    node = _get_node(caller - 1)
     node = _lookfor_child_nameof(node)
     if not node:
+        if len(args) == 1:
+            return _bytecode_nameof(caller + 1)
         raise VarnameRetrievingError("Unable to retrieve callee's node.")
 
     ret = []
@@ -256,6 +274,28 @@ def nameof(*args):
 
     return ret[0] if len(args) == 1 else tuple(ret)
 
+
+def _bytecode_nameof(caller=1):
+    frame = _get_frame(caller)
+    return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
+
+
+@lru_cache()
+def _bytecode_nameof_cached(code, offset):
+    instructions = list(dis.get_instructions(code))
+    (current_instruction_index, current_instruction), = (
+        (index, instruction)
+        for index, instruction in enumerate(instructions)
+        if instruction.offset == offset
+    )
+    if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
+        raise VarnameRetrievingError("Did you call nameof in a weird way?")
+    name_instruction = instructions[current_instruction_index - 1]
+    if not name_instruction.opname.startswith("LOAD_"):
+        raise VarnameRetrievingError("Argument must be a variable or attribute")
+    return name_instruction.argrepr
+
+
 def namedtuple(*args, **kwargs):
     """A shortcut for namedtuple
 
@@ -267,7 +307,7 @@ def namedtuple(*args, **kwargs):
     >>> Name = namedtuple('Name', ['first', 'last'])
 
     You can do:
-    >>> from variables import namedtuple
+    >>> from varname import namedtuple
     >>> Name = namedtuple(['first', 'last'])
     """
     typename = varname(raise_exc=True)

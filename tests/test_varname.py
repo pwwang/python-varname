@@ -9,7 +9,27 @@ from varname import (varname,
                      inject,
                      namedtuple,
                      _get_node,
-                     nameof)
+                     _bytecode_nameof,
+                     nameof as original_nameof)
+
+import varname as varname_module
+
+
+def nameof(*args):
+    """Test both implementations at the same time"""
+    result = original_nameof(*args, caller=2)
+    if len(args) == 1:
+        assert result == _bytecode_nameof(caller=2)
+    return result
+
+
+varname_module.nameof = nameof
+
+
+def test_original_nameof():
+    x = 1
+    assert original_nameof(x) == nameof(x) == _bytecode_nameof(x) == 'x'
+
 
 
 @pytest.fixture
@@ -264,6 +284,9 @@ def test_nameof():
         nameof(a==1)
 
     with pytest.raises(VarnameRetrievingError):
+        _bytecode_nameof(a == 1)
+
+    with pytest.raises(VarnameRetrievingError):
         nameof()
 
 def test_nameof_statements():
@@ -294,14 +317,13 @@ def test_nameof_statements():
         assert len(nameof(test)) == 4
 
 def test_nameof_expr():
-    import varname
     test = {}
-    assert len(varname.nameof(test)) == 4
+    assert len(varname_module.nameof(test)) == 4
 
     lam = lambda: 0
     lam.a = 1
     with pytest.raises(VarnameRetrievingError) as vrerr:
-        varname.nameof(test, lam.a)
+        varname_module.nameof(test, lam.a)
     assert str(vrerr.value) == ("Only variables should "
                                 "be passed to nameof.")
 
@@ -392,7 +414,7 @@ def test_frame_fail_varname(no_getframe):
 def test_frame_fail_nameof(no_getframe):
     a = 1
     with pytest.raises(VarnameRetrievingError):
-        nameof(a)
+        assert nameof(a) == 'a'
 
 
 def test_frame_fail_will(no_getframe):
@@ -430,3 +452,23 @@ def test_inject():
     a.append(1)
     b.append(1)
     assert a == b
+
+
+def test_no_source_code_nameof():
+    assert eval('nameof(list)') == eval('original_nameof(list)') == 'list'
+
+    with pytest.raises(VarnameRetrievingError):
+        eval("original_nameof(list, list)")
+
+
+class Weird:
+    def __add__(self, other):
+        _bytecode_nameof(caller=2)
+
+
+def test_bytecode_nameof_wrong_node():
+    with pytest.raises(
+        VarnameRetrievingError,
+        match='Did you call nameof in a weird way',
+    ):
+        Weird() + Weird()
