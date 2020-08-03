@@ -413,10 +413,8 @@ def test_frame_fail_varname(no_getframe):
 
 def test_frame_fail_nameof(no_getframe):
     a = 1
-    with pytest.raises(ValueError):
+    with pytest.raises(VarnameRetrievingError):
         assert nameof(a) == 'a'
-        raise ValueError
-
 
 
 def test_frame_fail_will(no_getframe):

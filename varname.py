@@ -22,6 +22,14 @@ class VarnameRetrievingWarning(Warning):
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
+
+def _get_frame(caller):
+    try:
+        return sys._getframe(caller + 1)
+    except Exception as e:
+        raise VarnameRetrievingError from e
+
+
 def _get_node(caller):
     """Try to get node from the executing object.
 
@@ -31,12 +39,8 @@ def _get_node(caller):
 
     When the node can not be retrieved, try to return the first statement.
     """
-    try:
-        frame = sys._getframe(caller + 2)
-    except Exception:
-        return None
-    else:
-        exet = executing.Source.executing(frame)
+    frame = _get_frame(caller + 2)
+    exet = executing.Source.executing(frame)
 
     if exet.node:
         return exet.node
@@ -268,7 +272,7 @@ def nameof(*args, caller=1):
 
 
 def _bytecode_nameof(caller=1):
-    frame = sys._getframe(caller)
+    frame = _get_frame(caller)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 
