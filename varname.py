@@ -14,7 +14,6 @@ __version__ = "0.2.0"
 
 VARNAME_INDEX = [-1]
 
-TESTING = False
 
 class MultipleTargetAssignmentWarning(Warning):
     """When multiple-target assignment found, i.e. y = x = func()"""
