@@ -28,6 +28,7 @@ varname_module.nameof = nameof
 
 def test_original_nameof():
     x = 1
+	raise ValueError
     assert original_nameof(x) == nameof(x) == _bytecode_nameof(x) == 'x'
 
 
