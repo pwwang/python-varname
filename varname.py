@@ -1,6 +1,6 @@
 """Get the variable name that assigned by function/class calls"""
 import ast
-import inspect
+import sys
 import warnings
 from collections import namedtuple as standard_namedtuple
 import executing
@@ -28,8 +28,8 @@ def _get_node(caller):
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        frame = inspect.stack()[caller+2].frame
-    except IndexError:
+        frame = sys._getframe(caller + 2)
+    except Exception:
         return None
     else:
         exet = executing.Source.executing(frame)
