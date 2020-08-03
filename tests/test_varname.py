@@ -454,3 +454,23 @@ def test_inject():
     a.append(1)
     b.append(1)
     assert a == b
+
+
+def test_no_source_code_nameof():
+    assert eval('nameof(list)') == eval('original_nameof(list)') == 'list'
+
+    with pytest.raises(VarnameRetrievingError):
+        eval("original_nameof(list, list)")
+
+
+class Weird:
+    def __add__(self, other):
+        _bytecode_nameof(caller=2)
+
+
+def test_bytecode_nameof_wrong_node():
+    with pytest.raises(
+        VarnameRetrievingError,
+        match='Did you call nameof in a weird way',
+    ):
+        Weird() + Weird()

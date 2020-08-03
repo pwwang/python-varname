@@ -1,8 +1,6 @@
 """Get the variable name that assigned by function/class calls"""
 import ast
-import sys
 import dis
-import inspect
 import sys
 import warnings
 from collections import namedtuple as standard_namedtuple
@@ -43,7 +41,11 @@ def _get_node(caller):
     if exet.node:
         return exet.node
 
-    return list(exet.statements)[0]
+    if exet.source.text and exet.source.tree:
+        return list(exet.statements)[0]
+
+    return None
+
 
 def _lookfor_parent_assign(node):
     """Look for an ast.Assign node in the parents"""
