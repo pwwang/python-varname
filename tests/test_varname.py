@@ -284,6 +284,9 @@ def test_nameof():
         nameof(a==1)
 
     with pytest.raises(VarnameRetrievingError):
+        _bytecode_nameof(a == 1)
+
+    with pytest.raises(VarnameRetrievingError):
         nameof()
 
 def test_nameof_statements():
