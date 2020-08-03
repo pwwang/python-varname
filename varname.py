@@ -26,8 +26,8 @@ class VarnameRetrievingError(Exception):
 def _get_frame(caller):
     try:
         return sys._getframe(caller + 1)
-    except Exception as e:
-        raise VarnameRetrievingError from e
+    except Exception as exc:
+        raise VarnameRetrievingError from exc
 
 
 def _get_node(caller):
