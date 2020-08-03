@@ -9,10 +9,26 @@ from varname import (varname,
                      inject,
                      namedtuple,
                      _get_node,
-                     nameof)
+                     _bytecode_nameof,
+                     nameof as original_nameof)
+
 import varname as varname_module
 
-varname_module.TESTING = True
+
+def nameof(*args):
+    """Test both implementations at the same time"""
+    result = original_nameof(*args, caller=2)
+    if len(args) == 1:
+        assert result == _bytecode_nameof(caller=2)
+    return result
+
+
+varname_module.nameof = nameof
+
+
+def test_original_nameof():
+    x = 1
+    assert original_nameof(x) == nameof(x) == _bytecode_nameof(x) == 'x'
 
 
 
@@ -298,14 +314,13 @@ def test_nameof_statements():
         assert len(nameof(test)) == 4
 
 def test_nameof_expr():
-    import varname
     test = {}
-    assert len(varname.nameof(test)) == 4
+    assert len(varname_module.nameof(test)) == 4
 
     lam = lambda: 0
     lam.a = 1
     with pytest.raises(VarnameRetrievingError) as vrerr:
-        varname.nameof(test, lam.a)
+        varname_module.nameof(test, lam.a)
     assert str(vrerr.value) == ("Only variables should "
                                 "be passed to nameof.")
 

@@ -3,6 +3,7 @@ import ast
 import sys
 import dis
 import inspect
+import sys
 import warnings
 from collections import namedtuple as standard_namedtuple
 from functools import lru_cache
@@ -235,7 +236,7 @@ def inject(obj):
         raise VarnameRetrievingError('Unable to inject __varname__.')
     return obj
 
-def nameof(*args):
+def nameof(*args, caller=1):
     """Get the names of the variables passed in
 
     Args:
@@ -244,11 +245,11 @@ def nameof(*args):
     Returns:
         tuple|str: The names of variables passed in
     """
-    node = _get_node(0)
+    node = _get_node(caller - 1)
     node = _lookfor_child_nameof(node)
     if not node:
         if len(args) == 1:
-            return _bytecode_nameof()
+            return _bytecode_nameof(caller + 1)
         raise VarnameRetrievingError("Unable to retrieve callee's node.")
 
     ret = []
@@ -262,17 +263,11 @@ def nameof(*args):
         raise VarnameRetrievingError("At least one variable should be "
                                      "passed to nameof")
 
-    if len(args) == 1:
-        ret = ret[0]
-        if TESTING:
-            assert ret == _bytecode_nameof()
-        return ret
-    else:
-        return tuple(ret)
+    return ret[0] if len(args) == 1 else tuple(ret)
 
 
-def _bytecode_nameof():
-    frame = inspect.currentframe().f_back.f_back
+def _bytecode_nameof(caller=1):
+    frame = sys._getframe(caller)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 
