@@ -1,4 +1,4 @@
-name: python-varname checks
+name: Build and Deploy
 
 on: [push, pull_request]
 
@@ -33,3 +33,13 @@ jobs:
           path: junit/test-results-${{ matrix.python-version }}.xml
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        if: matrix.python-version == 3.8
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: .coverage.xml
+      - name: Publish to PyPI
+        if: success() && matrix.python-version == 3.8 && github.event_name == 'push' && startsWith(github.ref, 'refs/tags') 
+        run: poetry publish --build -u ${{ secrets.pypi_user }} -p ${{ secrets.pypi_password }}
+    
