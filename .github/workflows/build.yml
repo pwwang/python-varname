@@ -1,0 +1,45 @@
+name: Build and Deploy
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python # Set Python version
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          pip install pylint
+          poetry install -v
+      - name: Run pylint
+        run: pylint varname.py
+      - name: Test with pytest
+        run: poetry run pytest tests/ --junitxml=junit/test-results-${{ matrix.python-version }}.xml
+      - name: Upload pytest test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: pytest-results-${{ matrix.python-version }}
+          path: junit/test-results-${{ matrix.python-version }}.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        if: matrix.python-version == 3.8
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: .coverage.xml
+      - name: Publish to PyPI
+        if: success() && matrix.python-version == 3.8 && github.event_name == 'push' && startsWith(github.ref, 'refs/tags') 
+        run: poetry publish --build -u ${{ secrets.pypi_user }} -p ${{ secrets.pypi_password }}
+    
