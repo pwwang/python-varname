@@ -39,7 +39,11 @@ def _get_node(caller):
 
     When the node can not be retrieved, try to return the first statement.
     """
-    frame = _get_frame(caller + 2)
+    try:
+        frame = _get_frame(caller + 2)
+    except VarnameRetrievingError:
+        return None
+
     exet = executing.Source.executing(frame)
 
     if exet.node:
