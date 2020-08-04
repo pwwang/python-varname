@@ -322,10 +322,7 @@ def test_nameof_expr():
 
     lam = lambda: 0
     lam.a = 1
-    with pytest.raises(VarnameRetrievingError) as vrerr:
-        varname_module.nameof(test, lam.a)
-    assert str(vrerr.value) == ("Only variables should "
-                                "be passed to nameof.")
+    assert varname_module.nameof(test, lam.a) == ("test", "a")
 
 def test_class_property():
     class C:
