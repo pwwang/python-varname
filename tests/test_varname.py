@@ -333,7 +333,16 @@ class TestNameof(unittest.TestCase):
                                     "be passed to nameof.")
 
 
-def test_bytecode_nameof_fail():
+def test_nameof_pytest_fail():
+    with pytest.raises(
+        VarnameRetrievingError,
+        match="Couldn't retrieve the call node. "
+              "This may happen if you're using some other AST magic"
+    ):
+        assert nameof(nameof) == 'nameof'
+
+
+def test_bytecode_pytest_nameof_fail():
     with pytest.raises(
         VarnameRetrievingError,
         match="Found the variable name '@py_assert2' which is obviously wrong.",
