@@ -1,7 +1,6 @@
 """Get the variable name that assigned by function/class calls"""
 import ast
 import dis
-import re
 import sys
 import warnings
 from collections import namedtuple as standard_namedtuple
@@ -53,8 +52,8 @@ def _get_node(caller):
     if exet.source.text and exet.source.tree:
         raise VarnameRetrievingError(
             "Couldn't retrieve the call node. "
-            "This may happen if you're using some other AST magic at the same time, "
-            "such as pytest, ipython, macropy, or birdseye."
+            "This may happen if you're using some other AST magic at the "
+            "same time, such as pytest, ipython, macropy, or birdseye."
         )
 
     return None
@@ -256,8 +255,8 @@ def _bytecode_nameof_cached(code, offset):
     if not name.isidentifier():
         raise VarnameRetrievingError(
             f"Found the variable name {name!r} which is obviously wrong. "
-			"This may happen if you're using some other AST magic at the same time, "
-			"such as pytest, ipython, macropy, or birdseye."
+            "This may happen if you're using some other AST magic at the "
+            "same time, such as pytest, ipython, macropy, or birdseye."
         )
 
     return name
