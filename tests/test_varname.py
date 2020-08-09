@@ -1,4 +1,6 @@
 import sys
+import unittest
+
 import pytest
 from varname import (varname,
                      VarnameRetrievingWarning,
@@ -24,12 +26,6 @@ def nameof(*args):
 
 
 varname_module.nameof = nameof
-
-
-def test_original_nameof():
-    x = 1
-    assert original_nameof(x) == nameof(x) == _bytecode_nameof(x) == 'x'
-
 
 
 @pytest.fixture
@@ -258,74 +254,84 @@ def test_wrapper():
     assert str(val1) == 'True'
     assert repr(val1) == "<Wrapper (name='val1', value=True)>"
 
-def test_nameof():
-    a = 1
-    b = nameof(a)
-    assert b == 'a'
-    nameof2 = nameof
-    c = nameof2(a, b)
-    assert b == 'a'
-    assert c == ('a', 'b')
 
-    def func():
-        return varname() + 'abc'
+class TestNameof(unittest.TestCase):
+    def test_original_nameof(self):
+        x = 1
+        self.assertEqual(original_nameof(x), 'x')
+        self.assertEqual(nameof(x), 'x')
+        self.assertEqual(_bytecode_nameof(x), 'x')
 
-    f = func()
-    assert f == 'fabc'
+    def test_nameof(self):
+        a = 1
+        b = nameof(a)
+        assert b == 'a'
+        nameof2 = nameof
+        c = nameof2(a, b)
+        assert b == 'a'
+        assert c == ('a', 'b')
 
-    assert nameof(f) == 'f'
-    assert 'f' == nameof(f)
-    assert len(nameof(f)) == 1
+        def func():
+            return varname() + 'abc'
 
-    fname1 = fname = nameof(f)
-    assert fname1 == fname == 'f'
+        f = func()
+        assert f == 'fabc'
 
-    with pytest.raises(VarnameRetrievingError):
-        nameof(a==1)
+        self.assertEqual(nameof(f), 'f')
+        self.assertEqual('f', nameof(f))
+        self.assertEqual(len(nameof(f)), 1)
 
-    with pytest.raises(VarnameRetrievingError):
-        _bytecode_nameof(a == 1)
+        fname1 = fname = nameof(f)
+        self.assertEqual(fname, 'f')
+        self.assertEqual(fname1, 'f')
 
-    with pytest.raises(VarnameRetrievingError):
-        nameof()
+        with pytest.raises(VarnameRetrievingError):
+            nameof(a==1)
 
-def test_nameof_statements():
-    a = {'test': 1}
-    test = {}
-    del a[nameof(test)]
-    assert a == {}
+        with pytest.raises(VarnameRetrievingError):
+            _bytecode_nameof(a == 1)
 
-    def func():
-        return nameof(test)
+        with pytest.raises(VarnameRetrievingError):
+            nameof()
 
-    assert func() == 'test'
+    def test_nameof_statements(self):
+        a = {'test': 1}
+        test = {}
+        del a[nameof(test)]
+        assert a == {}
 
-    def func2():
-        yield nameof(test)
+        def func():
+            return nameof(test)
 
-    assert list(func2()) == ['test']
+        assert func() == 'test'
 
-    def func3():
-        raise ValueError(nameof(test))
+        def func2():
+            yield nameof(test)
 
-    with pytest.raises(ValueError) as verr:
-        func3()
-    assert str(verr.value) == 'test'
+        assert list(func2()) == ['test']
 
-    for i in [0]:
-        assert nameof(test) == 'test'
-        assert len(nameof(test)) == 4
+        def func3():
+            raise ValueError(nameof(test))
 
-def test_nameof_expr():
-    test = {}
-    assert len(varname_module.nameof(test)) == 4
+        with pytest.raises(ValueError) as verr:
+            func3()
+        assert str(verr.value) == 'test'
 
-    lam = lambda: 0
-    lam.a = 1
-    with pytest.raises(VarnameRetrievingError) as vrerr:
-        varname_module.nameof(test, lam.a)
-    assert str(vrerr.value) == ("Only variables should "
-                                "be passed to nameof.")
+        for i in [0]:
+            self.assertEqual(nameof(test), 'test')
+            self.assertEqual(len(nameof(test)), 4)
+
+    def test_nameof_expr(self):
+        test = {}
+        self.assertEqual(len(varname_module.nameof(test)), 4)
+
+        lam = lambda: 0
+        lam.a = 1
+        with pytest.raises(VarnameRetrievingError) as vrerr:
+            varname_module.nameof(test, lam.a)
+        assert str(vrerr.value) == ("Only variables should "
+                                    "be passed to nameof.")
+
 
 def test_class_property():
     class C:
@@ -382,7 +388,8 @@ def test_will_property():
             return 'I will do something'
 
     c = C()
-    assert c.iwill.do() == 'I will do something'
+    result = c.iwill.do()
+    assert result == 'I will do something'
 
 def test_will_fail():
 

@@ -1,6 +1,7 @@
 """Get the variable name that assigned by function/class calls"""
 import ast
 import dis
+import re
 import sys
 import warnings
 from collections import namedtuple as standard_namedtuple
@@ -50,7 +51,11 @@ def _get_node(caller):
         return exet.node
 
     if exet.source.text and exet.source.tree:
-        return list(exet.statements)[0]
+        raise VarnameRetrievingError(
+            "Couldn't retrieve the call node. "
+            "This may happen if you're using some other AST magic at the same time, "
+            "such as pytest, ipython, macropy, or birdseye."
+        )
 
     return None
 
@@ -62,53 +67,6 @@ def _lookfor_parent_assign(node):
 
         if isinstance(node, ast.Assign):
             return node
-    return None
-
-def _lookfor_child_nameof(node):
-    """Look for ast.Call with func=Name(id='nameof',...)"""
-    # pylint: disable=too-many-return-statements
-    if isinstance(node, ast.Call):
-        # if node.func.id == 'nameof':
-        #     return node
-
-        # We want to support alias for nameof, i.e. nameof2
-        # Or called like: varname.nameof(test)
-        # If all args are ast.Name, then if must be alias of nameof
-        # Since this is originated from it, and there is no other
-        # ast.Call node in args
-        if not any(isinstance(arg, ast.Call) for arg in node.args):
-            return node
-
-        # print(nameof(test))
-        for arg in node.args:
-            found = _lookfor_child_nameof(arg)
-            if found:
-                return found
-
-    elif isinstance(node, ast.Compare):
-        # nameof(test) == 'test'
-        found = _lookfor_child_nameof(node.left)
-        if found:
-            return found
-        # 'test' == nameof(test)
-        for comp in node.comparators:
-            found = _lookfor_child_nameof(comp)
-            if found:
-                return found
-
-    elif isinstance(node, ast.Assert):
-        # assert nameof(test) == 'test'
-        found = _lookfor_child_nameof(node.test)
-        if found:
-            return found
-
-    elif isinstance(node, ast.Expr): # pragma: no cover
-        # print(nameof(test)) in ipython's forloop
-        # issue #5
-        found = _lookfor_child_nameof(node.value)
-        if found:
-            return found
-
     return None
 
 
@@ -255,7 +213,6 @@ def nameof(*args, caller=1):
         tuple|str: The names of variables passed in
     """
     node = _get_node(caller - 1)
-    node = _lookfor_child_nameof(node)
     if not node:
         if len(args) == 1:
             return _bytecode_nameof(caller + 1)
