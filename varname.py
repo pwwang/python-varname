@@ -203,6 +203,7 @@ def inject(obj):
         raise VarnameRetrievingError('Unable to inject __varname__.')
     return obj
 
+
 def nameof(*args, caller=1):
     """Get the names of the variables passed in
 
@@ -250,7 +251,16 @@ def _bytecode_nameof_cached(code, offset):
     name_instruction = instructions[current_instruction_index - 1]
     if not name_instruction.opname.startswith("LOAD_"):
         raise VarnameRetrievingError("Argument must be a variable or attribute")
-    return name_instruction.argrepr
+
+    name: str = name_instruction.argrepr
+    if not name.isidentifier():
+        raise VarnameRetrievingError(
+            f"Found the variable name {name!r} which is obviously wrong. "
+			"This may happen if you're using some other AST magic at the same time, "
+			"such as pytest, ipython, macropy, or birdseye."
+        )
+
+    return name
 
 
 def namedtuple(*args, **kwargs):

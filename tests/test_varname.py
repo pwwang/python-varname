@@ -333,6 +333,16 @@ class TestNameof(unittest.TestCase):
                                     "be passed to nameof.")
 
 
+def test_bytecode_nameof_fail():
+    with pytest.raises(
+        VarnameRetrievingError,
+        match="Found the variable name '@py_assert2' which is obviously wrong.",
+    ):
+        lam = lambda: 0
+        lam.a = 1
+        assert _bytecode_nameof(lam.a) == 'a'
+
+
 def test_class_property():
     class C:
         @property
