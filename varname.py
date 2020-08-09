@@ -166,13 +166,13 @@ def varname(caller=1, raise_exc=False):
 def _node_name(node):
     if isinstance(node, ast.Name):
         return node.id
-    elif isinstance(node, ast.Attribute):
+    if isinstance(node, ast.Attribute):
         return node.attr
-    else:
-        raise VarnameRetrievingError(
-            f"Can only get name of a variable or attribute, "
-            f"not {ast.dump(node)}"
-        )
+
+    raise VarnameRetrievingError(
+        f"Can only get name of a variable or attribute, "
+        f"not {ast.dump(node)}"
+    )
 
 
 def will(caller=1, raise_exc=False):
