@@ -160,24 +160,28 @@ def will(caller=1, raise_exc=False):
             raise VarnameRetrievingError("Unable to retrieve the frame.")
         return None
 
-    ret = None
-    try:
-        # have to be used in a call
-        assert isinstance(node, (ast.Attribute, ast.Call)), (
-            "Invalid use of function `will`"
-        )
+    # have to be called like: inst.attr or inst.attr()
+    # see test_will_malformat
+    if not isinstance(node, (ast.Attribute, ast.Call)):
+        if raise_exc:
+            raise VarnameRetrievingError("Invalid use of function `will`")
+        return None
+
+    if isinstance(node, ast.Call):
+        # try to get not inst.attr from inst.attr()
+        # seemingly ast.Call always has parent, at least, ast.Expr
         node = node.parent
-    except (AssertionError, AttributeError):
-        pass
-    else:
-        if isinstance(node, ast.Attribute):
-            ret = node.attr
 
-        if not ret and raise_exc:
-            raise VarnameRetrievingError('Unable to retrieve the '
-                                         'next attribute name')
-
-    return ret
+    # see test_will_fail
+    if not isinstance(node, ast.Attribute):
+        if raise_exc:
+            raise VarnameRetrievingError(
+                "Function `will` has to be called within "
+                "a method/property of a class."
+            ) from None
+        return None
+    # ast.Attribute
+    return node.attr
 
 def inject(obj):
     """Inject attribute `__varname__` to an object

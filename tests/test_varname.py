@@ -410,14 +410,34 @@ def test_will_property():
     result = c.iwill.do()
     assert result == 'I will do something'
 
+def test_will_malformat():
+    """Function will has to be used in the format of `inst.attr` or
+    `inst.attr()`"""
+    class C1:
+        def __getitem__(self, name):
+            return will(raise_exc=True)
+
+    class C2:
+        def __getitem__(self, name):
+            return will(raise_exc=False)
+
+    c1 = C1()
+    with pytest.raises(VarnameRetrievingError):
+        c1[1]
+
+    c2_will = C2()[1]
+    assert c2_will is None
+
 def test_will_fail():
 
-    def get_will():
-        return {'a': will(raise_exc=True)}
+    def get_will(raise_exc):
+        return will(raise_exc=raise_exc)
 
     with pytest.raises(VarnameRetrievingError):
-        get_will()['a']
+        get_will(True)
 
+    the_will = get_will(False)
+    assert the_will is None
 
 def test_frame_fail(no_getframe):
     """Test when failed to retrieve the frame"""
