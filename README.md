@@ -32,7 +32,7 @@ Thanks goes to these awesome people/projects:
     </td>
     <td align="center">
       <a href="https://github.com/alexmojaki/executing">
-        <img src="https://via.placeholder.com/100?text=executing" width="50px;" alt=""/>
+        <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
         <br /><sub><b>executing</b></sub>
       </a>
     </td>
