@@ -392,6 +392,7 @@ def test_will_deep():
     func = i_will().abc
     assert func.will == 'abc'
 
+# issue #17
 def test_will_property():
 
     class C:
@@ -400,15 +401,49 @@ def test_will_property():
 
         @property
         def iwill(self):
-            self.will = will()
+            self.will = will(raise_exc=False)
             return self
 
         def do(self):
             return 'I will do something'
 
     c = C()
+    c.iwill
+    assert c.will is None
+
     result = c.iwill.do()
+    assert c.will == 'do'
     assert result == 'I will do something'
+
+# issue #18
+def test_will_method():
+    class AwesomeClass:
+        def __init__(self):
+            self.will = None
+
+        def permit(self):
+            self.will = will()
+            if self.will == 'do':
+                # let self handle do
+                return self
+            raise AttributeError('Should do something with AwesomeClass object')
+
+        def do(self):
+            if self.will != 'do':
+                raise AttributeError("You don't have permission to do")
+            return 'I am doing!'
+
+    awesome = AwesomeClass()
+    with pytest.raises(AttributeError) as exc:
+        awesome.do()
+    assert str(exc.value) == "You don't have permission to do"
+
+    with pytest.raises(AttributeError) as exc:
+        awesome.permit()
+    assert str(exc.value) == 'Should do something with AwesomeClass object'
+
+    ret = awesome.permit().do()
+    assert ret == 'I am doing!'
 
 def test_will_malformat():
     """Function will has to be used in the format of `inst.attr` or
@@ -427,6 +462,7 @@ def test_will_malformat():
 
     c2_will = C2()[1]
     assert c2_will is None
+
 
 def test_will_fail():
 

@@ -167,10 +167,10 @@ def will(caller=1, raise_exc=False):
             raise VarnameRetrievingError("Invalid use of function `will`")
         return None
 
-    if isinstance(node, ast.Call):
-        # try to get not inst.attr from inst.attr()
-        # seemingly ast.Call always has parent, at least, ast.Expr
-        node = node.parent
+    # try to get not inst.attr from inst.attr()
+    # ast.Call/Attribute always has parent
+    # see: https://docs.python.org/3/library/ast.html#abstract-grammar
+    node = node.parent
 
     # see test_will_fail
     if not isinstance(node, ast.Attribute):
