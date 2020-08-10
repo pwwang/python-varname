@@ -24,6 +24,7 @@ class VarnameRetrievingError(Exception):
 
 
 def _get_frame(caller):
+    """Get the frame at `caller` depth"""
     try:
         return sys._getframe(caller + 1)
     except Exception as exc:
@@ -130,17 +131,30 @@ def will(caller=1, raise_exc=False):
     """Detect the attribute name right immediately after a function call.
 
     Examples:
-        ```python
-        def i_will():
-            will = varname.will()
-            func = lambda: 0
-            func.will = will
-            return func
+        >>> class AwesomeClass:
+        >>>     def __init__(self):
+        >>>         self.will = None
 
-        func = i_will().abc
+        >>>     def permit(self):
+        >>>         self.will = will()
+        >>>         if self.will == 'do':
+        >>>             # let self handle do
+        >>>             return self
+        >>>         raise AttributeError(
+        >>>             'Should do something with AwesomeClass object'
+        >>>         )
 
-        # func.will == 'abc'
-        ```
+        >>>     def do(self):
+        >>>         if self.will != 'do':
+        >>>             raise AttributeError("You don't have permission to do")
+        >>>         return 'I am doing!'
+
+        >>> awesome = AwesomeClass()
+        >>> # AttributeError: You don't have permission to do
+        >>> awesome.do()
+        >>> # AttributeError: Should do something with AwesomeClass object
+        >>> awesome.permit()
+        >>> awesome.permit().do() == 'I am doing!'
 
     Args:
         caller (int): At which stack this function is called.
@@ -186,6 +200,23 @@ def will(caller=1, raise_exc=False):
 def inject(obj):
     """Inject attribute `__varname__` to an object
 
+    Examples:
+        >>> class MyList(list):
+        >>>     pass
+
+        >>> a = varname.inject(MyList())
+        >>> b = varname.inject(MyList())
+
+        >>> a.__varname__ == 'a'
+        >>> b.__varname__ == 'b'
+
+        >>> a == b
+
+        >>> # other methods not affected
+        >>> a.append(1)
+        >>> b.append(1)
+        >>> a == b
+
     Args:
         obj: An object that can be injected
 
@@ -209,6 +240,15 @@ def inject(obj):
 
 def nameof(*args, caller=1):
     """Get the names of the variables passed in
+
+    Examples:
+        >>> a = 1
+        >>> aname = nameof(a)
+        >>> # aname == 'a
+
+        >>> b = 2
+        >>> aname, bname = nameof(a, b)
+        >>> # aname == 'a', bname == 'b'
 
     Args:
         *args: A couple of variables passed in
@@ -273,18 +313,38 @@ def namedtuple(*args, **kwargs):
     the variable name.
 
     So instead of:
-    >>> from collections import namedtuple
-    >>> Name = namedtuple('Name', ['first', 'last'])
+        >>> from collections import namedtuple
+        >>> Name = namedtuple('Name', ['first', 'last'])
 
     You can do:
-    >>> from varname import namedtuple
-    >>> Name = namedtuple(['first', 'last'])
+        >>> from varname import namedtuple
+        >>> Name = namedtuple(['first', 'last'])
+
+    Args:
+        *args: arguments for `collections.namedtuple` except `typename`
+        **kwargs: keyword arguments for `collections.namedtuple`
+            except `typename`
     """
     typename = varname(raise_exc=True)
     return standard_namedtuple(typename, *args, **kwargs)
 
 class Wrapper:
-    """A wrapper with ability to retrieve the variable name"""
+    """A wrapper with ability to retrieve the variable name
+
+    Examples:
+        >>> foo = Wrapper(True)
+        >>> # foo.name == 'foo'
+        >>> # foo.value == True
+
+        >>> val = {}
+        >>> bar = Wrapper(val)
+        >>> # bar.name == 'bar'
+        >>> # bar.value is val
+
+    Attributes:
+        name (str): The variable name to which the instance is assigned
+        value (any): The value this wrapper wraps
+    """
 
     def __init__(self, value):
         self.name = varname()
