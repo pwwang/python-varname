@@ -18,6 +18,27 @@ pip install python-varname
 - Shortcut for `collections.namedtuple` (added in `v0.1.6`)
 - Injecting `__varname__` to objects (added in `v0.1.7`)
 
+## Credits
+
+Thanks goes to these awesome people/projects:
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/alexmojaki">
+        <img src="https://avatars0.githubusercontent.com/u/3627481?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@alexmojaki</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/alexmojaki/executing">
+        <img src="https://via.placeholder.com/100?text=executing" width="50px;" alt=""/>
+        <br /><sub><b>executing</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
 ## Usage
 
 ### Retrieving the variable names from inside a function call/class instantiation
