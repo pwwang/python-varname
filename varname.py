@@ -178,7 +178,7 @@ def will(caller=1, raise_exc=False):
             raise VarnameRetrievingError(
                 "Function `will` has to be called within "
                 "a method/property of a class."
-            ) from None
+            )
         return None
     # ast.Attribute
     return node.attr
