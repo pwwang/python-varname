@@ -174,13 +174,6 @@ def will(caller=1, raise_exc=False):
             raise VarnameRetrievingError("Unable to retrieve the frame.")
         return None
 
-    # have to be called like: inst.attr or inst.attr()
-    # see test_will_malformat
-    if not isinstance(node, (ast.Attribute, ast.Call)):
-        if raise_exc:
-            raise VarnameRetrievingError("Invalid use of function `will`")
-        return None
-
     # try to get not inst.attr from inst.attr()
     # ast.Call/Attribute always has parent
     # see: https://docs.python.org/3/library/ast.html#abstract-grammar
