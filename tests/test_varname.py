@@ -421,7 +421,7 @@ def test_will_method():
         def __init__(self):
             self.will = None
 
-        def permit(self):
+        def permit(self, *_):
             self.will = will()
             if self.will == 'do':
                 # let self handle do
@@ -432,6 +432,8 @@ def test_will_method():
             if self.will != 'do':
                 raise AttributeError("You don't have permission to do")
             return 'I am doing!'
+
+        __getitem__ = permit
 
     awesome = AwesomeClass()
     with pytest.raises(AttributeError) as exc:
@@ -445,23 +447,12 @@ def test_will_method():
     ret = awesome.permit().do()
     assert ret == 'I am doing!'
 
-def test_will_malformat():
-    """Function will has to be used in the format of `inst.attr` or
-    `inst.attr()`"""
-    class C1:
-        def __getitem__(self, name):
-            return will(raise_exc=True)
+    with pytest.raises(AttributeError) as exc:
+        print(awesome[2])
+    assert str(exc.value) == 'Should do something with AwesomeClass object'
 
-    class C2:
-        def __getitem__(self, name):
-            return will(raise_exc=False)
-
-    c1 = C1()
-    with pytest.raises(VarnameRetrievingError):
-        c1[1]
-
-    c2_will = C2()[1]
-    assert c2_will is None
+    ret = awesome[2].do()
+    assert ret == 'I am doing!'
 
 
 def test_will_fail():
