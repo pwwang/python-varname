@@ -327,10 +327,19 @@ class TestNameof(unittest.TestCase):
 
         lam = lambda: 0
         lam.a = 1
-        with pytest.raises(VarnameRetrievingError) as vrerr:
-            varname_module.nameof(test, lam.a)
-        assert str(vrerr.value) == ("Only variables should "
-                                    "be passed to nameof.")
+        lam.lam = lam
+        lams = [lam]
+        self.assertEqual(
+            varname_module.nameof(test, lam.a),
+            ("test", "a"),
+        )
+
+        self.assertEqual(nameof(lam.a), "a")
+        self.assertEqual(nameof(lam.lam.lam.lam.a), "a")
+        self.assertEqual(nameof(lam.lam.lam.lam), "lam")
+        self.assertEqual(nameof(lams[0].lam), "lam")
+        self.assertEqual(nameof(lams[0].lam.a), "a")
+        self.assertEqual(nameof((lam() or lams[0]).lam.a), "a")
 
 
 def test_nameof_pytest_fail():

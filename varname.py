@@ -118,14 +118,20 @@ def varname(caller=1, raise_exc=False):
                       "on the very left will be used.",
                       MultipleTargetAssignmentWarning)
     target = node.targets[0]
+    return _node_name(target)
 
-    # must be a variable
-    if isinstance(target, ast.Name):
-        return target.id
+
+def _node_name(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
 
     raise VarnameRetrievingError(
-        f"Invaid variable assigned: {ast.dump(target)!r}"
+        f"Can only get name of a variable or attribute, "
+        f"not {ast.dump(node)}"
     )
+
 
 def will(caller=1, raise_exc=False):
     """Detect the attribute name right immediately after a function call.
@@ -257,10 +263,7 @@ def nameof(*args, caller=1):
 
     ret = []
     for arg in node.args:
-        if not isinstance(arg, ast.Name):
-            raise VarnameRetrievingError("Only variables should "
-                                         "be passed to nameof.")
-        ret.append(arg.id)
+        ret.append(_node_name(arg))
 
     if not ret:
         raise VarnameRetrievingError("At least one variable should be "
