@@ -1,4 +1,6 @@
 import sys
+import unittest
+
 import pytest
 from varname import (varname,
                      VarnameRetrievingWarning,
@@ -24,12 +26,6 @@ def nameof(*args):
 
 
 varname_module.nameof = nameof
-
-
-def test_original_nameof():
-    x = 1
-    assert original_nameof(x) == nameof(x) == _bytecode_nameof(x) == 'x'
-
 
 
 @pytest.fixture
@@ -258,71 +254,103 @@ def test_wrapper():
     assert str(val1) == 'True'
     assert repr(val1) == "<Wrapper (name='val1', value=True)>"
 
-def test_nameof():
-    a = 1
-    b = nameof(a)
-    assert b == 'a'
-    nameof2 = nameof
-    c = nameof2(a, b)
-    assert b == 'a'
-    assert c == ('a', 'b')
 
-    def func():
-        return varname() + 'abc'
+class TestNameof(unittest.TestCase):
+    def test_original_nameof(self):
+        x = 1
+        self.assertEqual(original_nameof(x), 'x')
+        self.assertEqual(nameof(x), 'x')
+        self.assertEqual(_bytecode_nameof(x), 'x')
 
-    f = func()
-    assert f == 'fabc'
+    def test_nameof(self):
+        a = 1
+        b = nameof(a)
+        assert b == 'a'
+        nameof2 = nameof
+        c = nameof2(a, b)
+        assert b == 'a'
+        assert c == ('a', 'b')
 
-    assert nameof(f) == 'f'
-    assert 'f' == nameof(f)
-    assert len(nameof(f)) == 1
+        def func():
+            return varname() + 'abc'
 
-    fname1 = fname = nameof(f)
-    assert fname1 == fname == 'f'
+        f = func()
+        assert f == 'fabc'
 
-    with pytest.raises(VarnameRetrievingError):
-        nameof(a==1)
+        self.assertEqual(nameof(f), 'f')
+        self.assertEqual('f', nameof(f))
+        self.assertEqual(len(nameof(f)), 1)
 
-    with pytest.raises(VarnameRetrievingError):
-        _bytecode_nameof(a == 1)
+        fname1 = fname = nameof(f)
+        self.assertEqual(fname, 'f')
+        self.assertEqual(fname1, 'f')
 
-    with pytest.raises(VarnameRetrievingError):
-        nameof()
+        with pytest.raises(VarnameRetrievingError):
+            nameof(a==1)
 
-def test_nameof_statements():
-    a = {'test': 1}
-    test = {}
-    del a[nameof(test)]
-    assert a == {}
+        with pytest.raises(VarnameRetrievingError):
+            _bytecode_nameof(a == 1)
 
-    def func():
-        return nameof(test)
+        with pytest.raises(VarnameRetrievingError):
+            nameof()
 
-    assert func() == 'test'
+    def test_nameof_statements(self):
+        a = {'test': 1}
+        test = {}
+        del a[nameof(test)]
+        assert a == {}
 
-    def func2():
-        yield nameof(test)
+        def func():
+            return nameof(test)
 
-    assert list(func2()) == ['test']
+        assert func() == 'test'
 
-    def func3():
-        raise ValueError(nameof(test))
+        def func2():
+            yield nameof(test)
 
-    with pytest.raises(ValueError) as verr:
-        func3()
-    assert str(verr.value) == 'test'
+        assert list(func2()) == ['test']
 
-    for i in [0]:
-        assert nameof(test) == 'test'
-        assert len(nameof(test)) == 4
+        def func3():
+            raise ValueError(nameof(test))
 
-def test_nameof_expr():
-    test = {}
-    assert len(varname_module.nameof(test)) == 4
+        with pytest.raises(ValueError) as verr:
+            func3()
+        assert str(verr.value) == 'test'
 
-    lam = lambda: 0
-    lam.a = 1
-    assert varname_module.nameof(test, lam.a) == ("test", "a")
+        for i in [0]:
+            self.assertEqual(nameof(test), 'test')
+            self.assertEqual(len(nameof(test)), 4)
+
+    def test_nameof_expr(self):
+        test = {}
+        self.assertEqual(len(varname_module.nameof(test)), 4)
+
+        lam = lambda: 0
+        lam.a = 1
+        self.assertEqual(
+            varname_module.nameof(test, lam.a),
+            ("test", "a"),
+        )
+
+
+def test_nameof_pytest_fail():
+    with pytest.raises(
+        VarnameRetrievingError,
+        match="Couldn't retrieve the call node. "
+              "This may happen if you're using some other AST magic"
+    ):
+        assert nameof(nameof) == 'nameof'
+
+
+def test_bytecode_pytest_nameof_fail():
+    with pytest.raises(
+        VarnameRetrievingError,
+        match="Found the variable name '@py_assert2' which is obviously wrong.",
+    ):
+        lam = lambda: 0
+        lam.a = 1
+        assert _bytecode_nameof(lam.a) == 'a'
+
 
 def test_class_property():
     class C:
@@ -364,6 +392,7 @@ def test_will_deep():
     func = i_will().abc
     assert func.will == 'abc'
 
+# issue #17
 def test_will_property():
 
     class C:
@@ -372,23 +401,79 @@ def test_will_property():
 
         @property
         def iwill(self):
-            self.will = will()
+            self.will = will(raise_exc=False)
             return self
 
         def do(self):
             return 'I will do something'
 
     c = C()
-    assert c.iwill.do() == 'I will do something'
+    c.iwill
+    assert c.will is None
+
+    result = c.iwill.do()
+    assert c.will == 'do'
+    assert result == 'I will do something'
+
+# issue #18
+def test_will_method():
+    class AwesomeClass:
+        def __init__(self):
+            self.will = None
+
+        def permit(self):
+            self.will = will()
+            if self.will == 'do':
+                # let self handle do
+                return self
+            raise AttributeError('Should do something with AwesomeClass object')
+
+        def do(self):
+            if self.will != 'do':
+                raise AttributeError("You don't have permission to do")
+            return 'I am doing!'
+
+    awesome = AwesomeClass()
+    with pytest.raises(AttributeError) as exc:
+        awesome.do()
+    assert str(exc.value) == "You don't have permission to do"
+
+    with pytest.raises(AttributeError) as exc:
+        awesome.permit()
+    assert str(exc.value) == 'Should do something with AwesomeClass object'
+
+    ret = awesome.permit().do()
+    assert ret == 'I am doing!'
+
+def test_will_malformat():
+    """Function will has to be used in the format of `inst.attr` or
+    `inst.attr()`"""
+    class C1:
+        def __getitem__(self, name):
+            return will(raise_exc=True)
+
+    class C2:
+        def __getitem__(self, name):
+            return will(raise_exc=False)
+
+    c1 = C1()
+    with pytest.raises(VarnameRetrievingError):
+        c1[1]
+
+    c2_will = C2()[1]
+    assert c2_will is None
+
 
 def test_will_fail():
 
-    def get_will():
-        return {'a': will(raise_exc=True)}
+    def get_will(raise_exc):
+        return will(raise_exc=raise_exc)
 
     with pytest.raises(VarnameRetrievingError):
-        get_will()['a']
+        get_will(True)
 
+    the_will = get_will(False)
+    assert the_will is None
 
 def test_frame_fail(no_getframe):
     """Test when failed to retrieve the frame"""

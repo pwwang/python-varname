@@ -24,6 +24,7 @@ class VarnameRetrievingError(Exception):
 
 
 def _get_frame(caller):
+    """Get the frame at `caller` depth"""
     try:
         return sys._getframe(caller + 1)
     except Exception as exc:
@@ -50,7 +51,11 @@ def _get_node(caller):
         return exet.node
 
     if exet.source.text and exet.source.tree:
-        return list(exet.statements)[0]
+        raise VarnameRetrievingError(
+            "Couldn't retrieve the call node. "
+            "This may happen if you're using some other AST magic at the "
+            "same time, such as pytest, ipython, macropy, or birdseye."
+        )
 
     return None
 
@@ -62,53 +67,6 @@ def _lookfor_parent_assign(node):
 
         if isinstance(node, ast.Assign):
             return node
-    return None
-
-def _lookfor_child_nameof(node):
-    """Look for ast.Call with func=Name(id='nameof',...)"""
-    # pylint: disable=too-many-return-statements
-    if isinstance(node, ast.Call):
-        # if node.func.id == 'nameof':
-        #     return node
-
-        # We want to support alias for nameof, i.e. nameof2
-        # Or called like: varname.nameof(test)
-        # If all args are ast.Name, then if must be alias of nameof
-        # Since this is originated from it, and there is no other
-        # ast.Call node in args
-        if not any(isinstance(arg, ast.Call) for arg in node.args):
-            return node
-
-        # print(nameof(test))
-        for arg in node.args:
-            found = _lookfor_child_nameof(arg)
-            if found:
-                return found
-
-    elif isinstance(node, ast.Compare):
-        # nameof(test) == 'test'
-        found = _lookfor_child_nameof(node.left)
-        if found:
-            return found
-        # 'test' == nameof(test)
-        for comp in node.comparators:
-            found = _lookfor_child_nameof(comp)
-            if found:
-                return found
-
-    elif isinstance(node, ast.Assert):
-        # assert nameof(test) == 'test'
-        found = _lookfor_child_nameof(node.test)
-        if found:
-            return found
-
-    elif isinstance(node, ast.Expr): # pragma: no cover
-        # print(nameof(test)) in ipython's forloop
-        # issue #5
-        found = _lookfor_child_nameof(node.value)
-        if found:
-            return found
-
     return None
 
 
@@ -179,17 +137,30 @@ def will(caller=1, raise_exc=False):
     """Detect the attribute name right immediately after a function call.
 
     Examples:
-        ```python
-        def i_will():
-            will = varname.will()
-            func = lambda: 0
-            func.will = will
-            return func
+        >>> class AwesomeClass:
+        >>>     def __init__(self):
+        >>>         self.will = None
 
-        func = i_will().abc
+        >>>     def permit(self):
+        >>>         self.will = will()
+        >>>         if self.will == 'do':
+        >>>             # let self handle do
+        >>>             return self
+        >>>         raise AttributeError(
+        >>>             'Should do something with AwesomeClass object'
+        >>>         )
 
-        # func.will == 'abc'
-        ```
+        >>>     def do(self):
+        >>>         if self.will != 'do':
+        >>>             raise AttributeError("You don't have permission to do")
+        >>>         return 'I am doing!'
+
+        >>> awesome = AwesomeClass()
+        >>> # AttributeError: You don't have permission to do
+        >>> awesome.do()
+        >>> # AttributeError: Should do something with AwesomeClass object
+        >>> awesome.permit()
+        >>> awesome.permit().do() == 'I am doing!'
 
     Args:
         caller (int): At which stack this function is called.
@@ -209,27 +180,48 @@ def will(caller=1, raise_exc=False):
             raise VarnameRetrievingError("Unable to retrieve the frame.")
         return None
 
-    ret = None
-    try:
-        # have to be used in a call
-        assert isinstance(node, (ast.Attribute, ast.Call)), (
-            "Invalid use of function `will`"
-        )
-        node = node.parent
-    except (AssertionError, AttributeError):
-        pass
-    else:
-        if isinstance(node, ast.Attribute):
-            ret = node.attr
+    # have to be called like: inst.attr or inst.attr()
+    # see test_will_malformat
+    if not isinstance(node, (ast.Attribute, ast.Call)):
+        if raise_exc:
+            raise VarnameRetrievingError("Invalid use of function `will`")
+        return None
 
-        if not ret and raise_exc:
-            raise VarnameRetrievingError('Unable to retrieve the '
-                                         'next attribute name')
+    # try to get not inst.attr from inst.attr()
+    # ast.Call/Attribute always has parent
+    # see: https://docs.python.org/3/library/ast.html#abstract-grammar
+    node = node.parent
 
-    return ret
+    # see test_will_fail
+    if not isinstance(node, ast.Attribute):
+        if raise_exc:
+            raise VarnameRetrievingError(
+                "Function `will` has to be called within "
+                "a method/property of a class."
+            )
+        return None
+    # ast.Attribute
+    return node.attr
 
 def inject(obj):
     """Inject attribute `__varname__` to an object
+
+    Examples:
+        >>> class MyList(list):
+        >>>     pass
+
+        >>> a = varname.inject(MyList())
+        >>> b = varname.inject(MyList())
+
+        >>> a.__varname__ == 'a'
+        >>> b.__varname__ == 'b'
+
+        >>> a == b
+
+        >>> # other methods not affected
+        >>> a.append(1)
+        >>> b.append(1)
+        >>> a == b
 
     Args:
         obj: An object that can be injected
@@ -251,8 +243,18 @@ def inject(obj):
         raise VarnameRetrievingError('Unable to inject __varname__.')
     return obj
 
+
 def nameof(*args, caller=1):
     """Get the names of the variables passed in
+
+    Examples:
+        >>> a = 1
+        >>> aname = nameof(a)
+        >>> # aname == 'a
+
+        >>> b = 2
+        >>> aname, bname = nameof(a, b)
+        >>> # aname == 'a', bname == 'b'
 
     Args:
         *args: A couple of variables passed in
@@ -261,7 +263,6 @@ def nameof(*args, caller=1):
         tuple|str: The names of variables passed in
     """
     node = _get_node(caller - 1)
-    node = _lookfor_child_nameof(node)
     if not node:
         if len(args) == 1:
             return _bytecode_nameof(caller + 1)
@@ -296,7 +297,16 @@ def _bytecode_nameof_cached(code, offset):
     name_instruction = instructions[current_instruction_index - 1]
     if not name_instruction.opname.startswith("LOAD_"):
         raise VarnameRetrievingError("Argument must be a variable or attribute")
-    return name_instruction.argrepr
+
+    name: str = name_instruction.argrepr
+    if not name.isidentifier():
+        raise VarnameRetrievingError(
+            f"Found the variable name {name!r} which is obviously wrong. "
+            "This may happen if you're using some other AST magic at the "
+            "same time, such as pytest, ipython, macropy, or birdseye."
+        )
+
+    return name
 
 
 def namedtuple(*args, **kwargs):
@@ -306,18 +316,38 @@ def namedtuple(*args, **kwargs):
     the variable name.
 
     So instead of:
-    >>> from collections import namedtuple
-    >>> Name = namedtuple('Name', ['first', 'last'])
+        >>> from collections import namedtuple
+        >>> Name = namedtuple('Name', ['first', 'last'])
 
     You can do:
-    >>> from varname import namedtuple
-    >>> Name = namedtuple(['first', 'last'])
+        >>> from varname import namedtuple
+        >>> Name = namedtuple(['first', 'last'])
+
+    Args:
+        *args: arguments for `collections.namedtuple` except `typename`
+        **kwargs: keyword arguments for `collections.namedtuple`
+            except `typename`
     """
     typename = varname(raise_exc=True)
     return standard_namedtuple(typename, *args, **kwargs)
 
 class Wrapper:
-    """A wrapper with ability to retrieve the variable name"""
+    """A wrapper with ability to retrieve the variable name
+
+    Examples:
+        >>> foo = Wrapper(True)
+        >>> # foo.name == 'foo'
+        >>> # foo.value == True
+
+        >>> val = {}
+        >>> bar = Wrapper(val)
+        >>> # bar.name == 'bar'
+        >>> # bar.value is val
+
+    Attributes:
+        name (str): The variable name to which the instance is assigned
+        value (any): The value this wrapper wraps
+    """
 
     def __init__(self, value):
         self.name = varname()
