@@ -11,12 +11,12 @@ pip install python-varname
 
 ## Features
 
-- Fetching variable names from inside the function/class call
-- Fetching variable names directly (added in `v0.1.2`)
-- A value wrapper to store the variable name that a value is assigned to (added in `v0.1.1`)
-- Detecting next immediate attribute name (added in `v0.1.4`)
-- Shortcut for `collections.namedtuple` (added in `v0.1.6`)
-- Injecting `__varname__` to objects (added in `v0.1.7`)
+- Fetching variable names from inside the function/class call using `varname`
+- Fetching variable names directly using `nameof`
+- A value wrapper to store the variable name that a value is assigned to using `Wrapper`
+- Detecting next immediate attribute name using `will`
+- Shortcut for `collections.namedtuple`
+- Injecting `__varname__` to objects
 
 ## Credits
 
@@ -36,6 +36,11 @@ Thanks goes to these awesome people/projects:
         <br /><sub><b>executing</b></sub>
       </a>
     </td>
+    <td align="center" style="min-width: 75px"></td>
+    <td align="center" style="min-width: 75px"></td>
+    <td align="center" style="min-width: 75px"></td>
+    <td align="center" style="min-width: 75px"></td>
+    <td align="center" style="min-width: 75px"></td>
   </tr>
 </table>
 
@@ -54,6 +59,7 @@ Thanks goes to these awesome people/projects:
     ```
 
 -  `varname` calls being buried deeply
+
     ```python
     def function():
         # I know that at which stack this will be called
@@ -70,6 +76,7 @@ Thanks goes to these awesome people/projects:
     ```
 
 - Retrieving instance name of a class
+
     ```python
     class Klass:
         def __init__(self):
@@ -87,6 +94,7 @@ Thanks goes to these awesome people/projects:
     ```
 
 - Some unusual use
+
     ```python
     func = [function()]
     # func == ['func']
@@ -114,6 +122,10 @@ Thanks goes to these awesome people/projects:
     func = function2()
     # func == 'func'
 
+    a = lambda: 0
+    a.b = function()
+    # a.b == 'b'
+
     # Since v0.1.3
     # We can ask varname to raise exceptions
     # if it fails to detect the variable name
@@ -127,7 +139,8 @@ Thanks goes to these awesome people/projects:
         except VarnameRetrieveingError:
             return None
 
-    a.b = get_name() # None
+    a = {}
+    a['b'] = get_name() # None
     ```
 
 ### Value wrapper
