@@ -19,7 +19,7 @@ import varname as varname_module
 
 def nameof(*args):
     """Test both implementations at the same time"""
-    result = original_nameof(*args, caller=2)
+    result = original_nameof(*args, _caller=2)
     if len(args) == 1:
         assert result == _bytecode_nameof(caller=2)
     return result

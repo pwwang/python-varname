@@ -24,13 +24,13 @@ Thanks goes to these awesome people/projects:
 
 <table>
   <tr>
-    <td align="center">
+    <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki">
         <img src="https://avatars0.githubusercontent.com/u/3627481?s=400&v=4" width="50px;" alt=""/>
         <br /><sub><b>@alexmojaki</b></sub>
       </a>
     </td>
-    <td align="center">
+    <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki/executing">
         <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
         <br /><sub><b>executing</b></sub>
@@ -230,18 +230,21 @@ a == b
 ```
 
 ## Limitations
-- Working in `ipython REPL` but not in standard `python console`
-- You have to know at which stack the function/class will be called (caller's depth)
-- Not working with `reticulate` from `R` since it cuts stacks to the most recent one.
-- ~~`nameof` cannot be used in statements in `pytest`~~ (supported in `v0.2.0`)
-  ```diff
-  -a = 1
-  +assert nameof(a) == 'a'
-  -# Retrieving failure.
-  -# The right way:
-  -aname = nameof(a)
-  -assert aname == 'a'
+`python-varname` is all depending on `executing` package to look for the node.
+It does not work with any environment where `executing` is not able to detect the node.
+For example:
+
+- Environments where other AST magics apply. For example: `pytest`.
+  This will not work with `pytest`:
+  ```python
+  a = 1
+  assert nameof(a) == 'a'
+
+  # do this instead
+  name_a = nameof(a)
+  assert name_a == 'a'
   ```
+- `R` with `reticulate`.
 
 [1]: https://github.com/pwwang/python-varname
 [3]: https://img.shields.io/pypi/v/python-varname?style=flat-square
