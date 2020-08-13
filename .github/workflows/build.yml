@@ -20,16 +20,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install poetry
-          pip install pylint
-          pip install mkdocs
-          pip install mkdocs-material
-          pip install mkapi
-          pip install pymdown-extensions
           poetry install -v
       - name: Run pylint
         run: pylint varname.py
       - name: Update docs
         run: |
+          pip install pylint
+          pip install mkdocs
+          pip install mkdocs-material
+          pip install mkapi
+          pip install pymdown-extensions
           cd docs; ln -s ../README.md index.md; ln -s ../logo.png; cd -
           mkdocs gh-deploy
         if: success() && matrix.python-version == 3.8 && github.event_name == 'push'
