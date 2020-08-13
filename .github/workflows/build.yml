@@ -31,9 +31,12 @@ jobs:
           pip install mkapi
           pip install pymdown-extensions
           echo "-----------------"
-          pwd
+          ls -l
           echo "-----------------"
           cd docs; ln -s ../README.md index.md; ln -s ../logo.png; cd -
+          echo "-----------------"
+          ls -l docs
+          echo "-----------------"
           mkdocs gh-deploy
         if: success() && matrix.python-version == 3.8 && github.event_name == 'push'
       - name: Test with pytest
