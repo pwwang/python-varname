@@ -30,6 +30,9 @@ jobs:
           pip install mkdocs-material
           pip install mkapi
           pip install pymdown-extensions
+          echo "-----------------"
+          pwd
+          echo "-----------------"
           cd docs; ln -s ../README.md index.md; ln -s ../logo.png; cd -
           mkdocs gh-deploy
         if: success() && matrix.python-version == 3.8 && github.event_name == 'push'
