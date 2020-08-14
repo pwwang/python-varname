@@ -9,7 +9,7 @@ from functools import lru_cache
 
 import executing
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
