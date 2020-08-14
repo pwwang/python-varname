@@ -126,18 +126,12 @@ Thanks goes to these awesome people/projects:
     # Since v0.1.3
     # We can ask varname to raise exceptions
     # if it fails to detect the variable name
-
-    from varname import VarnameRetrievingError
-    def get_name():
-        try:
-            # if raise_exc is False
-            # "var_<index>" will be returned
-            return varname(raise_exc=True)
-        except VarnameRetrieveingError:
-            return None
+    def get_name(raise_exc):
+        return varname(raise_exc=raise_exc)
 
     a = {}
-    a['b'] = get_name() # None
+    a['b'] = get_name(True) # VarnameRetrievingError
+    a['b'] = get_name(False) # None
     ```
 
 ### Value wrapper
@@ -189,7 +183,7 @@ class AwesomeClass:
         self.will = None
 
     def permit(self):
-        self.will = will()
+        self.will = will(raise_exc=False)
         if self.will == 'do':
             # let self handle do
             return self
@@ -239,13 +233,18 @@ b.append(1)
 a == b
 ```
 
-## Limitations
+## Reliability and limitations
 `python-varname` is all depending on `executing` package to look for the node.
-It does not work with any environment where `executing` is not able to detect the node.
+The node `executing` detects is ensured to be the correct one (see [this][19]).
+
+It partially works with environments where other AST magics apply, including
+`pytest`, `ipython`, `macropy`, `birdseye`, `reticulate` with `R`, etc. Neither
+`executing` nor `python-varname` is 100% working with those environments. Use
+it at your own risk.
+
 For example:
 
-- Environments where other AST magics apply. For example: `pytest`, `ipython`, `macropy`, or `birdseye`.
-  This will not work with `pytest`:
+- This will not work with `pytest`:
   ```python
   a = 1
   assert nameof(a) == 'a'
@@ -253,6 +252,13 @@ For example:
   # do this instead
   name_a = nameof(a)
   assert name_a == 'a'
+  ```
+
+- This will also typically fail with `ipython`:
+  ```python
+  a = 1
+  for _ in [0]:
+      print(nameof(a))
   ```
 - `R` with `reticulate`.
 
@@ -272,3 +278,4 @@ For example:
 [16]: https://pwwang.github.io/python-varname/CHANGELOG/
 [17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
 [18]: https://gitter.im/python-varname/community
+[19]: https://github.com/alexmojaki/executing#is-it-reliable

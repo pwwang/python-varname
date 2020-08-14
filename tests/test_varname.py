@@ -3,8 +3,6 @@ import unittest
 
 import pytest
 from varname import (varname,
-                     VarnameRetrievingWarning,
-                     MultipleTargetAssignmentWarning,
                      VarnameRetrievingError,
                      Wrapper,
                      will,
@@ -212,18 +210,23 @@ def test_only_one():
 
 def test_raise():
 
-    def get_name():
-        return varname(raise_exc=True)
+    def get_name(raise_exc):
+        return varname(raise_exc=raise_exc)
 
     with pytest.raises(VarnameRetrievingError):
-        get_name()
+        get_name(True)
+
+    name = "0"
+    # we can't get it in such way.
+    name += str(get_name(False))
+    assert name == '0None'
 
 def test_multiple_targets():
 
     def function():
         return varname()
 
-    with pytest.warns(MultipleTargetAssignmentWarning):
+    with pytest.warns(UserWarning):
         y = x = function()
     assert y == x == 'y'
 
@@ -237,9 +240,9 @@ def test_unusual():
     assert xyz == 'z'
 
     x = 'a'
-    with pytest.warns(VarnameRetrievingWarning):
+    with pytest.raises(VarnameRetrievingError):
         x += function()
-    assert x == 'avar_0'
+    assert x == 'a'
 
     func = function
     x = func()
@@ -431,7 +434,7 @@ def test_will_method():
             self.will = None
 
         def permit(self, *_):
-            self.will = will()
+            self.will = will(raise_exc=False)
             if self.will == 'do':
                 # let self handle do
                 return self
@@ -488,9 +491,8 @@ def test_frame_fail_varname(no_getframe):
     with pytest.raises(VarnameRetrievingError):
         a = func(True)
 
-    with pytest.warns(VarnameRetrievingWarning):
-        b = func(False)
-    assert b.startswith('var_')
+    b = func(False)
+    assert b is None
 
 
 def test_frame_fail_nameof(no_getframe):

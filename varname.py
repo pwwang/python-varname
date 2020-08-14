@@ -11,18 +11,10 @@ import executing
 
 __version__ = "0.3.0"
 
-VARNAME_INDEX = [-1]
-
-class MultipleTargetAssignmentWarning(Warning):
-    """When multiple-target assignment found, i.e. y = x = func()"""
-
-class VarnameRetrievingWarning(Warning):
-    """When varname retrieving failed for whatever reason"""
-
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
-def varname(caller: int = 1, raise_exc: bool = False) -> str:
+def varname(caller: int = 1, raise_exc: bool = True) -> str:
     """Get the variable name that assigned by function/class calls
 
     Args:
@@ -32,9 +24,7 @@ def varname(caller: int = 1, raise_exc: bool = False) -> str:
             to retrieve the name.
 
     Returns:
-        str|None: The variable name, or
-            `var_<index>` (will be deprecated in `v0.4.0`) if failed.
-            It returns `None` when `raise_exc` is `False` and
+        str|None: The variable name, or `None` when `raise_exc` is `False` and
             we failed to retrieve the variable name.
 
     Raises:
@@ -44,21 +34,15 @@ def varname(caller: int = 1, raise_exc: bool = False) -> str:
             is set to `True`.
 
     Warns:
-        MultipleTargetAssignmentWarning: When there are multiple target
+        UserWarning: When there are multiple target
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
-        VarnameRetrievingWarning: When `var_0` and alike returned.
-            This will be deprecated in `v0.4.0`
     """
     node = _get_node(caller)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
-        VARNAME_INDEX[0] += 1
-        warnings.warn(f"var_{VARNAME_INDEX[0]} used, "
-                      "which will be deprecated in v0.4.0",
-                      VarnameRetrievingWarning)
-        return f"var_{VARNAME_INDEX[0]}"
+        return None
 
     node = _lookfor_parent_assign(node)
     if not node:
@@ -66,22 +50,18 @@ def varname(caller: int = 1, raise_exc: bool = False) -> str:
             raise VarnameRetrievingError(
                 'Failed to retrieve the variable name.'
             )
-        VARNAME_INDEX[0] += 1
-        warnings.warn(f"var_{VARNAME_INDEX[0]} used, "
-                      "which will be deprecated in v0.4.0",
-                      VarnameRetrievingWarning)
-        return f"var_{VARNAME_INDEX[0]}"
+        return None
 
     # Need to actually check that there's just one
     # give warnings if: a = b = func()
     if len(node.targets) > 1:
         warnings.warn("Multiple targets in assignment, variable name "
                       "on the very left will be used.",
-                      MultipleTargetAssignmentWarning)
+                      UserWarning)
     target = node.targets[0]
     return _node_name(target)
 
-def will(caller: int = 1, raise_exc: bool = False) -> str:
+def will(caller: int = 1, raise_exc: bool = True) -> str:
     """Detect the attribute name right immediately after a function call.
 
     Examples:
@@ -259,7 +239,7 @@ class Wrapper:
         value (any): The value this wrapper wraps
     """
 
-    def __init__(self, value: any, raise_exc: bool = False):
+    def __init__(self, value: any, raise_exc: bool = True):
         self.name: str = varname(raise_exc=raise_exc)
         self.value: any = value
 

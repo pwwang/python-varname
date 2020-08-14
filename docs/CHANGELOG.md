@@ -32,3 +32,8 @@
 - Drop support for pytest, don't try to find node when executing fails
 - Remodel `will` for better logic
 - Support attributes in varname and nameof (#14)
+
+## v0.4.0
+- Change default of `raise_exc` to `True` for all related APIs
+- Deprecate `var_0`
+- Get rid of `VarnameRetrievingWarning`.
