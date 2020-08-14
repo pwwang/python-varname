@@ -3,8 +3,7 @@ theme:
     name: 'material'
 plugins:
   - search
-  - mkapi:
-      src_dirs: ['.']
+  - mkapi
 extra_css:
   - api.css
 markdown_extensions:
