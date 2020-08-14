@@ -1,8 +1,10 @@
 ![python-varname][7]
 
-[![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13]
+[![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13] [![Chat on gitter][17]][18]
 
 Dark magics about variable names in python
+
+[Change Log][16] | [API][15]
 
 ## Installation
 ```shell
@@ -271,3 +273,7 @@ For example:
 [12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
 [13]: https://app.codacy.com/manual/pwwang/python-varname/dashboard
 [14]: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+[15]: https://pwwang.github.io/python-varname/api/varname/
+[16]: https://pwwang.github.io/python-varname/CHANGELOG/
+[17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
+[18]: https://gitter.im/python-varname/community
