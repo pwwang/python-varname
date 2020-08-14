@@ -1,6 +1,3 @@
-.. role:: raw-html-m2r(raw)
-   :format: html
-
 
 
 .. image:: logo.png
@@ -32,9 +29,15 @@
 .. image:: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
    :target: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
    :alt: Codacy coverage
- <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_
+ <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_ `
+.. image:: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
+   :target: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
+   :alt: Chat on gitter
+ <https://gitter.im/python-varname/community>`_
 
 Dark magics about variable names in python
+
+`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname/>`_
 
 Installation
 ------------
@@ -47,12 +50,38 @@ Features
 --------
 
 
-* Fetching variable names from inside the function/class call
-* Fetching variable names directly (added in ``v0.1.2``\ )
-* A value wrapper to store the variable name that a value is assigned to (added in ``v0.1.1``\ )
-* Detecting next immediate attribute name (added in ``v0.1.4``\ )
-* Shortcut for ``collections.namedtuple`` (added in ``v0.1.6``\ )
-* Injecting ``__varname__`` to objects (added in ``v0.1.7``\ )
+* Fetching variable names from inside the function/class call using ``varname``
+* Fetching variable names directly using ``nameof``
+* A value wrapper to store the variable name that a value is assigned to using ``Wrapper``
+* Detecting next immediate attribute name using ``will``
+* Shortcut for ``collections.namedtuple``
+* Injecting ``__varname__`` to objects
+
+Credits
+-------
+
+Thanks goes to these awesome people/projects:
+
+
+.. raw:: html
+
+   <table>
+     <tr>
+       <td align="center" style="min-width: 75px">
+         <a href="https://github.com/alexmojaki">
+           <img src="https://avatars0.githubusercontent.com/u/3627481?s=400&v=4" width="50px;" alt=""/>
+           <br /><sub><b>@alexmojaki</b></sub>
+         </a>
+       </td>
+       <td align="center" style="min-width: 75px">
+         <a href="https://github.com/alexmojaki/executing">
+           <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
+           <br /><sub><b>executing</b></sub>
+         </a>
+       </td>
+     </tr>
+   </table>
+
 
 Usage
 -----
@@ -141,6 +170,10 @@ Retrieving the variable names from inside a function call/class instantiation
        func = function2()
        # func == 'func'
 
+       a = lambda: 0
+       a.b = function()
+       # a.b == 'b'
+
        # Since v0.1.3
        # We can ask varname to raise exceptions
        # if it fails to detect the variable name
@@ -154,7 +187,8 @@ Retrieving the variable names from inside a function call/class instantiation
            except VarnameRetrieveingError:
                return None
 
-       a.b = get_name() # None
+       a = {}
+       a['b'] = get_name() # None
 
 Value wrapper
 ^^^^^^^^^^^^^
@@ -265,16 +299,22 @@ Injecting ``__varname__``
 Limitations
 -----------
 
+``python-varname`` is all depending on ``executing`` package to look for the node.
+It does not work with any environment where ``executing`` is not able to detect the node.
+For example:
 
-* Working in ``ipython REPL`` but not in standard ``python console``
-* You have to know at which stack the function/class will be called (caller's depth)
-* Not working with ``reticulate`` from ``R`` since it cuts stacks to the most recent one.
-* :raw-html-m2r:`<del>\ ``nameof`` cannot be used in statements in ``pytest``\ </del>` (supported in ``v0.2.0``\ )
-  .. code-block:: diff
 
-     -a = 1
-     +assert nameof(a) == 'a'
-     -# Retrieving failure.
-     -# The right way:
-     -aname = nameof(a)
-     -assert aname == 'a'
+* 
+  Environments where other AST magics apply. For example: ``pytest``\ , ``ipython``\ , ``macropy``\ , or ``birdseye``.
+  This will not work with ``pytest``\ :
+
+  .. code-block:: python
+
+     a = 1
+     assert nameof(a) == 'a'
+
+     # do this instead
+     name_a = nameof(a)
+     assert name_a == 'a'
+
+* ``R`` with ``reticulate``.

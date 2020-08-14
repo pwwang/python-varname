@@ -1,8 +1,10 @@
 ![python-varname][7]
 
-[![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13]
+[![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13] [![Chat on gitter][17]][18]
 
 Dark magics about variable names in python
+
+[Change Log][16] | [API][15]
 
 ## Installation
 ```shell
@@ -11,12 +13,12 @@ pip install python-varname
 
 ## Features
 
-- Fetching variable names from inside the function/class call
-- Fetching variable names directly (added in `v0.1.2`)
-- A value wrapper to store the variable name that a value is assigned to (added in `v0.1.1`)
-- Detecting next immediate attribute name (added in `v0.1.4`)
-- Shortcut for `collections.namedtuple` (added in `v0.1.6`)
-- Injecting `__varname__` to objects (added in `v0.1.7`)
+- Fetching variable names from inside the function/class call using `varname`
+- Fetching variable names directly using `nameof`
+- A value wrapper to store the variable name that a value is assigned to using `Wrapper`
+- Detecting next immediate attribute name using `will`
+- Shortcut for `collections.namedtuple`
+- Injecting `__varname__` to objects
 
 ## Credits
 
@@ -24,13 +26,13 @@ Thanks goes to these awesome people/projects:
 
 <table>
   <tr>
-    <td align="center">
+    <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki">
         <img src="https://avatars0.githubusercontent.com/u/3627481?s=400&v=4" width="50px;" alt=""/>
         <br /><sub><b>@alexmojaki</b></sub>
       </a>
     </td>
-    <td align="center">
+    <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki/executing">
         <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
         <br /><sub><b>executing</b></sub>
@@ -54,6 +56,7 @@ Thanks goes to these awesome people/projects:
     ```
 
 -  `varname` calls being buried deeply
+
     ```python
     def function():
         # I know that at which stack this will be called
@@ -70,6 +73,7 @@ Thanks goes to these awesome people/projects:
     ```
 
 - Retrieving instance name of a class
+
     ```python
     class Klass:
         def __init__(self):
@@ -87,6 +91,7 @@ Thanks goes to these awesome people/projects:
     ```
 
 - Some unusual use
+
     ```python
     func = [function()]
     # func == ['func']
@@ -114,6 +119,10 @@ Thanks goes to these awesome people/projects:
     func = function2()
     # func == 'func'
 
+    a = lambda: 0
+    a.b = function()
+    # a.b == 'b'
+
     # Since v0.1.3
     # We can ask varname to raise exceptions
     # if it fails to detect the variable name
@@ -127,7 +136,8 @@ Thanks goes to these awesome people/projects:
         except VarnameRetrieveingError:
             return None
 
-    a.b = get_name() # None
+    a = {}
+    a['b'] = get_name() # None
     ```
 
 ### Value wrapper
@@ -230,18 +240,21 @@ a == b
 ```
 
 ## Limitations
-- Working in `ipython REPL` but not in standard `python console`
-- You have to know at which stack the function/class will be called (caller's depth)
-- Not working with `reticulate` from `R` since it cuts stacks to the most recent one.
-- ~~`nameof` cannot be used in statements in `pytest`~~ (supported in `v0.2.0`)
-  ```diff
-  -a = 1
-  +assert nameof(a) == 'a'
-  -# Retrieving failure.
-  -# The right way:
-  -aname = nameof(a)
-  -assert aname == 'a'
+`python-varname` is all depending on `executing` package to look for the node.
+It does not work with any environment where `executing` is not able to detect the node.
+For example:
+
+- Environments where other AST magics apply. For example: `pytest`, `ipython`, `macropy`, or `birdseye`.
+  This will not work with `pytest`:
+  ```python
+  a = 1
+  assert nameof(a) == 'a'
+
+  # do this instead
+  name_a = nameof(a)
+  assert name_a == 'a'
   ```
+- `R` with `reticulate`.
 
 [1]: https://github.com/pwwang/python-varname
 [3]: https://img.shields.io/pypi/v/python-varname?style=flat-square
@@ -255,3 +268,7 @@ a == b
 [12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
 [13]: https://app.codacy.com/manual/pwwang/python-varname/dashboard
 [14]: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+[15]: https://pwwang.github.io/python-varname/api/varname/
+[16]: https://pwwang.github.io/python-varname/CHANGELOG/
+[17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
+[18]: https://gitter.im/python-varname/community

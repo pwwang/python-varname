@@ -1,0 +1,19 @@
+site_name: python-varname
+theme:
+    name: 'material'
+plugins:
+  - search
+  - mkapi
+extra_css:
+  - api.css
+markdown_extensions:
+    - markdown.extensions.admonition
+    - pymdownx.superfences:
+        preserve_tabs: true
+    - toc:
+        baselevel: 2
+nav:
+    - "": mkapi/api/varname
+    - index.md
+    - API: api/varname.md
+    - 'Change Log': CHANGELOG.md
