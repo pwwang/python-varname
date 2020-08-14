@@ -38,7 +38,7 @@ def varname(caller: int = 1, raise_exc: bool = True) -> str:
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    node = _get_node(caller)
+    node = _get_node(caller, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
@@ -102,7 +102,7 @@ def will(caller: int = 1, raise_exc: bool = True) -> str:
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    node = _get_node(caller)
+    node = _get_node(caller, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the frame.")
@@ -180,7 +180,7 @@ def nameof(*args, caller: int = 1) -> Union[str, Tuple[str]]:
     Returns:
         tuple|str: The names of variables passed in
     """
-    node = _get_node(caller - 1)
+    node = _get_node(caller - 1, raise_exc=True)
     if not node:
         if len(args) == 1:
             return _bytecode_nameof(caller + 1)
@@ -257,7 +257,7 @@ def _get_frame(caller):
     except Exception as exc:
         raise VarnameRetrievingError from exc
 
-def _get_node(caller):
+def _get_node(caller: int, raise_exc: bool = True):
     """Try to get node from the executing object.
 
     This can fail when a frame is failed to retrieve.
@@ -276,7 +276,7 @@ def _get_node(caller):
     if exet.node:
         return exet.node
 
-    if exet.source.text and exet.source.tree:
+    if exet.source.text and exet.source.tree and raise_exc:
         raise VarnameRetrievingError(
             "Couldn't retrieve the call node. "
             "This may happen if you're using some other AST magic at the "

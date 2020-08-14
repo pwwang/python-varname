@@ -386,6 +386,7 @@ def test_will():
 
     func = i_will().abc
     assert func.will == 'abc'
+    assert getattr(func, 'will') == 'abc'
 
 def test_will_deep():
 
@@ -427,21 +428,31 @@ def test_will_property():
     assert c.will == 'do'
     assert result == 'I will do something'
 
-# issue #18
+
 def test_will_method():
     class AwesomeClass:
         def __init__(self):
-            self.will = None
+            self.wills = [None]
+
+        def __call__(self, *_):
+            return self
+
+        myself = __call__
+        __getattr__ = __call__
 
         def permit(self, *_):
-            self.will = will(raise_exc=False)
-            if self.will == 'do':
-                # let self handle do
-                return self
-            raise AttributeError('Should do something with AwesomeClass object')
+            self.wills.append(will(raise_exc=False))
+
+            if self.wills[-1] is None:
+                raise AttributeError(
+                    'Should do something with AwesomeClass object'
+                )
+
+            # let self handle do
+            return self
 
         def do(self):
-            if self.will != 'do':
+            if self.wills[-1] != 'do':
                 raise AttributeError("You don't have permission to do")
             return 'I am doing!'
 
@@ -456,8 +467,31 @@ def test_will_method():
         awesome.permit()
     assert str(exc.value) == 'Should do something with AwesomeClass object'
 
+    # clear wills
+    awesome = AwesomeClass()
     ret = awesome.permit().do()
     assert ret == 'I am doing!'
+    assert awesome.wills == [None, 'do']
+
+    awesome = AwesomeClass()
+    ret = awesome.myself().permit().do()
+    assert ret == 'I am doing!'
+    assert awesome.wills == [None, 'do']
+
+    awesome = AwesomeClass()
+    ret = awesome().permit().do()
+    assert ret == 'I am doing!'
+    assert awesome.wills == [None, 'do']
+
+    awesome = AwesomeClass()
+    ret = awesome.attr.permit().do()
+    assert ret == 'I am doing!'
+    assert awesome.wills == [None, 'do']
+
+    awesome = AwesomeClass()
+    ret = awesome.permit().permit().do()
+    assert ret == 'I am doing!'
+    assert awesome.wills == [None, 'permit', 'do']
 
     with pytest.raises(AttributeError) as exc:
         print(awesome[2])
@@ -465,6 +499,37 @@ def test_will_method():
 
     ret = awesome[2].do()
     assert ret == 'I am doing!'
+
+def test_will_decorated():
+
+    def return_self(func):
+        def wrapper(self, *args, **kwargs):
+            func(self, *args, **kwargs)
+            return self
+
+        return wrapper
+
+    class Foo:
+
+        def __init__(self):
+            self.will = None
+
+        def get_will(self):
+            self.will = will(raise_exc=False)
+            return self
+
+        @return_self
+        def get_will_decor(self):
+            self.will = will(2, raise_exc=False)
+
+        def __getattr__(self, name):
+            return self.will
+
+    x = Foo().get_will().x
+    assert x == 'x'
+
+    x = Foo().get_will_decor().x
+    assert x == 'x'
 
 
 def test_will_fail():
