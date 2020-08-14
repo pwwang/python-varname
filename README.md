@@ -38,11 +38,6 @@ Thanks goes to these awesome people/projects:
         <br /><sub><b>executing</b></sub>
       </a>
     </td>
-    <td align="center" style="min-width: 75px"></td>
-    <td align="center" style="min-width: 75px"></td>
-    <td align="center" style="min-width: 75px"></td>
-    <td align="center" style="min-width: 75px"></td>
-    <td align="center" style="min-width: 75px"></td>
   </tr>
 </table>
 
@@ -249,7 +244,7 @@ a == b
 It does not work with any environment where `executing` is not able to detect the node.
 For example:
 
-- Environments where other AST magics apply. For example: `pytest`.
+- Environments where other AST magics apply. For example: `pytest`, `ipython`, `macropy`, or `birdseye`.
   This will not work with `pytest`:
   ```python
   a = 1
