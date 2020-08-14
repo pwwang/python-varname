@@ -1,9 +1,9 @@
 site_name: python-varname
 theme:
     name: 'material'
-# plugins:
-#   - search
-#   - mkapi
+plugins:
+  - search
+  - mkapi
 extra_css:
   - api.css
 markdown_extensions:
@@ -13,7 +13,7 @@ markdown_extensions:
     - toc:
         baselevel: 2
 nav:
-    # - "": mkapi/api/varname
+    - "": mkapi/api/varname
     - index.md
     - API: api/varname.md
     - 'Change Log': CHANGELOG.md

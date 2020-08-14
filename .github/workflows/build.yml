@@ -24,15 +24,15 @@ jobs:
           poetry install -v
       - name: Run pylint
         run: pylint varname.py
-      - name: Update docs
-        run: |
-          pip install mkdocs
-          pip install mkdocs-material
-          #pip install mkapi
-          pip install pymdown-extensions
-          cd docs; ln -s ../README.md index.md; ln -s ../logo.png; cd -
-          mkdocs gh-deploy
-        if: success() && matrix.python-version == 3.8 && github.event_name == 'push'
+      # - name: Update docs
+      #   run: |
+      #     pip install mkdocs
+      #     pip install mkdocs-material
+      #     pip install mkapi
+      #     pip install pymdown-extensions
+      #     cd docs; ln -s ../README.md index.md; ln -s ../logo.png; cd -
+      #     mkdocs gh-deploy
+      #   if: success() && matrix.python-version == 3.8 && github.event_name == 'push'
       - name: Test with pytest
         run: poetry run pytest tests/ --junitxml=junit/test-results-${{ matrix.python-version }}.xml
       - name: Upload pytest test results
