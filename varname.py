@@ -162,7 +162,7 @@ def inject(obj: any) -> any:
 
 # _caller is only used for test purposes
 # or unless one wants to wrap this function
-def nameof(*args, _caller: int = 1) -> Union[str, Tuple[str]]:
+def nameof(*args, caller: int = 1) -> Union[str, Tuple[str]]:
     """Get the names of the variables passed in
 
     Examples:
@@ -180,10 +180,10 @@ def nameof(*args, _caller: int = 1) -> Union[str, Tuple[str]]:
     Returns:
         tuple|str: The names of variables passed in
     """
-    node = _get_node(_caller - 1)
+    node = _get_node(caller - 1)
     if not node:
         if len(args) == 1:
-            return _bytecode_nameof(_caller + 1)
+            return _bytecode_nameof(caller + 1)
         raise VarnameRetrievingError("Unable to retrieve callee's node.")
 
     ret = []
