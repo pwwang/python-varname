@@ -9,7 +9,7 @@ from functools import lru_cache
 
 import executing
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 VARNAME_INDEX = [-1]
 
