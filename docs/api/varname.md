@@ -1,0 +1,11 @@
+# ![mkapi](varname|plain|link|sourcelink)
+
+## ![mkapi](varname.MultipleTargetAssignmentWarning||link|sourcelink)
+## ![mkapi](varname.VarnameRetrievingWarning||link|sourcelink)
+## ![mkapi](varname.VarnameRetrievingError||link|sourcelink)
+## ![mkapi](varname.varname||link|sourcelink)
+## ![mkapi](varname.will||link|sourcelink)
+## ![mkapi](varname.inject||link|sourcelink)
+## ![mkapi](varname.nameof||link|sourcelink)
+## ![mkapi](varname.namedtuple||link|sourcelink)
+## ![mkapi](varname.Wrapper||link|sourcelink)
