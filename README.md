@@ -8,7 +8,8 @@ Dark magics about variable names in python
 
 ## Installation
 ```shell
-pip install python-varname
+pip install python-varname # will be deprecated after 0.4.0
+pip install varname # use this instead
 ```
 
 ## Features

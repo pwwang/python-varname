@@ -44,7 +44,8 @@ Installation
 
 .. code-block:: shell
 
-   pip install python-varname
+   pip install python-varname # will be deprecated after 0.4.0
+   pip install varname # use this instead
 
 Features
 --------
@@ -317,12 +318,4 @@ For example:
      assert name_a == 'a'
 
 * 
-  This will also typically fail with ``ipython``\ :
-
-  .. code-block:: python
-
-     a = 1
-     for _ in [0]:
-         print(nameof(a))
-
-* ``R`` with ``reticulate``.
+  ``R`` with ``reticulate``.
