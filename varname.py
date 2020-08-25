@@ -156,7 +156,7 @@ def inject(obj: any) -> any:
     try:
         setattr(obj, '__varname__', vname)
     except AttributeError:
-        raise VarnameRetrievingError('Unable to inject __varname__.')
+        raise VarnameRetrievingError('Unable to inject __varname__.') from None
     return obj
 
 
