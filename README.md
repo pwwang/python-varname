@@ -1,4 +1,4 @@
-![python-varname][7]
+![varname][7]
 
 [![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13] [![Chat on gitter][17]][18]
 
@@ -235,12 +235,12 @@ a == b
 ```
 
 ## Reliability and limitations
-`python-varname` is all depending on `executing` package to look for the node.
+`varname` is all depending on `executing` package to look for the node.
 The node `executing` detects is ensured to be the correct one (see [this][19]).
 
 It partially works with environments where other AST magics apply, including
 `pytest`, `ipython`, `macropy`, `birdseye`, `reticulate` with `R`, etc. Neither
-`executing` nor `python-varname` is 100% working with those environments. Use
+`executing` nor `varname` is 100% working with those environments. Use
 it at your own risk.
 
 For example:
