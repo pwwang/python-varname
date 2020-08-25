@@ -254,12 +254,6 @@ For example:
   assert name_a == 'a'
   ```
 
-- This will also typically fail with `ipython`:
-  ```python
-  a = 1
-  for _ in [0]:
-      print(nameof(a))
-  ```
 - `R` with `reticulate`.
 
 [1]: https://github.com/pwwang/python-varname
