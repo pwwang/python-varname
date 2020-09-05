@@ -271,7 +271,7 @@ For example:
 [12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
 [13]: https://app.codacy.com/manual/pwwang/python-varname/dashboard
 [14]: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
-[15]: https://pwwang.github.io/python-varname/api/
+[15]: https://pwwang.github.io/python-varname/api/varname
 [16]: https://pwwang.github.io/python-varname/CHANGELOG/
 [17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
 [18]: https://gitter.im/python-varname/community
