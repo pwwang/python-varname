@@ -1,5 +1,7 @@
 site_name: varname
 theme:
+    favicon: favicon.png
+    logo: favicon.png
     name: 'material'
     # font:
     #   text: 'Ubuntu'
