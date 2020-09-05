@@ -3,7 +3,8 @@ import ast
 import dis
 import sys
 import warnings
-from typing import Union, Tuple
+from typing import Union, Tuple, Any, Optional, Type, List, Iterator
+from types import FrameType, CodeType
 from collections import namedtuple as standard_namedtuple
 from functools import lru_cache
 
@@ -11,20 +12,22 @@ import executing
 
 __version__ = "0.4.0"
 
+NodeType = Type[ast.AST]
+
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
-def varname(caller: int = 1, raise_exc: bool = True) -> str:
+def varname(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
     """Get the variable name that assigned by function/class calls
 
     Args:
-        caller (int): The call stack index, indicating where this function
+        caller: The call stack index, indicating where this function
             is called relative to where the variable is finally retrieved
-        raise_exc (bool): Whether we should raise an exception if failed
+        raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
 
     Returns:
-        str|None: The variable name, or `None` when `raise_exc` is `False` and
+        The variable name, or `None` when `raise_exc` is `False` and
             we failed to retrieve the variable name.
 
     Raises:
@@ -33,12 +36,11 @@ def varname(caller: int = 1, raise_exc: bool = True) -> str:
             when we are unable to retrieve the variable name and `raise_exc`
             is set to `True`.
 
-    Warns:
         UserWarning: When there are multiple target
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    node = _get_node(caller, raise_exc=raise_exc)
+    node: Optional[NodeType] = _get_node(caller, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
@@ -58,10 +60,10 @@ def varname(caller: int = 1, raise_exc: bool = True) -> str:
         warnings.warn("Multiple targets in assignment, variable name "
                       "on the very left will be used.",
                       UserWarning)
-    target = node.targets[0]
+    target: str = node.targets[0]
     return _node_name(target)
 
-def will(caller: int = 1, raise_exc: bool = True) -> str:
+def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
     """Detect the attribute name right immediately after a function call.
 
     Examples:
@@ -91,25 +93,25 @@ def will(caller: int = 1, raise_exc: bool = True) -> str:
         >>> awesome.permit().do() == 'I am doing!'
 
     Args:
-        caller (int): At which stack this function is called.
-        raise_exc (bool): Raise exception we failed to detect
+        caller: At which stack this function is called.
+        raise_exc: Raise exception we failed to detect
 
     Returns:
-        str: The attribute name right after the function call
-        None: If there is no attribute attached and `raise_exc` is `False`
+        The attribute name right after the function call
+        If there is no attribute attached and `raise_exc` is `False`
 
     Raises:
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    node = _get_node(caller, raise_exc=raise_exc)
+    node: Optional[NodeType] = _get_node(caller, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the frame.")
         return None
 
     # try to get not inst.attr from inst.attr()
-    node = node.parent
+    node: NodeType = node.parent
 
     # see test_will_fail
     if not isinstance(node, ast.Attribute):
@@ -122,7 +124,7 @@ def will(caller: int = 1, raise_exc: bool = True) -> str:
     # ast.Attribute
     return node.attr
 
-def inject(obj: any) -> any:
+def inject(obj: object) -> object:
     """Inject attribute `__varname__` to an object
 
     Examples:
@@ -150,9 +152,9 @@ def inject(obj: any) -> any:
             be set as an attribute
 
     Returns:
-        obj: The object with __varname__ injected
+        The object with __varname__ injected
     """
-    vname = varname()
+    vname: Optional[str] = varname()
     try:
         setattr(obj, '__varname__', vname)
     except AttributeError:
@@ -178,15 +180,15 @@ def nameof(*args, caller: int = 1) -> Union[str, Tuple[str]]:
         *args: A couple of variables passed in
 
     Returns:
-        tuple|str: The names of variables passed in
+        The names of variables passed in
     """
-    node = _get_node(caller - 1, raise_exc=True)
+    node: Optional[NodeType] = _get_node(caller - 1, raise_exc=True)
     if not node:
         if len(args) == 1:
             return _bytecode_nameof(caller + 1)
         raise VarnameRetrievingError("Unable to retrieve callee's node.")
 
-    ret = []
+    ret: List[str] = []
     for arg in node.args:
         ret.append(_node_name(arg))
 
@@ -196,7 +198,7 @@ def nameof(*args, caller: int = 1) -> Union[str, Tuple[str]]:
 
     return ret[0] if len(args) == 1 else tuple(ret)
 
-def namedtuple(*args, **kwargs):
+def namedtuple(*args, **kwargs) -> type:
     """A shortcut for namedtuple
 
     You don't need to specify the typename, which will be fetched from
@@ -214,6 +216,9 @@ def namedtuple(*args, **kwargs):
         *args: arguments for `collections.namedtuple` except `typename`
         **kwargs: keyword arguments for `collections.namedtuple`
             except `typename`
+
+    Returns:
+        The namedtuple you desired.
     """
     typename: str = varname(raise_exc=True)
     return standard_namedtuple(typename, *args, **kwargs)
@@ -232,16 +237,17 @@ class Wrapper:
         >>> # bar.value is val
 
     Args:
-
+        value: The value to be wrapped
+        raise_exc: Whether to raise exception when varname is failed to retrieve
 
     Attributes:
-        name (str): The variable name to which the instance is assigned
-        value (any): The value this wrapper wraps
+        name: The variable name to which the instance is assigned
+        value: The value this wrapper wraps
     """
 
-    def __init__(self, value: any, raise_exc: bool = True):
+    def __init__(self, value: Any, raise_exc: bool = True):
         self.name: str = varname(raise_exc=raise_exc)
-        self.value: any = value
+        self.value: Any = value
 
     def __str__(self) -> str:
         return repr(self.value)
@@ -250,14 +256,14 @@ class Wrapper:
         return (f"<{self.__class__.__name__} "
                 f"(name={self.name!r}, value={self.value!r})>")
 
-def _get_frame(caller):
+def _get_frame(caller: int) -> FrameType:
     """Get the frame at `caller` depth"""
     try:
         return sys._getframe(caller + 1)
     except Exception as exc:
         raise VarnameRetrievingError from exc
 
-def _get_node(caller: int, raise_exc: bool = True):
+def _get_node(caller: int, raise_exc: bool = True) -> Optional[NodeType]:
     """Try to get node from the executing object.
 
     This can fail when a frame is failed to retrieve.
@@ -267,11 +273,11 @@ def _get_node(caller: int, raise_exc: bool = True):
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        frame = _get_frame(caller + 2)
+        frame: FrameType = _get_frame(caller + 2)
     except VarnameRetrievingError:
         return None
 
-    exet = executing.Source.executing(frame)
+    exet: executing.Executing = executing.Source.executing(frame)
 
     if exet.node:
         return exet.node
@@ -285,7 +291,7 @@ def _get_node(caller: int, raise_exc: bool = True):
 
     return None
 
-def _lookfor_parent_assign(node):
+def _lookfor_parent_assign(node: NodeType) -> Optional[ast.Assign]:
     """Look for an ast.Assign node in the parents"""
     while hasattr(node, 'parent'):
         node = node.parent
@@ -294,8 +300,11 @@ def _lookfor_parent_assign(node):
             return node
     return None
 
-def _node_name(node):
-    """Get the node node name"""
+def _node_name(node: NodeType) -> str:
+    """Get the node node name.
+
+    Raises VarnameRetrievingError when failed
+    """
     if isinstance(node, ast.Name):
         return node.id
     if isinstance(node, ast.Attribute):
@@ -306,15 +315,15 @@ def _node_name(node):
         f"not {ast.dump(node)}"
     )
 
-def _bytecode_nameof(caller=1):
+def _bytecode_nameof(caller: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
-    frame = _get_frame(caller)
+    frame: FrameType = _get_frame(caller)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 @lru_cache()
-def _bytecode_nameof_cached(code, offset):
+def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
     """Cached Bytecode version of nameof"""
-    instructions = list(dis.get_instructions(code))
+    instructions: Iterator[dis.Instruction] = list(dis.get_instructions(code))
     (current_instruction_index, current_instruction), = (
         (index, instruction)
         for index, instruction in enumerate(instructions)
@@ -324,7 +333,9 @@ def _bytecode_nameof_cached(code, offset):
     if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
         raise VarnameRetrievingError("Did you call nameof in a weird way?")
 
-    name_instruction = instructions[current_instruction_index - 1]
+    name_instruction: dis.Instruction = instructions[
+        current_instruction_index - 1
+    ]
     if not name_instruction.opname.startswith("LOAD_"):
         raise VarnameRetrievingError("Argument must be a variable or attribute")
 
