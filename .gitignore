@@ -108,3 +108,4 @@ poetry.lock
 
 docs/index.md
 docs/logo.png
+docs/api/

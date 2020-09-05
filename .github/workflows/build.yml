@@ -3,8 +3,8 @@ name: Build and Deploy
 on: [push, pull_request]
 
 jobs:
-  build:
 
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,20 +19,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint
-          pip install poetry
+          python -m pip install pylint
+          python -m pip install poetry
           poetry install -v
       - name: Run pylint
         run: pylint varname.py
-      # - name: Update docs
-      #   run: |
-      #     pip install mkdocs
-      #     pip install mkdocs-material
-      #     pip install mkapi
-      #     pip install pymdown-extensions
-      #     cd docs; ln -s ../README.md index.md; ln -s ../logo.png; cd -
-      #     mkdocs gh-deploy
-      #   if: success() && matrix.python-version == 3.8 && github.event_name == 'push'
       - name: Test with pytest
         run: poetry run pytest tests/ --junitxml=junit/test-results-${{ matrix.python-version }}.xml
       - name: Upload pytest test results
@@ -48,6 +39,22 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: .coverage.xml
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    strategy:
+      matrix:
+        python-version: [3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python # Set Python version
+        uses: actions/setup-python@v2
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install poetry
       - name: Publish to PyPI
-        if: success() && matrix.python-version == 3.8 && github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-        run: poetry publish --build -u ${{ secrets.pypi_user }} -p ${{ secrets.pypi_password }}
+        run: poetry publish --build -u ${{ secrets.PYPI_USER }} -p ${{ secrets.PYPI_PASSWORD }}
+        if: success()

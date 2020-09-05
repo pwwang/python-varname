@@ -1,6 +1,7 @@
 ![varname][7]
 
-[![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Travis building][10]][11] [![Codacy][12]][13] [![Codacy coverage][14]][13] [![Chat on gitter][17]][18]
+[![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] [![Building][10]][11] [![Docs and API][9]][15]
+[![Codacy][12]][13] [![Codacy coverage][14]][13] [![Chat on gitter][17]][18]
 
 Dark magics about variable names in python
 
@@ -264,12 +265,13 @@ For example:
 [6]: https://github.com/pwwang/python-varname
 [7]: logo.png
 [8]: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
-[10]: https://img.shields.io/travis/pwwang/python-varname?style=flat-square
+[9]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
+[10]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
 [11]: https://travis-ci.org/pwwang/python-varname
 [12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
 [13]: https://app.codacy.com/manual/pwwang/python-varname/dashboard
 [14]: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
-[15]: https://pwwang.github.io/python-varname/api/varname/
+[15]: https://pwwang.github.io/python-varname/api/
 [16]: https://pwwang.github.io/python-varname/CHANGELOG/
 [17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
 [18]: https://gitter.im/python-varname/community
