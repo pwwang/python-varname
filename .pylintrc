@@ -145,7 +145,14 @@ disable=print-statement,
         no-name-in-module,
         no-member,
         broad-except,
-        cyclic-import
+        cyclic-import,
+        too-few-public-methods,
+        unbalanced-tuple-unpacking,
+        no-self-use,
+        too-few-public-methods,
+        protected-access,
+        too-many-instance-attributes,
+        too-many-arguments
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -312,6 +319,7 @@ good-names=i,
            do,
            by,
            tf,
+           on,
            op,
            Run,
            _

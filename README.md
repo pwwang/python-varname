@@ -54,8 +54,7 @@ Thanks goes to these awesome people/projects:
     def function():
         return varname()
 
-    func = function()
-    # func == 'func'
+    func = function()  # func == 'func'
     ```
 
 -  `varname` calls being buried deeply
@@ -71,60 +70,51 @@ Thanks goes to these awesome people/projects:
     def function2():
         return function1()
 
-    func = function2()
-    # func == 'func'
+    func = function2()  # func == 'func'
     ```
 
 - Retrieving instance name of a class
 
     ```python
-    class Klass:
+    class Foo:
         def __init__(self):
             self.id = varname()
 
         def copy(self):
-            # also able to fetch inside a member call
-            return varname()
+            # also able to fetch inside a method call
+            copied = Foo() # copied.id == 'copied'
+            copied.id = varname() # assign id to whatever variable name
+            return copied
 
-    k = Klass()
-    # k.id == 'k'
+    k = Foo()   # k.id == 'k'
 
-    k2 = k.copy()
-    # k2 == 'k2'
+    k2 = k.copy() # k2.id == 'k2'
     ```
 
 - Some unusual use
 
     ```python
-    func = [function()]
-    # func == ['func']
+    func = [function()]    # func == ['func']
 
-    func = [function(), function()]
-    # func == ['func', 'func']
+    func = [function(), function()] # func == ['func', 'func']
 
-    func = function(), function()
-    # func = ('func', 'func')
+    func = function(), function()   # func = ('func', 'func')
 
-    func = func1 = function()
-    # func == func1 == 'func'
+    func = func1 = function()  # func == func1 == 'func'
     # a warning will be printed
     # since you may not want func1 to be 'func'
 
-    x = func(y = func())
-    # x == 'x'
+    x = func(y = func())  # x == 'x'
 
     # get part of the name
-    func_abc = function()[-3:]
-    # func_abc == 'abc'
+    func_abc = function()[-3:]  # func_abc == 'abc'
 
     # function alias supported now
     function2 = function
-    func = function2()
-    # func == 'func'
+    func = function2()  # func == 'func'
 
     a = lambda: 0
-    a.b = function()
-    # a.b == 'b'
+    a.b = function() # a.b == 'b'
 
     # Since v0.1.3
     # We can ask varname to raise exceptions
@@ -162,20 +152,23 @@ mydict = values_to_dict(foo, bar)
 from varname import varname, nameof
 
 a = 1
-aname = nameof(a)
-# aname == 'a
+nameof(a) # 'a'
 
 b = 2
-aname, bname = nameof(a, b)
-# aname == 'a', bname == 'b'
+nameof(a, b) # ('a', 'b')
 
 def func():
     return varname() + '_suffix'
 
-f = func()
-# f == 'f_suffix'
-fname = nameof(f)
-# fname == 'f'
+f = func() # f == 'f_suffix'
+nameof(f)  # 'f'
+
+# get full names of (chained) attribute calls
+func.a = func
+nameof(func.a, full=True) # 'func.a'
+
+func.a.b = 1
+nameof(func.a.b, full=True) # 'func.a.b'
 ```
 
 ### Detecting next immediate attribute name

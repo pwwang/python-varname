@@ -37,3 +37,8 @@
 - Change default of `raise_exc` to `True` for all related APIs
 - Deprecate `var_0`
 - Get rid of `VarnameRetrievingWarning`.
+
+## v0.5.0
+- Allow `nameof` to retrieve full name of chained attribute calls
+- Add `__all__` to the module so that only desired APIs are exposed when `from varname import *`
+- Give more hints on `nameof` being called in a weird way when no soucecode available.

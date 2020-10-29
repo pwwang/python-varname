@@ -2,7 +2,7 @@
 
 .. image:: logo.png
    :target: logo.png
-   :alt: python-varname
+   :alt: varname
 
 
 `
@@ -17,11 +17,16 @@
 .. image:: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
    :target: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
    :alt: PythonVers
- <https://pypi.org/project/python-varname/>`_ `
-.. image:: https://img.shields.io/travis/pwwang/python-varname?style=flat-square
-   :target: https://img.shields.io/travis/pwwang/python-varname?style=flat-square
-   :alt: Travis building
- <https://travis-ci.org/pwwang/python-varname>`_ `
+ <https://pypi.org/project/python-varname/>`_ 
+.. image:: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
+   :target: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
+   :alt: Building
+
+`
+.. image:: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
+   :target: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
+   :alt: Docs and API
+ <https://pwwang.github.io/python-varname/api/varname>`_ `
 .. image:: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
    :target: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
    :alt: Codacy
@@ -29,7 +34,8 @@
 .. image:: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
    :target: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
    :alt: Codacy coverage
- <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_ `
+ <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_
+`
 .. image:: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
    :target: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
    :alt: Chat on gitter
@@ -37,7 +43,7 @@
 
 Dark magics about variable names in python
 
-`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname/>`_
+`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname>`_
 
 Installation
 ------------
@@ -100,8 +106,7 @@ Retrieving the variable names from inside a function call/class instantiation
        def function():
            return varname()
 
-       func = function()
-       # func == 'func'
+       func = function()  # func == 'func'
 
 * 
   ``varname`` calls being buried deeply
@@ -118,62 +123,53 @@ Retrieving the variable names from inside a function call/class instantiation
       def function2():
           return function1()
 
-      func = function2()
-      # func == 'func'
+      func = function2()  # func == 'func'
 
 * 
   Retrieving instance name of a class
 
   .. code-block:: python
 
-       class Klass:
+       class Foo:
            def __init__(self):
                self.id = varname()
 
            def copy(self):
-               # also able to fetch inside a member call
-               return varname()
+               # also able to fetch inside a method call
+               copied = Foo() # copied.id == 'copied'
+               copied.id = varname() # assign id to whatever variable name
+               return copied
 
-       k = Klass()
-       # k.id == 'k'
+       k = Foo()   # k.id == 'k'
 
-       k2 = k.copy()
-       # k2 == 'k2'
+       k2 = k.copy() # k2.id == 'k2'
 
 * 
   Some unusual use
 
   .. code-block:: python
 
-       func = [function()]
-       # func == ['func']
+       func = [function()]    # func == ['func']
 
-       func = [function(), function()]
-       # func == ['func', 'func']
+       func = [function(), function()] # func == ['func', 'func']
 
-       func = function(), function()
-       # func = ('func', 'func')
+       func = function(), function()   # func = ('func', 'func')
 
-       func = func1 = function()
-       # func == func1 == 'func'
+       func = func1 = function()  # func == func1 == 'func'
        # a warning will be printed
        # since you may not want func1 to be 'func'
 
-       x = func(y = func())
-       # x == 'x'
+       x = func(y = func())  # x == 'x'
 
        # get part of the name
-       func_abc = function()[-3:]
-       # func_abc == 'abc'
+       func_abc = function()[-3:]  # func_abc == 'abc'
 
        # function alias supported now
        function2 = function
-       func = function2()
-       # func == 'func'
+       func = function2()  # func == 'func'
 
        a = lambda: 0
-       a.b = function()
-       # a.b == 'b'
+       a.b = function() # a.b == 'b'
 
        # Since v0.1.3
        # We can ask varname to raise exceptions
@@ -213,20 +209,23 @@ Getting variable names directly
    from varname import varname, nameof
 
    a = 1
-   aname = nameof(a)
-   # aname == 'a
+   nameof(a) # 'a'
 
    b = 2
-   aname, bname = nameof(a, b)
-   # aname == 'a', bname == 'b'
+   nameof(a, b) # ('a', 'b')
 
    def func():
        return varname() + '_suffix'
 
-   f = func()
-   # f == 'f_suffix'
-   fname = nameof(f)
-   # fname == 'f'
+   f = func() # f == 'f_suffix'
+   nameof(f)  # 'f'
+
+   # get full names of (chained) attribute calls
+   func.a = func
+   nameof(func.a, full=True) # 'func.a'
+
+   func.a.b = 1
+   nameof(func.a.b, full=True) # 'func.a.b'
 
 Detecting next immediate attribute name
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -294,12 +293,12 @@ Injecting ``__varname__``
 Reliability and limitations
 ---------------------------
 
-``python-varname`` is all depending on ``executing`` package to look for the node.
+``varname`` is all depending on ``executing`` package to look for the node.
 The node ``executing`` detects is ensured to be the correct one (see `this <https://github.com/alexmojaki/executing#is-it-reliable>`_\ ).
 
 It partially works with environments where other AST magics apply, including
 ``pytest``\ , ``ipython``\ , ``macropy``\ , ``birdseye``\ , ``reticulate`` with ``R``\ , etc. Neither
-``executing`` nor ``python-varname`` is 100% working with those environments. Use
+``executing`` nor ``varname`` is 100% working with those environments. Use
 it at your own risk.
 
 For example:

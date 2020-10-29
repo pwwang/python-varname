@@ -3,14 +3,18 @@ import ast
 import dis
 import sys
 import warnings
-from typing import Union, Tuple, Any, Optional, Type, List, Iterator
+from typing import Union, Tuple, Any, Optional, Type, List
 from types import FrameType, CodeType
 from collections import namedtuple as standard_namedtuple
 from functools import lru_cache
 
 import executing
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
+__all__ = [
+    "VarnameRetrievingError", "varname", "will",
+    "inject", "nameof", "namedtuple", "Wrapper"
+]
 
 NodeType = Type[ast.AST]
 
@@ -40,7 +44,7 @@ def varname(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    node: Optional[NodeType] = _get_node(caller, raise_exc=raise_exc)
+    node = _get_node(caller, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
@@ -60,7 +64,7 @@ def varname(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
         warnings.warn("Multiple targets in assignment, variable name "
                       "on the very left will be used.",
                       UserWarning)
-    target: str = node.targets[0]
+    target = node.targets[0]
     return _node_name(target)
 
 def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
@@ -104,14 +108,14 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    node: Optional[NodeType] = _get_node(caller, raise_exc=raise_exc)
+    node = _get_node(caller, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the frame.")
         return None
 
-    # try to get not inst.attr from inst.attr()
-    node: NodeType = node.parent
+    # try to get node inst.attr from inst.attr()
+    node = node.parent
 
     # see test_will_fail
     if not isinstance(node, ast.Attribute):
@@ -154,7 +158,7 @@ def inject(obj: object) -> object:
     Returns:
         The object with __varname__ injected
     """
-    vname: Optional[str] = varname()
+    vname = varname()
     try:
         setattr(obj, '__varname__', vname)
     except AttributeError:
@@ -162,41 +166,74 @@ def inject(obj: object) -> object:
     return obj
 
 
-# _caller is only used for test purposes
-# or unless one wants to wrap this function
-def nameof(*args, caller: int = 1) -> Union[str, Tuple[str]]:
+def nameof(var, *more_vars, # pylint: disable=unused-argument
+           caller: int = 1,
+           full: bool = False) -> Union[str, Tuple[str]]:
     """Get the names of the variables passed in
 
     Examples:
         >>> a = 1
-        >>> aname = nameof(a)
-        >>> # aname == 'a
+        >>> nameof(a) # 'a'
 
         >>> b = 2
-        >>> aname, bname = nameof(a, b)
-        >>> # aname == 'a', bname == 'b'
+        >>> nameof(a, b) # ('a', 'b')
+
+        >>> x = lambda: None
+        >>> x.y = 1
+        >>> nameof(x.y) # 'x.y'
 
     Args:
-        *args: A couple of variables passed in
+        var: The variable to retrieve the name of
+        *more_vars: Other variables to retrieve the names of
+        caller: The depth of the caller (this function) is called.
+            This is useful if you want to wrap this function.
+        full: Whether report the full path of the variable.
+            For example: `nameof(a.b.c, full=True)` give you `a.b.c`
+            instead of `c`
 
     Returns:
         The names of variables passed in
+
+    Raises:
+        VarnameRetrievingError: When the callee's node cannot be retrieved or
+            trying to retrieve the full name of non attribute series calls.
     """
-    node: Optional[NodeType] = _get_node(caller - 1, raise_exc=True)
+    node = _get_node(caller - 1, raise_exc=True)
     if not node:
-        if len(args) == 1:
+        # only works with nameof(a) or nameof(a.b)
+        # no keyword arguments is supposed to be passed in
+        # that means we cannot retrieve the full name without
+        # soucecode available and you can't wrap this function in such a case
+        if not more_vars:
             return _bytecode_nameof(caller + 1)
         raise VarnameRetrievingError("Unable to retrieve callee's node.")
 
     ret: List[str] = []
     for arg in node.args:
-        ret.append(_node_name(arg))
+        if not full or isinstance(arg, ast.Name):
+            ret.append(_node_name(arg))
+        else:
+            # traverse the node to get the full name: nameof(a.b.c)
+            # arg:
+            # Attribute(value=Attribute(value=Name(id='a', ctx=Load()),
+            #                           attr='b',
+            #                           ctx=Load()),
+            #           attr='c',
+            #           ctx=Load())
+            full_name = []
+            while not isinstance(arg, ast.Name):
+                if not isinstance(arg, ast.Attribute):
+                    raise VarnameRetrievingError(
+                        'Can only retrieve full names of '
+                        '(chained) attribute calls by nameof.'
+                    )
+                full_name.append(arg.attr)
+                arg = arg.value
+            # now it is an ast.Name
+            full_name.append(arg.id)
+            ret.append('.'.join(reversed(full_name)))
 
-    if not ret:
-        raise VarnameRetrievingError("At least one variable should be "
-                                     "passed to nameof")
-
-    return ret[0] if len(args) == 1 else tuple(ret)
+    return ret[0] if not more_vars else tuple(ret)
 
 def namedtuple(*args, **kwargs) -> type:
     """A shortcut for namedtuple
@@ -220,7 +257,7 @@ def namedtuple(*args, **kwargs) -> type:
     Returns:
         The namedtuple you desired.
     """
-    typename: str = varname(raise_exc=True)
+    typename = varname(raise_exc=True)
     return standard_namedtuple(typename, *args, **kwargs)
 
 class Wrapper:
@@ -323,7 +360,7 @@ def _bytecode_nameof(caller: int = 1) -> str:
 @lru_cache()
 def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
     """Cached Bytecode version of nameof"""
-    instructions: Iterator[dis.Instruction] = list(dis.get_instructions(code))
+    instructions = list(dis.get_instructions(code))
     (current_instruction_index, current_instruction), = (
         (index, instruction)
         for index, instruction in enumerate(instructions)
@@ -331,15 +368,19 @@ def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
     )
 
     if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
-        raise VarnameRetrievingError("Did you call nameof in a weird way?")
+        raise VarnameRetrievingError(
+            "Did you call nameof in a weird way? "
+            "Without soucecode available, nameof can only retrieve the name of "
+            "a single variable without any keyword arguments being passed in."
+        )
 
-    name_instruction: dis.Instruction = instructions[
+    name_instruction = instructions[
         current_instruction_index - 1
     ]
     if not name_instruction.opname.startswith("LOAD_"):
         raise VarnameRetrievingError("Argument must be a variable or attribute")
 
-    name: str = name_instruction.argrepr
+    name = name_instruction.argrepr
     if not name.isidentifier():
         raise VarnameRetrievingError(
             f"Found the variable name {name!r} which is obviously wrong. "

@@ -15,9 +15,9 @@ from varname import (varname,
 import varname as varname_module
 
 
-def nameof(*args):
+def nameof(*args, full=False):
     """Test both implementations at the same time"""
-    result = original_nameof(*args, caller=2)
+    result = original_nameof(*args, caller=2, full=full)
     if len(args) == 1:
         assert result == _bytecode_nameof(caller=2)
     return result
@@ -162,7 +162,7 @@ def test_class_deep():
     assert k2 == 'k2'
 
 def test_false():
-
+    """Test if any false positives happen"""
     def func(**kwargs):
         return varname()
 
@@ -179,24 +179,18 @@ def test_false():
 
 def test_referring():
 
-    def Proc(**kwargs):
+    def proc(**kwargs):
         return varname()
 
     def func2():
-        pProc1 = Proc(
-            input = {'infile:file': ['infile']},
-            output = 'outfile:file:{{i.infile|__import__("pathlib").Path|.stem}}.txt',
-            script = """cat {{i.infile}} > {{o.outfile}}""")
-        pProc2 = Proc(
-            input = 'infile:file',
-            output = 'outfile:file:{{i.infile|__import__("pathlib").Path|.stem}}.txt',
-            script = """echo world >> {{o.outfile}}""",
-            depends = pProc1)
-        return pProc1, pProc2
+        p1 = proc(a=1, b=2)
+        p2 = proc(a=1, b=2, c=p1)
+        return p1, p2
 
-    assert func2() == ('pProc1', 'pProc2')
+    assert func2() == ('p1', 'p2')
 
 def test_only_one():
+    """Only one variable to receive the name on LHS"""
 
     def function():
         return varname()
@@ -226,7 +220,7 @@ def test_multiple_targets():
     def function():
         return varname()
 
-    with pytest.warns(UserWarning):
+    with pytest.warns(UserWarning, match="Multiple targets in assignment"):
         y = x = function()
     assert y == x == 'y'
 
@@ -244,6 +238,7 @@ def test_unusual():
         x += function()
     assert x == 'a'
 
+    # alias
     func = function
     x = func()
     assert x == 'x'
@@ -294,8 +289,9 @@ class TestNameof(unittest.TestCase):
         with pytest.raises(VarnameRetrievingError):
             _bytecode_nameof(a == 1)
 
-        with pytest.raises(VarnameRetrievingError):
-            nameof()
+        # this is avoided by requiring the first argument `var`
+        # with pytest.raises(VarnameRetrievingError):
+        #     nameof()
 
     def test_nameof_statements(self):
         a = {'test': 1}
@@ -364,7 +360,7 @@ def test_bytecode_pytest_nameof_fail():
         assert _bytecode_nameof(lam.a) == 'a'
 
 
-def test_class_property():
+def test_varname_from_attributes():
     class C:
         @property
         def var(self):
@@ -621,3 +617,35 @@ def test_bytecode_nameof_wrong_node():
         match='Did you call nameof in a weird way',
     ):
         Weird() + Weird()
+
+def test_nameof_full():
+    x = lambda: None
+    a = x
+    a.b = x
+    a.b.c = x
+    name = original_nameof(a)
+    assert name == 'a'
+    name = original_nameof(a, caller=1)
+    assert name == 'a'
+    name = original_nameof(a.b)
+    assert name == 'b'
+    name = original_nameof(a.b, full=True)
+    assert name == 'a.b'
+    name = original_nameof(a.b.c)
+    assert name == 'c'
+    name = original_nameof(a.b.c, full=True)
+    assert name == 'a.b.c'
+
+    d = [a, a]
+    with pytest.raises(
+            VarnameRetrievingError,
+            match='Can only retrieve full names of'
+    ):
+        name = original_nameof(d[0].b, full=True)
+
+    # we are not able to retreive full names without source code available
+    with pytest.raises(
+            VarnameRetrievingError,
+            match='Did you call nameof in a weird way'
+    ):
+        eval('nameof(a.b.c, full=True)')

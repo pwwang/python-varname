@@ -21,7 +21,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='varname',
-    version='0.4.0',
+    version='0.5.0',
     description='Retrieving variable names of function or class calls.',
     python_requires='==3.*,>=3.6.0',
     project_urls={
