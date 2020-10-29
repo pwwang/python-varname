@@ -255,8 +255,8 @@ For example:
 - `R` with `reticulate`.
 
 [1]: https://github.com/pwwang/python-varname
-[3]: https://img.shields.io/pypi/v/python-varname?style=flat-square
-[4]: https://pypi.org/project/python-varname/
+[3]: https://img.shields.io/pypi/v/varname?style=flat-square
+[4]: https://pypi.org/project/varname/
 [5]: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
 [6]: https://github.com/pwwang/python-varname
 [7]: logo.png
