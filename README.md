@@ -44,6 +44,8 @@ Thanks goes to these awesome people/projects:
   </tr>
 </table>
 
+Special thanks to @HanyuuLu to give up the name `varname` in pypi for this project.
+
 ## Usage
 
 ### Retrieving the variable names from inside a function call/class instantiation
