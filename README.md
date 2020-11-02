@@ -10,8 +10,7 @@ Dark magics about variable names in python
 
 ## Installation
 ```shell
-pip install python-varname # will be deprecated after 0.4.0
-pip install varname # use this instead
+pip install varname
 ```
 
 ## Features
@@ -44,7 +43,7 @@ Thanks goes to these awesome people/projects:
   </tr>
 </table>
 
-Special thanks to @HanyuuLu to give up the name `varname` in pypi for this project.
+Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this project.
 
 ## Usage
 
@@ -255,6 +254,7 @@ For example:
 - `R` with `reticulate`.
 
 [1]: https://github.com/pwwang/python-varname
+[2]: https://github.com/HanyuuLu
 [3]: https://img.shields.io/pypi/v/varname?style=flat-square
 [4]: https://pypi.org/project/varname/
 [5]: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square

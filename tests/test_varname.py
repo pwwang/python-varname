@@ -2,6 +2,7 @@ import sys
 import unittest
 
 import pytest
+import subprocess
 from varname import (varname,
                      VarnameRetrievingError,
                      Wrapper,
@@ -646,6 +647,19 @@ def test_nameof_full():
     # we are not able to retreive full names without source code available
     with pytest.raises(
             VarnameRetrievingError,
-            match='Did you call nameof in a weird way'
+            match='Are you trying to call nameof from evaluation'
     ):
         eval('nameof(a.b.c, full=True)')
+
+def test_nameof_from_stdin():
+    code = ('from varname import nameof; '
+            'x = lambda: 0; '
+            'x.y = x; '
+            'print(nameof(x.y, full=True))')
+    p = subprocess.Popen([sys.executable],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT,
+                         encoding='utf8')
+    out, _ = p.communicate(input=code)
+    assert 'Are you trying to call nameof in REPL/python shell' in out

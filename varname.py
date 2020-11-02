@@ -283,8 +283,8 @@ class Wrapper:
     """
 
     def __init__(self, value: Any, raise_exc: bool = True):
-        self.name: str = varname(raise_exc=raise_exc)
-        self.value: Any = value
+        self.name = varname(raise_exc=raise_exc)
+        self.value = value
 
     def __str__(self) -> str:
         return repr(self.value)
@@ -310,11 +310,11 @@ def _get_node(caller: int, raise_exc: bool = True) -> Optional[NodeType]:
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        frame: FrameType = _get_frame(caller + 2)
+        frame = _get_frame(caller + 2)
     except VarnameRetrievingError:
         return None
 
-    exet: executing.Executing = executing.Source.executing(frame)
+    exet = executing.Source.executing(frame)
 
     if exet.node:
         return exet.node
@@ -354,12 +354,19 @@ def _node_name(node: NodeType) -> str:
 
 def _bytecode_nameof(caller: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
-    frame: FrameType = _get_frame(caller)
-    return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
+    frame = _get_frame(caller)
+    source = frame.f_code.co_filename
+    return _bytecode_nameof_cached(frame.f_code, frame.f_lasti, source)
 
 @lru_cache()
-def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
-    """Cached Bytecode version of nameof"""
+def _bytecode_nameof_cached(code: CodeType, offset: int, source: str) -> str:
+    """Cached Bytecode version of nameof
+
+    We are trying this version only when the soucecode is unavisible. In most
+    cases, this will happen when user is trying to run a script in REPL/
+    python shell, with `eval`, or other circumstances where the code is
+    manipulated to run but sourcecode is not available.
+    """
     instructions = list(dis.get_instructions(code))
     (current_instruction_index, current_instruction), = (
         (index, instruction)
@@ -368,11 +375,19 @@ def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
     )
 
     if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
-        raise VarnameRetrievingError(
-            "Did you call nameof in a weird way? "
-            "Without soucecode available, nameof can only retrieve the name of "
-            "a single variable without any keyword arguments being passed in."
-        )
+        if source == '<stdin>':
+            raise VarnameRetrievingError(
+                "Are you trying to call nameof in REPL/python shell? "
+                "In such a case, nameof can only be called with single "
+                "argument and no keyword arguments."
+            )
+        if source == '<string>':
+            raise VarnameRetrievingError(
+                "Are you trying to call nameof from evaluation? "
+                "In such a case, nameof can only be called with single "
+                "argument and no keyword arguments."
+            )
+        raise VarnameRetrievingError("Did you call nameof in a weird way? ")
 
     name_instruction = instructions[
         current_instruction_index - 1
