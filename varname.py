@@ -180,7 +180,16 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
 
         >>> x = lambda: None
         >>> x.y = 1
-        >>> nameof(x.y) # 'x.y'
+        >>> nameof(x.y, full=True) # 'x.y'
+
+    Note:
+        This function works with the environments where source code is
+        available, in other words, the callee's node can be retrieved by
+        `executing`. In some cases, for example, running code from python
+        shell/REPL or from `exec`/`eval`, we try to fetch the variable name
+        from the bytecode. This requires only a single variable name is passed
+        to this function and no keyword arguments, meaning that getting full
+        names of attribute calls are not supported in such cases.
 
     Args:
         var: The variable to retrieve the name of
@@ -200,10 +209,16 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
     """
     node = _get_node(caller - 1, raise_exc=True)
     if not node:
+        if full:
+            raise VarnameRetrievingError(
+                "Cannot retrieve full name by nameof when called "
+                "in shell/REPL, exec/eval or other situations "
+                "where sourcecode is unavailable."
+            )
         # only works with nameof(a) or nameof(a.b)
         # no keyword arguments is supposed to be passed in
         # that means we cannot retrieve the full name without
-        # soucecode available and you can't wrap this function in such a case
+        # sourcecode available
         if not more_vars:
             return _bytecode_nameof(caller + 1)
         raise VarnameRetrievingError("Unable to retrieve callee's node.")
@@ -362,7 +377,7 @@ def _bytecode_nameof(caller: int = 1) -> str:
 def _bytecode_nameof_cached(code: CodeType, offset: int, source: str) -> str:
     """Cached Bytecode version of nameof
 
-    We are trying this version only when the soucecode is unavisible. In most
+    We are trying this version only when the sourcecode is unavisible. In most
     cases, this will happen when user is trying to run a script in REPL/
     python shell, with `eval`, or other circumstances where the code is
     manipulated to run but sourcecode is not available.
@@ -383,7 +398,7 @@ def _bytecode_nameof_cached(code: CodeType, offset: int, source: str) -> str:
             )
         if source == '<string>':
             raise VarnameRetrievingError(
-                "Are you trying to call nameof from evaluation? "
+                "Are you trying to call nameof from exec/eval? "
                 "In such a case, nameof can only be called with single "
                 "argument and no keyword arguments."
             )
@@ -392,6 +407,7 @@ def _bytecode_nameof_cached(code: CodeType, offset: int, source: str) -> str:
     name_instruction = instructions[
         current_instruction_index - 1
     ]
+
     if not name_instruction.opname.startswith("LOAD_"):
         raise VarnameRetrievingError("Argument must be a variable or attribute")
 

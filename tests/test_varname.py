@@ -647,15 +647,21 @@ def test_nameof_full():
     # we are not able to retreive full names without source code available
     with pytest.raises(
             VarnameRetrievingError,
-            match='Are you trying to call nameof from evaluation'
+            match='Are you trying to call nameof from exec/eval'
     ):
-        eval('nameof(a.b.c, full=True)')
+        eval('nameof(a.b, full=False)')
+
+    with pytest.raises(
+            VarnameRetrievingError,
+            match='Cannot retrieve full name by nameof'
+    ):
+        eval('nameof(a.b, full=True)')
 
 def test_nameof_from_stdin():
     code = ('from varname import nameof; '
             'x = lambda: 0; '
             'x.y = x; '
-            'print(nameof(x.y, full=True))')
+            'print(nameof(x.y, full=False))')
     p = subprocess.Popen([sys.executable],
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
