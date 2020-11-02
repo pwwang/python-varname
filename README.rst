@@ -6,10 +6,10 @@
 
 
 `
-.. image:: https://img.shields.io/pypi/v/python-varname?style=flat-square
-   :target: https://img.shields.io/pypi/v/python-varname?style=flat-square
+.. image:: https://img.shields.io/pypi/v/varname?style=flat-square
+   :target: https://img.shields.io/pypi/v/varname?style=flat-square
    :alt: Pypi
- <https://pypi.org/project/python-varname/>`_ `
+ <https://pypi.org/project/varname/>`_ `
 .. image:: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
    :target: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
    :alt: Github
@@ -17,7 +17,7 @@
 .. image:: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
    :target: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
    :alt: PythonVers
- <https://pypi.org/project/python-varname/>`_ 
+ <https://pypi.org/project/varname/>`_ 
 .. image:: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
    :target: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
    :alt: Building
@@ -50,8 +50,7 @@ Installation
 
 .. code-block:: shell
 
-   pip install python-varname # will be deprecated after 0.4.0
-   pip install varname # use this instead
+   pip install varname
 
 Features
 --------
@@ -89,6 +88,8 @@ Thanks goes to these awesome people/projects:
      </tr>
    </table>
 
+
+Special thanks to `@HanyuuLu <https://github.com/HanyuuLu>`_ to give up the name ``varname`` in pypi for this project.
 
 Usage
 -----
