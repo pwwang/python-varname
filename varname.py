@@ -168,7 +168,7 @@ def inject(obj: object) -> object:
 
 def nameof(var, *more_vars, # pylint: disable=unused-argument
            caller: int = 1,
-           full: bool = False) -> Union[str, Tuple[str]]:
+           full: Optional[bool] = None) -> Union[str, Tuple[str]]:
     """Get the names of the variables passed in
 
     Examples:
@@ -209,19 +209,36 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
     """
     node = _get_node(caller - 1, raise_exc=True)
     if not node:
-        if full:
-            raise VarnameRetrievingError(
-                "Cannot retrieve full name by nameof when called "
-                "in shell/REPL, exec/eval or other situations "
-                "where sourcecode is unavailable."
-            )
-        # only works with nameof(a) or nameof(a.b)
-        # no keyword arguments is supposed to be passed in
-        # that means we cannot retrieve the full name without
-        # sourcecode available
-        if not more_vars:
+        # We can't retrieve the node by executing.
+        # It can be due to running code from python/shell, exec/eval or
+        # other environments where sourcecode cannot be reached
+        # make sure we keep it simple (only single variable passed and no
+        # full passed) to use _bytecode_nameof
+        if not more_vars and full is None:
             return _bytecode_nameof(caller + 1)
-        raise VarnameRetrievingError("Unable to retrieve callee's node.")
+
+        # We are anyway raising exceptions, no worries about additional burden
+        # of frame retrieval again
+
+        # may raise exception, just leave it as is
+        frame = _get_frame(caller)
+        source = frame.f_code.co_filename
+        if source == '<stdin>':
+            raise VarnameRetrievingError(
+                "Are you trying to call nameof in REPL/python shell? "
+                "In such a case, nameof can only be called with single "
+                "argument and no keyword arguments."
+            )
+        if source == '<string>':
+            raise VarnameRetrievingError(
+                "Are you trying to call nameof from exec/eval? "
+                "In such a case, nameof can only be called with single "
+                "argument and no keyword arguments."
+            )
+        raise VarnameRetrievingError(
+            "Source code unavailable, nameof can only retrieve the name of "
+            "a single variable, and argument `full` should not be specified."
+        )
 
     ret: List[str] = []
     for arg in node.args:
@@ -370,11 +387,10 @@ def _node_name(node: NodeType) -> str:
 def _bytecode_nameof(caller: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
     frame = _get_frame(caller)
-    source = frame.f_code.co_filename
-    return _bytecode_nameof_cached(frame.f_code, frame.f_lasti, source)
+    return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 @lru_cache()
-def _bytecode_nameof_cached(code: CodeType, offset: int, source: str) -> str:
+def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
     """Cached Bytecode version of nameof
 
     We are trying this version only when the sourcecode is unavisible. In most
@@ -390,19 +406,7 @@ def _bytecode_nameof_cached(code: CodeType, offset: int, source: str) -> str:
     )
 
     if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
-        if source == '<stdin>':
-            raise VarnameRetrievingError(
-                "Are you trying to call nameof in REPL/python shell? "
-                "In such a case, nameof can only be called with single "
-                "argument and no keyword arguments."
-            )
-        if source == '<string>':
-            raise VarnameRetrievingError(
-                "Are you trying to call nameof from exec/eval? "
-                "In such a case, nameof can only be called with single "
-                "argument and no keyword arguments."
-            )
-        raise VarnameRetrievingError("Did you call nameof in a weird way? ")
+        raise VarnameRetrievingError("Did you call nameof in a weird way?")
 
     name_instruction = instructions[
         current_instruction_index - 1

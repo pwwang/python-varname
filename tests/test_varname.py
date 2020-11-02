@@ -16,9 +16,9 @@ from varname import (varname,
 import varname as varname_module
 
 
-def nameof(*args, full=False):
+def nameof(*args):
     """Test both implementations at the same time"""
-    result = original_nameof(*args, caller=2, full=full)
+    result = original_nameof(*args, caller=2)
     if len(args) == 1:
         assert result == _bytecode_nameof(caller=2)
     return result
@@ -600,13 +600,6 @@ def test_inject():
     assert a == b
 
 
-def test_no_source_code_nameof():
-    assert eval('nameof(list)') == eval('original_nameof(list)') == 'list'
-
-    with pytest.raises(VarnameRetrievingError):
-        eval("original_nameof(list, list)")
-
-
 class Weird:
     def __add__(self, other):
         _bytecode_nameof(caller=2)
@@ -647,15 +640,10 @@ def test_nameof_full():
     # we are not able to retreive full names without source code available
     with pytest.raises(
             VarnameRetrievingError,
-            match='Are you trying to call nameof from exec/eval'
+            match=('Are you trying to call nameof from exec/eval')
     ):
-        eval('nameof(a.b, full=False)')
+        eval('original_nameof(a.b, full=False)')
 
-    with pytest.raises(
-            VarnameRetrievingError,
-            match='Cannot retrieve full name by nameof'
-    ):
-        eval('nameof(a.b, full=True)')
 
 def test_nameof_from_stdin():
     code = ('from varname import nameof; '
