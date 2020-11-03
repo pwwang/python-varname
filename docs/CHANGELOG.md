@@ -45,3 +45,7 @@
 
 ## v0.5.1
 - Add better messaging for weird nameof calls
+
+## v0.5.2
+- Move messaging of weird nameof calls from `_bytecode_nameof` to `nameof`.
+- Disallow `full` to be used when `_bytecode_nameof` needs to be invoked.
