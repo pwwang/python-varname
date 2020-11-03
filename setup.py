@@ -21,8 +21,8 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='varname',
-    version='0.5.1',
-    description='Retrieving variable names of function or class calls.',
+    version='0.5.2',
+    description='Dark magics about variable names in python.',
     python_requires='==3.*,>=3.6.0',
     project_urls={
         "homepage": "https://github.com/pwwang/python-varname",
