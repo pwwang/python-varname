@@ -260,7 +260,7 @@ For example:
 [5]: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
 [6]: https://github.com/pwwang/python-varname
 [7]: logo.png
-[8]: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
+[8]: https://img.shields.io/pypi/pyversions/varname?style=flat-square
 [9]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
 [10]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
 [12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
