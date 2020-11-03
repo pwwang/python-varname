@@ -1,10 +1,11 @@
 name: Build Docs
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   docs:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     strategy:
       matrix:
         python-version: [3.8]
@@ -33,6 +34,7 @@ jobs:
   fix-index:
     needs: docs
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     strategy:
       matrix:
         python-version: [3.8]
