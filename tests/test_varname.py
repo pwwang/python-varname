@@ -3,29 +3,8 @@ import unittest
 
 import pytest
 import subprocess
-from varname import (varname,
-                     VarnameRetrievingError,
-                     Wrapper,
-                     will,
-                     inject,
-                     namedtuple,
-                     _get_node,
-                     _bytecode_nameof,
-                     nameof as original_nameof)
-
-import varname as varname_module
-
-
-def nameof(*args):
-    """Test both implementations at the same time"""
-    result = original_nameof(*args, caller=2)
-    if len(args) == 1:
-        assert result == _bytecode_nameof(caller=2)
-    return result
-
-
-varname_module.nameof = nameof
-
+from varname import *
+from varname import _get_node
 
 @pytest.fixture
 def no_getframe():
@@ -33,7 +12,6 @@ def no_getframe():
     Monkey-patch sys._getframe to fail,
     simulating environments that don't support varname
     """
-
     def getframe(_context):
         raise ValueError
 
@@ -126,13 +104,13 @@ def test_function_deep():
 
 def test_class():
 
-    class Klass:
+    class Foo:
         def __init__(self):
             self.id = varname()
         def copy(self):
             return varname()
 
-    k = Klass()
+    k = Foo()
     assert k.id == 'k'
 
     k2 = k.copy()
@@ -140,7 +118,7 @@ def test_class():
 
 def test_class_deep():
 
-    class Klass:
+    class Foo:
         def __init__(self):
             self.id = self.some_internal()
 
@@ -156,7 +134,7 @@ def test_class_deep():
         def copy_id_internal(self):
             return varname(caller = 3)
 
-    k = Klass()
+    k = Foo()
     assert k.id == 'k'
 
     k2 = k.copy()
@@ -190,7 +168,7 @@ def test_referring():
 
     assert func2() == ('p1', 'p2')
 
-def test_only_one():
+def test_only_one_lhs():
     """Only one variable to receive the name on LHS"""
 
     def function():
@@ -254,94 +232,6 @@ def test_wrapper():
     assert repr(val1) == "<Wrapper (name='val1', value=True)>"
 
 
-class TestNameof(unittest.TestCase):
-    def test_original_nameof(self):
-        x = 1
-        self.assertEqual(original_nameof(x), 'x')
-        self.assertEqual(nameof(x), 'x')
-        self.assertEqual(_bytecode_nameof(x), 'x')
-
-    def test_nameof(self):
-        a = 1
-        b = nameof(a)
-        assert b == 'a'
-        nameof2 = nameof
-        c = nameof2(a, b)
-        assert b == 'a'
-        assert c == ('a', 'b')
-
-        def func():
-            return varname() + 'abc'
-
-        f = func()
-        assert f == 'fabc'
-
-        self.assertEqual(nameof(f), 'f')
-        self.assertEqual('f', nameof(f))
-        self.assertEqual(len(nameof(f)), 1)
-
-        fname1 = fname = nameof(f)
-        self.assertEqual(fname, 'f')
-        self.assertEqual(fname1, 'f')
-
-        with pytest.raises(VarnameRetrievingError):
-            nameof(a==1)
-
-        with pytest.raises(VarnameRetrievingError):
-            _bytecode_nameof(a == 1)
-
-        # this is avoided by requiring the first argument `var`
-        # with pytest.raises(VarnameRetrievingError):
-        #     nameof()
-
-    def test_nameof_statements(self):
-        a = {'test': 1}
-        test = {}
-        del a[nameof(test)]
-        assert a == {}
-
-        def func():
-            return nameof(test)
-
-        assert func() == 'test'
-
-        def func2():
-            yield nameof(test)
-
-        assert list(func2()) == ['test']
-
-        def func3():
-            raise ValueError(nameof(test))
-
-        with pytest.raises(ValueError) as verr:
-            func3()
-        assert str(verr.value) == 'test'
-
-        for i in [0]:
-            self.assertEqual(nameof(test), 'test')
-            self.assertEqual(len(nameof(test)), 4)
-
-    def test_nameof_expr(self):
-        test = {}
-        self.assertEqual(len(varname_module.nameof(test)), 4)
-
-        lam = lambda: 0
-        lam.a = 1
-        lam.lam = lam
-        lams = [lam]
-        self.assertEqual(
-            varname_module.nameof(test, lam.a),
-            ("test", "a"),
-        )
-
-        self.assertEqual(nameof(lam.a), "a")
-        self.assertEqual(nameof(lam.lam.lam.lam.a), "a")
-        self.assertEqual(nameof(lam.lam.lam.lam), "lam")
-        self.assertEqual(nameof(lams[0].lam), "lam")
-        self.assertEqual(nameof(lams[0].lam.a), "a")
-        self.assertEqual(nameof((lam() or lams[0]).lam.a), "a")
-
-
 def test_nameof_pytest_fail():
     with pytest.raises(
         VarnameRetrievingError,
@@ -349,17 +239,6 @@ def test_nameof_pytest_fail():
               "This may happen if you're using some other AST magic"
     ):
         assert nameof(nameof) == 'nameof'
-
-
-def test_bytecode_pytest_nameof_fail():
-    with pytest.raises(
-        VarnameRetrievingError,
-        match="Found the variable name '@py_assert2' which is obviously wrong.",
-    ):
-        lam = lambda: 0
-        lam.a = 1
-        assert _bytecode_nameof(lam.a) == 'a'
-
 
 def test_varname_from_attributes():
     class C:
@@ -560,7 +439,7 @@ def test_frame_fail_varname(no_getframe):
 def test_frame_fail_nameof(no_getframe):
     a = 1
     with pytest.raises(VarnameRetrievingError):
-        assert nameof(a) == 'a'
+        nameof(a)
 
 
 def test_frame_fail_will(no_getframe):
@@ -599,35 +478,22 @@ def test_inject():
     b.append(1)
     assert a == b
 
-
-class Weird:
-    def __add__(self, other):
-        _bytecode_nameof(caller=2)
-
-
-def test_bytecode_nameof_wrong_node():
-    with pytest.raises(
-        VarnameRetrievingError,
-        match='Did you call nameof in a weird way',
-    ):
-        Weird() + Weird()
-
 def test_nameof_full():
     x = lambda: None
     a = x
     a.b = x
     a.b.c = x
-    name = original_nameof(a)
+    name = nameof(a)
     assert name == 'a'
-    name = original_nameof(a, caller=1)
+    name = nameof(a, caller=1)
     assert name == 'a'
-    name = original_nameof(a.b)
+    name = nameof(a.b)
     assert name == 'b'
-    name = original_nameof(a.b, full=True)
+    name = nameof(a.b, full=True)
     assert name == 'a.b'
-    name = original_nameof(a.b.c)
+    name = nameof(a.b.c)
     assert name == 'c'
-    name = original_nameof(a.b.c, full=True)
+    name = nameof(a.b.c, full=True)
     assert name == 'a.b.c'
 
     d = [a, a]
@@ -635,14 +501,14 @@ def test_nameof_full():
             VarnameRetrievingError,
             match='Can only retrieve full names of'
     ):
-        name = original_nameof(d[0].b, full=True)
+        name = nameof(d[0].b, full=True)
 
     # we are not able to retreive full names without source code available
     with pytest.raises(
             VarnameRetrievingError,
             match=('Are you trying to call nameof from exec/eval')
     ):
-        eval('original_nameof(a.b, full=False)')
+        eval('nameof(a.b, full=False)')
 
 
 def test_nameof_from_stdin():
@@ -657,3 +523,14 @@ def test_nameof_from_stdin():
                          encoding='utf8')
     out, _ = p.communicate(input=code)
     assert 'Are you trying to call nameof in REPL/python shell' in out
+
+def test_nameof_node_not_retrieved():
+    """Test when calling nameof without sourcecode available
+    but filename is not <stdin> or <string>"""
+    source = ('from varname import nameof; '
+              'x = lambda: 0; '
+              'x.y = x; '
+              'print(nameof(x.y, full=False))')
+    code = compile(source, filename="<string2>", mode="exec")
+    with pytest.raises(VarnameRetrievingError, match='Source code unavailable'):
+        exec(code)

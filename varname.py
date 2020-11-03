@@ -3,7 +3,7 @@ import ast
 import dis
 import sys
 import warnings
-from typing import Union, Tuple, Any, Optional, Type, List
+from typing import Union, Tuple, Any, Optional
 from types import FrameType, CodeType
 from collections import namedtuple as standard_namedtuple
 from functools import lru_cache
@@ -15,8 +15,6 @@ __all__ = [
     "VarnameRetrievingError", "varname", "will",
     "inject", "nameof", "namedtuple", "Wrapper"
 ]
-
-NodeType = Type[ast.AST]
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
@@ -201,7 +199,9 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
             instead of `c`
 
     Returns:
-        The names of variables passed in
+        The names of variables passed in. If a single varialble is passed,
+            return the name of it. If multiple variables are passed, return
+            a tuple of their names.
 
     Raises:
         VarnameRetrievingError: When the callee's node cannot be retrieved or
@@ -240,7 +240,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
             "a single variable, and argument `full` should not be specified."
         )
 
-    ret: List[str] = []
+    ret = []
     for arg in node.args:
         if not full or isinstance(arg, ast.Name):
             ret.append(_node_name(arg))
@@ -332,7 +332,7 @@ def _get_frame(caller: int) -> FrameType:
     except Exception as exc:
         raise VarnameRetrievingError from exc
 
-def _get_node(caller: int, raise_exc: bool = True) -> Optional[NodeType]:
+def _get_node(caller: int, raise_exc: bool = True) -> Optional[ast.AST]:
     """Try to get node from the executing object.
 
     This can fail when a frame is failed to retrieve.
@@ -360,7 +360,7 @@ def _get_node(caller: int, raise_exc: bool = True) -> Optional[NodeType]:
 
     return None
 
-def _lookfor_parent_assign(node: NodeType) -> Optional[ast.Assign]:
+def _lookfor_parent_assign(node: ast.AST) -> Optional[ast.Assign]:
     """Look for an ast.Assign node in the parents"""
     while hasattr(node, 'parent'):
         node = node.parent
@@ -369,7 +369,7 @@ def _lookfor_parent_assign(node: NodeType) -> Optional[ast.Assign]:
             return node
     return None
 
-def _node_name(node: NodeType) -> str:
+def _node_name(node: ast.AST) -> str:
     """Get the node node name.
 
     Raises VarnameRetrievingError when failed
