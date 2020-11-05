@@ -534,3 +534,11 @@ def test_nameof_node_not_retrieved():
     code = compile(source, filename="<string2>", mode="exec")
     with pytest.raises(VarnameRetrievingError, match='Source code unavailable'):
         exec(code)
+
+def test_debug(capsys):
+    a = 1
+    b = object()
+    debug(a)
+    assert 'DEBUG: a=1\n' == capsys.readouterr().out
+    debug(a, b, merge=True)
+    assert 'DEBUG: a=1, b=<object' in capsys.readouterr().out

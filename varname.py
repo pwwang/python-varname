@@ -13,7 +13,7 @@ import executing
 __version__ = "0.5.2"
 __all__ = [
     "VarnameRetrievingError", "varname", "will",
-    "inject", "nameof", "namedtuple", "Wrapper"
+    "inject", "nameof", "namedtuple", "Wrapper", "debug"
 ]
 
 class VarnameRetrievingError(Exception):
@@ -266,6 +266,42 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
             ret.append('.'.join(reversed(full_name)))
 
     return ret[0] if not more_vars else tuple(ret)
+
+def debug(var, *more_vars,
+          prefix: str = 'DEBUG: ',
+          merge: bool = False,
+          repr: bool = True) -> None: # pylint: disable=redefined-builtin
+    """Print variable names and values.
+
+    Examples:
+        >>> a = 1
+        >>> b = object
+        >>> print(f'a={a}') # previously, we have to do
+        >>> print(f'{a=}')  # or with python3.8
+        >>> # instead we can do:
+        >>> debug(a) # DEBUG: a=1
+        >>> debug(a, prefix='') # a=1
+        >>> debug(a, b, merge=True) # a=1, b=<object object at 0x2b9a4c89cf00>
+
+    Args:
+        var: The variable to print
+        *more_vars: Other variables to print
+        prefix: A prefix to print for each line
+        merge: Whether merge all variables in one line or not
+        repr: Print the value as `repr(var)`? otherwise `str(var)`
+    """
+    var_names = nameof(var, *more_vars, caller=2, full=True)
+    if not isinstance(var_names, tuple):
+        var_names = (var_names, )
+    variables = (var, *more_vars)
+    name_and_values = [f"{var_name}={variables[i]!r}" if repr
+                       else f"{var_name}={variables[i]}"
+                       for i, var_name in enumerate(var_names)]
+    if merge:
+        print(f"{prefix}{', '.join(name_and_values)}")
+    else:
+        for name_and_value in name_and_values:
+            print(f"{prefix}{name_and_value}")
 
 def namedtuple(*args, **kwargs) -> type:
     """A shortcut for namedtuple

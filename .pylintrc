@@ -152,7 +152,10 @@ disable=print-statement,
         too-few-public-methods,
         protected-access,
         too-many-instance-attributes,
-        too-many-arguments
+        too-many-arguments,
+        too-many-return-statements,
+        too-many-locals,
+        not-callable
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -308,6 +311,7 @@ good-names=i,
            y,
            z,
            np,
+           gc,
            nn,
            ns,
            t,
