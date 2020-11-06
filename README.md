@@ -19,7 +19,6 @@ pip install varname
 - Fetching variable names directly using `nameof`
 - A value wrapper to store the variable name that a value is assigned to using `Wrapper`
 - Detecting next immediate attribute name using `will`
-- Shortcut for `collections.namedtuple`
 - Injecting `__varname__` to objects
 - A `debug` function to print variables with their names and values.
 
@@ -196,17 +195,6 @@ awesome = AwesomeClass()
 awesome.do() # AttributeError: You don't have permission to do
 awesome.permit() # AttributeError: Should do something with AwesomeClass object
 awesome.permit().do() == 'I am doing!'
-```
-
-### Shortcut for `collections.namedtuple`
-```python
-# instead of
-from collections import namedtuple
-Name = namedtuple('Name', ['first', 'last'])
-
-# we can do:
-from varname import namedtuple
-Name = namedtuple(['first', 'last'])
 ```
 
 ### Injecting `__varname__`
