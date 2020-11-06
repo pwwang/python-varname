@@ -14,8 +14,8 @@
    :target: https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square
    :alt: Github
  <https://github.com/pwwang/python-varname>`_ `
-.. image:: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
-   :target: https://img.shields.io/pypi/pyversions/python-varname?style=flat-square
+.. image:: https://img.shields.io/pypi/pyversions/varname?style=flat-square
+   :target: https://img.shields.io/pypi/pyversions/varname?style=flat-square
    :alt: PythonVers
  <https://pypi.org/project/varname/>`_ 
 .. image:: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
@@ -62,6 +62,7 @@ Features
 * Detecting next immediate attribute name using ``will``
 * Shortcut for ``collections.namedtuple``
 * Injecting ``__varname__`` to objects
+* A ``debug`` function to print variables with their names and values.
 
 Credits
 -------
@@ -290,6 +291,22 @@ Injecting ``__varname__``
    a.append(1)
    b.append(1)
    a == b
+
+Debugging with ``debug``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+   a = 'value'
+   b = object()
+   debug(a) # DEBUG: a='value'
+   debug(b) # DEBUG: b=<object object at 0x2b70580e5f20>
+   debug(a, b)
+   # DEBUG: a='value'
+   # DEBUG: b=<object object at 0x2b70580e5f20>
+   debug(a, b, merge=True)
+   # DEBUG: a='value', b=<object object at 0x2b70580e5f20>
+   debug(a, repr=False, prefix='') # a=value
 
 Reliability and limitations
 ---------------------------

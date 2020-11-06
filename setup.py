@@ -21,7 +21,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='varname',
-    version='0.5.2',
+    version='0.5.3',
     description='Dark magics about variable names in python.',
     python_requires='==3.*,>=3.6.0',
     project_urls={
