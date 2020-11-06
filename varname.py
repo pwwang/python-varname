@@ -10,7 +10,7 @@ from functools import lru_cache
 
 import executing
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 __all__ = [
     "VarnameRetrievingError", "varname", "will",
     "inject", "nameof", "namedtuple", "Wrapper", "debug"

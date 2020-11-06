@@ -21,6 +21,7 @@ pip install varname
 - Detecting next immediate attribute name using `will`
 - Shortcut for `collections.namedtuple`
 - Injecting `__varname__` to objects
+- A `debug` function to print variables with their names and values.
 
 ## Credits
 
@@ -228,6 +229,20 @@ a == b
 a.append(1)
 b.append(1)
 a == b
+```
+
+### Debugging with `debug`
+```python
+a = 'value'
+b = object()
+debug(a) # DEBUG: a='value'
+debug(b) # DEBUG: b=<object object at 0x2b70580e5f20>
+debug(a, b)
+# DEBUG: a='value'
+# DEBUG: b=<object object at 0x2b70580e5f20>
+debug(a, b, merge=True)
+# DEBUG: a='value', b=<object object at 0x2b70580e5f20>
+debug(a, repr=False, prefix='') # a=value
 ```
 
 ## Reliability and limitations
