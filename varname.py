@@ -325,6 +325,9 @@ def namedtuple(*args, **kwargs) -> type:
     Returns:
         The namedtuple you desired.
     """
+    warnings.warn("Shortcut for namedtuple is deprecated and "
+                  "will be removed in 0.6.0. Use the standard way instead.",
+                  DeprecationWarning)
     typename = varname(raise_exc=True)
     return standard_namedtuple(typename, *args, **kwargs)
 
