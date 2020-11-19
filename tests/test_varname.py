@@ -194,6 +194,14 @@ def test_multivars_lhs():
     [a, b] = function()
     assert (a, b) == ('a', 'b')
 
+    with pytest.raises(VarnameRetrievingError,
+                       match=r'Expecting \d+ variables on left-hand side'):
+        a = function()
+    with pytest.raises(VarnameRetrievingError,
+                       match=r'Expecting \d+ variables on left-hand side'):
+        a, b, c = function()
+
+
     def function2():
         names = varname(nvars=None)
         return names
