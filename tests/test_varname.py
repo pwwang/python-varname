@@ -179,7 +179,7 @@ def test_only_one_lhs():
     with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
 
-    # This is no supported in 0.5.4
+    # This is now supported in 0.5.4
     # with pytest.raises(VarnameRetrievingError):
     #     [x] = function()
 
