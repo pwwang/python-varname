@@ -30,11 +30,14 @@ def varname(caller: int = 1,
         nvars: Number of variables to be expected on left-hand side (LHS).
             if nvars > 1, a tuple of variable names will be returned.
             Note that you also have to return the same number of elements in
-            you function:
+            your function:
             For example:
             >>> from varname import varname
             >>> def func():
             >>>   print(varname(nvars=2))
+            >>>   # return (1,) or (1,2,3) will raise an error
+            >>>   # not because of varname
+            >>>   # because you are trying to do: a, b = 1
             >>>   return 1, 2
             >>> a, b = func() # prints ('a', 'b')
             >>> # (a, b) == (1, 2)
