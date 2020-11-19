@@ -27,7 +27,7 @@ def varname(caller: int = 1,
     Args:
         caller: The call stack index, indicating where this function
             is called relative to where the variable is finally retrieved
-        nvars: Number of variables to be expected on left-hand side.
+        nvars: Number of variables to be expected on left-hand side (LHS).
             if nvars > 1, a tuple of variable names will be returned.
             Note that you also have to return the same number of elements in
             you function:
@@ -37,18 +37,29 @@ def varname(caller: int = 1,
             >>>   print(varname(nvars=2))
             >>>   return 1, 2
             >>> a, b = func() # prints ('a', 'b')
-            >>> # a == 1 and b == 2
+            >>> # (a, b) == (1, 2)
 
-            if also can be `None`, then you have to handle the return values
-            by yourself.
+            if nvars == 1, one can only do:
+            >>> var = func() # but not
+            >>> (var, ) = func()
+
+            if also can be `None`, it returns the variable names as-is. You
+            have to handle the return values by yourself.
+            For example:
+            >>> def func():
+            >>>   return varname(nvars=None)
+            >>> a = func() # a == 'a'
+            >>> (a, ) = func() # a == 'a' (varname returns ('a', ))
+            >>> a, b = func()
+            >>> # (a, b) == ('a', 'b') (varname returns ('a', 'b'))
         raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
             we failed to retrieve the variable name.
-        A tuple of variable names on LHS if nvars > 1 or nvars is None and
-        multiple variables on RHS.
+        A tuple of variable names on LHS when `nvars` > 1;
+            Or `nvars` is `None` and there is a tuple/list of variables on LHS.
 
     Raises:
         VarnameRetrievingError: When there is invalid variable used on the
