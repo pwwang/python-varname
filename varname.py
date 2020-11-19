@@ -40,8 +40,9 @@ def varname(caller: int = 1,
             >>> # (a, b) == (1, 2)
 
             if nvars == 1, one can only do:
-            >>> var = func() # but not
+            >>> var = func()
             >>> (var, ) = func()
+            >>> # raise error, because you are trying to do (var, ) = 'var'
 
             if also can be `None`, it returns the variable names as-is. You
             have to handle the return values by yourself.
