@@ -195,10 +195,10 @@ def test_multivars_lhs():
     assert (a, b) == ('a', 'b')
 
     with pytest.raises(VarnameRetrievingError,
-                       match=r'Expecting \d+ variables on left-hand side'):
+                       match='Expecting 2 variables on left-hand side, got 1'):
         a = function()
     with pytest.raises(VarnameRetrievingError,
-                       match=r'Expecting \d+ variables on left-hand side'):
+                       match='Expecting 2 variables on left-hand side, got 3'):
         a, b, c = function()
 
 
