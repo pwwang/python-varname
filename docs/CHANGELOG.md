@@ -1,3 +1,6 @@
+## v0.5.4
+- Allow `varname.varname` to receive multiple variables on the left-hand side
+
 ## v0.5.3
 - Add `debug` function
 - Deprecate `namedtuple` (will be removed in `0.6.0`)

@@ -178,8 +178,37 @@ def test_only_one_lhs():
         x, y = function()
     with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
-    with pytest.raises(VarnameRetrievingError):
-        [x] = function()
+
+    # This is no supported in 0.5.4
+    # with pytest.raises(VarnameRetrievingError):
+    #     [x] = function()
+
+def test_multivars_lhs():
+    """Tests multiple variables on the left hand side"""
+    def function():
+        x, y = varname(nvars=2)
+        return x, y
+
+    a, b = function()
+    assert (a, b) == ('a', 'b')
+    [a, b] = function()
+    assert (a, b) == ('a', 'b')
+
+    def function2():
+        names = varname(nvars=None)
+        return names
+
+    a, b, c, d = function2()
+    assert (a, b, c, d) == ('a', 'b', 'c', 'd')
+    [a, b, c, d] = function2()
+    assert (a, b, c, d) == ('a', 'b', 'c', 'd')
+
+    # Not all LHS are variables
+    with pytest.raises(
+        VarnameRetrievingError,
+        match='All left-hand side should be either a Name or an Attribute Node'
+    ):
+        a, *b = function()
 
 def test_raise():
 

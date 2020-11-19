@@ -10,7 +10,7 @@ from functools import lru_cache
 
 import executing
 
-__version__ = "0.5.3"
+__version__ = "0.5.4"
 __all__ = [
     "VarnameRetrievingError", "varname", "will",
     "inject", "nameof", "namedtuple", "Wrapper", "debug"
@@ -19,18 +19,36 @@ __all__ = [
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
-def varname(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
+def varname(caller: int = 1,
+            nvars: int = 1,
+            raise_exc: bool = True) -> Optional[Union[str, Tuple[str]]]:
     """Get the variable name that assigned by function/class calls
 
     Args:
         caller: The call stack index, indicating where this function
             is called relative to where the variable is finally retrieved
+        nvars: Number of variables to be expected on left-hand side.
+            if nvars > 1, a tuple of variable names will be returned.
+            Note that you also have to return the same number of elements in
+            you function:
+            For example:
+            >>> from varname import varname
+            >>> def func():
+            >>>   print(varname(nvars=2))
+            >>>   return 1, 2
+            >>> a, b = func() # prints ('a', 'b')
+            >>> # a == 1 and b == 2
+
+            if also can be `None`, then you have to handle the return values
+            by yourself.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
             we failed to retrieve the variable name.
+        A tuple of variable names on LHS if nvars > 1 or nvars is None and
+        multiple variables on RHS.
 
     Raises:
         VarnameRetrievingError: When there is invalid variable used on the
@@ -63,7 +81,22 @@ def varname(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
                       "on the very left will be used.",
                       UserWarning)
     target = node.targets[0]
-    return _node_name(target)
+
+    names = _node_name(target)
+
+    if nvars is None:
+        return names
+
+    if not isinstance(names, tuple):
+        names = (names, )
+
+    if len(names) != nvars:
+        raise VarnameRetrievingError(
+            f"Expecting {nvars} variables on left-hand side, got {len(names)}."
+        )
+    if nvars == 1:
+        return names[0]
+    return names
 
 def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
     """Detect the attribute name right immediately after a function call.
@@ -417,6 +450,16 @@ def _node_name(node: ast.AST) -> str:
         return node.id
     if isinstance(node, ast.Attribute):
         return node.attr
+    if isinstance(node, (ast.List, ast.Tuple)):
+        if not all(isinstance(elem, (ast.Name, ast.Attribute))
+                   for elem in node.elts):
+            raise VarnameRetrievingError(
+                "All left-hand side should be either "
+                "a Name or an Attribute Node."
+            )
+        return tuple(elem.id if isinstance(elem, ast.Name)
+                     else elem.Attribute
+                     for elem in node.elts)
 
     raise VarnameRetrievingError(
         f"Can only get name of a variable or attribute, "
