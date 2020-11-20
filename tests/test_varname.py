@@ -168,7 +168,7 @@ def test_referring():
 
     assert func2() == ('p1', 'p2')
 
-def test_only_one_lhs():
+def test_single_var_lhs():
     """Only one variable to receive the name on LHS"""
 
     def function():
@@ -183,7 +183,7 @@ def test_only_one_lhs():
     # with pytest.raises(VarnameRetrievingError):
     #     [x] = function()
 
-def test_multivars_lhs():
+def test_multi_vars_lhs():
     """Tests multiple variables on the left hand side"""
     def function():
         x, y = varname(nvars=2)
@@ -205,6 +205,9 @@ def test_multivars_lhs():
     def function2():
         names = varname(nvars=None)
         return names
+
+    a = function2()
+    assert a == ('a', )
 
     a, b, c, d = function2()
     assert (a, b, c, d) == ('a', 'b', 'c', 'd')
