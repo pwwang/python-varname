@@ -452,15 +452,7 @@ def _node_name(node: ast.AST) -> str:
     if isinstance(node, ast.Attribute):
         return node.attr
     if isinstance(node, (ast.List, ast.Tuple)):
-        if not all(isinstance(elem, (ast.Name, ast.Attribute))
-                   for elem in node.elts):
-            raise VarnameRetrievingError(
-                "All left-hand side should be either "
-                "a Name or an Attribute Node."
-            )
-        return tuple(elem.id if isinstance(elem, ast.Name)
-                     else elem.Attribute
-                     for elem in node.elts)
+        return tuple(_node_name(elem) for elem in node.elts)
 
     raise VarnameRetrievingError(
         f"Can only get name of a variable or attribute, "
