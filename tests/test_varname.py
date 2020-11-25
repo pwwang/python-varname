@@ -168,7 +168,7 @@ def test_referring():
 
     assert func2() == ('p1', 'p2')
 
-def test_single_var_lhs():
+def test_single_var_lhs_error():
     """Only one variable to receive the name on LHS"""
 
     def function():
@@ -186,6 +186,7 @@ def test_single_var_lhs():
 
 def test_multi_vars_lhs():
     """Tests multiple variables on the left hand side"""
+
     def function():
         return varname(multi_vars=True)
 
@@ -198,6 +199,10 @@ def test_multi_vars_lhs():
     # hierarchy
     a, (b, c) = function()
     assert (a, b, c) == ('a', 'b', 'c')
+    # with attributes
+    x = lambda: 1
+    a, (b, x.c) = function()
+    assert (a, b, x.c) == ('a', 'b', 'c')
 
     # Not all LHS are variables
     with pytest.raises(
