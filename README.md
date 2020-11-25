@@ -98,22 +98,14 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     # since v0.5.4
 
     def func():
-        return varname(nvars=None)
+        return varname(multi_vars=True)
 
-    a = func() # a == 'a'
+    a = func() # a == ('a', )
     a, b = func() # (a, b) == ('a', 'b')
     [a, b] = func() # (a, b) == ('a', 'b')
 
     # hierarchy is also possible
     a, (b, c) = func() # (a, b, c) == ('a', 'b', 'c')
-
-    # limit the number of variables on LHS
-    def func():
-        return varname(nvars=2)
-
-    a = func() # VarnameRetrievingError
-    a, b, c = func() # VarnameRetrievingError
-    a, b = func() # (a, b) == ('a', 'b')
     ```
 
 - Some unusual use

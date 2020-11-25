@@ -174,7 +174,8 @@ def test_single_var_lhs():
     def function():
         return varname()
 
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(VarnameRetrievingError,
+                       match='Expecting a single variable on left-hand side'):
         x, y = function()
     with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
@@ -186,36 +187,16 @@ def test_single_var_lhs():
 def test_multi_vars_lhs():
     """Tests multiple variables on the left hand side"""
     def function():
-        x, y = varname(nvars=2)
-        return x, y
+        return varname(multi_vars=True)
 
     a, b = function()
     assert (a, b) == ('a', 'b')
     [a, b] = function()
     assert (a, b) == ('a', 'b')
-
-    with pytest.raises(VarnameRetrievingError,
-                       match='Expecting 2 variables on left-hand side, got 1'):
-        a = function()
-    with pytest.raises(VarnameRetrievingError,
-                       match='Expecting 2 variables on left-hand side, got 3'):
-        a, b, c = function()
-
-
-    def function2():
-        names = varname(nvars=None)
-        return names
-
-    a = function2()
+    a = function()
     assert a == ('a', )
-
-    a, b, c, d = function2()
-    assert (a, b, c, d) == ('a', 'b', 'c', 'd')
-    [a, b, c, d] = function2()
-    assert (a, b, c, d) == ('a', 'b', 'c', 'd')
-
     # hierarchy
-    a, (b, c) = function2()
+    a, (b, c) = function()
     assert (a, b, c) == ('a', 'b', 'c')
 
     # Not all LHS are variables

@@ -20,38 +20,23 @@ class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
 def varname(caller: int = 1,
-            nvars: int = 1,
+            multi_vars: bool = False,
             raise_exc: bool = True) -> Optional[Union[str, Tuple[str]]]:
     """Get the variable name that assigned by function/class calls
 
     Args:
         caller: The call stack index, indicating where this function
             is called relative to where the variable is finally retrieved
-        nvars: Number of variables to be expected on left-hand side (LHS).
-            if `nvars` > 1 or `nvars` is `None`, a tuple of variable names
-            will be returned.
-            Note that for `nvars` is `None`, this function will return
-            a tuple even when there is only one variable on the LHS
-            For example:
-            >>> def func():
-            >>>   return varname(nvars=2)
-            >>> a, b = func()
-            >>> # (a, b) == ('a', 'b')
-            >>>
-            >>> def func():
-            >>>   return varname(nvars=None)
-            >>> a = func() # a == ('a', )
-
-            if nvars == 1, a single variable name will be returned.
-            if LHS is hierarchical, this denotes the number of first-level
-            elements.
+        multi_vars: Whether allow multiple variables on left-hand side (LHS).
+            If `True`, this function returns a tuple of the variable names,
+            even there is only one variable on LHS.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
             we failed to retrieve the variable name.
-        A tuple of variable names on LHS when `nvars` > 1 or `nvars` is `None`.
+        A tuple of variable names when `multi_vars` is `True`
 
     Raises:
         VarnameRetrievingError: When there is invalid variable used on the
@@ -90,16 +75,15 @@ def varname(caller: int = 1,
     if not isinstance(names, tuple):
         names = (names, )
 
-    if nvars is None:
+    if multi_vars:
         return names
 
-    if len(names) != nvars:
+    if len(names) > 1:
         raise VarnameRetrievingError(
-            f"Expecting {nvars} variables on left-hand side, got {len(names)}."
+            f"Expecting a single variable on left-hand side, got {len(names)}."
         )
-    if nvars == 1:
-        return names[0]
-    return names
+
+    return names[0]
 
 def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
     """Detect the attribute name right immediately after a function call.
