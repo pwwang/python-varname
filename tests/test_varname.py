@@ -214,10 +214,14 @@ def test_multi_vars_lhs():
     [a, b, c, d] = function2()
     assert (a, b, c, d) == ('a', 'b', 'c', 'd')
 
+    # hierarchy
+    a, (b, c) = function2()
+    assert (a, b, c) == ('a', 'b', 'c')
+
     # Not all LHS are variables
     with pytest.raises(
         VarnameRetrievingError,
-        match='All left-hand side should be either a Name or an Attribute Node'
+        match='Can only get name of a variable or attribute, not Starred'
     ):
         a, *b = function()
 

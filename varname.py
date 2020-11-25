@@ -43,6 +43,8 @@ def varname(caller: int = 1,
             >>> a = func() # a == ('a', )
 
             if nvars == 1, a single variable name will be returned.
+            if LHS is hierarchical, this denotes the number of first-level
+            elements.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
 
