@@ -16,12 +16,16 @@ __all__ = [
     "inject", "nameof", "namedtuple", "Wrapper", "debug"
 ]
 
+StringOrTuple = Union[str, Tuple[str]]
+
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
-def varname(caller: int = 1,
-            multi_vars: bool = False,
-            raise_exc: bool = True) -> Optional[Union[str, Tuple[str]]]:
+def varname(
+        caller: int = 1,
+        multi_vars: bool = False,
+        raise_exc: bool = True
+) -> Optional[Union[StringOrTuple, Tuple["StringOrTuple"]]]:
     """Get the variable name that assigned by function/class calls
 
     Args:
@@ -30,17 +34,20 @@ def varname(caller: int = 1,
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
+            If `False`, and multiple variables on LHS, a
+            `VarnameRetrievingError` will be raised.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
             we failed to retrieve the variable name.
-        A tuple of variable names when `multi_vars` is `True`
+        A tuple or a hierarchy (tuple of tuples) of variable names
+            when `multi_vars` is `True`.
 
     Raises:
-        VarnameRetrievingError: When there is invalid variable used on the
-            left of the assign node. (e.g: `a.b = func()`) or
+        VarnameRetrievingError: When there is invalid variables or
+            invalid number of variables used on the LHS; or
             when we are unable to retrieve the variable name and `raise_exc`
             is set to `True`.
 
@@ -186,7 +193,7 @@ def inject(obj: object) -> object:
 
 def nameof(var, *more_vars, # pylint: disable=unused-argument
            caller: int = 1,
-           full: Optional[bool] = None) -> Union[str, Tuple[str]]:
+           full: Optional[bool] = None) -> StringOrTuple:
     """Get the names of the variables passed in
 
     Examples:
@@ -428,7 +435,7 @@ def _lookfor_parent_assign(node: ast.AST) -> Optional[ast.Assign]:
             return node
     return None
 
-def _node_name(node: ast.AST) -> str:
+def _node_name(node: ast.AST) -> StringOrTuple:
     """Get the node node name.
 
     Raises VarnameRetrievingError when failed
