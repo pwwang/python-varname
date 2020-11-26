@@ -181,6 +181,9 @@ def inject(obj: object) -> object:
     Returns:
         The object with __varname__ injected
     """
+    warnings.warn("Function inject will be removed in 0.6.0. Use "
+                  "varname.register to register your class.",
+                  DeprecationWarning)
     vname = varname()
     try:
         setattr(obj, '__varname__', vname)
