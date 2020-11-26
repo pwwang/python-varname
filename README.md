@@ -92,6 +92,22 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     k2 = k.copy() # k2.id == 'k2'
     ```
 
+- Multiple variables on Left-hand side
+
+    ```python
+    # since v0.5.4
+
+    def func():
+        return varname(multi_vars=True)
+
+    a = func() # a == ('a', )
+    a, b = func() # (a, b) == ('a', 'b')
+    [a, b] = func() # (a, b) == ('a', 'b')
+
+    # hierarchy is also possible
+    a, (b, c) = func() # (a, b, c) == ('a', 'b', 'c')
+    ```
+
 - Some unusual use
 
     ```python

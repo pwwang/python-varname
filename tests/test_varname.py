@@ -168,18 +168,48 @@ def test_referring():
 
     assert func2() == ('p1', 'p2')
 
-def test_only_one_lhs():
+def test_single_var_lhs_error():
     """Only one variable to receive the name on LHS"""
 
     def function():
         return varname()
 
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(VarnameRetrievingError,
+                       match='Expecting a single variable on left-hand side'):
         x, y = function()
     with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
-    with pytest.raises(VarnameRetrievingError):
-        [x] = function()
+
+    # This is now supported in 0.5.4
+    # with pytest.raises(VarnameRetrievingError):
+    #     [x] = function()
+
+def test_multi_vars_lhs():
+    """Tests multiple variables on the left hand side"""
+
+    def function():
+        return varname(multi_vars=True)
+
+    a, b = function()
+    assert (a, b) == ('a', 'b')
+    [a, b] = function()
+    assert (a, b) == ('a', 'b')
+    a = function()
+    assert a == ('a', )
+    # hierarchy
+    a, (b, c) = function()
+    assert (a, b, c) == ('a', 'b', 'c')
+    # with attributes
+    x = lambda: 1
+    a, (b, x.c) = function()
+    assert (a, b, x.c) == ('a', 'b', 'c')
+
+    # Not all LHS are variables
+    with pytest.raises(
+        VarnameRetrievingError,
+        match='Can only get name of a variable or attribute, not Starred'
+    ):
+        a, *b = function()
 
 def test_raise():
 
