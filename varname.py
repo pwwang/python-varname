@@ -16,8 +16,6 @@ __all__ = [
     "inject", "nameof", "namedtuple", "Wrapper", "debug"
 ]
 
-StringOrTuple = Union[str, Tuple[str]]
-
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
@@ -25,7 +23,7 @@ def varname(
         caller: int = 1,
         multi_vars: bool = False,
         raise_exc: bool = True
-) -> Optional[Union[StringOrTuple, Tuple["StringOrTuple"]]]:
+) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
     """Get the variable name that assigned by function/class calls
 
     Args:
@@ -193,7 +191,7 @@ def inject(obj: object) -> object:
 
 def nameof(var, *more_vars, # pylint: disable=unused-argument
            caller: int = 1,
-           full: Optional[bool] = None) -> StringOrTuple:
+           full: Optional[bool] = None) -> Union[str, Tuple[str]]:
     """Get the names of the variables passed in
 
     Examples:
@@ -435,7 +433,7 @@ def _lookfor_parent_assign(node: ast.AST) -> Optional[ast.Assign]:
             return node
     return None
 
-def _node_name(node: ast.AST) -> StringOrTuple:
+def _node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
     """Get the node node name.
 
     Raises VarnameRetrievingError when failed
