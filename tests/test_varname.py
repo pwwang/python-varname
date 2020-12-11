@@ -572,3 +572,18 @@ def test_debug(capsys):
     assert 'DEBUG: a=1\n' == capsys.readouterr().out
     debug(a, b, merge=True)
     assert 'DEBUG: a=1, b=<object' in capsys.readouterr().out
+
+def test_inject_varname():
+
+    @inject_varname
+    class Foo:
+        def __init__(self, a=1):
+            self.a = a
+
+    f = Foo()
+    assert f.__varname__ == 'f'
+    assert f.a == 1
+
+    f2 = Foo(2)
+    assert f2.__varname__ == 'f2'
+    assert f2.a == 2

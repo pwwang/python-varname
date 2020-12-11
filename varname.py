@@ -3,16 +3,17 @@ import ast
 import dis
 import sys
 import warnings
-from typing import Union, Tuple, Any, Optional
+from typing import Callable, Union, Tuple, Any, Optional
 from types import FrameType, CodeType
 from collections import namedtuple as standard_namedtuple
+from functools import wraps
 from functools import lru_cache
 
 import executing
 
 __version__ = "0.5.4"
 __all__ = [
-    "VarnameRetrievingError", "varname", "will",
+    "VarnameRetrievingError", "varname", "will", "inject_varname",
     "inject", "nameof", "namedtuple", "Wrapper", "debug"
 ]
 
@@ -151,6 +152,62 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
     # ast.Attribute
     return node.attr
 
+def inject_varname(
+        cls: type = None, *,
+        caller: int = 1,
+        multi_vars: bool = False,
+        raise_exc: bool = True
+) -> Union[type, Callable[[type], type]]:
+    """A decorator to inject __varname__ attribute to a class
+
+    Args:
+        caller: The call stack index, indicating where this class
+            is instantiated relative to where the variable is finally retrieved
+        multi_vars: Whether allow multiple variables on left-hand side (LHS).
+            If `True`, this function returns a tuple of the variable names,
+            even there is only one variable on LHS.
+            If `False`, and multiple variables on LHS, a
+            `VarnameRetrievingError` will be raised.
+        raise_exc: Whether we should raise an exception if failed
+            to retrieve the name.
+
+    Examples:
+        >>> @inject_varname
+        >>> class Foo: pass
+        >>> foo = Foo()
+        >>> # foo.__varname__ == 'foo'
+
+    Returns:
+        The wrapper function or the class itself if it is specified explictly.
+    """
+    if cls is not None:
+        # Used as @inject_varname directly
+        return inject_varname(
+            caller=caller,
+            multi_vars=multi_vars,
+            raise_exc=raise_exc
+        )(cls)
+
+    # Used as @inject_varname(multi_vars=..., raise_exc=...)
+    def wrapper(cls):
+        """The wrapper function to wrap a class and inject `__varname__`"""
+        orig_init = cls.__init__
+
+        @wraps(cls.__init__)
+        def wrapped_init(self, *args, **kwargs):
+            """Wrapped init function to replace the original one"""
+            self.__varname__ = varname(
+                caller=caller,
+                multi_vars=multi_vars,
+                raise_exc=raise_exc
+            )
+            orig_init(self, *args, **kwargs)
+
+        cls.__init__ = wrapped_init
+        return cls
+
+    return wrapper
+
 def inject(obj: object) -> object:
     """Inject attribute `__varname__` to an object
 
@@ -182,7 +239,7 @@ def inject(obj: object) -> object:
         The object with __varname__ injected
     """
     warnings.warn("Function inject will be removed in 0.6.0. Use "
-                  "varname.register to register your class.",
+                  "varname.inject_varname to decorate your class.",
                   DeprecationWarning)
     vname = varname()
     try:
