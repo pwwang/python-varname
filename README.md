@@ -19,7 +19,7 @@ pip install varname
 - Fetching variable names directly using `nameof`
 - A value wrapper to store the variable name that a value is assigned to using `Wrapper`
 - Detecting next immediate attribute name using `will`
-- Injecting `__varname__` to objects
+- Injecting `__varname__` to classes
 - A `debug` function to print variables with their names and values.
 
 ## Credits
@@ -213,26 +213,21 @@ awesome.permit() # AttributeError: Should do something with AwesomeClass object
 awesome.permit().do() == 'I am doing!'
 ```
 
-### Injecting `__varname__`
+### Injecting `__varname__` to classes
 
 ```python
-from varname import inject
+from varname import inject_varname
 
-class MyList(list):
+@inject_varname
+class Dict(dict):
     pass
 
-a = inject(MyList())
-b = inject(MyList())
-
+a = Dict(a=1)
+b = Dict(b=2)
 a.__varname__ == 'a'
 b.__varname__ == 'b'
-
-a == b
-
-# other methods not affected
-a.append(1)
-b.append(1)
-a == b
+a.update(b)
+a == {'a':1, 'b':2}
 ```
 
 ### Debugging with `debug`

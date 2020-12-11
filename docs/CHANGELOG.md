@@ -1,3 +1,6 @@
+## v0.5.5
+- Deprecate inject and use inject_varname decorator instead
+
 ## v0.5.4
 - Allow `varname.varname` to receive multiple variables on the left-hand side
 

@@ -11,7 +11,7 @@ from functools import lru_cache
 
 import executing
 
-__version__ = "0.5.4"
+__version__ = "0.5.5"
 __all__ = [
     "VarnameRetrievingError", "varname", "will", "inject_varname",
     "inject", "nameof", "namedtuple", "Wrapper", "debug"
