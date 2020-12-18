@@ -587,3 +587,25 @@ def test_inject_varname():
     f2 = Foo(2)
     assert f2.__varname__ == 'f2'
     assert f2.a == 2
+
+def test_type_anno_varname():
+
+    class Foo:
+        def __init__(self):
+            self.id = varname()
+
+    foo: Foo = Foo()
+    assert foo.id == 'foo'
+
+def test_generic_type_varname():
+    from typing import Generic, TypeVar
+
+    T = TypeVar("T")
+
+    class Foo(Generic[T]):
+        def __init__(self):
+            self.id = varname(caller=1)
+
+    foo = Foo[int]()
+
+    assert foo.id == 'foo'

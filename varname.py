@@ -68,13 +68,16 @@ def varname(
             )
         return None
 
-    # Need to actually check that there's just one
-    # give warnings if: a = b = func()
-    if len(node.targets) > 1:
-        warnings.warn("Multiple targets in assignment, variable name "
-                      "on the very left will be used.",
-                      UserWarning)
-    target = node.targets[0]
+    if isinstance(node, ast.AnnAssign):
+        target = node.target
+    else:
+        # Need to actually check that there's just one
+        # give warnings if: a = b = func()
+        if len(node.targets) > 1:
+            warnings.warn("Multiple targets in assignment, variable name "
+                          "on the very left will be used.",
+                          UserWarning)
+        target = node.targets[0]
 
     names = _node_name(target)
 
@@ -489,7 +492,7 @@ def _lookfor_parent_assign(node: ast.AST) -> Optional[ast.Assign]:
     while hasattr(node, 'parent'):
         node = node.parent
 
-        if isinstance(node, ast.Assign):
+        if isinstance(node, (ast.AnnAssign, ast.Assign)):
             return node
     return None
 
