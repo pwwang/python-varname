@@ -1,5 +1,4 @@
 import sys
-import unittest
 
 import pytest
 import subprocess
@@ -598,14 +597,21 @@ def test_type_anno_varname():
     assert foo.id == 'foo'
 
 def test_generic_type_varname():
+    import typing
     from typing import Generic, TypeVar
 
     T = TypeVar("T")
 
     class Foo(Generic[T]):
         def __init__(self):
-            self.id = varname(caller=1)
+            self.id = varname(caller=1,
+                              ignore=[(typing, '_GenericAlias.__call__')])
 
     foo = Foo[int]()
-
     assert foo.id == 'foo'
+
+    bar:Foo = Foo[str]()
+    assert bar.id == 'bar'
+
+    baz = Foo()
+    assert baz.id == 'baz'

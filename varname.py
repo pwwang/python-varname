@@ -2,9 +2,10 @@
 import ast
 import dis
 import sys
+import inspect
 import warnings
-from typing import Callable, Union, Tuple, Any, Optional
-from types import FrameType, CodeType
+from typing import Callable, List, Union, Tuple, Any, Optional
+from types import FrameType, CodeType, ModuleType
 from collections import namedtuple as standard_namedtuple
 from functools import wraps
 from functools import lru_cache
@@ -22,6 +23,7 @@ class VarnameRetrievingError(Exception):
 
 def varname(
         caller: int = 1,
+        ignore: Optional[List[Union[str, Tuple[ModuleType, str]]]] = None,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
@@ -30,6 +32,13 @@ def varname(
     Args:
         caller: The call stack index, indicating where this function
             is called relative to where the variable is finally retrieved
+            If `ignore` provided, this should be the stack where we start
+            to search the node that should not be ignored.
+        ignore: A list of qualnames or tuples of module and qualname that
+            you want to ignore for the intermediate calls.
+            For example, `['func']` ignores all intermediate calls named `func`,
+            but `[(module, 'func')]` only ignores the calls named `func`
+            from `module`.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
@@ -54,7 +63,7 @@ def varname(
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    node = _get_node(caller, raise_exc=raise_exc)
+    node = _get_node(caller, ignore, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
@@ -459,7 +468,9 @@ def _get_frame(caller: int) -> FrameType:
     except Exception as exc:
         raise VarnameRetrievingError from exc
 
-def _get_node(caller: int, raise_exc: bool = True) -> Optional[ast.AST]:
+def _get_node(caller: int,
+              ignore: Optional[List[Union[str, Tuple[ModuleType, str]]]] = None,
+              raise_exc: bool = True) -> Optional[ast.AST]:
     """Try to get node from the executing object.
 
     This can fail when a frame is failed to retrieve.
@@ -474,6 +485,14 @@ def _get_node(caller: int, raise_exc: bool = True) -> Optional[ast.AST]:
         return None
 
     exet = executing.Source.executing(frame)
+    qualname = exet.code_qualname()
+    module = inspect.getmodule(frame)
+
+    if ignore and (qualname in ignore or
+                   (module, qualname) in ignore):
+        # should be caller + 1
+        # but we created an extra frame here
+        return _get_node(caller+2, ignore, raise_exc)
 
     if exet.node:
         return exet.node
