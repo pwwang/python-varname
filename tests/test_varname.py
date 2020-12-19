@@ -602,10 +602,21 @@ def test_generic_type_varname():
 
     T = TypeVar("T")
 
-    class Foo(Generic[T]):
-        def __init__(self):
-            self.id = varname(caller=1,
-                              ignore=[(typing, '_GenericAlias.__call__')])
+    if sys.version_info < (3, 7):
+        class Foo(Generic[T]):
+            def __init__(self):
+                self.id = varname(
+                    caller=1,
+                    ignore=[(typing, '_generic_new'),
+                            (typing, 'Generic.__new__')]
+                )
+    else:
+        class Foo(Generic[T]):
+            def __init__(self):
+                self.id = varname(
+                    caller=1,
+                    ignore=[(typing, '_GenericAlias.__call__')]
+                )
 
     foo = Foo[int]()
     assert foo.id == 'foo'
