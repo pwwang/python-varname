@@ -5,14 +5,14 @@ from varname import nameof, varname, VarnameRetrievingError
 
 def nameof_both(*args):
     """Test both implementations at the same time"""
-    result = nameof(*args, caller=2)
+    result = nameof(*args, frame=2)
     if len(args) == 1:
-        assert result == _bytecode_nameof(caller=2)
+        assert result == _bytecode_nameof(frame=2)
     return result
 
 class Weird:
     def __add__(self, other):
-        _bytecode_nameof(caller=2)
+        _bytecode_nameof(frame=2)
 
 class TestNameof(unittest.TestCase):
     def test_original_nameof(self):

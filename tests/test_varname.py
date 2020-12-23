@@ -96,7 +96,7 @@ def test_function_deep():
 
     def function():
         # I know that at which stack this will be called
-        return varname(caller = 3)
+        return varname(frame=3)
 
     def function1():
         return function()
@@ -128,7 +128,7 @@ def test_class_deep():
             self.id = self.some_internal()
 
         def some_internal(self):
-            return varname(caller = 2)
+            return varname(frame=2)
 
         def copy(self):
             return self.copy_id()
@@ -137,7 +137,7 @@ def test_class_deep():
             return self.copy_id_internal()
 
         def copy_id_internal(self):
-            return varname(caller = 3)
+            return varname(frame=3)
 
     k = Foo()
     assert k.id == 'k'
@@ -520,7 +520,7 @@ def test_nameof_full():
     a.b.c = x
     name = nameof(a)
     assert name == 'a'
-    name = nameof(a, caller=1)
+    name = nameof(a, frame=1)
     assert name == 'a'
     name = nameof(a.b)
     assert name == 'b'
@@ -595,7 +595,7 @@ def test_internal_debug(capsys, enable_debug):
     @my_decorator
     def foo3():
         return varname(
-            caller=3,
+            frame=3,
             ignore=[(
                 sys.modules[__name__],
                 "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
@@ -681,7 +681,7 @@ def test_async_varname():
     async def func():
         # also works this way
         return varname(
-            caller=2,
+            frame=2,
             ignore=[asyncio, (sys.modules[__name__],
                               'test_async_varname.<locals>.run_async')]
         )

@@ -11,7 +11,7 @@ from functools import wraps, lru_cache
 
 import executing
 
-__version__ = "0.5.6"
+__version__ = "0.6.0"
 __all__ = [
     "VarnameRetrievingError", "varname", "will", "inject_varname",
     "register", "inject", "nameof", "namedtuple", "Wrapper", "debug"
@@ -24,7 +24,7 @@ class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
 def varname(
-        caller: int = 1,
+        frame: int = 1,
         ignore: Optional[
             List[Union[ModuleType, Tuple[ModuleType, str]]]
         ] = None,
@@ -33,14 +33,14 @@ def varname(
 ) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
     """Get the variable name that assigned by function/class calls
 
-    To debug and specify the right caller and ignore arguments, you can set
+    To debug and specify the right frame and ignore arguments, you can set
     debug on and see how the frames are ignored or selected:
 
     >>> import varname
     >>> varname.DEBUG = True
 
     Args:
-        caller: The call frame index, indicating where this function
+        frame: The call frame index, indicating where this function
             is called relative to where the variable is finally retrieved
             Frames are counted with the ignored ones being excluded.
             See `ignore` for frames to be ignored.
@@ -80,7 +80,7 @@ def varname(
     _check_qualname(ignore)
     # Skip one more frame, as it is supposed to be called
     # inside another function
-    node = _get_node(caller + 1, ignore, raise_exc=raise_exc)
+    node = _get_node(frame + 1, ignore, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
@@ -120,7 +120,7 @@ def varname(
 
     return names[0]
 
-def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
+def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
     """Detect the attribute name right immediately after a function call.
 
     Examples:
@@ -150,7 +150,7 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
         >>> awesome.permit().do() == 'I am doing!'
 
     Args:
-        caller: At which stack this function is called.
+        frame: At which frame this function is called.
         raise_exc: Raise exception we failed to detect
 
     Returns:
@@ -161,7 +161,7 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    node = _get_node(caller + 1, raise_exc=raise_exc)
+    node = _get_node(frame + 1, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the frame.")
@@ -183,14 +183,14 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
 
 def register(
         cls: type = None, *,
-        caller: int = 1,
+        frame: int = 1,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Union[type, Callable[[type], type]]:
     """A decorator to inject __varname__ attribute to a class
 
     Args:
-        caller: The call stack index, indicating where this class
+        frame: The call stack index, indicating where this class
             is instantiated relative to where the variable is finally retrieved
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
@@ -213,7 +213,7 @@ def register(
     if cls is not None:
         # Used as @register directly
         return register(
-            caller=caller,
+            frame=frame,
             multi_vars=multi_vars,
             raise_exc=raise_exc
         )(cls)
@@ -227,7 +227,7 @@ def register(
         def wrapped_init(self, *args, **kwargs):
             """Wrapped init function to replace the original one"""
             self.__varname__ = varname(
-                caller=caller-1,
+                frame=frame-1,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc
             )
@@ -240,7 +240,7 @@ def register(
 
 def inject_varname(
         cls: type = None, *,
-        caller: int = 1,
+        frame: int = 1,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Union[type, Callable[[type], type]]:
@@ -250,7 +250,7 @@ def inject_varname(
                   DeprecationWarning)
     return register(
         cls,
-        caller=caller,
+        frame=frame,
         multi_vars=multi_vars,
         raise_exc=raise_exc
     )
@@ -288,7 +288,7 @@ def inject(obj: object) -> object:
     warnings.warn("Function inject will be removed in 0.6.0. Use "
                   "varname.register to decorate your class.",
                   DeprecationWarning)
-    vname = varname(caller=0)
+    vname = varname(frame=0)
     try:
         setattr(obj, '__varname__', vname)
     except AttributeError:
@@ -297,7 +297,7 @@ def inject(obj: object) -> object:
 
 
 def nameof(var, *more_vars, # pylint: disable=unused-argument
-           caller: int = 1,
+           frame: int = 1,
            full: Optional[bool] = None) -> Union[str, Tuple[str]]:
     """Get the names of the variables passed in
 
@@ -324,7 +324,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
     Args:
         var: The variable to retrieve the name of
         *more_vars: Other variables to retrieve the names of
-        caller: The depth of the caller (this function) is called.
+        frame: The depth of the frame (this function) is called.
             This is useful if you want to wrap this function.
             Note that the calls from varname and builtin modules are ignored.
         full: Whether report the full path of the variable.
@@ -340,7 +340,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         VarnameRetrievingError: When the callee's node cannot be retrieved or
             trying to retrieve the full name of non attribute series calls.
     """
-    node = _get_node(caller, raise_exc=True)
+    node = _get_node(frame, raise_exc=True)
     if not node:
         # We can't retrieve the node by executing.
         # It can be due to running code from python/shell, exec/eval or
@@ -348,16 +348,13 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         # make sure we keep it simple (only single variable passed and no
         # full passed) to use _bytecode_nameof
         if not more_vars and full is None:
-            # don't need caller + 1
-            # since this is happening inside varname
-            # and will be ignored by default
-            return _bytecode_nameof(caller)
+            return _bytecode_nameof(frame)
 
         # We are anyway raising exceptions, no worries about additional burden
         # of frame retrieval again
 
         # may raise exception, just leave it as is
-        frame = _get_frame(caller)
+        frame = _get_frame(frame)
         source = frame.f_code.co_filename
         if source == '<stdin>':
             raise VarnameRetrievingError(
@@ -491,7 +488,7 @@ class Wrapper:
 
     def __init__(self, value: Any, raise_exc: bool = True):
         # This call is ignored, since it's inside varname
-        self.name = varname(caller=0, raise_exc=raise_exc)
+        self.name = varname(frame=0, raise_exc=raise_exc)
         self.value = value
 
     def __str__(self) -> str:
@@ -533,15 +530,15 @@ def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
     sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')
 
 def _get_frame(
-        caller: int,
+        frame: int,
         ignore: Optional[
             List[Union[ModuleType, Tuple[ModuleType, str]]]
         ] = None
 ) -> FrameType:
     """This function makes sure that we get the desired frame,
-    by caller and ignroe.
+    by frame and ignroe.
 
-    The caller is the desired stack we want after excluding the frames we want
+    The frame is the desired stack we want after excluding the frames we want
     to ignore. By default, this module (varname) and the builtin modules will
     be ignored.
 
@@ -554,30 +551,30 @@ def _get_frame(
         # Don't bother to test them, just simply skip.
         frame_index = 2
 
-        while caller > 0:
-            frame = sys._getframe(frame_index)
+        while frame > 0:
+            frameobj = sys._getframe(frame_index)
             # loot at next frame anyway at next iteration
             frame_index += 1
-            module = inspect.getmodule(frame)
+            module = inspect.getmodule(frameobj)
             # exect = executing.Source.executing(frame)
 
             if module is sys.modules[__name__]:
-                _debug('Skipping frame from varname', frame)
+                _debug('Skipping frame from varname', frameobj)
                 continue
 
             if module and module.__name__ in sys.builtin_module_names:
                 # havn't find a way to compose a test for this, skip for now
-                _debug('Skipping builtin module', frame) # pragma: no cover
+                _debug('Skipping builtin module', frameobj) # pragma: no cover
                 continue # pragma: no cover
 
             if ignore and (
                     module in ignore or (
                         module,
-                        executing.Source.for_frame(frame).
-                        code_qualname(frame.f_code)
+                        executing.Source.for_frame(frameobj).
+                        code_qualname(frameobj.f_code)
                     ) in ignore
             ):
-                _debug('Ignored', frame)
+                _debug('Ignored', frameobj)
                 continue
 
             if ignore and module and '.' in module.__name__:
@@ -587,22 +584,22 @@ def _get_frame(
                 if any(sys.modules['.'.join(modnames[:i+1])] in ignore
                        for i, _ in enumerate(modnames)):
 
-                    _debug('Ignored', frame)
+                    _debug('Ignored', frameobj)
                     continue
 
-            caller -= 1
+            frame -= 1
 
-            if caller > 0:
-                _debug(f'Skipping ({caller - 1} more to skip)', frame)
+            if frame > 0:
+                _debug(f'Skipping ({frame - 1} more to skip)', frameobj)
             else:
-                _debug('Gotcha!', frame)
-                return frame
+                _debug('Gotcha!', frameobj)
+                return frameobj
 
     except Exception as exc:
         raise VarnameRetrievingError from exc
 
 def _get_node(
-        caller: int,
+        frame: int,
         ignore: Optional[
             List[Union[ModuleType, Tuple[ModuleType, str]]]
         ] = None,
@@ -617,7 +614,7 @@ def _get_node(
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        frame = _get_frame(caller, ignore)
+        frame = _get_frame(frame, ignore)
     except VarnameRetrievingError:
         return None
 
@@ -661,9 +658,9 @@ def _node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
         f"not {ast.dump(node)}"
     )
 
-def _bytecode_nameof(caller: int = 1) -> str:
+def _bytecode_nameof(frame: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
-    frame = _get_frame(caller)
+    frame = _get_frame(frame)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 @lru_cache()

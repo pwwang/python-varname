@@ -115,8 +115,12 @@ Retrieving the variable names from inside a function call/class instantiation
   .. code-block:: python
 
       def function():
-          # I know that at which stack this will be called
-          return varname(caller=3)
+          # I know that at which frame this will be called
+          return varname(3)
+          # with v0.5.6+ now you can also specify a list of intermediate
+          # calls to be ignored in counting:
+          # module = sys.modules[__name__]
+          # return varname(ignore=[(module, 'function1'), (module, 'function2)])
 
       def function1():
           return function()
@@ -125,6 +129,26 @@ Retrieving the variable names from inside a function call/class instantiation
           return function1()
 
       func = function2()  # func == 'func'
+
+* 
+  ``varname`` in type annotation or async context
+
+  .. code-block:: python
+
+       import typing
+       class Foo:
+           def __init__(self):
+               self.id = varname(ignore=[typing])
+
+       foo: Foo = Foo() # foo.id == 'foo'
+
+  .. code-block:: python
+
+       import asyncio
+       async def func():
+           return varname(ignore=[asyncio])
+
+       x = asyncio.run(func()) # x == 'x'
 
 * 
   Retrieving instance name of a class
@@ -142,6 +166,7 @@ Retrieving the variable names from inside a function call/class instantiation
                return copied
 
        k = Foo()   # k.id == 'k'
+       # see also register __varname__ to classes
 
        k2 = k.copy() # k2.id == 'k2'
 
@@ -272,14 +297,14 @@ Detecting next immediate attribute name
    awesome.permit() # AttributeError: Should do something with AwesomeClass object
    awesome.permit().do() == 'I am doing!'
 
-Injecting ``__varname__`` to classes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Register ``__varname__`` to classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   from varname import inject_varname
+   from varname import register
 
-   @inject_varname
+   @register
    class Dict(dict):
        pass
 
