@@ -5,6 +5,8 @@ from varname import nameof, varname, VarnameRetrievingError
 
 def nameof_both(*args):
     """Test both implementations at the same time"""
+    # No need caller=2 anymore, since internal calls from varname are ignored
+    # now by default
     result = nameof(*args, caller=2)
     if len(args) == 1:
         assert result == _bytecode_nameof(caller=2)
@@ -46,7 +48,6 @@ class TestNameof(unittest.TestCase):
         c = nameof2(a, b)
         assert b == 'a'
         assert c == ('a', 'b')
-
         def func():
             return varname() + 'abc'
 

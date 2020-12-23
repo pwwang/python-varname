@@ -21,6 +21,12 @@ def no_getframe():
     finally:
         sys._getframe = orig_getframe
 
+@pytest.fixture
+def enable_debug():
+    import varname as _varname
+    _varname.DEBUG = True
+    yield
+    _varname.DEBUG = False
 
 def test_function():
 
@@ -572,6 +578,42 @@ def test_debug(capsys):
     debug(a, b, merge=True)
     assert 'DEBUG: a=1, b=<object' in capsys.readouterr().out
 
+def test_internal_debug(capsys, enable_debug):
+    def my_decorator(f):
+        def wrapper():
+            return f()
+        return wrapper
+
+    @my_decorator
+    def foo1():
+        return foo2()
+
+    @my_decorator
+    def foo2():
+        return foo3()
+
+    @my_decorator
+    def foo3():
+        return varname(
+            caller=3,
+            ignore=[(
+                sys.modules[__name__],
+                "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
+            )]
+        )
+
+    x = foo1()
+    assert x == 'x'
+    msgs = capsys.readouterr().err.splitlines()
+    assert "Skipping frame from varname [In 'varname'" in msgs[0]
+    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
+    assert "Ignored [In 'wrapper'" in msgs[2]
+    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
+    assert "Ignored [In 'wrapper'" in msgs[4]
+    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
+    assert "Ignored [In 'wrapper'" in msgs[6]
+    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
+
 def test_inject_varname():
 
     @inject_varname
@@ -602,22 +644,9 @@ def test_generic_type_varname():
 
     T = TypeVar("T")
 
-    if sys.version_info < (3, 7):
-        class Foo(Generic[T]):
-            def __init__(self):
-                self.id = varname(
-                    caller=1,
-                    ignore=[(typing, '_generic_new'),
-                            (typing, 'Generic.__new__')]
-                )
-    else:
-        class Foo(Generic[T]):
-            def __init__(self):
-                self.id = varname(
-                    caller=1,
-                    ignore=[(typing, '_GenericAlias.__call__')]
-                )
-
+    class Foo(Generic[T]):
+        def __init__(self):
+            self.id = varname(ignore=[typing])
     foo = Foo[int]()
     assert foo.id == 'foo'
 
@@ -626,3 +655,23 @@ def test_generic_type_varname():
 
     baz = Foo()
     assert baz.id == 'baz'
+
+def test_async_varname():
+
+    import asyncio
+
+    async def func():
+        return varname(ignore=[asyncio.events, asyncio.base_events, asyncio.runners])
+
+    x = asyncio.run(func())
+    assert x == 'x'
+
+    async def func():
+        # also works this way
+        return varname(caller=2, ignore=[asyncio])
+
+    async def main():
+        return await func()
+
+    x = asyncio.run(main())
+    assert x == 'x'
