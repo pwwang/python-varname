@@ -1,5 +1,4 @@
 import sys
-import unittest
 
 import pytest
 import subprocess
@@ -22,6 +21,12 @@ def no_getframe():
     finally:
         sys._getframe = orig_getframe
 
+@pytest.fixture
+def enable_debug():
+    import varname as _varname
+    _varname.DEBUG = True
+    yield
+    _varname.DEBUG = False
 
 def test_function():
 
@@ -573,6 +578,42 @@ def test_debug(capsys):
     debug(a, b, merge=True)
     assert 'DEBUG: a=1, b=<object' in capsys.readouterr().out
 
+def test_internal_debug(capsys, enable_debug):
+    def my_decorator(f):
+        def wrapper():
+            return f()
+        return wrapper
+
+    @my_decorator
+    def foo1():
+        return foo2()
+
+    @my_decorator
+    def foo2():
+        return foo3()
+
+    @my_decorator
+    def foo3():
+        return varname(
+            caller=3,
+            ignore=[(
+                sys.modules[__name__],
+                "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
+            )]
+        )
+
+    x = foo1()
+    assert x == 'x'
+    msgs = capsys.readouterr().err.splitlines()
+    assert "Skipping frame from varname [In 'varname'" in msgs[0]
+    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
+    assert "Ignored [In 'wrapper'" in msgs[2]
+    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
+    assert "Ignored [In 'wrapper'" in msgs[4]
+    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
+    assert "Ignored [In 'wrapper'" in msgs[6]
+    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
+
 def test_inject_varname():
 
     @inject_varname
@@ -587,3 +628,96 @@ def test_inject_varname():
     f2 = Foo(2)
     assert f2.__varname__ == 'f2'
     assert f2.a == 2
+
+def test_type_anno_varname():
+
+    class Foo:
+        def __init__(self):
+            self.id = varname()
+
+    foo: Foo = Foo()
+    assert foo.id == 'foo'
+
+def test_generic_type_varname():
+    import typing
+    from typing import Generic, TypeVar
+
+    T = TypeVar("T")
+
+    class Foo(Generic[T]):
+        def __init__(self):
+            self.id = varname(ignore=[typing])
+    foo = Foo[int]()
+    assert foo.id == 'foo'
+
+    bar:Foo = Foo[str]()
+    assert bar.id == 'bar'
+
+    baz = Foo()
+    assert baz.id == 'baz'
+
+def test_async_varname():
+
+    import asyncio
+
+    def run_async(coro):
+        if sys.version_info < (3, 7):
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(coro)
+        else:
+            return asyncio.run(coro)
+
+    async def func():
+        return varname(
+            ignore=[
+                asyncio,
+                (sys.modules[__name__], 'test_async_varname.<locals>.run_async')
+            ]
+        )
+
+    x = run_async(func())
+    assert x == 'x'
+
+    async def func():
+        # also works this way
+        return varname(
+            caller=2,
+            ignore=[asyncio, (sys.modules[__name__],
+                              'test_async_varname.<locals>.run_async')]
+        )
+
+    async def main():
+        return await func()
+
+    x = run_async(main())
+    assert x == 'x'
+
+def test_qualname_ignore_fail():
+    # not a list
+    def func():
+        return varname(ignore=sys)
+
+    with pytest.raises(AssertionError):
+        f = func()
+
+    # non-existing qualname
+    def func():
+        return varname(ignore=[(sys.modules[__name__], 'nosuchqualname')])
+
+    with pytest.raises(AssertionError):
+        f = func()
+
+    # non-unique qualname
+    def func():
+        return varname(ignore=[(sys.modules[__name__],
+                                'test_qualname_ignore_fail.<locals>.wrapper')])
+
+    def wrapper():
+        return func()
+
+    wrapper2 = wrapper
+    def wrapper():
+        return func()
+
+    with pytest.raises(AssertionError):
+        f = func()

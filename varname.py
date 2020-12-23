@@ -2,12 +2,12 @@
 import ast
 import dis
 import sys
+import inspect
 import warnings
-from typing import Callable, Union, Tuple, Any, Optional
-from types import FrameType, CodeType
+from typing import Callable, List, Union, Tuple, Any, Optional
+from types import FrameType, CodeType, ModuleType
 from collections import namedtuple as standard_namedtuple
-from functools import wraps
-from functools import lru_cache
+from functools import wraps, lru_cache
 
 import executing
 
@@ -17,19 +17,41 @@ __all__ = [
     "inject", "nameof", "namedtuple", "Wrapper", "debug"
 ]
 
+# To show how the desired frame is selected and other frames are skipped
+DEBUG = False
+
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
 
 def varname(
         caller: int = 1,
+        ignore: Optional[
+            List[Union[ModuleType, Tuple[ModuleType, str]]]
+        ] = None,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
     """Get the variable name that assigned by function/class calls
 
+    To debug and specify the right caller and ignore arguments, you can set
+    debug on and see how the frames are ignored or selected:
+
+    >>> import varname
+    >>> varname.DEBUG = True
+
     Args:
-        caller: The call stack index, indicating where this function
+        caller: The call frame index, indicating where this function
             is called relative to where the variable is finally retrieved
+            Frames are counted with the ignored ones being excluded.
+            See `ignore` for frames to be ignored.
+        ignore: A list of modules or tuples of module and qualname that
+            you want to ignore for the intermediate calls.
+            For example, `['module']` ignores all intermediate calls
+            from `module` and its submodules, but `[(module, 'func')]`
+            only ignores the calls (qual)named `func` from `module`.
+            By default, all calls from `varname` and builtin modules
+            (in `sys.builtin_module_names`) are ignored.
+            Note that the qualname in the module should exist and be unique.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
@@ -54,7 +76,11 @@ def varname(
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
-    node = _get_node(caller, raise_exc=raise_exc)
+    ignore = ignore or []
+    _check_qualname(ignore)
+    # Skip one more frame, as it is supposed to be called
+    # inside another function
+    node = _get_node(caller + 1, ignore, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
@@ -68,13 +94,16 @@ def varname(
             )
         return None
 
-    # Need to actually check that there's just one
-    # give warnings if: a = b = func()
-    if len(node.targets) > 1:
-        warnings.warn("Multiple targets in assignment, variable name "
-                      "on the very left will be used.",
-                      UserWarning)
-    target = node.targets[0]
+    if isinstance(node, ast.AnnAssign):
+        target = node.target
+    else:
+        # Need to actually check that there's just one
+        # give warnings if: a = b = func()
+        if len(node.targets) > 1:
+            warnings.warn("Multiple targets in assignment, variable name "
+                          "on the very left will be used.",
+                          UserWarning)
+        target = node.targets[0]
 
     names = _node_name(target)
 
@@ -132,7 +161,7 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
     """
-    node = _get_node(caller, raise_exc=raise_exc)
+    node = _get_node(caller + 1, raise_exc=raise_exc)
     if not node:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the frame.")
@@ -197,7 +226,7 @@ def inject_varname(
         def wrapped_init(self, *args, **kwargs):
             """Wrapped init function to replace the original one"""
             self.__varname__ = varname(
-                caller=caller,
+                caller=caller-1,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc
             )
@@ -241,7 +270,7 @@ def inject(obj: object) -> object:
     warnings.warn("Function inject will be removed in 0.6.0. Use "
                   "varname.inject_varname to decorate your class.",
                   DeprecationWarning)
-    vname = varname()
+    vname = varname(caller=0)
     try:
         setattr(obj, '__varname__', vname)
     except AttributeError:
@@ -279,6 +308,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         *more_vars: Other variables to retrieve the names of
         caller: The depth of the caller (this function) is called.
             This is useful if you want to wrap this function.
+            Note that the calls from varname and builtin modules are ignored.
         full: Whether report the full path of the variable.
             For example: `nameof(a.b.c, full=True)` give you `a.b.c`
             instead of `c`
@@ -292,7 +322,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         VarnameRetrievingError: When the callee's node cannot be retrieved or
             trying to retrieve the full name of non attribute series calls.
     """
-    node = _get_node(caller - 1, raise_exc=True)
+    node = _get_node(caller, raise_exc=True)
     if not node:
         # We can't retrieve the node by executing.
         # It can be due to running code from python/shell, exec/eval or
@@ -300,7 +330,10 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         # make sure we keep it simple (only single variable passed and no
         # full passed) to use _bytecode_nameof
         if not more_vars and full is None:
-            return _bytecode_nameof(caller + 1)
+            # don't need caller + 1
+            # since this is happening inside varname
+            # and will be ignored by default
+            return _bytecode_nameof(caller)
 
         # We are anyway raising exceptions, no worries about additional burden
         # of frame retrieval again
@@ -375,7 +408,7 @@ def debug(var, *more_vars,
         merge: Whether merge all variables in one line or not
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
-    var_names = nameof(var, *more_vars, caller=2, full=True)
+    var_names = nameof(var, *more_vars, full=True)
     if not isinstance(var_names, tuple):
         var_names = (var_names, )
     variables = (var, *more_vars)
@@ -439,7 +472,8 @@ class Wrapper:
     """
 
     def __init__(self, value: Any, raise_exc: bool = True):
-        self.name = varname(raise_exc=raise_exc)
+        # This call is ignored, since it's inside varname
+        self.name = varname(caller=0, raise_exc=raise_exc)
         self.value = value
 
     def __str__(self) -> str:
@@ -449,14 +483,113 @@ class Wrapper:
         return (f"<{self.__class__.__name__} "
                 f"(name={self.name!r}, value={self.value!r})>")
 
-def _get_frame(caller: int) -> FrameType:
-    """Get the frame at `caller` depth"""
+def _check_qualname(
+        ignore_list: List[Union[ModuleType, Tuple[ModuleType, str]]]
+) -> None:
+    """Check if a qualname refers to a unique object.
+
+    If multiple or none, raise an error
+    """
+    assert isinstance(ignore_list, list), (
+        f"A list expected for 'ignore', got {type(ignore_list)}"
+    )
+    for ignore_elem in ignore_list:
+        if not isinstance(ignore_elem, tuple):
+            continue
+        module, qualname = ignore_elem
+        source = executing.Source.for_filename(module.__file__, module.__dict__)
+        nobj = list(source._qualnames.values()).count(qualname)
+        assert nobj == 1, (
+            f"Qualname {qualname!r} in {module.__name__!r} doesn't exist or "
+            "refers to multiple objects."
+        )
+
+def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
+    """Print the debug message"""
+    if not DEBUG:
+        return
+    if frame is not None:
+        frameinfo = inspect.getframeinfo(frame)
+        msg = (f'{msg} [In {frameinfo.function!r} at '
+               f'{frameinfo.filename}:{frameinfo.lineno}]')
+    sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')
+
+def _get_frame(
+        caller: int,
+        ignore: Optional[
+            List[Union[ModuleType, Tuple[ModuleType, str]]]
+        ] = None
+) -> FrameType:
+    """This function makes sure that we get the desired frame,
+    by caller and ignroe.
+
+    The caller is the desired stack we want after excluding the frames we want
+    to ignore. By default, this module (varname) and the builtin modules will
+    be ignored.
+
+    The frame_index defaults to 1 to exclude the calls from inside this module.
+    """
+    # Use loop instead of recursion to avoid creating additional stacks
     try:
-        return sys._getframe(caller + 1)
+        # We are at least skipping 2 frames:
+        # one is this function, the other is any varname API that uses this
+        # Don't bother to test them, just simply skip.
+        frame_index = 2
+
+        while caller > 0:
+            frame = sys._getframe(frame_index)
+            # loot at next frame anyway at next iteration
+            frame_index += 1
+            module = inspect.getmodule(frame)
+            # exect = executing.Source.executing(frame)
+
+            if module is sys.modules[__name__]:
+                _debug('Skipping frame from varname', frame)
+                continue
+
+            if module and module.__name__ in sys.builtin_module_names:
+                # havn't find a way to compose a test for this, skip for now
+                _debug('Skipping builtin module', frame) # pragma: no cover
+                continue # pragma: no cover
+
+            if ignore and (
+                    module in ignore or (
+                        module,
+                        executing.Source.for_frame(frame).
+                        code_qualname(frame.f_code)
+                    ) in ignore
+            ):
+                _debug('Ignored', frame)
+                continue
+
+            if ignore and module and '.' in module.__name__:
+                # if asyncio specified, asyncio.runners, asyncio.events, etc
+                # should be all ignored
+                modnames = module.__name__.split('.')[:-1]
+                if any(sys.modules['.'.join(modnames[:i+1])] in ignore
+                       for i, _ in enumerate(modnames)):
+
+                    _debug('Ignored', frame)
+                    continue
+
+            caller -= 1
+
+            if caller > 0:
+                _debug(f'Skipping ({caller - 1} more to skip)', frame)
+            else:
+                _debug('Gotcha!', frame)
+                return frame
+
     except Exception as exc:
         raise VarnameRetrievingError from exc
 
-def _get_node(caller: int, raise_exc: bool = True) -> Optional[ast.AST]:
+def _get_node(
+        caller: int,
+        ignore: Optional[
+            List[Union[ModuleType, Tuple[ModuleType, str]]]
+        ] = None,
+        raise_exc: bool = True
+) -> Optional[ast.AST]:
     """Try to get node from the executing object.
 
     This can fail when a frame is failed to retrieve.
@@ -466,16 +599,16 @@ def _get_node(caller: int, raise_exc: bool = True) -> Optional[ast.AST]:
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        frame = _get_frame(caller + 2)
+        frame = _get_frame(caller, ignore)
     except VarnameRetrievingError:
         return None
 
-    exet = executing.Source.executing(frame)
+    exect = executing.Source.executing(frame)
 
-    if exet.node:
-        return exet.node
+    if exect.node:
+        return exect.node
 
-    if exet.source.text and exet.source.tree and raise_exc:
+    if exect.source.text and exect.source.tree and raise_exc:
         raise VarnameRetrievingError(
             "Couldn't retrieve the call node. "
             "This may happen if you're using some other AST magic at the "
@@ -489,7 +622,7 @@ def _lookfor_parent_assign(node: ast.AST) -> Optional[ast.Assign]:
     while hasattr(node, 'parent'):
         node = node.parent
 
-        if isinstance(node, ast.Assign):
+        if isinstance(node, (ast.AnnAssign, ast.Assign)):
             return node
     return None
 

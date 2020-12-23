@@ -60,8 +60,7 @@ Features
 * Fetching variable names directly using ``nameof``
 * A value wrapper to store the variable name that a value is assigned to using ``Wrapper``
 * Detecting next immediate attribute name using ``will``
-* Shortcut for ``collections.namedtuple``
-* Injecting ``__varname__`` to objects
+* Injecting ``__varname__`` to classes
 * A ``debug`` function to print variables with their names and values.
 
 Credits
@@ -145,6 +144,23 @@ Retrieving the variable names from inside a function call/class instantiation
        k = Foo()   # k.id == 'k'
 
        k2 = k.copy() # k2.id == 'k2'
+
+* 
+  Multiple variables on Left-hand side
+
+  .. code-block:: python
+
+       # since v0.5.4
+
+       def func():
+           return varname(multi_vars=True)
+
+       a = func() # a == ('a', )
+       a, b = func() # (a, b) == ('a', 'b')
+       [a, b] = func() # (a, b) == ('a', 'b')
+
+       # hierarchy is also possible
+       a, (b, c) = func() # (a, b, c) == ('a', 'b', 'c')
 
 * 
   Some unusual use
@@ -256,41 +272,23 @@ Detecting next immediate attribute name
    awesome.permit() # AttributeError: Should do something with AwesomeClass object
    awesome.permit().do() == 'I am doing!'
 
-Shortcut for ``collections.namedtuple``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Injecting ``__varname__`` to classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   # instead of
-   from collections import namedtuple
-   Name = namedtuple('Name', ['first', 'last'])
+   from varname import inject_varname
 
-   # we can do:
-   from varname import namedtuple
-   Name = namedtuple(['first', 'last'])
-
-Injecting ``__varname__``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-   from varname import inject
-
-   class MyList(list):
+   @inject_varname
+   class Dict(dict):
        pass
 
-   a = inject(MyList())
-   b = inject(MyList())
-
+   a = Dict(a=1)
+   b = Dict(b=2)
    a.__varname__ == 'a'
    b.__varname__ == 'b'
-
-   a == b
-
-   # other methods not affected
-   a.append(1)
-   b.append(1)
-   a == b
+   a.update(b)
+   a == {'a':1, 'b':2}
 
 Debugging with ``debug``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
