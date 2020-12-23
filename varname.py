@@ -77,9 +77,6 @@ def varname(
             `b == 'a'`, may not be the case you want)
     """
     ignore = ignore or []
-    assert isinstance(ignore, list), (
-        f"A list expected for 'ignore', got {type(ignore)}"
-    )
     _check_qualname(ignore)
     # Skip one more frame, as it is supposed to be called
     # inside another function
@@ -493,6 +490,9 @@ def _check_qualname(
 
     If multiple or none, raise an error
     """
+    assert isinstance(ignore_list, list), (
+        f"A list expected for 'ignore', got {type(ignore_list)}"
+    )
     for ignore_elem in ignore_list:
         if not isinstance(ignore_elem, tuple):
             continue
