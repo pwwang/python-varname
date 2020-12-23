@@ -48,7 +48,7 @@ def varname(
             you want to ignore for the intermediate calls.
             For example, `['module']` ignores all intermediate calls
             from `module` and its submodules, but `[(module, 'func')]`
-            only ignores the calls (qual)named `func` from `typing`.
+            only ignores the calls (qual)named `func` from `module`.
             By default, all calls from `varname` and builtin modules
             (in `sys.builtin_module_names`) are ignored.
             Note that the qualname in the module should exist and be unique.
