@@ -11,7 +11,7 @@ from functools import wraps, lru_cache
 
 import executing
 
-__version__ = "0.5.5"
+__version__ = "0.5.6"
 __all__ = [
     "VarnameRetrievingError", "varname", "will", "inject_varname",
     "register", "inject", "nameof", "namedtuple", "Wrapper", "debug"
