@@ -14,7 +14,7 @@ import executing
 __version__ = "0.5.5"
 __all__ = [
     "VarnameRetrievingError", "varname", "will", "inject_varname",
-    "inject", "nameof", "namedtuple", "Wrapper", "debug"
+    "register", "inject", "nameof", "namedtuple", "Wrapper", "debug"
 ]
 
 # To show how the desired frame is selected and other frames are skipped
@@ -181,7 +181,7 @@ def will(caller: int = 1, raise_exc: bool = True) -> Optional[str]:
     # ast.Attribute
     return node.attr
 
-def inject_varname(
+def register(
         cls: type = None, *,
         caller: int = 1,
         multi_vars: bool = False,
@@ -201,7 +201,7 @@ def inject_varname(
             to retrieve the name.
 
     Examples:
-        >>> @inject_varname
+        >>> @varname.register
         >>> class Foo: pass
         >>> foo = Foo()
         >>> # foo.__varname__ == 'foo'
@@ -209,15 +209,16 @@ def inject_varname(
     Returns:
         The wrapper function or the class itself if it is specified explictly.
     """
+
     if cls is not None:
-        # Used as @inject_varname directly
-        return inject_varname(
+        # Used as @register directly
+        return register(
             caller=caller,
             multi_vars=multi_vars,
             raise_exc=raise_exc
         )(cls)
 
-    # Used as @inject_varname(multi_vars=..., raise_exc=...)
+    # Used as @register(multi_vars=..., raise_exc=...)
     def wrapper(cls):
         """The wrapper function to wrap a class and inject `__varname__`"""
         orig_init = cls.__init__
@@ -236,6 +237,23 @@ def inject_varname(
         return cls
 
     return wrapper
+
+def inject_varname(
+        cls: type = None, *,
+        caller: int = 1,
+        multi_vars: bool = False,
+        raise_exc: bool = True
+) -> Union[type, Callable[[type], type]]:
+    """Alias of register. Will be deprecated"""
+    warnings.warn("Decorator inject_varname will be removed in 0.6.0. "
+                  "Use varname.register to decorate your class.",
+                  DeprecationWarning)
+    return register(
+        cls,
+        caller=caller,
+        multi_vars=multi_vars,
+        raise_exc=raise_exc
+    )
 
 def inject(obj: object) -> object:
     """Inject attribute `__varname__` to an object
@@ -268,7 +286,7 @@ def inject(obj: object) -> object:
         The object with __varname__ injected
     """
     warnings.warn("Function inject will be removed in 0.6.0. Use "
-                  "varname.inject_varname to decorate your class.",
+                  "varname.register to decorate your class.",
                   DeprecationWarning)
     vname = varname(caller=0)
     try:
