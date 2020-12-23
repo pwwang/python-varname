@@ -40,17 +40,18 @@ def varname(
     >>> varname.DEBUG = True
 
     Args:
-        caller: The call stack index, indicating where this function
+        caller: The call frame index, indicating where this function
             is called relative to where the variable is finally retrieved
-            Stacks are counted with the ignored ones being excluded.
-            See `ignore` for stacks to be ignored.
+            Frames are counted with the ignored ones being excluded.
+            See `ignore` for frames to be ignored.
         ignore: A list of modules or tuples of module and qualname that
             you want to ignore for the intermediate calls.
             For example, `['module']` ignores all intermediate calls
-            from `module`, but `[(module, 'func')]` only ignores the calls
-            (qual)named `func` from `typing`.
+            from `module` and its submodules, but `[(module, 'func')]`
+            only ignores the calls (qual)named `func` from `typing`.
             By default, all calls from `varname` and builtin modules
             (in `sys.builtin_module_names`) are ignored.
+            Note that the qualname in the module should exist and be unique.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
@@ -79,6 +80,7 @@ def varname(
     assert isinstance(ignore, list), (
         f"A list expected for 'ignore', got {type(ignore)}"
     )
+    _check_qualname(ignore)
     # Skip one more frame, as it is supposed to be called
     # inside another function
     node = _get_node(caller + 1, ignore, raise_exc=raise_exc)
@@ -340,7 +342,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         # of frame retrieval again
 
         # may raise exception, just leave it as is
-        frame = _get_executing(caller).frame
+        frame = _get_frame(caller)
         source = frame.f_code.co_filename
         if source == '<stdin>':
             raise VarnameRetrievingError(
@@ -484,6 +486,24 @@ class Wrapper:
         return (f"<{self.__class__.__name__} "
                 f"(name={self.name!r}, value={self.value!r})>")
 
+def _check_qualname(
+        ignore_list: List[Union[ModuleType, Tuple[ModuleType, str]]]
+) -> None:
+    """Check if a qualname refers to a unique object.
+
+    If multiple or none, raise an error
+    """
+    for ignore_elem in ignore_list:
+        if not isinstance(ignore_elem, tuple):
+            continue
+        module, qualname = ignore_elem
+        source = executing.Source.for_filename(module.__file__, module.__dict__)
+        nobj = list(source._qualnames.values()).count(qualname)
+        assert nobj == 1, (
+            f"Qualname {qualname!r} in {module.__name__!r} doesn't exist or "
+            "refers to multiple objects."
+        )
+
 def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
     """Print the debug message"""
     if not DEBUG:
@@ -494,7 +514,7 @@ def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
                f'{frameinfo.filename}:{frameinfo.lineno}]')
     sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')
 
-def _get_executing(
+def _get_frame(
         caller: int,
         ignore: Optional[
             List[Union[ModuleType, Tuple[ModuleType, str]]]
@@ -521,7 +541,7 @@ def _get_executing(
             # loot at next frame anyway at next iteration
             frame_index += 1
             module = inspect.getmodule(frame)
-            exect = executing.Source.executing(frame)
+            # exect = executing.Source.executing(frame)
 
             if module is sys.modules[__name__]:
                 _debug('Skipping frame from varname', frame)
@@ -529,16 +549,20 @@ def _get_executing(
 
             if module and module.__name__ in sys.builtin_module_names:
                 # havn't find a way to compose a test for this, skip for now
+                _debug('Skipping builtin module', frame) # pragma: no cover
                 continue # pragma: no cover
 
             if ignore and (
-                    module in ignore or
-                    (module, exect.code_qualname()) in ignore
+                    module in ignore or (
+                        module,
+                        executing.Source.for_frame(frame).
+                        code_qualname(frame.f_code)
+                    ) in ignore
             ):
                 _debug('Ignored', frame)
                 continue
 
-            if ignore and '.' in module.__name__:
+            if ignore and module and '.' in module.__name__:
                 # if asyncio specified, asyncio.runners, asyncio.events, etc
                 # should be all ignored
                 modnames = module.__name__.split('.')[:-1]
@@ -554,7 +578,7 @@ def _get_executing(
                 _debug(f'Skipping ({caller - 1} more to skip)', frame)
             else:
                 _debug('Gotcha!', frame)
-                return exect
+                return frame
 
     except Exception as exc:
         raise VarnameRetrievingError from exc
@@ -575,9 +599,11 @@ def _get_node(
     When the node can not be retrieved, try to return the first statement.
     """
     try:
-        exect = _get_executing(caller, ignore)
+        frame = _get_frame(caller, ignore)
     except VarnameRetrievingError:
         return None
+
+    exect = executing.Source.executing(frame)
 
     if exect.node:
         return exect.node
@@ -619,7 +645,7 @@ def _node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
 
 def _bytecode_nameof(caller: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
-    frame = _get_executing(caller).frame
+    frame = _get_frame(caller)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 @lru_cache()

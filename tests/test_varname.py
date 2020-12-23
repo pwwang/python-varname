@@ -691,3 +691,33 @@ def test_async_varname():
 
     x = run_async(main())
     assert x == 'x'
+
+def test_qualname_ignore_fail():
+    # not a list
+    def func():
+        return varname(ignore=sys)
+
+    with pytest.raises(AssertionError):
+        f = func()
+
+    # non-existing qualname
+    def func():
+        return varname(ignore=[(sys.modules[__name__], 'nosuchqualname')])
+
+    with pytest.raises(AssertionError):
+        f = func()
+
+    # non-unique qualname
+    def func():
+        return varname(ignore=[(sys.modules[__name__],
+                                'test_qualname_ignore_fail.<locals>.wrapper')])
+
+    def wrapper():
+        return func()
+
+    wrapper2 = wrapper
+    def wrapper():
+        return func()
+
+    with pytest.raises(AssertionError):
+        f = func()
