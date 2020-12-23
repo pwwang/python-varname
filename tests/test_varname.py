@@ -491,27 +491,27 @@ def test_frame_fail_will(no_getframe):
     assert func(False).a == 1
     assert func(False).will is None
 
-def test_namedtuple():
-    Name = namedtuple(['first', 'last'])
-    name = Name('Bill', 'Gates')
-    assert isinstance(name, Name)
+# def test_namedtuple():
+#     Name = namedtuple(['first', 'last'])
+#     name = Name('Bill', 'Gates')
+#     assert isinstance(name, Name)
 
-def test_inject():
+# def test_inject():
 
-    with pytest.raises(VarnameRetrievingError):
-        a = inject(1)
+#     with pytest.raises(VarnameRetrievingError):
+#         a = inject(1)
 
-    class A(list):
-        pass
+#     class A(list):
+#         pass
 
-    a = inject(A())
-    b = inject(A())
-    assert a.__varname__ == 'a'
-    assert b.__varname__ == 'b'
-    assert a == b
-    a.append(1)
-    b.append(1)
-    assert a == b
+#     a = inject(A())
+#     b = inject(A())
+#     assert a.__varname__ == 'a'
+#     assert b.__varname__ == 'b'
+#     assert a == b
+#     a.append(1)
+#     b.append(1)
+#     assert a == b
 
 def test_nameof_full():
     x = lambda: None
@@ -614,9 +614,9 @@ def test_internal_debug(capsys, enable_debug):
     assert "Ignored [In 'wrapper'" in msgs[6]
     assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
 
-def test_inject_varname():
+def test_register_to_class():
 
-    @inject_varname
+    @register
     class Foo:
         def __init__(self, a=1):
             self.a = a

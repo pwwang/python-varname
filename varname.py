@@ -6,15 +6,14 @@ import inspect
 import warnings
 from typing import Callable, List, Union, Tuple, Any, Optional
 from types import FrameType, CodeType, ModuleType
-from collections import namedtuple as standard_namedtuple
 from functools import wraps, lru_cache
 
 import executing
 
 __version__ = "0.6.0"
 __all__ = [
-    "VarnameRetrievingError", "varname", "will", "inject_varname",
-    "register", "inject", "nameof", "namedtuple", "Wrapper", "debug"
+    "VarnameRetrievingError", "varname", "will",
+    "register", "nameof", "Wrapper", "debug"
 ]
 
 # To show how the desired frame is selected and other frames are skipped
@@ -187,7 +186,7 @@ def register(
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Union[type, Callable[[type], type]]:
-    """A decorator to inject __varname__ attribute to a class
+    """A decorator to register __varname__ attribute to a class
 
     Args:
         frame: The call stack index, indicating where this class
@@ -220,7 +219,7 @@ def register(
 
     # Used as @register(multi_vars=..., raise_exc=...)
     def wrapper(cls):
-        """The wrapper function to wrap a class and inject `__varname__`"""
+        """The wrapper function to wrap a class and register `__varname__`"""
         orig_init = cls.__init__
 
         @wraps(cls.__init__)
@@ -237,64 +236,6 @@ def register(
         return cls
 
     return wrapper
-
-def inject_varname(
-        cls: type = None, *,
-        frame: int = 1,
-        multi_vars: bool = False,
-        raise_exc: bool = True
-) -> Union[type, Callable[[type], type]]:
-    """Alias of register. Will be deprecated"""
-    warnings.warn("Decorator inject_varname will be removed in 0.6.0. "
-                  "Use varname.register to decorate your class.",
-                  DeprecationWarning)
-    return register(
-        cls,
-        frame=frame,
-        multi_vars=multi_vars,
-        raise_exc=raise_exc
-    )
-
-def inject(obj: object) -> object:
-    """Inject attribute `__varname__` to an object
-
-    Examples:
-        >>> class MyList(list):
-        >>>     pass
-
-        >>> a = varname.inject(MyList())
-        >>> b = varname.inject(MyList())
-
-        >>> a.__varname__ == 'a'
-        >>> b.__varname__ == 'b'
-
-        >>> a == b
-
-        >>> # other methods not affected
-        >>> a.append(1)
-        >>> b.append(1)
-        >>> a == b
-
-    Args:
-        obj: An object that can be injected
-
-    Raises:
-        VarnameRetrievingError: When `__varname__` is unable to
-            be set as an attribute
-
-    Returns:
-        The object with __varname__ injected
-    """
-    warnings.warn("Function inject will be removed in 0.6.0. Use "
-                  "varname.register to decorate your class.",
-                  DeprecationWarning)
-    vname = varname(frame=0)
-    try:
-        setattr(obj, '__varname__', vname)
-    except AttributeError:
-        raise VarnameRetrievingError('Unable to inject __varname__.') from None
-    return obj
-
 
 def nameof(var, *more_vars, # pylint: disable=unused-argument
            frame: int = 1,
@@ -435,34 +376,6 @@ def debug(var, *more_vars,
     else:
         for name_and_value in name_and_values:
             print(f"{prefix}{name_and_value}")
-
-def namedtuple(*args, **kwargs) -> type:
-    """A shortcut for namedtuple
-
-    You don't need to specify the typename, which will be fetched from
-    the variable name.
-
-    So instead of:
-        >>> from collections import namedtuple
-        >>> Name = namedtuple('Name', ['first', 'last'])
-
-    You can do:
-        >>> from varname import namedtuple
-        >>> Name = namedtuple(['first', 'last'])
-
-    Args:
-        *args: arguments for `collections.namedtuple` except `typename`
-        **kwargs: keyword arguments for `collections.namedtuple`
-            except `typename`
-
-    Returns:
-        The namedtuple you desired.
-    """
-    warnings.warn("Shortcut for namedtuple is deprecated and "
-                  "will be removed in 0.6.0. Use the standard way instead.",
-                  DeprecationWarning)
-    typename = varname(raise_exc=True)
-    return standard_namedtuple(typename, *args, **kwargs)
 
 class Wrapper:
     """A wrapper with ability to retrieve the variable name
