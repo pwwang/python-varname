@@ -1,3 +1,7 @@
+## v0.5.6
+- Add `ignore` argument to `varname` to ignore frames that are not counted by caller
+- Deprecate `inject_varname`, use `register` instead
+
 ## v0.5.5
 - Deprecate inject and use inject_varname decorator instead
 
