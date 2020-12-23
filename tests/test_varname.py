@@ -660,18 +660,34 @@ def test_async_varname():
 
     import asyncio
 
-    async def func():
-        return varname(ignore=[asyncio.events, asyncio.base_events, asyncio.runners])
+    def run_async(coro):
+        if sys.version_info < (3, 7):
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(coro)
+        else:
+            return asyncio.run(coro)
 
-    x = asyncio.run(func())
+    async def func():
+        return varname(
+            ignore=[
+                asyncio,
+                (sys.modules[__name__], 'test_async_varname.<locals>.run_async')
+            ]
+        )
+
+    x = run_async(func())
     assert x == 'x'
 
     async def func():
         # also works this way
-        return varname(caller=2, ignore=[asyncio])
+        return varname(
+            caller=2,
+            ignore=[asyncio, (sys.modules[__name__],
+                              'test_async_varname.<locals>.run_async')]
+        )
 
     async def main():
         return await func()
 
-    x = asyncio.run(main())
+    x = run_async(main())
     assert x == 'x'
