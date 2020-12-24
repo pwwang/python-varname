@@ -98,6 +98,8 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = asyncio.run(function()) # func == 'func'
     ```
 
+    Note that `frame` and `ignore` can be used together. Then only frames not in the `ignore` list will be counted.
+
 - Retrieving name of a class instance
 
     ```python
@@ -170,7 +172,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     a['b'] = get_name(False) # None
     ```
 
-### The decorator way to regsiter `__varname__` to functions/classes
+### The decorator way to register `__varname__` to functions/classes
 
 - Registering `__varname__` to functions
 
