@@ -1,5 +1,9 @@
 ## v0.6.0
-
+- Remove `inject_varname`. Use `register` instead
+- Allow `register` to decorate functions
+- Change argument `caller` to `frame` across all APIs
+- Add arguments `frame` and `ignore` to `Wrapper`
+- Remove `namedtuple` and `inject`
 
 ## v0.5.6
 - Add `ignore` argument to `varname` to ignore frames that are not counted by caller
