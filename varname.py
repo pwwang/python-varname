@@ -1,11 +1,9 @@
 """Dark magics about variable name in python"""
 import ast
 import dis
-from operator import mul
 import sys
 import inspect
 import warnings
-import functools
 from typing import Callable, List, Union, Tuple, Any, Optional
 from types import FrameType, CodeType, ModuleType
 from functools import wraps, lru_cache, partial
@@ -227,7 +225,7 @@ def register(
         def wrapped_init(self, *args, **kwargs):
             """Wrapped init function to replace the original one"""
             self.__varname__ = varname(
-                frame=frame-1,
+                frame-1,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc
             )
