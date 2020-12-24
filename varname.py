@@ -183,6 +183,9 @@ def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
 def register(
         cls_or_func: type = None, *,
         frame: int = 1,
+        ignore: Optional[List[Union[
+            ModuleType, Tuple[ModuleType, str]
+        ]]] = None,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Union[type, Callable[[type], type]]:
@@ -226,6 +229,7 @@ def register(
             """Wrapped init function to replace the original one"""
             self.__varname__ = varname(
                 frame-1,
+                ignore=ignore,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc
             )
@@ -240,6 +244,7 @@ def register(
             """The wrapper to register `__varname__` to a function"""
             cls_or_func.__globals__['__varname__'] = varname(
                 frame-1,
+                ignore=ignore,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc
             )
@@ -253,6 +258,7 @@ def register(
     # None, meaning we have other arguments
     return partial(register,
                    frame=frame,
+                   ignore=ignore,
                    multi_vars=multi_vars,
                    raise_exc=raise_exc)
 
@@ -418,9 +424,15 @@ class Wrapper:
         value: The value this wrapper wraps
     """
 
-    def __init__(self, value: Any, raise_exc: bool = True):
+    def __init__(self,
+                 value: Any,
+                 frame: int = 1,
+                 ignore: Optional[List[Union[
+                     ModuleType, Tuple[ModuleType, str]
+                 ]]] = None,
+                 raise_exc: bool = True):
         # This call is ignored, since it's inside varname
-        self.name = varname(frame=0, raise_exc=raise_exc)
+        self.name = varname(frame-1, ignore=ignore, raise_exc=raise_exc)
         self.value = value
 
     def __str__(self) -> str:

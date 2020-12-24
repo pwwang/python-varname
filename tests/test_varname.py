@@ -181,7 +181,7 @@ def test_unusual():
     x = func()
     assert x == 'x'
 
-def test_wrapper():
+def test_wrapper(enable_debug):
 
     val1 = Wrapper(True)
     assert val1.name == 'val1'
@@ -190,6 +190,20 @@ def test_wrapper():
     assert str(val1) == 'True'
     assert repr(val1) == "<Wrapper (name='val1', value=True)>"
 
+    # wrapped Wrapper
+    def wrapped(value):
+        return Wrapper(value, frame=2)
+    val2 = wrapped(True)
+    assert val2.name == 'val2'
+    assert val2.value is True
+
+    # with ignore
+    def wrapped2(value):
+        return Wrapper(value, ignore=[(sys.modules[__name__],
+                                       wrapped2.__qualname__)])
+    val3 = wrapped2(True)
+    assert val3.name == 'val3'
+    assert val3.value is True
 
 def test_nameof_pytest_fail():
     with pytest.raises(
@@ -394,7 +408,6 @@ def test_frame_fail_varname(no_getframe):
     b = func(False)
     assert b is None
 
-
 def test_frame_fail_nameof(no_getframe):
     a = 1
     with pytest.raises(VarnameRetrievingError):
@@ -531,6 +544,17 @@ def test_register_to_class():
     assert f2.__varname__ == 'f2'
     assert f2.a == 2
 
+    def wrapped(foo):
+        return foo.__varname__
+
+    @register(ignore=[(sys.modules[__name__], wrapped.__qualname__)])
+    class Foo:
+        def __init__(self):
+            ...
+
+    foo = wrapped(Foo())
+    assert foo == 'foo'
+
 def test_register_to_function():
 
     @register
@@ -548,6 +572,17 @@ def test_register_to_function():
     def func2():
         return func1()
     f = func2()
+    assert f == 'f'
+
+    # with ignore
+    def func3():
+        return func4()
+
+    @register(ignore=[(sys.modules[__name__], func3.__qualname__)])
+    def func4():
+        return __varname__
+
+    f = func3()
     assert f == 'f'
 
 def test_type_anno_varname():
