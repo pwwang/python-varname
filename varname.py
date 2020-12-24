@@ -1,12 +1,14 @@
 """Dark magics about variable name in python"""
 import ast
 import dis
+from operator import mul
 import sys
 import inspect
 import warnings
+import functools
 from typing import Callable, List, Union, Tuple, Any, Optional
 from types import FrameType, CodeType, ModuleType
-from functools import wraps, lru_cache
+from functools import wraps, lru_cache, partial
 
 import executing
 
@@ -181,12 +183,16 @@ def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
     return node.attr
 
 def register(
-        cls: type = None, *,
+        cls_or_func: type = None, *,
         frame: int = 1,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Union[type, Callable[[type], type]]:
-    """A decorator to register __varname__ attribute to a class
+    """A decorator to register __varname__ to a class or function
+
+    When registered to a class, it can be accessed by `self.__varname__`;
+    while to a function, it is registered to locals, meaning that it can be
+    accessed directly.
 
     Args:
         frame: The call stack index, indicating where this class
@@ -204,25 +210,20 @@ def register(
         >>> class Foo: pass
         >>> foo = Foo()
         >>> # foo.__varname__ == 'foo'
+        >>>
+        >>> @varname.register
+        >>> def func():
+        >>>   return __varname__
+        >>> foo = func() # foo == 'foo'
 
     Returns:
-        The wrapper function or the class itself if it is specified explictly.
+        The wrapper function or the class/function itself
+        if it is specified explictly.
     """
+    if inspect.isclass(cls_or_func):
+        orig_init = cls_or_func.__init__
 
-    if cls is not None:
-        # Used as @register directly
-        return register(
-            frame=frame,
-            multi_vars=multi_vars,
-            raise_exc=raise_exc
-        )(cls)
-
-    # Used as @register(multi_vars=..., raise_exc=...)
-    def wrapper(cls):
-        """The wrapper function to wrap a class and register `__varname__`"""
-        orig_init = cls.__init__
-
-        @wraps(cls.__init__)
+        @wraps(cls_or_func.__init__)
         def wrapped_init(self, *args, **kwargs):
             """Wrapped init function to replace the original one"""
             self.__varname__ = varname(
@@ -232,10 +233,30 @@ def register(
             )
             orig_init(self, *args, **kwargs)
 
-        cls.__init__ = wrapped_init
-        return cls
+        cls_or_func.__init__ = wrapped_init
+        return cls_or_func
 
-    return wrapper
+    if inspect.isfunction(cls_or_func):
+        @wraps(cls_or_func)
+        def wrapper(*args, **kwargs):
+            """The wrapper to register `__varname__` to a function"""
+            cls_or_func.__globals__['__varname__'] = varname(
+                frame-1,
+                multi_vars=multi_vars,
+                raise_exc=raise_exc
+            )
+
+            try:
+                return cls_or_func(*args, **kwargs)
+            finally:
+                del cls_or_func.__globals__['__varname__']
+        return wrapper
+
+    # None, meaning we have other arguments
+    return partial(register,
+                   frame=frame,
+                   multi_vars=multi_vars,
+                   raise_exc=raise_exc)
 
 def nameof(var, *more_vars, # pylint: disable=unused-argument
            frame: int = 1,

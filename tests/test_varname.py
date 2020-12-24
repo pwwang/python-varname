@@ -36,22 +36,6 @@ def test_function():
     func = function()
     assert func == 'func'
 
-    func = function(
-    )
-    assert func == 'func'
-
-    func = \
-        function()
-    assert func == 'func'
-
-    func = function \
-        ()
-    assert func == 'func'
-
-    func = (function
-            ())
-    assert func == 'func'
-
     func = [function()]
     assert func == ['func']
 
@@ -63,34 +47,6 @@ def test_function():
 
     func = (function(), function())
     assert func == ('func', 'func')
-
-def test_function_context():
-
-    def function(*args):
-        return varname()
-
-    func = function(
-        1, # I
-        2, # have
-        3, # a
-        4, # long
-        5, # argument
-        6, # list
-    )
-    assert func == 'func'
-
-    def function(*args):
-        return varname()
-
-    func = function(
-        1, # I
-        2, # have
-        3, # a
-        4, # long
-        5, # argument
-        6, # list
-    )
-    assert func == 'func'
 
 def test_function_deep():
 
@@ -145,34 +101,6 @@ def test_class_deep():
     k2 = k.copy()
     assert k2 == 'k2'
 
-def test_false():
-    """Test if any false positives happen"""
-    def func(**kwargs):
-        return varname()
-
-    x = func(
-        y = func()
-    )
-    assert x == 'x'
-
-    def func(**kwargs):
-        return varname()
-
-    x = func(y = func())
-    assert x == 'x'
-
-def test_referring():
-
-    def proc(**kwargs):
-        return varname()
-
-    def func2():
-        p1 = proc(a=1, b=2)
-        p2 = proc(a=1, b=2, c=p1)
-        return p1, p2
-
-    assert func2() == ('p1', 'p2')
-
 def test_single_var_lhs_error():
     """Only one variable to receive the name on LHS"""
 
@@ -184,10 +112,6 @@ def test_single_var_lhs_error():
         x, y = function()
     with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
-
-    # This is now supported in 0.5.4
-    # with pytest.raises(VarnameRetrievingError):
-    #     [x] = function()
 
 def test_multi_vars_lhs():
     """Tests multiple variables on the left hand side"""
@@ -491,28 +415,6 @@ def test_frame_fail_will(no_getframe):
     assert func(False).a == 1
     assert func(False).will is None
 
-# def test_namedtuple():
-#     Name = namedtuple(['first', 'last'])
-#     name = Name('Bill', 'Gates')
-#     assert isinstance(name, Name)
-
-# def test_inject():
-
-#     with pytest.raises(VarnameRetrievingError):
-#         a = inject(1)
-
-#     class A(list):
-#         pass
-
-#     a = inject(A())
-#     b = inject(A())
-#     assert a.__varname__ == 'a'
-#     assert b.__varname__ == 'b'
-#     assert a == b
-#     a.append(1)
-#     b.append(1)
-#     assert a == b
-
 def test_nameof_full():
     x = lambda: None
     a = x
@@ -628,6 +530,25 @@ def test_register_to_class():
     f2 = Foo(2)
     assert f2.__varname__ == 'f2'
     assert f2.a == 2
+
+def test_register_to_function():
+
+    @register
+    def func():
+        return __varname__
+
+    f = func()
+    assert f == 'f'
+
+    # wrapped with other function
+    @register(frame=2)
+    def func1():
+        return __varname__
+
+    def func2():
+        return func1()
+    f = func2()
+    assert f == 'f'
 
 def test_type_anno_varname():
 
