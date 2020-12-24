@@ -442,6 +442,17 @@ class Wrapper:
         return (f"<{self.__class__.__name__} "
                 f"(name={self.name!r}, value={self.value!r})>")
 
+def _check_qualname_without_source(
+        module: ModuleType,
+        qualname: str # pylint: disable=unused-argument
+) -> None:
+    """Check the qualnames without module source being avaialbe"""
+    # // todo: walk the object to check qualname?
+
+    # a little trick to identify this module when source code is
+    # not available
+    module.__varname_ignore_id__ = f'<varname-ignore-{id(module)}>'
+
 def _check_qualname(
         ignore_list: List[Union[ModuleType, Tuple[ModuleType, str]]]
 ) -> None:
@@ -456,12 +467,17 @@ def _check_qualname(
         if not isinstance(ignore_elem, tuple):
             continue
         module, qualname = ignore_elem
-        source = executing.Source.for_filename(module.__file__, module.__dict__)
-        nobj = list(source._qualnames.values()).count(qualname)
-        assert nobj == 1, (
-            f"Qualname {qualname!r} in {module.__name__!r} doesn't exist or "
-            "refers to multiple objects."
-        )
+        try:
+            modfile = module.__file__
+        except AttributeError:
+            _check_qualname_without_source(module, qualname)
+        else:
+            source = executing.Source.for_filename(modfile, module.__dict__)
+            nobj = list(source._qualnames.values()).count(qualname)
+            assert nobj == 1, (
+                f"Qualname {qualname!r} in {module.__name__!r} "
+                "doesn't exist or refers to multiple objects."
+            )
 
 def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
     """Print the debug message"""
@@ -488,6 +504,15 @@ def _get_frame(
 
     The frame_index defaults to 1 to exclude the calls from inside this module.
     """
+    # We need this to check the modules that can't be retrieved
+    # by inspect.getmodule
+    ignore_transformed = [
+        getattr(mod_qname, '__varname_ignore_id__', None)
+        if isinstance(mod_qname, ModuleType)
+        else (getattr(mod_qname[0], '__varname_ignore_id__', None),
+              mod_qname[1])
+        for mod_qname in ignore
+    ] if ignore else []
     # Use loop instead of recursion to avoid creating additional stacks
     try:
         # We are at least skipping 2 frames:
@@ -499,8 +524,14 @@ def _get_frame(
             frameobj = sys._getframe(frame_index)
             # loot at next frame anyway at next iteration
             frame_index += 1
+
             module = inspect.getmodule(frameobj)
-            # exect = executing.Source.executing(frame)
+            try:
+                module_ignore_id = frameobj.f_globals['__varname_ignore_id__']
+            except KeyError:
+                # Use '' instead of None, because we want
+                # module to be matched
+                module_ignore_id = ''
 
             if module is sys.modules[__name__]:
                 _debug('Skipping frame from varname', frameobj)
@@ -516,7 +547,12 @@ def _get_frame(
                         module,
                         executing.Source.for_frame(frameobj).
                         code_qualname(frameobj.f_code)
-                    ) in ignore
+                    ) in ignore or
+                    module_ignore_id in ignore_transformed or (
+                        module_ignore_id,
+                        executing.Source.for_frame(frameobj).
+                        code_qualname(frameobj.f_code)
+                    ) in ignore_transformed
             ):
                 _debug('Ignored', frameobj)
                 continue
