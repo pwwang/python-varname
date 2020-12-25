@@ -84,6 +84,8 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
 
     def function():
         return varname(ignore=[(sys.modules[__name__], 'wrapped')])
+        # or you can specify the wrapper directly
+        #return varname(ignore=[wrapped])
 
     func = wrapped() # func == 'func'
     ```

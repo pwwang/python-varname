@@ -1,11 +1,12 @@
 """Dark magics about variable name in python"""
+import os
+import sys
 import ast
 import dis
-import sys
 import inspect
 import warnings
 from typing import Callable, List, Union, Tuple, Any, Optional
-from types import FrameType, CodeType, ModuleType
+from types import FrameType, CodeType, FunctionType, ModuleType
 from functools import wraps, lru_cache, partial
 
 import executing
@@ -16,6 +17,8 @@ __all__ = [
     "register", "nameof", "Wrapper", "debug"
 ]
 
+IgnoreType = List[Union[ModuleType, FunctionType, Tuple[ModuleType, str]]]
+
 # To show how the desired frame is selected and other frames are skipped
 DEBUG = False
 
@@ -24,9 +27,7 @@ class VarnameRetrievingError(Exception):
 
 def varname(
         frame: int = 1,
-        ignore: Optional[
-            List[Union[ModuleType, Tuple[ModuleType, str]]]
-        ] = None,
+        ignore: Optional[IgnoreType] = None,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
@@ -43,14 +44,17 @@ def varname(
             is called relative to where the variable is finally retrieved
             Frames are counted with the ignored ones being excluded.
             See `ignore` for frames to be ignored.
-        ignore: A list of modules or tuples of module and qualname that
-            you want to ignore for the intermediate calls.
-            For example, `['module']` ignores all intermediate calls
-            from `module` and its submodules, but `[(module, 'func')]`
-            only ignores the calls (qual)named `func` from `module`.
+        ignore: A list of calls to be ignored in counting the frame.
+            You can specify:
+            - A function. Note about the decorated function. You may also need
+                to ignore the original function. If the original function is
+                not avaiable anymore. You can have to specifiy it in
+                `(module, qualname)` way
+            - A module. All calls from it and its submodules will be ignored.
+            - A tuple of module and qualname. Note that the qualname in the
+                module should exist and be unique.
             By default, all calls from `varname` and builtin modules
             (in `sys.builtin_module_names`) are ignored.
-            Note that the qualname in the module should exist and be unique.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
@@ -183,9 +187,7 @@ def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
 def register(
         cls_or_func: type = None, *,
         frame: int = 1,
-        ignore: Optional[List[Union[
-            ModuleType, Tuple[ModuleType, str]
-        ]]] = None,
+        ignore: Optional[IgnoreType] = None,
         multi_vars: bool = False,
         raise_exc: bool = True
 ) -> Union[type, Callable[[type], type]]:
@@ -427,9 +429,7 @@ class Wrapper:
     def __init__(self,
                  value: Any,
                  frame: int = 1,
-                 ignore: Optional[List[Union[
-                     ModuleType, Tuple[ModuleType, str]
-                 ]]] = None,
+                 ignore: Optional[IgnoreType] = None,
                  raise_exc: bool = True):
         # This call is ignored, since it's inside varname
         self.name = varname(frame-1, ignore=ignore, raise_exc=raise_exc)
@@ -444,7 +444,7 @@ class Wrapper:
 
 def _check_qualname_without_source(
         module: ModuleType,
-        qualname: str # pylint: disable=unused-argument
+        qualname: Optional[str] # pylint: disable=unused-argument
 ) -> None:
     """Check the qualnames without module source being avaialbe"""
     # // todo: walk the object to check qualname?
@@ -453,9 +453,7 @@ def _check_qualname_without_source(
     # not available
     module.__varname_ignore_id__ = f'<varname-ignore-{id(module)}>'
 
-def _check_qualname(
-        ignore_list: List[Union[ModuleType, Tuple[ModuleType, str]]]
-) -> None:
+def _check_qualname(ignore_list: IgnoreType) -> None:
     """Check if a qualname refers to a unique object.
 
     If multiple or none, raise an error
@@ -464,20 +462,24 @@ def _check_qualname(
         f"A list expected for 'ignore', got {type(ignore_list)}"
     )
     for ignore_elem in ignore_list:
-        if not isinstance(ignore_elem, tuple):
+        if isinstance(ignore_elem, FunctionType):
             continue
-        module, qualname = ignore_elem
-        try:
-            modfile = module.__file__
-        except AttributeError:
-            _check_qualname_without_source(module, qualname)
+        if isinstance(ignore_elem, ModuleType):
+            module, qualname = ignore_elem, None
         else:
-            source = executing.Source.for_filename(modfile, module.__dict__)
-            nobj = list(source._qualnames.values()).count(qualname)
-            assert nobj == 1, (
-                f"Qualname {qualname!r} in {module.__name__!r} "
-                "doesn't exist or refers to multiple objects."
-            )
+            module, qualname = ignore_elem
+
+        modfile = getattr(module, '__file__', None)
+        if modfile and os.path.isfile(modfile):
+            if qualname:
+                source = executing.Source.for_filename(modfile, module.__dict__)
+                nobj = list(source._qualnames.values()).count(qualname)
+                assert nobj == 1, (
+                    f"Qualname {qualname!r} in {module.__name__!r} "
+                    "doesn't exist or refers to multiple objects."
+                )
+        else: # source code may not be accessible
+            _check_qualname_without_source(module, qualname)
 
 def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
     """Print the debug message"""
@@ -491,9 +493,7 @@ def _debug(msg: str, frame: Optional[FrameType] = None) -> None:
 
 def _get_frame(
         frame: int,
-        ignore: Optional[
-            List[Union[ModuleType, Tuple[ModuleType, str]]]
-        ] = None
+        ignore: Optional[IgnoreType] = None
 ) -> FrameType:
     """This function makes sure that we get the desired frame,
     by frame and ignroe.
@@ -512,7 +512,9 @@ def _get_frame(
         else (getattr(mod_qname[0], '__varname_ignore_id__', None),
               mod_qname[1])
         for mod_qname in ignore
+        if not isinstance(mod_qname, FunctionType)
     ] if ignore else []
+
     # Use loop instead of recursion to avoid creating additional stacks
     try:
         # We are at least skipping 2 frames:
@@ -542,19 +544,27 @@ def _get_frame(
                 _debug('Skipping builtin module', frameobj) # pragma: no cover
                 continue # pragma: no cover
 
+            if ignore and (module in ignore or
+                           module_ignore_id in ignore_transformed):
+                _debug('Ignored by module', frameobj)
+                continue
+
+            if ignore and (frameobj.f_code in (
+                    getattr(maybe_func, '__code__', '')
+                    for maybe_func in ignore
+            )):
+                _debug('Ignored by function', frameobj)
+                continue
+
             if ignore and (
-                    module in ignore or (
-                        module,
-                        executing.Source.for_frame(frameobj).
-                        code_qualname(frameobj.f_code)
-                    ) in ignore or
-                    module_ignore_id in ignore_transformed or (
-                        module_ignore_id,
-                        executing.Source.for_frame(frameobj).
-                        code_qualname(frameobj.f_code)
-                    ) in ignore_transformed
+                    (module,
+                     executing.Source.for_frame(frameobj).
+                     code_qualname(frameobj.f_code)) in ignore or
+                    (module_ignore_id,
+                     executing.Source.for_frame(frameobj).
+                     code_qualname(frameobj.f_code)) in ignore_transformed
             ):
-                _debug('Ignored', frameobj)
+                _debug('Ignored by qualname', frameobj)
                 continue
 
             if ignore and module and '.' in module.__name__:
@@ -580,9 +590,7 @@ def _get_frame(
 
 def _get_node(
         frame: int,
-        ignore: Optional[
-            List[Union[ModuleType, Tuple[ModuleType, str]]]
-        ] = None,
+        ignore: Optional[IgnoreType] = None,
         raise_exc: bool = True
 ) -> Optional[ast.AST]:
     """Try to get node from the executing object.

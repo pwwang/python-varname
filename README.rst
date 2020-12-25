@@ -139,6 +139,8 @@ Retrieving the variable names using ``varname(...)``
 
        def function():
            return varname(ignore=[(sys.modules[__name__], 'wrapped')])
+           # or you can specify the wrapper directly
+           #return varname(ignore=[wrapped])
 
        func = wrapped() # func == 'func'
 

@@ -199,8 +199,7 @@ def test_wrapper(enable_debug):
 
     # with ignore
     def wrapped2(value):
-        return Wrapper(value, ignore=[(sys.modules[__name__],
-                                       wrapped2.__qualname__)])
+        return Wrapper(value, ignore=[wrapped2])
     val3 = wrapped2(True)
     assert val3.name == 'val3'
     assert val3.value is True
@@ -485,6 +484,28 @@ def test_nameof_node_not_retrieved():
     with pytest.raises(VarnameRetrievingError, match='Source code unavailable'):
         exec(code)
 
+def test_ignore_module_source_na():
+    source = ('import sys\n'
+              'import __main__\n'
+              'del __main__.__file__\n'
+              'import varname\n'
+              'varname.DEBUG = True\n'
+              'from varname import varname\n'
+              'def func(): \n'
+              '  return varname(ignore=[(__main__, "wrapped")])\n\n'
+              'def wrapped():\n'
+              '  return func()\n\n'
+              'variable = wrapped()\n')
+
+    p = subprocess.Popen([sys.executable],
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT,
+                         encoding='utf8')
+    out, _ = p.communicate(input=source)
+    assert "Ignored by qualname [In 'wrapped'" in out
+
+
 def test_debug(capsys):
     a = 1
     b = object()
@@ -522,11 +543,11 @@ def test_internal_debug(capsys, enable_debug):
     msgs = capsys.readouterr().err.splitlines()
     assert "Skipping frame from varname [In 'varname'" in msgs[0]
     assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
-    assert "Ignored [In 'wrapper'" in msgs[2]
+    assert "Ignored by qualname [In 'wrapper'" in msgs[2]
     assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
-    assert "Ignored [In 'wrapper'" in msgs[4]
+    assert "Ignored by qualname [In 'wrapper'" in msgs[4]
     assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
-    assert "Ignored [In 'wrapper'" in msgs[6]
+    assert "Ignored by qualname [In 'wrapper'" in msgs[6]
     assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
 
 def test_register_to_class():
