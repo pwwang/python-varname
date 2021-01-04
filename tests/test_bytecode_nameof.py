@@ -1,25 +1,25 @@
 import pytest
 import unittest
-from varname import _bytecode_nameof
+from varname.utils import bytecode_nameof
 from varname import nameof, varname, VarnameRetrievingError
 
 def nameof_both(*args):
     """Test both implementations at the same time"""
     result = nameof(*args, frame=2)
     if len(args) == 1:
-        assert result == _bytecode_nameof(frame=2)
+        assert result == bytecode_nameof(frame=2)
     return result
 
 class Weird:
     def __add__(self, other):
-        _bytecode_nameof(frame=2)
+        bytecode_nameof(frame=2)
 
 class TestNameof(unittest.TestCase):
     def test_original_nameof(self):
         x = 1
         self.assertEqual(nameof(x), 'x')
         self.assertEqual(nameof_both(x), 'x')
-        self.assertEqual(_bytecode_nameof(x), 'x')
+        self.assertEqual(bytecode_nameof(x), 'x')
 
     def test_bytecode_nameof_wrong_node(self):
         with pytest.raises(
@@ -36,7 +36,7 @@ class TestNameof(unittest.TestCase):
         ):
             lam = lambda: 0
             lam.a = 1
-            assert _bytecode_nameof(lam.a) == 'a'
+            assert bytecode_nameof(lam.a) == 'a'
 
     def test_nameof(self):
         a = 1
@@ -64,7 +64,7 @@ class TestNameof(unittest.TestCase):
             nameof_both(a==1)
 
         with pytest.raises(VarnameRetrievingError):
-            _bytecode_nameof(a == 1)
+            bytecode_nameof(a == 1)
 
         # this is avoided by requiring the first argument `var`
         # with pytest.raises(VarnameRetrievingError):

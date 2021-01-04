@@ -31,7 +31,7 @@ setup(
     author='pwwang',
     author_email='pwwang@pwwang.com',
     license='MIT',
-    packages=[],
+    packages=['varname'],
     package_dir={"": "."},
     package_data={},
     install_requires=['executing'],

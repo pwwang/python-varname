@@ -22,7 +22,7 @@ repos:
     rev: v2.4.4
     hooks:
     -   id: pylint
-        files: ^varname.py$
+        files: ^varname/.+$
         pass_filenames: false
         types: [python]
         args: [varname]
@@ -46,4 +46,4 @@ repos:
         language: system
         args: [tests/]
         pass_filenames: false
-        files: ^tests/.+$|^varname.py$
+        files: ^tests/.+$|^varname/.+$
