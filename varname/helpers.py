@@ -4,7 +4,7 @@ from functools import partial, wraps
 from typing import Any, Callable, Optional, Union
 
 from .utils import IgnoreType
-from .varname import nameof, varname
+from .core import nameof, varname
 
 
 def register(
