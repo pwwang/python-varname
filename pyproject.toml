@@ -11,8 +11,6 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/pwwang/python-varname"
 repository = "https://github.com/pwwang/python-varname"
-[[tool.poetry.packages]]
-include = "varname.py"
 
 [tool.poetry.dependencies]
 python = "^3.6"
