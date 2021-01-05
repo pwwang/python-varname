@@ -124,7 +124,9 @@ class IgnoreFunction(IgnoreElem):
     def __init__(self, ignore: FunctionType) -> None:
         super().__init__(ignore)
         if (
-                '<locals>' in ignore.__qualname__ or # without functools.wraps
+                # but this is annoying when the whole set (decorated function +
+                # var = func()) inside the same function
+                #'<locals>' in ignore.__qualname__ or # without functools.wraps
                 ignore.__name__ != ignore.__code__.co_name
         ):
             warnings.warn('A decorated function might be used '
