@@ -26,6 +26,7 @@ import sys
 import re
 from os import path
 import inspect
+import distutils.sysconfig as sysconfig
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple, Optional
 from types import FrameType, ModuleType, FunctionType
@@ -103,6 +104,14 @@ class IgnoreModule(IgnoreElem):
 
             return (getattr(self.ignore, MODULE_IGNORE_ID_NAME, None) ==
                     frame.f_globals.get(MODULE_IGNORE_ID_NAME, ''))
+
+        if path.isdir(self.ignore):
+            # ignore all calls from modules from a directory
+            # Used internally currently to ignore standard libraries
+            if not self.ignore.endswith('/'):
+                self.ignore = f'{self.ignore}/'
+            return frame.f_code.co_filename.startswith(self.ignore)
+
         return frame.f_code.co_filename == self.ignore
 
     def __repr__(self):
@@ -238,6 +247,7 @@ class IgnoreList:
             ignore = [ignore]
 
         ignore_list = [
+            create_ignore_elem(sysconfig.get_python_lib(standard_lib=True)),
             create_ignore_elem(sys.modules[__package__]),
             # Will the following be calls?
             # create_ignore_elem((None, '<listcomp>')),

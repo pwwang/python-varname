@@ -348,7 +348,9 @@ def test_generic_type_varname():
 
     class Foo(Generic[T]):
         def __init__(self):
-            self.id = varname(ignore=[typing])
+            # Standard libraries are ignored by default now (0.6.0)
+            # self.id = varname(ignore=[typing])
+            self.id = varname()
     foo = Foo[int]()
     assert foo.id == 'foo'
 
@@ -435,13 +437,4 @@ def test_ignore_lambda():
     bar = lambda: foo()
 
     b = bar()
-    assert b == 'b'
-
-def test_ignore_comprehensions(enable_debug):
-
-    def foo():
-        return varname()
-
-    bar = [lambda: foo() for i in [0]]
-    b = bar[0]()
     assert b == 'b'
