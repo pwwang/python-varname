@@ -39,7 +39,7 @@ def get_node(
 
     if exect.node:
         return exect.node
-    print(exect.node, '|', exect.source.text, '//', exect.source.tree)
+
     if exect.source.text and exect.source.tree and raise_exc:
         raise VarnameRetrievingError(
             "Couldn't retrieve the call node. "

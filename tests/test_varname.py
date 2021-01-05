@@ -209,10 +209,41 @@ def test_frame_fail_varname(no_getframe):
     b = func(False)
     assert b is None
 
-def test_ignore_module_source_na():
+def test_ignore_module_filename():
+    source = ('def foo(): return bar()')
+
+    code = compile(source, '<string>', 'exec')
+    def bar():
+        return varname(ignore='<string>')
+
+    globs = {'bar': bar}
+    exec(code, globs)
+    foo = globs['foo']
+    f = foo()
+    assert f == 'f'
+
+def test_ignore_module_no_file(tmp_path):
+    modfile = tmp_path / 'ignore_module8525.py'
+    modfile.write_text("def foo(): return bar()")
+    sys.path.insert(0, str(tmp_path))
+    modu = __import__('ignore_module8525')
+    # force injecting __varname_ignore_id__
+    del modu.__file__
+
+    def bar():
+        return varname(ignore=[
+            (modu, 'foo'), # can't get module by inspect.getmodule
+            modu
+        ])
+    modu.bar = bar
+
+    f = modu.foo()
+    assert f == 'f'
+
+
+def test_ignore_module_filename_qualname():
     source = ('import sys\n'
               'import __main__\n'
-              'del __main__.__file__\n'
               'import varname\n'
               'varname.config.debug = True\n'
               'from varname import varname\n'
@@ -221,6 +252,10 @@ def test_ignore_module_source_na():
               'def wrapped():\n'
               '  return func()\n\n'
               'variable = wrapped()\n')
+
+    # code = compile(source, '<string>', 'exec')
+    # # ??? NameError: name 'func' is not defined
+    # exec(code)
 
     p = subprocess.Popen([sys.executable],
                          stdin=subprocess.PIPE,
@@ -248,10 +283,14 @@ def test_internal_debug(capsys, enable_debug):
     def foo3():
         return varname(
             frame=3,
-            ignore=[(
-                sys.modules[__name__],
-                "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
-            )]
+            ignore=[
+                (
+                    sys.modules[__name__],
+                    "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
+                ),
+                # unrelated qualname will not hit at all
+                (sys, 'wrapper')
+            ]
         )
 
     x = foo1()
@@ -265,6 +304,32 @@ def test_internal_debug(capsys, enable_debug):
     assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
     assert "Ignored by <IgnoreQualname('tests.test_varname', test_internal_debug.<locals>.my_decorator.<locals>.wrapper)>" in msgs[6]
     assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
+
+def test_ignore_decorated():
+    def my_decorator(f):
+        def wrapper():
+            return f()
+        return wrapper
+
+    @my_decorator
+    def foo4():
+        return foo5()
+
+    def foo5():
+        return varname(ignore=(foo4, 1))
+
+    f4 = foo4()
+    assert f4 == 'f4'
+
+    @my_decorator
+    def foo6():
+        return foo7()
+
+    def foo7():
+        return varname(ignore=(foo4, 100))
+
+    with pytest.raises(VarnameRetrievingError):
+        f6 = foo6()
 
 def test_type_anno_varname():
 
@@ -311,9 +376,14 @@ def test_async_varname():
                 (sys.modules[__name__], 'test_async_varname.<locals>.run_async')
             ]
         )
+    async def func2():
+        return varname(ignore=[asyncio, run_async])
 
     x = run_async(func())
     assert x == 'x'
+
+    x2 = run_async(func2())
+    assert x2 == 'x2'
 
     async def func():
         # also works this way
@@ -330,6 +400,11 @@ def test_async_varname():
     assert x == 'x'
 
 def test_qualname_ignore_fail():
+    # unexpected ignore item
+    def func():
+        return varname(ignore=1)
+    with pytest.raises(ValueError):
+        f = func()
 
     # non-existing qualname
     def func():
@@ -352,3 +427,21 @@ def test_qualname_ignore_fail():
 
     with pytest.raises(AssertionError):
         f = func()
+
+def test_ignore_lambda():
+    def foo():
+        return varname()
+
+    bar = lambda: foo()
+
+    b = bar()
+    assert b == 'b'
+
+def test_ignore_comprehensions(enable_debug):
+
+    def foo():
+        return varname()
+
+    bar = [lambda: foo() for i in [0]]
+    b = bar[0]()
+    assert b == 'b'
