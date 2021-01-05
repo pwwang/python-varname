@@ -24,9 +24,10 @@ Attributes:
 """
 import sys
 import re
-from os import path
 import inspect
 import distutils.sysconfig as sysconfig
+import warnings
+from os import path
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple, Optional
 from types import FrameType, ModuleType, FunctionType
@@ -120,8 +121,14 @@ class IgnoreModule(IgnoreElem):
 
 class IgnoreFunction(IgnoreElem):
     """Ignore a non-decorated function"""
-    # // TODO: warn if the function is decorated suspiciously
-    # (no perfect solutions)
+    def __init__(self, ignore: FunctionType) -> None:
+        super().__init__(ignore)
+        if (
+                '<locals>' in ignore.__qualname__ or # without functools.wraps
+                ignore.__name__ != ignore.__code__.co_name
+        ):
+            warnings.warn('A decorated function might be used '
+                          'as an ignore element for varname.')
 
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
@@ -218,7 +225,7 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
     """Create an ignore element according to the type"""
     if isinstance(ignore_elem, (ModuleType, str)):
         return IgnoreModule(ignore_elem)
-    if isinstance(ignore_elem, FunctionType):
+    if hasattr(ignore_elem, '__code__'):
         return IgnoreFunction(ignore_elem)
     if isinstance(ignore_elem, tuple):
         if isinstance(ignore_elem[1], int):

@@ -17,7 +17,7 @@ def register(
     """A decorator to register __varname__ to a class or function
 
     When registered to a class, it can be accessed by `self.__varname__`;
-    while to a function, it is registered to locals, meaning that it can be
+    while to a function, it is registered to globals, meaning that it can be
     accessed directly.
 
     Args:
