@@ -23,10 +23,10 @@ Attributes:
         `inspect.getmodule(frame)`
 """
 import sys
-import re
 import inspect
 import distutils.sysconfig as sysconfig
 import warnings
+from fnmatch import fnmatch
 from os import path
 from abc import ABC, abstractmethod
 from typing import List, Union, Tuple, Optional
@@ -111,9 +111,13 @@ class IgnoreModule(IgnoreElem):
             # Used internally currently to ignore standard libraries
             if not self.ignore.endswith('/'):
                 self.ignore = f'{self.ignore}/'
-            return frame.f_code.co_filename.startswith(self.ignore)
+            return path.realpath(frame.f_code.co_filename).startswith(
+                path.realpath(self.ignore)
+            )
 
-        return frame.f_code.co_filename == self.ignore
+        # in case of symbolic links
+        return (path.realpath(frame.f_code.co_filename) ==
+                path.realpath(self.ignore))
 
     def __repr__(self):
         rep = self.ignore.__name__ if self.is_module else self.ignore
@@ -201,19 +205,19 @@ class IgnoreQualname(IgnoreElem):
                         f"{self.ignore[0].__name__!r} "
                         "doesn't exist or refers to multiple objects."
                     )
-            return re.match(self.ignore[1],
-                            Source.for_frame(frame).code_qualname(frame.f_code))
+            return fnmatch(Source.for_frame(frame).code_qualname(frame.f_code),
+                           self.ignore[1])
 
         if self.module_flag == 'filename':
             return (frame.f_code.co_filename == self.ignore[0] and
-                    re.match(
-                        self.ignore[1],
-                        Source.for_frame(frame).code_qualname(frame.f_code)
+                    fnmatch(
+                        Source.for_frame(frame).code_qualname(frame.f_code),
+                        self.ignore[1]
                     ))
 
         # module is None, check qualname only
-        return re.match(self.ignore[1],
-                        Source.for_frame(frame).code_qualname(frame.f_code))
+        return fnmatch(Source.for_frame(frame).code_qualname(frame.f_code),
+                       self.ignore[1])
 
     def __repr__(self) -> str:
         module_repr = (
@@ -263,7 +267,7 @@ class IgnoreList:
             # create_ignore_elem((None, '<dictcomp>')),
             # create_ignore_elem((None, '<setcomp>')),
             # create_ignore_elem((None, '<genexpr>')),
-            create_ignore_elem((None, r'(?:.+\.)?\<lambda\>')),
+            create_ignore_elem((None, r'*<lambda>')),
         ]
         for ignore_elem in ignore:
             ignore_list.append(create_ignore_elem(ignore_elem))
