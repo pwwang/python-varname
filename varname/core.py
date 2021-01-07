@@ -43,7 +43,10 @@ def varname(
                 on the wrapper function inside decorators should also be counted
             - Tuple of a module (or filename) and qualified name (qualname).
                 Note that the qualname in the module should exist and be unique.
-            By default, all calls from `varname` packages are ignored.
+                You can also use Unix shell-style wildcards to match the
+                qualname.
+            By default, all calls from `varname` package, python standard
+            libraries and lambda functions are ignored.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
