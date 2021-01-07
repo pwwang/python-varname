@@ -87,24 +87,29 @@ class IgnoreModule(IgnoreElem):
 
     def __init__(self, ignore: Union[ModuleType, str]) -> None:
         super().__init__(ignore)
-        self.is_module = isinstance(ignore, ModuleType)
-        if self.is_module:
-            modfile = getattr(self.ignore, '__file__', None)
-            if not modfile or not path.isfile(modfile):
-                setattr(self.ignore, MODULE_IGNORE_ID_NAME,
-                        f'<varname-ignore-{id(self.ignore)}>')
+        modfile = getattr(self.ignore, '__file__', None)
+        if not modfile or not path.isfile(modfile):
+            setattr(self.ignore, MODULE_IGNORE_ID_NAME,
+                    f'<varname-ignore-{id(self.ignore)}>')
 
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
+        module = inspect.getmodule(frame)
+        if module:
+            return (module.__name__ == self.ignore.__name__ or
+                    module.__name__.startswith(f'{self.ignore.__name__}.'))
 
-        if self.is_module:
-            module = inspect.getmodule(frame)
-            if module:
-                return (module.__name__ == self.ignore.__name__ or
-                        module.__name__.startswith(f'{self.ignore.__name__}.'))
+        return (getattr(self.ignore, MODULE_IGNORE_ID_NAME, None) ==
+                frame.f_globals.get(MODULE_IGNORE_ID_NAME, ''))
 
-            return (getattr(self.ignore, MODULE_IGNORE_ID_NAME, None) ==
-                    frame.f_globals.get(MODULE_IGNORE_ID_NAME, ''))
+    def __repr__(self):
+        return f'<IgnoreModule({self.ignore.__name__!r})>'
+
+class IgnoreFilename(IgnoreElem):
+    """Ignore calls from a module by matching its filename"""
+
+    def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
+        frame = frameinfos[frame_no].frame
 
         if path.isdir(self.ignore):
             # ignore all calls from modules from a directory
@@ -120,8 +125,7 @@ class IgnoreModule(IgnoreElem):
                 path.realpath(self.ignore))
 
     def __repr__(self):
-        rep = self.ignore.__name__ if self.is_module else self.ignore
-        return f'<IgnoreModule({rep!r})>'
+        return f'<IgnoreFilename({self.ignore!r})>'
 
 class IgnoreFunction(IgnoreElem):
     """Ignore a non-decorated function"""
@@ -229,8 +233,10 @@ class IgnoreQualname(IgnoreElem):
 
 def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
     """Create an ignore element according to the type"""
-    if isinstance(ignore_elem, (ModuleType, str)):
+    if isinstance(ignore_elem, ModuleType):
         return IgnoreModule(ignore_elem)
+    if isinstance(ignore_elem, str):
+        return IgnoreFilename(ignore_elem)
     if hasattr(ignore_elem, '__code__'):
         return IgnoreFunction(ignore_elem)
     if isinstance(ignore_elem, tuple):
