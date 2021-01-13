@@ -2,6 +2,7 @@ import sys
 
 import pytest
 import subprocess
+from functools import wraps
 from varname import *
 from varname.helpers import *
 from varname.utils import get_node
@@ -263,7 +264,25 @@ def test_ignore_module_filename_qualname():
                          stderr=subprocess.STDOUT,
                          encoding='utf8')
     out, _ = p.communicate(input=source)
-    assert "Ignored by <IgnoreQualname('<stdin>', wrapped)>" in out
+    assert "Ignored by <IgnoreFilenameQualname('<stdin>', wrapped)>" in out
+
+def test_ignore_function_warning():
+
+    def my_decorator(f):
+        @wraps(f)
+        def wrapper():
+            return f()
+        return wrapper
+
+    @my_decorator
+    def func1():
+        return func2()
+
+    def func2():
+        return varname(ignore=[func1, (func1, 1)])
+
+    with pytest.warns(UserWarning, match='A decorated function may be used'):
+        f = func1()
 
 def test_internal_debug(capsys, enable_debug):
     def my_decorator(f):
@@ -286,7 +305,7 @@ def test_internal_debug(capsys, enable_debug):
             ignore=[
                 (
                     sys.modules[__name__],
-                    "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
+                    "*.wrapper"
                 ),
                 # unrelated qualname will not hit at all
                 (sys, 'wrapper')
@@ -298,11 +317,11 @@ def test_internal_debug(capsys, enable_debug):
     msgs = capsys.readouterr().err.splitlines()
     assert "Ignored by <IgnoreModule('varname')>" in msgs[0]
     assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
-    assert "Ignored by <IgnoreQualname('tests.test_varname', test_internal_debug.<locals>.my_decorator.<locals>.wrapper)>" in msgs[2]
+    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[2]
     assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
-    assert "Ignored by <IgnoreQualname('tests.test_varname', test_internal_debug.<locals>.my_decorator.<locals>.wrapper)>" in msgs[4]
+    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[4]
     assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
-    assert "Ignored by <IgnoreQualname('tests.test_varname', test_internal_debug.<locals>.my_decorator.<locals>.wrapper)>" in msgs[6]
+    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[6]
     assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
 
 def test_ignore_decorated():
@@ -408,11 +427,9 @@ def test_qualname_ignore_fail():
     with pytest.raises(ValueError):
         f = func()
 
-    # non-existing qualname
     def func():
-        return varname(ignore=[(sys.modules[__name__], 'nosuchqualname')])
-
-    with pytest.raises(AssertionError):
+        return varname(ignore=(1,2))
+    with pytest.raises(ValueError):
         f = func()
 
     # non-unique qualname

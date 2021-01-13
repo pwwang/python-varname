@@ -111,21 +111,29 @@ class IgnoreFilename(IgnoreElem):
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
 
-        if path.isdir(self.ignore):
-            # ignore all calls from modules from a directory
-            # Used internally currently to ignore standard libraries
-            if not self.ignore.endswith('/'):
-                self.ignore = f'{self.ignore}/'
-            return path.realpath(frame.f_code.co_filename).startswith(
-                path.realpath(self.ignore)
-            )
-
         # in case of symbolic links
         return (path.realpath(frame.f_code.co_filename) ==
                 path.realpath(self.ignore))
 
     def __repr__(self):
         return f'<IgnoreFilename({self.ignore!r})>'
+
+class IgnoreDirname(IgnoreElem):
+    """Ignore calls from modules inside a directory
+
+    Currently used internally to ignore calls from standard libraries."""
+
+    def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
+        frame = frameinfos[frame_no].frame
+
+        if not self.ignore.endswith('/'):
+            self.ignore = f'{self.ignore}/'
+        return path.realpath(frame.f_code.co_filename).startswith(
+            path.realpath(self.ignore)
+        )
+
+    def __repr__(self):
+        return f'<IgnoreDirname({self.ignore!r})>'
 
 class IgnoreFunction(IgnoreElem):
     """Ignore a non-decorated function"""
@@ -137,8 +145,8 @@ class IgnoreFunction(IgnoreElem):
                 #'<locals>' in ignore.__qualname__ or # without functools.wraps
                 ignore.__name__ != ignore.__code__.co_name
         ):
-            warnings.warn('A decorated function might be used '
-                          'as an ignore element for varname.')
+            warnings.warn('A decorated function may be used '
+                          'as an ignore element directly for varname.')
 
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
@@ -160,89 +168,112 @@ class IgnoreDecorated(IgnoreElem):
     def __repr__(self):
         return f'<IgnoreDecorated({self.ignore[0].__name__}, {self.ignore[1]})>'
 
-class IgnoreQualname(IgnoreElem):
-    """Ignore a function by qualified name"""
-    def __init__(self,
-                 ignore: Tuple[Optional[Union[ModuleType, str]], str]) -> None:
+class IgnoreModuleQualname(IgnoreElem):
+    """Ignore calls by qualified name in the module"""
+    def __init__(self, ignore: Tuple[ModuleType, str]) -> None:
         super().__init__(ignore)
-        self.module_flag = (
-            None if not ignore[0]
-            else 'module' if isinstance(ignore[0], ModuleType)
-            else 'filename'
-        )
 
         # check uniqueness of qualname
         self.qname_checked = False
-        if self.module_flag == 'module':
-            modfile = getattr(self.ignore[0], '__file__', None)
-            if modfile and path.isfile(modfile):
-                source = Source.for_filename(modfile, self.ignore[0].__dict__)
-                nobj = list(source._qualnames.values()).count(self.ignore[1])
-                assert nobj == 1, (
-                    f"Qualname {self.ignore[1]!r} in "
-                    f"{self.ignore[0].__name__!r} "
-                    "doesn't exist or refers to multiple objects."
-                )
-                self.qname_checked = True
+        modfile = getattr(self.ignore[0], '__file__', None)
+        if modfile and path.isfile(modfile):
+            source = Source.for_filename(modfile, self.ignore[0].__dict__)
+            nobj = list(source._qualnames.values()).count(self.ignore[1])
+            # don't check for non-existence, as it could contain wildcards
+            assert nobj <= 1, (
+                f"Qualname {self.ignore[1]!r} in "
+                f"{self.ignore[0].__name__!r} refers to multiple objects."
+            )
+            self.qname_checked = True
 
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
-        if self.module_flag == 'module':
-            module = inspect.getmodule(frame)
-            if module and module != self.ignore[0]:
-                return False
 
-            if not module and (
-                    getattr(self.ignore, MODULE_IGNORE_ID_NAME, None) !=
-                    frame.f_globals.get(MODULE_IGNORE_ID_NAME, '')
-            ):
-                return False
+        module = inspect.getmodule(frame)
+        # Return earlier to avoid qualname uniqueness check
+        if module and module != self.ignore[0]:
+            return False
 
-            if not self.qname_checked:
-                source = Source.for_frame(frame)
-                if source.tree: # otherwise, no way to check
-                    nobj = list(
-                        source._qualnames.values()
-                    ).count(self.ignore[1])
-                    assert nobj == 1, (
-                        f"Qualname {self.ignore[1]!r} in "
-                        f"{self.ignore[0].__name__!r} "
-                        "doesn't exist or refers to multiple objects."
-                    )
-            return fnmatch(Source.for_frame(frame).code_qualname(frame.f_code),
-                           self.ignore[1])
+        if not module and (
+                getattr(self.ignore, MODULE_IGNORE_ID_NAME, None) !=
+                frame.f_globals.get(MODULE_IGNORE_ID_NAME, '')
+        ):
+            return False
 
-        if self.module_flag == 'filename':
-            return (frame.f_code.co_filename == self.ignore[0] and
-                    fnmatch(
-                        Source.for_frame(frame).code_qualname(frame.f_code),
-                        self.ignore[1]
-                    ))
+        if not self.qname_checked: # // todo: coverage
+            source = Source.for_frame(frame)
+            if source.tree: # otherwise, no way to check
+                nobj = list(source._qualnames.values()).count(self.ignore[1])
+                # don't check for non-existence, as it could contain wildcards
+                assert nobj <= 1, (
+                    f"Qualname {self.ignore[1]!r} in "
+                    f"{self.ignore[0].__name__!r} refers to multiple objects."
+                )
 
-        # module is None, check qualname only
-        return fnmatch(Source.for_frame(frame).code_qualname(frame.f_code),
-                       self.ignore[1])
+        return fnmatch(
+            Source.for_frame(frame).code_qualname(frame.f_code),
+            self.ignore[1]
+        )
 
     def __repr__(self) -> str:
-        module_repr = (
-            self.ignore[0].__name__
-            if self.module_flag == 'module'
-            else self.ignore[0]
+        return ('<IgnoreModuleQualname'
+                f'({self.ignore[0].__name__!r}, {self.ignore[1]})>')
+
+class IgnoreFilenameQualname(IgnoreElem):
+    """Ignore calls with given qualname in the module with the filename"""
+
+    def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
+        frame = frameinfos[frame_no].frame
+
+        return (
+            path.realpath(frame.f_code.co_filename) ==
+            path.realpath(self.ignore[0]) and
+            fnmatch(
+                Source.for_frame(frame).code_qualname(frame.f_code),
+                self.ignore[1]
+            )
         )
-        return f'<IgnoreQualname({module_repr!r}, {self.ignore[1]})>'
+
+    def __repr__(self) -> str:
+        return f'<IgnoreFilenameQualname({self.ignore[0]!r}, {self.ignore[1]})>'
+
+class IgnoreOnlyQualname(IgnoreElem):
+    """Ignore calls that match the given qualname, across all frames."""
+
+    def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
+        frame = frameinfos[frame_no].frame
+
+        # module is None, check qualname only
+        return fnmatch(
+            Source.for_frame(frame).code_qualname(frame.f_code),
+            self.ignore[1]
+        )
+
+    def __repr__(self) -> str:
+        return f'<IgnoreOnlyQualname({self.ignore[1]!r})>'
 
 def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
     """Create an ignore element according to the type"""
     if isinstance(ignore_elem, ModuleType):
         return IgnoreModule(ignore_elem)
     if isinstance(ignore_elem, str):
-        return IgnoreFilename(ignore_elem)
+        return (IgnoreDirname(ignore_elem)
+                if path.isdir(ignore_elem)
+                else IgnoreFilename(ignore_elem))
     if hasattr(ignore_elem, '__code__'):
         return IgnoreFunction(ignore_elem)
-    if isinstance(ignore_elem, tuple):
-        if isinstance(ignore_elem[1], int):
-            return IgnoreDecorated(ignore_elem)
-        return IgnoreQualname(ignore_elem)
+    if not isinstance(ignore_elem, tuple) or len(ignore_elem) != 2:
+        raise ValueError(f'Unexpected ignore item: {ignore_elem!r}')
+    # is tuple and len == 2
+    if hasattr(ignore_elem[0], '__code__') and isinstance(ignore_elem[1], int):
+        return IgnoreDecorated(ignore_elem)
+    if isinstance(ignore_elem[0], ModuleType):
+        return IgnoreModuleQualname(ignore_elem)
+    if isinstance(ignore_elem[0], str):
+        return IgnoreFilenameQualname(ignore_elem)
+    if ignore_elem[0] is None:
+        return IgnoreOnlyQualname(ignore_elem)
+
     raise ValueError(f'Unexpected ignore item: {ignore_elem!r}')
 
 class IgnoreList:
