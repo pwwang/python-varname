@@ -1,9 +1,15 @@
 ## v0.6.0
-- Remove `inject_varname`. Use `register` instead
-- Allow `register` to decorate functions
-- Change argument `caller` to `frame` across all APIs
-- Add arguments `frame` and `ignore` to `Wrapper`
-- Remove `namedtuple` and `inject`
+- Changed:
+    - `Wrapper`, `register` and `debug` moved to `varname.helpers`
+    - Argument `caller` changed to `frame` across all APIs
+    - `ignore` accepting module, filename, function, (function, num_decorators), (module, qualname) and (filename, qualname)
+- Removed:
+    - `inject` (Use `helpers.regiester` instead)
+    - `inject_varname` (Use `helpers.regiester` instead)
+    - `namedtuple`
+- Added:
+    - Arguments `frame` and `ignore` to `Wrapper`
+    - `helpers.register` as a decorator for functions
 
 ## v0.5.6
 - Add `ignore` argument to `varname` to ignore frames that are not counted by caller

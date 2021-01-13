@@ -118,9 +118,10 @@ Retrieving the variable names using ``varname(...)``
 
        func = function()  # func == 'func'
 
+    When there are intermediate frames:
+
   .. code-block:: python
 
-       # function can be wrapped
        def wrapped():
            return function()
 
@@ -130,31 +131,28 @@ Retrieving the variable names using ``varname(...)``
 
        func = wrapped() # func == 'func'
 
+    Or use ``ignore`` to ignore the wrapped frame:
+
   .. code-block:: python
 
-       # use ignore to ignore the wrapped frame
-       import sys
        def wrapped():
            return function()
 
        def function():
-           return varname(ignore=[(sys.modules[__name__], 'wrapped')])
-           # or you can specify the wrapper directly
-           #return varname(ignore=[wrapped])
+           return varname(ignore=wrapped)
 
        func = wrapped() # func == 'func'
 
+    Calls from standard libraries are ignored by default:
+
   .. code-block:: python
 
-       # You can also ignore all calls from a module
        import asyncio
 
        async def function():
-           return varname(ignore=[asyncio])
+           return varname()
 
        func = asyncio.run(function()) # func == 'func'
-
-    Note that ``frame`` and ``ignore`` can be used together. Then only frames not in the ``ignore`` list will be counted.
 
 * 
   Retrieving name of a class instance
@@ -206,7 +204,7 @@ Retrieving the variable names using ``varname(...)``
        func = function(), function()   # func = ('func', 'func')
 
        func = func1 = function()  # func == func1 == 'func'
-       # a warning will be printed
+       # a warning will be shown
        # since you may not want func1 to be 'func'
 
        x = func(y = func())  # x == 'x'
@@ -240,7 +238,7 @@ The decorator way to register ``__varname__`` to functions/classes
 
   .. code-block:: python
 
-       from varname import register
+       from varname.helpers import register
 
        @register
        def function():
@@ -330,7 +328,7 @@ Value wrapper
 
 .. code-block:: python
 
-   from varname import Wrapper
+   from varname.helpers import Wrapper
 
    foo = Wrapper(True)
    # foo.name == 'foo'
@@ -349,6 +347,8 @@ Debugging with ``debug``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
+
+   from varname.helpers import debug
 
    a = 'value'
    b = object()

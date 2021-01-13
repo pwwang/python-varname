@@ -64,8 +64,8 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = function()  # func == 'func'
     ```
 
+    When there are intermediate frames:
     ```python
-    # function can be wrapped
     def wrapped():
         return function()
 
@@ -76,31 +76,26 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = wrapped() # func == 'func'
     ```
 
+    Or use `ignore` to ignore the wrapped frame:
     ```python
-    # use ignore to ignore the wrapped frame
-    import sys
     def wrapped():
         return function()
 
     def function():
-        return varname(ignore=[(sys.modules[__name__], 'wrapped')])
-        # or you can specify the wrapper directly
-        #return varname(ignore=[wrapped])
+        return varname(ignore=wrapped)
 
     func = wrapped() # func == 'func'
     ```
 
+    Calls from standard libraries are ignored by default:
     ```python
-    # You can also ignore all calls from a module
     import asyncio
 
     async def function():
-        return varname(ignore=[asyncio])
+        return varname()
 
     func = asyncio.run(function()) # func == 'func'
     ```
-
-    Note that `frame` and `ignore` can be used together. Then only frames not in the `ignore` list will be counted.
 
 - Retrieving name of a class instance
 
@@ -148,7 +143,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = function(), function()   # func = ('func', 'func')
 
     func = func1 = function()  # func == func1 == 'func'
-    # a warning will be printed
+    # a warning will be shown
     # since you may not want func1 to be 'func'
 
     x = func(y = func())  # x == 'x'
@@ -179,7 +174,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
 - Registering `__varname__` to functions
 
     ```python
-    from varname import register
+    from varname.helpers import register
 
     @register
     def function():
@@ -264,7 +259,7 @@ awesome.permit().do() == 'I am doing!'
 ### Value wrapper
 
 ```python
-from varname import Wrapper
+from varname.helpers import Wrapper
 
 foo = Wrapper(True)
 # foo.name == 'foo'
@@ -282,6 +277,8 @@ mydict = values_to_dict(foo, bar)
 
 ### Debugging with `debug`
 ```python
+from varname.helpers import debug
+
 a = 'value'
 b = object()
 debug(a) # DEBUG: a='value'

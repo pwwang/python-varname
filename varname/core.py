@@ -44,7 +44,7 @@ def varname(
             - Tuple of a module (or filename) and qualified name (qualname).
                 Note that the qualname in the module should exist and be unique.
                 You can also use Unix shell-style wildcards to match the
-                qualname.
+                qualname. You may also used wildcards to match the qualnames.
             By default, all calls from `varname` package, python standard
             libraries and lambda functions are ignored.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
