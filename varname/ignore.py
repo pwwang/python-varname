@@ -85,7 +85,7 @@ class IgnoreElem(ABC):
 class IgnoreModule(IgnoreElem):
     """Ignore calls from a module or its submodules"""
 
-    def __init__(self, ignore: Union[ModuleType, str]) -> None:
+    def __init__(self, ignore: ModuleType) -> None:
         super().__init__(ignore)
         modfile = getattr(self.ignore, '__file__', None)
         if not modfile or not path.isfile(modfile):
@@ -99,8 +99,8 @@ class IgnoreModule(IgnoreElem):
             return (module.__name__ == self.ignore.__name__ or
                     module.__name__.startswith(f'{self.ignore.__name__}.'))
 
-        return (getattr(self.ignore, MODULE_IGNORE_ID_NAME, None) ==
-                frame.f_globals.get(MODULE_IGNORE_ID_NAME, ''))
+        return (getattr(self.ignore, MODULE_IGNORE_ID_NAME, object()) ==
+                frame.f_globals.get(MODULE_IGNORE_ID_NAME, object()))
 
     def __repr__(self):
         return f'<IgnoreModule({self.ignore.__name__!r})>'
