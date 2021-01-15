@@ -4,22 +4,6 @@ import pytest
 import subprocess
 from varname import *
 
-@pytest.fixture
-def no_getframe():
-    """
-    Monkey-patch sys._getframe to fail,
-    simulating environments that don't support varname
-    """
-    def getframe(_context):
-        raise ValueError
-
-    orig_getframe = sys._getframe
-    try:
-        sys._getframe = getframe
-        yield
-    finally:
-        sys._getframe = orig_getframe
-
 def test_nameof_pytest_fail():
     with pytest.raises(
         VarnameRetrievingError,

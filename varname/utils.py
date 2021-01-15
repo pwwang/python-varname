@@ -1,13 +1,28 @@
 """Some internal utilities for varname"""
 import dis
-from functools import lru_cache
 import ast
-from types import CodeType
-from typing import Optional, Tuple, Union
+import inspect
+from functools import lru_cache
+from types import ModuleType, FunctionType, CodeType
+from typing import Optional, Tuple, Union, List
 
 from executing import Source
 
-from .ignore import IgnoreList, IgnoreType
+IgnoreElemType = Union[
+    # module
+    ModuleType,
+    # filename of a module
+    str,
+    FunctionType,
+    # the module (filename) and qualname
+    # If module is None, then all qualname matches the 2nd element
+    # will be ignored. Used to ignore <listcomp/dictcomp/setcomp/genexpr>
+    # internally
+    Tuple[Optional[Union[ModuleType, str]], str],
+    # Function and number of its decorators
+    Tuple[FunctionType, int]
+]
+IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
 
 class config: # pylint: disable=invalid-name
     """Global configurations for varname"""
@@ -15,6 +30,22 @@ class config: # pylint: disable=invalid-name
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""
+
+class QualnameNonUniqueError(Exception):
+    """When a qualified name is used as an ignore element but references to
+    multiple objects in a module"""
+
+class MaybeDecoratedFunctionWarning(Warning):
+    """When a suspecious decorated function used as ignore function directly"""
+
+class MultiTargetAssignmentWarning(Warning):
+    """When varname tries to retrieve variable name in
+    a multi-target assignment"""
+
+@lru_cache()
+def cached_getmodule(codeobj: CodeType):
+    """Cached version of inspect.getmodule"""
+    return inspect.getmodule(codeobj)
 
 def get_node(
         frame: int,
@@ -29,6 +60,7 @@ def get_node(
 
     When the node can not be retrieved, try to return the first statement.
     """
+    from .ignore import IgnoreList
     ignore = IgnoreList.create(ignore)
     try:
         frame = ignore.get_frame(frame)
@@ -77,6 +109,7 @@ def node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
 
 def bytecode_nameof(frame: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
+    from .ignore import IgnoreList
     frame = IgnoreList.create(None).get_frame(frame)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 

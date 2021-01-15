@@ -1,34 +1,17 @@
 import sys
-
-import pytest
 import subprocess
 from functools import wraps
+
+import pytest
+from executing import Source
 from varname import *
 from varname.helpers import *
 from varname.utils import get_node
 
-@pytest.fixture
-def no_getframe():
-    """
-    Monkey-patch sys._getframe to fail,
-    simulating environments that don't support varname
-    """
-    def getframe(_context):
-        raise ValueError
 
-    orig_getframe = sys._getframe
-    try:
-        sys._getframe = getframe
-        yield
-    finally:
-        sys._getframe = orig_getframe
+from .conftest import run_async
 
-@pytest.fixture
-def enable_debug():
-    import varname as _varname
-    _varname.config.debug = True
-    yield
-    _varname.config.debug = False
+SELF = sys.modules[__name__]
 
 def test_function():
 
@@ -50,10 +33,10 @@ def test_function():
     func = (function(), function())
     assert func == ('func', 'func')
 
-def test_function_deep():
+def test_function_with_frame_arg():
 
     def function():
-        # I know that at which stack this will be called
+        # I know that at which frame (3rd) this will be called
         return varname(frame=3)
 
     def function1():
@@ -79,7 +62,7 @@ def test_class():
     k2 = k.copy()
     assert k2 == 'k2'
 
-def test_class_deep():
+def test_class_with_frame_arg():
 
     class Foo:
         def __init__(self):
@@ -103,7 +86,7 @@ def test_class_deep():
     k2 = k.copy()
     assert k2 == 'k2'
 
-def test_single_var_lhs_error():
+def test_single_var_lhs_required():
     """Only one variable to receive the name on LHS"""
 
     def function():
@@ -143,7 +126,7 @@ def test_multi_vars_lhs():
     ):
         a, *b = function()
 
-def test_raise():
+def test_raise_exc():
 
     def get_name(raise_exc):
         return varname(raise_exc=raise_exc)
@@ -161,7 +144,8 @@ def test_multiple_targets():
     def function():
         return varname()
 
-    with pytest.warns(UserWarning, match="Multiple targets in assignment"):
+    with pytest.warns(MultiTargetAssignmentWarning,
+                      match="Multiple targets in assignment"):
         y = x = function()
     assert y == x == 'y'
 
@@ -184,7 +168,7 @@ def test_unusual():
     x = func()
     assert x == 'x'
 
-def test_varname_from_attributes():
+def test_from_property():
     class C:
         @property
         def var(self):
@@ -199,8 +183,6 @@ def test_frame_fail(no_getframe):
     # Let's monkey-patch inspect.stack to do this
     assert get_node(1) is None
 
-
-def test_frame_fail_varname(no_getframe):
     def func(raise_exc):
         return varname(raise_exc=raise_exc)
 
@@ -242,7 +224,71 @@ def test_ignore_module_no_file(tmp_path):
     assert f == 'f'
 
 
-def test_ignore_module_filename_qualname():
+def test_ignore_module_qualname_no_source(tmp_path):
+    modfile = tmp_path / 'ignore_module_qualname_no_source8525.py'
+    modfile.write_text("def bar(): return 1")
+    sys.path.insert(0, str(tmp_path))
+    modu = __import__('ignore_module_qualname_no_source8525')
+    source = Source.for_filename(modfile)
+    # simulate when source is not available
+    source.tree = None
+
+    def foo():
+        return varname(ignore=(modu, 'bar'))
+
+    f = foo()
+
+def test_ignore_module_qualname_ucheck_in_match(tmp_path):
+    modfile = tmp_path / 'ignore_module_qualname_no_source_ucheck_in_match_8525.py'
+    modfile.write_text("def foo(): return bar()")
+    sys.path.insert(0, str(tmp_path))
+    modu = __import__('ignore_module_qualname_no_source_ucheck_in_match_8525')
+    # uniqueness will be checked in match
+    modu.__file__ = None
+    modu.__varname_ignore_id__ = object()
+
+    def bar():
+        return varname(ignore=(modu, 'foo'))
+
+    modu.bar = bar
+
+    f = modu.foo()
+    assert f == 'f'
+
+def test_ignore_module_qualname(tmp_path, capsys, enable_debug):
+    modfile = tmp_path / 'ignore_module_qualname_8525.py'
+    modfile.write_text("def foo1(): return bar()")
+    sys.path.insert(0, str(tmp_path))
+    modu = __import__('ignore_module_qualname_8525')
+    # this will fail the retrieve, but get
+    #
+    # if not module and (
+    #         getattr(self.ignore[0], MODULE_IGNORE_ID_NAME, object()) !=
+    #         frame.f_globals.get(MODULE_IGNORE_ID_NAME, object())
+    # ):
+    #     return False
+    #
+    # covered
+    modu.__file__ = None
+
+    def bar():
+        return varname(ignore=(modu, 'foo1'))
+
+    modu.bar = bar
+
+    # No source available
+    with pytest.raises(VarnameRetrievingError):
+        f = modu.foo1()
+
+    # match should return false at aforementioned code block
+    assert (
+        "Ignored by <IgnoreModuleQualname('ignore_module_qualname_8525', foo1)>"
+        not in
+        capsys.readouterr().err
+    )
+
+
+def test_ignore_filename_qualname():
     source = ('import sys\n'
               'import __main__\n'
               'import varname\n'
@@ -281,48 +327,9 @@ def test_ignore_function_warning():
     def func2():
         return varname(ignore=[func1, (func1, 1)])
 
-    with pytest.warns(UserWarning, match='A decorated function may be used'):
+    with pytest.warns(MaybeDecoratedFunctionWarning,
+                      match="You asked varname to ignore function 'func1'"):
         f = func1()
-
-def test_internal_debug(capsys, enable_debug):
-    def my_decorator(f):
-        def wrapper():
-            return f()
-        return wrapper
-
-    @my_decorator
-    def foo1():
-        return foo2()
-
-    @my_decorator
-    def foo2():
-        return foo3()
-
-    @my_decorator
-    def foo3():
-        return varname(
-            frame=3,
-            ignore=[
-                (
-                    sys.modules[__name__],
-                    "*.wrapper"
-                ),
-                # unrelated qualname will not hit at all
-                (sys, 'wrapper')
-            ]
-        )
-
-    x = foo1()
-    assert x == 'x'
-    msgs = capsys.readouterr().err.splitlines()
-    assert "Ignored by <IgnoreModule('varname')>" in msgs[0]
-    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
-    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[2]
-    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
-    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[4]
-    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
-    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[6]
-    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
 
 def test_ignore_decorated():
     def my_decorator(f):
@@ -380,25 +387,13 @@ def test_generic_type_varname():
     assert baz.id == 'baz'
 
 def test_async_varname():
-
-    import asyncio
-
-    def run_async(coro):
-        if sys.version_info < (3, 7):
-            loop = asyncio.get_event_loop()
-            return loop.run_until_complete(coro)
-        else:
-            return asyncio.run(coro)
+    from . import conftest
 
     async def func():
-        return varname(
-            ignore=[
-                asyncio,
-                (sys.modules[__name__], 'test_async_varname.<locals>.run_async')
-            ]
-        )
+        return varname(ignore=(conftest, 'run_async'))
+
     async def func2():
-        return varname(ignore=[asyncio, run_async])
+        return varname(ignore=run_async)
 
     x = run_async(func())
     assert x == 'x'
@@ -406,21 +401,18 @@ def test_async_varname():
     x2 = run_async(func2())
     assert x2 == 'x2'
 
-    async def func():
+    # frame and ignore together
+    async def func3():
         # also works this way
-        return varname(
-            frame=2,
-            ignore=[asyncio, (sys.modules[__name__],
-                              'test_async_varname.<locals>.run_async')]
-        )
+        return varname(frame=2, ignore=run_async)
 
     async def main():
-        return await func()
+        return await func3()
 
-    x = run_async(main())
-    assert x == 'x'
+    x3 = run_async(main())
+    assert x3 == 'x3'
 
-def test_qualname_ignore_fail():
+def test_invalid_ignores():
     # unexpected ignore item
     def func():
         return varname(ignore=1)
@@ -432,10 +424,12 @@ def test_qualname_ignore_fail():
     with pytest.raises(ValueError):
         f = func()
 
+def test_qualname_ignore_fail():
     # non-unique qualname
     def func():
-        return varname(ignore=[(sys.modules[__name__],
-                                'test_qualname_ignore_fail.<locals>.wrapper')])
+        return varname(ignore=[
+            (SELF, 'test_qualname_ignore_fail.<locals>.wrapper')
+        ])
 
     def wrapper():
         return func()
@@ -444,7 +438,7 @@ def test_qualname_ignore_fail():
     def wrapper():
         return func()
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(QualnameNonUniqueError):
         f = func()
 
 def test_ignore_lambda():
@@ -455,3 +449,40 @@ def test_ignore_lambda():
 
     b = bar()
     assert b == 'b'
+
+def test_internal_debug(capsys, enable_debug):
+    def my_decorator(f):
+        def wrapper():
+            return f()
+        return wrapper
+
+    @my_decorator
+    def foo1():
+        return foo2()
+
+    @my_decorator
+    def foo2():
+        return foo3()
+
+    @my_decorator
+    def foo3():
+        return varname(
+            frame=3,
+            ignore=[
+                (SELF, "*.wrapper"),
+                # unrelated qualname will not be hit at all
+                (sys, 'wrapper')
+            ]
+        )
+
+    x = foo1()
+    assert x == 'x'
+    msgs = capsys.readouterr().err.splitlines()
+    assert "Ignored by <IgnoreModule('varname')>" in msgs[0]
+    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
+    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[2]
+    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
+    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[4]
+    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
+    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[6]
+    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]

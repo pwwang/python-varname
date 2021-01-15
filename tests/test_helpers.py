@@ -4,14 +4,7 @@ import pytest
 from varname import *
 from varname.helpers import *
 
-@pytest.fixture
-def enable_debug():
-    import varname as _varname
-    _varname.config.debug = True
-    yield
-    _varname.config.debug = False
-
-def test_wrapper(enable_debug):
+def test_wrapper():
 
     val1 = Wrapper(True)
     assert val1.name == 'val1'
@@ -30,7 +23,9 @@ def test_wrapper(enable_debug):
     # with ignore
     def wrapped2(value):
         return Wrapper(value, ignore=[wrapped2])
-    val3 = wrapped2(True)
+
+    with pytest.warns(MaybeDecoratedFunctionWarning):
+        val3 = wrapped2(True)
     assert val3.name == 'val3'
     assert val3.value is True
 

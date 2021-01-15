@@ -8,7 +8,8 @@ from .utils import (
     get_node,
     lookfor_parent_assign,
     node_name,
-    VarnameRetrievingError
+    VarnameRetrievingError,
+    MultiTargetAssignmentWarning
 )
 from .ignore import IgnoreList, IgnoreType
 
@@ -95,7 +96,7 @@ def varname(
         if len(node.targets) > 1:
             warnings.warn("Multiple targets in assignment, variable name "
                           "on the very left will be used.",
-                          UserWarning)
+                          MultiTargetAssignmentWarning)
         target = node.targets[0]
 
     names = node_name(target)
