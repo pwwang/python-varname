@@ -49,7 +49,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
 
 ### Retrieving the variable names from inside a function call/class instantiation
 
-- From insdie a function call
+- From inside a function call
     ```python
     from varname import varname
     def function():
