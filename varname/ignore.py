@@ -172,6 +172,9 @@ class IgnoreModuleQualname(IgnoreElem):
         # check uniqueness of qualname
         self.qname_checked = False
         modfile = getattr(self.ignore[0], '__file__', None)
+        if not modfile or not path.isfile(modfile):
+            setattr(self.ignore[0], MODULE_IGNORE_ID_NAME,
+                    f'<varname-ignore-{id(self.ignore)}>')
         if modfile:
             source = Source.for_filename(modfile, self.ignore[0].__dict__)
             self._check_qualname_by_source(source)
