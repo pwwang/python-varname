@@ -167,7 +167,7 @@ class IgnoreModuleQualname(IgnoreElem, attrs=['module', 'qualname']):
         if modfile is not None:
             check_qualname_by_source(
                 Source.for_filename(modfile, self.module.__dict__),
-                self.module,
+                self.module.__name__,
                 self.qualname
             )
 
@@ -186,7 +186,7 @@ class IgnoreModuleQualname(IgnoreElem, attrs=['module', 'qualname']):
             return False
 
         source = Source.for_frame(frame)
-        check_qualname_by_source(source, self.module, self.qualname)
+        check_qualname_by_source(source, self.module.__name__, self.qualname)
 
         return fnmatch(
             source.code_qualname(frame.f_code),

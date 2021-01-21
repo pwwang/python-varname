@@ -195,7 +195,7 @@ def frame_matches_module_by_ignore_id(
 
 def check_qualname_by_source(
         source: Source,
-        module: ModuleType,
+        modname: str,
         qualname: str
 ) -> None:
     """Check if a qualname in module is unique"""
@@ -206,7 +206,7 @@ def check_qualname_by_source(
     if nobj > 1:
         raise QualnameNonUniqueError(
             f"Qualname {qualname!r} in "
-            f"{module.__name__!r} refers to multiple objects."
+            f"{modname!r} refers to multiple objects."
         )
 
 def debug_ignore_frame(
