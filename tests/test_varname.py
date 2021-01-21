@@ -274,7 +274,7 @@ def test_ignore_module_qualname_ucheck_in_match(
     f = module.foo()
     assert f == 'f'
 
-def atest_ignore_module_qualname(tmp_path, capsys, enable_debug):
+def test_ignore_module_qualname(tmp_path, capsys, enable_debug):
     module = module_from_source(
         'ignore_module_qualname',
         '''
