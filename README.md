@@ -54,7 +54,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
 
 ### Retrieving the variable names using `varname(...)`
 
-- From insdie a function
+- From inside a function
 
     ```python
     from varname import varname

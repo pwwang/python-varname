@@ -1,9 +1,21 @@
-"""Some internal utilities for varname"""
+"""Some internal utilities for varname
+
+
+Attributes:
+
+    IgnoreElemType: The type for ignore elements
+    IgnoreType: The type for the ignore argument
+    MODULE_IGNORE_ID_NAME: The name of the ignore id injected to the module.
+        Espectially for modules that can't be retrieved by
+        `inspect.getmodule(frame)`
+"""
+import sys
 import dis
 import ast
 import inspect
+from os import path
 from functools import lru_cache
-from types import ModuleType, FunctionType, CodeType
+from types import ModuleType, FunctionType, CodeType, FrameType
 from typing import Optional, Tuple, Union, List
 
 from executing import Source
@@ -23,6 +35,8 @@ IgnoreElemType = Union[
     Tuple[FunctionType, int]
 ]
 IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
+
+MODULE_IGNORE_ID_NAME = '__varname_ignore_id__'
 
 class config: # pylint: disable=invalid-name
     """Global configurations for varname"""
@@ -148,3 +162,66 @@ def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
         )
 
     return name
+
+def attach_ignore_id_to_module(module: ModuleType) -> None:
+    """Attach the ignore id to module
+
+    This is useful when a module cannot be retrieved by frames using
+    `inspect.getmodule`, then we can use this id, which will exist in
+    `frame.f_globals` to check if the module matches in ignore.
+
+    Do it only when the __file__ is not avaiable or does not exist for
+    the module. Since this probably means the source is not avaiable and
+    `inspect.getmodule` would not work
+    """
+    module_file = getattr(module, '__file__', None)
+    if module_file is not None and path.isfile(module_file):
+        return
+    # or it's already been set
+    if hasattr(module, MODULE_IGNORE_ID_NAME):
+        return
+
+    setattr(module, MODULE_IGNORE_ID_NAME, f'<varname-ignore-{id(module)})')
+
+
+def frame_matches_module_by_ignore_id(
+        frame: FrameType,
+        module: ModuleType
+) -> bool:
+    """Check if the frame is from the module by ignore id"""
+    ignore_id_attached = getattr(module, MODULE_IGNORE_ID_NAME, object())
+    ignore_id_from_frame = frame.f_globals.get(MODULE_IGNORE_ID_NAME, object())
+    return ignore_id_attached == ignore_id_from_frame
+
+def check_qualname_by_source(
+        source: Source,
+        module: ModuleType,
+        qualname: str
+) -> None:
+    """Check if a qualname in module is unique"""
+    if not source.tree:
+        # no way to check it, skip
+        return
+    nobj = list(source._qualnames.values()).count(qualname)
+    if nobj > 1:
+        raise QualnameNonUniqueError(
+            f"Qualname {qualname!r} in "
+            f"{module.__name__!r} refers to multiple objects."
+        )
+
+def debug_ignore_frame(
+        msg: str,
+        frameinfo: Optional[inspect.FrameInfo] = None
+) -> None:
+    """Print the debug message for a given frame info object
+
+    Args:
+        msg: The debugging message
+        frameinfo: The FrameInfo object for the frame
+    """
+    if not config.debug:
+        return
+    if frameinfo is not None:
+        msg = (f'{msg} [In {frameinfo.function!r} at '
+               f'{frameinfo.filename}:{frameinfo.lineno}]')
+    sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')

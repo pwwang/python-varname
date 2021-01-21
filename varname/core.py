@@ -37,15 +37,18 @@ def varname(
             You can specify:
             - A module (or filename of a module). Any calls from it and its
                 submodules will be ignored.
-            - A function. Directly ignore a function. If it is a suspicious
-                decorated function, a warning will be shown. See decorated
-                function below.
-            - Tuple of a function and number of decorators. The decorators
-                on the wrapper function inside decorators should also be counted
+            - A function. If it looks like it might be a decorated function,
+                a `MaybeDecoratedFunctionWarning` will be shown.
+            - Tuple of a function and a number of additional frames that should
+                be skipped just before reaching this function in the stack.
+                This is typically used for functions that have been decorated
+                with a 'classic' decorator that replaces the function with
+                a wrapper. In that case each such decorator involved should
+                be counted in the number that's the second element of the tuple.
             - Tuple of a module (or filename) and qualified name (qualname).
-                Note that the qualname in the module should exist and be unique.
-                You can also use Unix shell-style wildcards to match the
-                qualname. You may also used wildcards to match the qualnames.
+                You can use Unix shell-style wildcards to match the qualname.
+                Otherwise the qualname must appear exactly once in the
+                module/file.
             By default, all calls from `varname` package, python standard
             libraries and lambda functions are ignored.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
