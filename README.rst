@@ -108,7 +108,7 @@ Retrieving the variable names using ``varname(...)``
 
 
 * 
-  From insdie a function
+  From inside a function
 
   .. code-block:: python
 
