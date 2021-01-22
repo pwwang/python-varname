@@ -43,7 +43,7 @@
 
 Dark magics about variable names in python
 
-`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname>`_
+`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname>`_ | `Playground <https://mybinder.org/v2/gh/pwwang/python-varname/dev?filepath=playground%2Fplayground.ipynb>`_
 
 Installation
 ------------

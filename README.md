@@ -6,7 +6,7 @@
 
 Dark magics about variable names in python
 
-[Change Log][16] | [API][15]
+[Change Log][16] | [API][15] | [Playground][11]
 
 ## Installation
 ```shell
@@ -324,6 +324,7 @@ For example:
 [8]: https://img.shields.io/pypi/pyversions/varname?style=flat-square
 [9]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
 [10]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
+[11]: https://mybinder.org/v2/gh/pwwang/python-varname/dev?filepath=playground%2Fplayground.ipynb
 [12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
 [13]: https://app.codacy.com/manual/pwwang/python-varname/dashboard
 [14]: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
