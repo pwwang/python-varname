@@ -193,6 +193,7 @@ def frame_matches_module_by_ignore_id(
     ignore_id_from_frame = frame.f_globals.get(MODULE_IGNORE_ID_NAME, object())
     return ignore_id_attached == ignore_id_from_frame
 
+@lru_cache()
 def check_qualname_by_source(
         source: Source,
         modname: str,
