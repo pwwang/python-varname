@@ -24,8 +24,8 @@ import warnings
 from os import path
 from fnmatch import fnmatch
 from abc import ABC, abstractmethod
-from typing import List, Optional
-from types import FrameType, ModuleType
+from typing import List, Optional, Union
+from types import FrameType, ModuleType, FunctionType
 
 from executing import Source
 
@@ -45,16 +45,26 @@ class IgnoreElem(ABC):
 
     def __init_subclass__(cls, attrs: List[str]) -> None:
         """Define different attributes for subclasses"""
-        def subclass_init(self, ignore: IgnoreElemType) -> None:
+
+        def subclass_init(
+                self,
+                # IgnoreModule: ModuleType
+                # IgnoreFilename/IgnoreDirname: str
+                # IgnoreFunction: FunctionType
+                # IgnoreDecorated: FunctionType, int
+                # IgnoreModuleQualname/IgnoreFilenameQualname:
+                #   ModuleType/str, str
+                # IgnoreOnlyQualname: None, str
+                *ign_args: Optional[Union[str, int, ModuleType, FunctionType]]
+        ) -> None:
             """__init__ function for subclasses"""
-            if len(attrs) == 1:
-                setattr(self, attrs[0], ignore)
-            else:
-                for i, attr in enumerate(attrs):
-                    setattr(self, attr, ignore[i])
+            for i, attr in enumerate(attrs):
+                setattr(self, attr, ign_args[i])
 
             self._post_init()
 
+        # save it for __repr__
+        cls.attrs = attrs
         cls.__init__ = subclass_init
 
     def _post_init(self) -> None:
@@ -64,9 +74,14 @@ class IgnoreElem(ABC):
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         """Whether the frame matches the ignore element"""
 
-    @abstractmethod
     def __repr__(self) -> str:
         """Representation of the element"""
+        attr_values = (getattr(self, attr) for attr in self.__class__.attrs)
+        # get __name__ if possible
+        attr_values = (repr(getattr(attr_value, '__name__', attr_value))
+                       for attr_value in attr_values)
+        attr_values = ', '.join(attr_values)
+        return f"{self.__class__.__name__}({attr_values})"
 
 class IgnoreModule(IgnoreElem, attrs=['module']):
     """Ignore calls from a module or its submodules"""
@@ -83,9 +98,6 @@ class IgnoreModule(IgnoreElem, attrs=['module']):
 
         return frame_matches_module_by_ignore_id(frame, self.module)
 
-    def __repr__(self):
-        return f'<IgnoreModule({self.module.__name__!r})>'
-
 class IgnoreFilename(IgnoreElem, attrs=['filename']):
     """Ignore calls from a module by matching its filename"""
 
@@ -95,9 +107,6 @@ class IgnoreFilename(IgnoreElem, attrs=['filename']):
         # in case of symbolic links
         return (path.realpath(frame.f_code.co_filename) ==
                 path.realpath(self.filename))
-
-    def __repr__(self):
-        return f'<IgnoreFilename({self.filename!r})>'
 
 class IgnoreDirname(IgnoreElem, attrs=['dirname']):
     """Ignore calls from modules inside a directory
@@ -116,9 +125,6 @@ class IgnoreDirname(IgnoreElem, attrs=['dirname']):
         return path.realpath(frame.f_code.co_filename).startswith(
             path.realpath(self.dirname)
         )
-
-    def __repr__(self):
-        return f'<IgnoreDirname({self.dirname!r})>'
 
 class IgnoreFunction(IgnoreElem, attrs=['func']):
     """Ignore a non-decorated function"""
@@ -140,9 +146,6 @@ class IgnoreFunction(IgnoreElem, attrs=['func']):
         frame = frameinfos[frame_no].frame
         return frame.f_code == self.func.__code__
 
-    def __repr__(self):
-        return f'<IgnoreFunction({self.func.__name__})>'
-
 class IgnoreDecorated(IgnoreElem, attrs=['func', 'n_decor']):
     """Ignore a decorated function"""
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
@@ -152,9 +155,6 @@ class IgnoreDecorated(IgnoreElem, attrs=['func', 'n_decor']):
             return False
 
         return frame.f_code == self.func.__code__
-
-    def __repr__(self):
-        return f'<IgnoreDecorated({self.func.__name__}, {self.n_decor})>'
 
 class IgnoreModuleQualname(IgnoreElem, attrs=['module', 'qualname']):
     """Ignore calls by qualified name in the module"""
@@ -193,10 +193,6 @@ class IgnoreModuleQualname(IgnoreElem, attrs=['module', 'qualname']):
             self.qualname
         )
 
-    def __repr__(self) -> str:
-        return ('<IgnoreModuleQualname'
-                f'({self.module.__name__!r}, {self.qualname})>')
-
 class IgnoreFilenameQualname(IgnoreElem, attrs=['filename', 'qualname']):
     """Ignore calls with given qualname in the module with the filename"""
 
@@ -217,9 +213,6 @@ class IgnoreFilenameQualname(IgnoreElem, attrs=['filename', 'qualname']):
             self.qualname
         )
 
-    def __repr__(self) -> str:
-        return f'<IgnoreFilenameQualname({self.filename!r}, {self.qualname})>'
-
 class IgnoreOnlyQualname(IgnoreElem, attrs=['_none', 'qualname']):
     """Ignore calls that match the given qualname, across all frames."""
 
@@ -231,9 +224,6 @@ class IgnoreOnlyQualname(IgnoreElem, attrs=['_none', 'qualname']):
             Source.for_frame(frame).code_qualname(frame.f_code),
             self.qualname
         )
-
-    def __repr__(self) -> str:
-        return f'<IgnoreOnlyQualname({self.qualname!r})>'
 
 def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
     """Create an ignore element according to the type"""
@@ -248,14 +238,21 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
     if not isinstance(ignore_elem, tuple) or len(ignore_elem) != 2:
         raise ValueError(f'Unexpected ignore item: {ignore_elem!r}')
     # is tuple and len == 2
-    if hasattr(ignore_elem[0], '__code__') and isinstance(ignore_elem[1], int):
-        return IgnoreDecorated(ignore_elem)
+    if (
+            hasattr(ignore_elem[0], '__code__') and
+            isinstance(ignore_elem[1], int)
+    ):
+        return IgnoreDecorated(*ignore_elem)
+    # otherwise, the second element should be qualname
+    if not isinstance(ignore_elem[1], str):
+        raise ValueError(f'Unexpected ignore item: {ignore_elem!r}')
+
     if isinstance(ignore_elem[0], ModuleType):
-        return IgnoreModuleQualname(ignore_elem)
+        return IgnoreModuleQualname(*ignore_elem)
     if isinstance(ignore_elem[0], str):
-        return IgnoreFilenameQualname(ignore_elem)
+        return IgnoreFilenameQualname(*ignore_elem)
     if ignore_elem[0] is None:
-        return IgnoreOnlyQualname(ignore_elem)
+        return IgnoreOnlyQualname(*ignore_elem)
 
     raise ValueError(f'Unexpected ignore item: {ignore_elem!r}')
 

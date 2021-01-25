@@ -28,8 +28,7 @@ IgnoreElemType = Union[
     FunctionType,
     # the module (filename) and qualname
     # If module is None, then all qualname matches the 2nd element
-    # will be ignored. Used to ignore <listcomp/dictcomp/setcomp/genexpr>
-    # internally
+    # will be ignored. Used to ignore <lambda> internally
     Tuple[Optional[Union[ModuleType, str]], str],
     # Function and number of its decorators
     Tuple[FunctionType, int]

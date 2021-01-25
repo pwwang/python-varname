@@ -303,7 +303,10 @@ def test_ignore_filename_qualname():
               'varname.config.debug = True\n'
               'from varname import varname\n'
               'def func(): \n'
-              '  return varname(ignore=[("<stdin>", "wrapped")])\n\n'
+              '  return varname(ignore=[\n'
+              '     ("unknown", "wrapped"), \n' # used to trigger filename mismatch
+              '     ("<stdin>", "wrapped")\n'
+              '  ])\n\n'
               'def wrapped():\n'
               '  return func()\n\n'
               'variable = wrapped()\n')
@@ -318,7 +321,7 @@ def test_ignore_filename_qualname():
                          stderr=subprocess.STDOUT,
                          encoding='utf8')
     out, _ = p.communicate(input=source)
-    assert "Ignored by <IgnoreFilenameQualname('<stdin>', wrapped)>" in out
+    assert "Ignored by IgnoreFilenameQualname('<stdin>', 'wrapped')" in out
 
 def test_ignore_function_warning():
 
@@ -432,6 +435,11 @@ def test_invalid_ignores():
     with pytest.raises(ValueError):
         f = func()
 
+    def func():
+        return varname(ignore=(1, '2'))
+    with pytest.raises(ValueError):
+        f = func()
+
 def test_qualname_ignore_fail():
     # non-unique qualname
     def func():
@@ -486,11 +494,11 @@ def test_internal_debug(capsys, enable_debug):
     x = foo1()
     assert x == 'x'
     msgs = capsys.readouterr().err.splitlines()
-    assert "Ignored by <IgnoreModule('varname')>" in msgs[0]
+    assert "Ignored by IgnoreModule('varname')" in msgs[0]
     assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
-    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[2]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[2]
     assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
-    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[4]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[4]
     assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
-    assert "Ignored by <IgnoreModuleQualname('tests.test_varname', *.wrapper)>" in msgs[6]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[6]
     assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
