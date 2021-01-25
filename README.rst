@@ -43,25 +43,34 @@
 
 Dark magics about variable names in python
 
-`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname>`_
+`Change Log <https://pwwang.github.io/python-varname/CHANGELOG/>`_ | `API <https://pwwang.github.io/python-varname/api/varname>`_ | `Playground <https://mybinder.org/v2/gh/pwwang/python-varname/dev?filepath=playground%2Fplayground.ipynb>`_
 
 Installation
 ------------
 
 .. code-block:: shell
 
-   pip install varname
+   pip install -U varname
 
 Features
 --------
 
 
-* Fetching variable names from inside the function/class call using ``varname``
-* Fetching variable names directly using ``nameof``
-* A value wrapper to store the variable name that a value is assigned to using ``Wrapper``
-* Detecting next immediate attribute name using ``will``
-* Injecting ``__varname__`` to classes
-* A ``debug`` function to print variables with their names and values.
+* 
+  Core features:
+
+
+  * Retrieving names of variables a function/class call is assigned to from inside it, using ``varname``.
+  * Retrieving variable names directly, using ``nameof``
+  * Detecting next immediate attribute name, using ``will``
+
+* 
+  Other helper APIs (built based on core features):
+
+
+  * A value wrapper to store the variable name that a value is assigned to, using ``Wrapper``
+  * A decorator to register ``__varname__`` to functions/classes, using ``register``
+  * A ``debug`` function to print variables with their names and values
 
 Credits
 -------
@@ -94,12 +103,12 @@ Special thanks to `@HanyuuLu <https://github.com/HanyuuLu>`_ to give up the name
 Usage
 -----
 
-Retrieving the variable names from inside a function call/class instantiation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Retrieving the variable names using ``varname(...)``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 * 
-  From insdie a function call
+  From inside a function
 
   .. code-block:: python
 
@@ -109,25 +118,44 @@ Retrieving the variable names from inside a function call/class instantiation
 
        func = function()  # func == 'func'
 
-* 
-  ``varname`` calls being buried deeply
+    When there are intermediate frames:
 
   .. code-block:: python
 
-      def function():
-          # I know that at which stack this will be called
-          return varname(caller=3)
+       def wrapped():
+           return function()
 
-      def function1():
-          return function()
+       def function():
+           # retrieve the variable name at the 2nd frame from this one
+           return varname(frame=2)
 
-      def function2():
-          return function1()
+       func = wrapped() # func == 'func'
 
-      func = function2()  # func == 'func'
+    Or use ``ignore`` to ignore the wrapped frame:
+
+  .. code-block:: python
+
+       def wrapped():
+           return function()
+
+       def function():
+           return varname(ignore=wrapped)
+
+       func = wrapped() # func == 'func'
+
+    Calls from standard libraries are ignored by default:
+
+  .. code-block:: python
+
+       import asyncio
+
+       async def function():
+           return varname()
+
+       func = asyncio.run(function()) # func == 'func'
 
 * 
-  Retrieving instance name of a class
+  Retrieving name of a class instance
 
   .. code-block:: python
 
@@ -141,9 +169,9 @@ Retrieving the variable names from inside a function call/class instantiation
                copied.id = varname() # assign id to whatever variable name
                return copied
 
-       k = Foo()   # k.id == 'k'
+       foo = Foo()   # foo.id == 'foo'
 
-       k2 = k.copy() # k2.id == 'k2'
+       foo2 = foo.copy() # foo2.id == 'foo2'
 
 * 
   Multiple variables on Left-hand side
@@ -151,7 +179,6 @@ Retrieving the variable names from inside a function call/class instantiation
   .. code-block:: python
 
        # since v0.5.4
-
        def func():
            return varname(multi_vars=True)
 
@@ -167,6 +194,9 @@ Retrieving the variable names from inside a function call/class instantiation
 
   .. code-block:: python
 
+       def function():
+           return varname()
+
        func = [function()]    # func == ['func']
 
        func = [function(), function()] # func == ['func', 'func']
@@ -174,7 +204,7 @@ Retrieving the variable names from inside a function call/class instantiation
        func = function(), function()   # func = ('func', 'func')
 
        func = func1 = function()  # func == func1 == 'func'
-       # a warning will be printed
+       # a warning will be shown
        # since you may not want func1 to be 'func'
 
        x = func(y = func())  # x == 'x'
@@ -199,28 +229,49 @@ Retrieving the variable names from inside a function call/class instantiation
        a['b'] = get_name(True) # VarnameRetrievingError
        a['b'] = get_name(False) # None
 
-Value wrapper
-^^^^^^^^^^^^^
+The decorator way to register ``__varname__`` to functions/classes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: python
 
-   from varname import Wrapper
+* 
+  Registering ``__varname__`` to functions
 
-   foo = Wrapper(True)
-   # foo.name == 'foo'
-   # foo.value == True
-   bar = Wrapper(False)
-   # bar.name == 'bar'
-   # bar.value == False
+  .. code-block:: python
 
-   def values_to_dict(*args):
-       return {val.name: val.value for val in args}
+       from varname.helpers import register
 
-   mydict = values_to_dict(foo, bar)
-   # {'foo': True, 'bar': False}
+       @register
+       def function():
+           return __varname__
 
-Getting variable names directly
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       func = function() # func == 'func'
+
+  .. code-block:: python
+
+       # arguments also allowed (frame, ignore and raise_exc)
+       @register(frame=2)
+       def function():
+           return __varname__
+
+       def wrapped():
+           return function()
+
+       func = wrapped() # func == 'func'
+
+* 
+  Registering ``__varname__`` as a class property
+
+  .. code-block:: python
+
+       @register
+       class Foo:
+           ...
+
+       foo = Foo()
+       # foo.__varname__ == 'foo'
+
+Getting variable names directly using ``nameof``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -272,28 +323,32 @@ Detecting next immediate attribute name
    awesome.permit() # AttributeError: Should do something with AwesomeClass object
    awesome.permit().do() == 'I am doing!'
 
-Injecting ``__varname__`` to classes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Value wrapper
+^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   from varname import inject_varname
+   from varname.helpers import Wrapper
 
-   @inject_varname
-   class Dict(dict):
-       pass
+   foo = Wrapper(True)
+   # foo.name == 'foo'
+   # foo.value == True
+   bar = Wrapper(False)
+   # bar.name == 'bar'
+   # bar.value == False
 
-   a = Dict(a=1)
-   b = Dict(b=2)
-   a.__varname__ == 'a'
-   b.__varname__ == 'b'
-   a.update(b)
-   a == {'a':1, 'b':2}
+   def values_to_dict(*args):
+       return {val.name: val.value for val in args}
+
+   mydict = values_to_dict(foo, bar)
+   # {'foo': True, 'bar': False}
 
 Debugging with ``debug``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
+
+   from varname.helpers import debug
 
    a = 'value'
    b = object()

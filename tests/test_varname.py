@@ -1,32 +1,17 @@
 import sys
+import subprocess
+from functools import wraps
 
 import pytest
-import subprocess
+from executing import Source
 from varname import *
-from varname import _get_node
+from varname.helpers import *
+from varname.utils import get_node
 
-@pytest.fixture
-def no_getframe():
-    """
-    Monkey-patch sys._getframe to fail,
-    simulating environments that don't support varname
-    """
-    def getframe(_context):
-        raise ValueError
 
-    orig_getframe = sys._getframe
-    try:
-        sys._getframe = getframe
-        yield
-    finally:
-        sys._getframe = orig_getframe
+from .conftest import run_async, module_from_source
 
-@pytest.fixture
-def enable_debug():
-    import varname as _varname
-    _varname.DEBUG = True
-    yield
-    _varname.DEBUG = False
+SELF = sys.modules[__name__]
 
 def test_function():
 
@@ -34,22 +19,6 @@ def test_function():
         return varname()
 
     func = function()
-    assert func == 'func'
-
-    func = function(
-    )
-    assert func == 'func'
-
-    func = \
-        function()
-    assert func == 'func'
-
-    func = function \
-        ()
-    assert func == 'func'
-
-    func = (function
-            ())
     assert func == 'func'
 
     func = [function()]
@@ -64,39 +33,11 @@ def test_function():
     func = (function(), function())
     assert func == ('func', 'func')
 
-def test_function_context():
-
-    def function(*args):
-        return varname()
-
-    func = function(
-        1, # I
-        2, # have
-        3, # a
-        4, # long
-        5, # argument
-        6, # list
-    )
-    assert func == 'func'
-
-    def function(*args):
-        return varname()
-
-    func = function(
-        1, # I
-        2, # have
-        3, # a
-        4, # long
-        5, # argument
-        6, # list
-    )
-    assert func == 'func'
-
-def test_function_deep():
+def test_function_with_frame_arg():
 
     def function():
-        # I know that at which stack this will be called
-        return varname(caller = 3)
+        # I know that at which frame (3rd) this will be called
+        return varname(frame=3)
 
     def function1():
         return function()
@@ -121,14 +62,14 @@ def test_class():
     k2 = k.copy()
     assert k2 == 'k2'
 
-def test_class_deep():
+def test_class_with_frame_arg():
 
     class Foo:
         def __init__(self):
             self.id = self.some_internal()
 
         def some_internal(self):
-            return varname(caller = 2)
+            return varname(frame=2)
 
         def copy(self):
             return self.copy_id()
@@ -137,7 +78,7 @@ def test_class_deep():
             return self.copy_id_internal()
 
         def copy_id_internal(self):
-            return varname(caller = 3)
+            return varname(frame=3)
 
     k = Foo()
     assert k.id == 'k'
@@ -145,49 +86,18 @@ def test_class_deep():
     k2 = k.copy()
     assert k2 == 'k2'
 
-def test_false():
-    """Test if any false positives happen"""
-    def func(**kwargs):
-        return varname()
-
-    x = func(
-        y = func()
-    )
-    assert x == 'x'
-
-    def func(**kwargs):
-        return varname()
-
-    x = func(y = func())
-    assert x == 'x'
-
-def test_referring():
-
-    def proc(**kwargs):
-        return varname()
-
-    def func2():
-        p1 = proc(a=1, b=2)
-        p2 = proc(a=1, b=2, c=p1)
-        return p1, p2
-
-    assert func2() == ('p1', 'p2')
-
-def test_single_var_lhs_error():
+def test_single_var_lhs_required():
     """Only one variable to receive the name on LHS"""
 
     def function():
         return varname()
 
     with pytest.raises(VarnameRetrievingError,
-                       match='Expecting a single variable on left-hand side'):
+                       match='Expect a single variable on left-hand side'):
         x, y = function()
+
     with pytest.raises(VarnameRetrievingError):
         x, y = function(), function()
-
-    # This is now supported in 0.5.4
-    # with pytest.raises(VarnameRetrievingError):
-    #     [x] = function()
 
 def test_multi_vars_lhs():
     """Tests multiple variables on the left hand side"""
@@ -216,7 +126,7 @@ def test_multi_vars_lhs():
     ):
         a, *b = function()
 
-def test_raise():
+def test_raise_exc():
 
     def get_name(raise_exc):
         return varname(raise_exc=raise_exc)
@@ -234,7 +144,8 @@ def test_multiple_targets():
     def function():
         return varname()
 
-    with pytest.warns(UserWarning, match="Multiple targets in assignment"):
+    with pytest.warns(MultiTargetAssignmentWarning,
+                      match="Multiple targets in assignment"):
         y = x = function()
     assert y == x == 'y'
 
@@ -257,25 +168,7 @@ def test_unusual():
     x = func()
     assert x == 'x'
 
-def test_wrapper():
-
-    val1 = Wrapper(True)
-    assert val1.name == 'val1'
-    assert val1.value is True
-
-    assert str(val1) == 'True'
-    assert repr(val1) == "<Wrapper (name='val1', value=True)>"
-
-
-def test_nameof_pytest_fail():
-    with pytest.raises(
-        VarnameRetrievingError,
-        match="Couldn't retrieve the call node. "
-              "This may happen if you're using some other AST magic"
-    ):
-        assert nameof(nameof) == 'nameof'
-
-def test_varname_from_attributes():
+def test_from_property():
     class C:
         @property
         def var(self):
@@ -285,182 +178,11 @@ def test_varname_from_attributes():
     v1 = c.var
     assert v1 == 'v1'
 
-def test_will():
-    def i_will():
-        iwill = will()
-        func = lambda: 0
-        func.will = iwill
-        # return the function itself
-        # so that we can retrieve it after the attribute call
-        func.abc = func
-        return func
-
-    func = i_will().abc
-    assert func.will == 'abc'
-    assert getattr(func, 'will') == 'abc'
-
-def test_will_deep():
-
-    def get_will():
-        return will(2)
-
-    def i_will():
-        iwill = get_will()
-        func = lambda: 0
-        func.will = iwill
-        # return the function itself
-        # so that we can retrieve it after the attribute call
-        func.abc = func
-        return func
-
-    func = i_will().abc
-    assert func.will == 'abc'
-
-# issue #17
-def test_will_property():
-
-    class C:
-        def __init__(self):
-            self.will = None
-
-        @property
-        def iwill(self):
-            self.will = will(raise_exc=False)
-            return self
-
-        def do(self):
-            return 'I will do something'
-
-    c = C()
-    c.iwill
-    assert c.will is None
-
-    result = c.iwill.do()
-    assert c.will == 'do'
-    assert result == 'I will do something'
-
-
-def test_will_method():
-    class AwesomeClass:
-        def __init__(self):
-            self.wills = [None]
-
-        def __call__(self, *_):
-            return self
-
-        myself = __call__
-        __getattr__ = __call__
-
-        def permit(self, *_):
-            self.wills.append(will(raise_exc=False))
-
-            if self.wills[-1] is None:
-                raise AttributeError(
-                    'Should do something with AwesomeClass object'
-                )
-
-            # let self handle do
-            return self
-
-        def do(self):
-            if self.wills[-1] != 'do':
-                raise AttributeError("You don't have permission to do")
-            return 'I am doing!'
-
-        __getitem__ = permit
-
-    awesome = AwesomeClass()
-    with pytest.raises(AttributeError) as exc:
-        awesome.do()
-    assert str(exc.value) == "You don't have permission to do"
-
-    with pytest.raises(AttributeError) as exc:
-        awesome.permit()
-    assert str(exc.value) == 'Should do something with AwesomeClass object'
-
-    # clear wills
-    awesome = AwesomeClass()
-    ret = awesome.permit().do()
-    assert ret == 'I am doing!'
-    assert awesome.wills == [None, 'do']
-
-    awesome = AwesomeClass()
-    ret = awesome.myself().permit().do()
-    assert ret == 'I am doing!'
-    assert awesome.wills == [None, 'do']
-
-    awesome = AwesomeClass()
-    ret = awesome().permit().do()
-    assert ret == 'I am doing!'
-    assert awesome.wills == [None, 'do']
-
-    awesome = AwesomeClass()
-    ret = awesome.attr.permit().do()
-    assert ret == 'I am doing!'
-    assert awesome.wills == [None, 'do']
-
-    awesome = AwesomeClass()
-    ret = awesome.permit().permit().do()
-    assert ret == 'I am doing!'
-    assert awesome.wills == [None, 'permit', 'do']
-
-    with pytest.raises(AttributeError) as exc:
-        print(awesome[2])
-    assert str(exc.value) == 'Should do something with AwesomeClass object'
-
-    ret = awesome[2].do()
-    assert ret == 'I am doing!'
-
-def test_will_decorated():
-
-    def return_self(func):
-        def wrapper(self, *args, **kwargs):
-            func(self, *args, **kwargs)
-            return self
-
-        return wrapper
-
-    class Foo:
-
-        def __init__(self):
-            self.will = None
-
-        def get_will(self):
-            self.will = will(raise_exc=False)
-            return self
-
-        @return_self
-        def get_will_decor(self):
-            self.will = will(2, raise_exc=False)
-
-        def __getattr__(self, name):
-            return self.will
-
-    x = Foo().get_will().x
-    assert x == 'x'
-
-    x = Foo().get_will_decor().x
-    assert x == 'x'
-
-
-def test_will_fail():
-
-    def get_will(raise_exc):
-        return will(raise_exc=raise_exc)
-
-    with pytest.raises(VarnameRetrievingError):
-        get_will(True)
-
-    the_will = get_will(False)
-    assert the_will is None
-
 def test_frame_fail(no_getframe):
     """Test when failed to retrieve the frame"""
     # Let's monkey-patch inspect.stack to do this
-    assert _get_node(1) is None
+    assert get_node(1) is None
 
-
-def test_frame_fail_varname(no_getframe):
     def func(raise_exc):
         return varname(raise_exc=raise_exc)
 
@@ -470,164 +192,181 @@ def test_frame_fail_varname(no_getframe):
     b = func(False)
     assert b is None
 
+def test_ignore_module_filename():
+    source = ('def foo(): return bar()')
 
-def test_frame_fail_nameof(no_getframe):
-    a = 1
-    with pytest.raises(VarnameRetrievingError):
-        nameof(a)
+    code = compile(source, '<string>', 'exec')
+    def bar():
+        return varname(ignore='<string>')
 
+    globs = {'bar': bar}
+    exec(code, globs)
+    foo = globs['foo']
+    f = foo()
+    assert f == 'f'
 
-def test_frame_fail_will(no_getframe):
-    def func(raise_exc):
-        wil = will(raise_exc=raise_exc)
-        ret = lambda: None
-        ret.a = 1
-        ret.will = wil
-        return ret
+def test_ignore_module_no_file(tmp_path):
+    module = module_from_source(
+        'ignore_module',
+        """
+        def foo():
+            return bar()
+        """,
+        tmp_path
+    )
+    # force injecting __varname_ignore_id__
+    del module.__file__
 
-    with pytest.raises(VarnameRetrievingError):
-        func(True).a
+    def bar():
+        return varname(ignore=[
+            (module, 'foo'), # can't get module by inspect.getmodule
+            module
+        ])
+    module.bar = bar
 
-    assert func(False).a == 1
-    assert func(False).will is None
-
-def test_namedtuple():
-    Name = namedtuple(['first', 'last'])
-    name = Name('Bill', 'Gates')
-    assert isinstance(name, Name)
-
-def test_inject():
-
-    with pytest.raises(VarnameRetrievingError):
-        a = inject(1)
-
-    class A(list):
-        pass
-
-    a = inject(A())
-    b = inject(A())
-    assert a.__varname__ == 'a'
-    assert b.__varname__ == 'b'
-    assert a == b
-    a.append(1)
-    b.append(1)
-    assert a == b
-
-def test_nameof_full():
-    x = lambda: None
-    a = x
-    a.b = x
-    a.b.c = x
-    name = nameof(a)
-    assert name == 'a'
-    name = nameof(a, caller=1)
-    assert name == 'a'
-    name = nameof(a.b)
-    assert name == 'b'
-    name = nameof(a.b, full=True)
-    assert name == 'a.b'
-    name = nameof(a.b.c)
-    assert name == 'c'
-    name = nameof(a.b.c, full=True)
-    assert name == 'a.b.c'
-
-    d = [a, a]
-    with pytest.raises(
-            VarnameRetrievingError,
-            match='Can only retrieve full names of'
-    ):
-        name = nameof(d[0].b, full=True)
-
-    # we are not able to retreive full names without source code available
-    with pytest.raises(
-            VarnameRetrievingError,
-            match=('Are you trying to call nameof from exec/eval')
-    ):
-        eval('nameof(a.b, full=False)')
+    f = module.foo()
+    assert f == 'f'
 
 
-def test_nameof_from_stdin():
-    code = ('from varname import nameof; '
-            'x = lambda: 0; '
-            'x.y = x; '
-            'print(nameof(x.y, full=False))')
+def test_ignore_module_qualname_no_source(tmp_path):
+    module = module_from_source(
+        'ignore_module_qualname_no_source',
+        """
+        def bar():
+            return 1
+        """,
+        tmp_path
+    )
+    source = Source.for_filename(module.__file__)
+    # simulate when source is not available
+    # no way to check uniqueness of qualname
+    source.tree = None
+
+    def foo():
+        return varname(ignore=(module, 'bar'))
+
+    f = foo()
+
+def test_ignore_module_qualname_ucheck_in_match(
+        tmp_path,
+        frame_matches_module_by_ignore_id_false
+):
+    module = module_from_source(
+        'ignore_module_qualname_no_source_ucheck_in_match',
+        """
+        def foo():
+            return bar()
+        """,
+        tmp_path
+    )
+    # force uniqueness to be checked in match
+    # module cannot be fetched by inspect.getmodule
+    module.__file__ = None
+
+    def bar():
+        return varname(ignore=[
+            (module, 'foo'), # frame_matches_module_by_ignore_id_false makes this fail
+            (None, 'foo') # make sure foo to be ignored
+        ])
+
+    module.bar = bar
+
+    f = module.foo()
+    assert f == 'f'
+
+def test_ignore_module_qualname(tmp_path, capsys, enable_debug):
+    module = module_from_source(
+        'ignore_module_qualname',
+        '''
+        def foo1():
+            return bar()
+        ''',
+        tmp_path
+    )
+
+    module.__file__ = None
+    # module.__varname_ignore_id__ = object()
+
+    def bar():
+        var = varname(ignore=(module, 'foo1'))
+        return var
+
+    module.bar = bar
+
+    f = module.foo1()
+    assert f == 'f'
+
+def test_ignore_filename_qualname():
+    source = ('import sys\n'
+              'import __main__\n'
+              'import varname\n'
+              'varname.config.debug = True\n'
+              'from varname import varname\n'
+              'def func(): \n'
+              '  return varname(ignore=[\n'
+              '     ("unknown", "wrapped"), \n' # used to trigger filename mismatch
+              '     ("<stdin>", "wrapped")\n'
+              '  ])\n\n'
+              'def wrapped():\n'
+              '  return func()\n\n'
+              'variable = wrapped()\n')
+
+    # code = compile(source, '<string>', 'exec')
+    # # ??? NameError: name 'func' is not defined
+    # exec(code)
+
     p = subprocess.Popen([sys.executable],
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.STDOUT,
                          encoding='utf8')
-    out, _ = p.communicate(input=code)
-    assert 'Are you trying to call nameof in REPL/python shell' in out
+    out, _ = p.communicate(input=source)
+    assert "Ignored by IgnoreFilenameQualname('<stdin>', 'wrapped')" in out
 
-def test_nameof_node_not_retrieved():
-    """Test when calling nameof without sourcecode available
-    but filename is not <stdin> or <string>"""
-    source = ('from varname import nameof; '
-              'x = lambda: 0; '
-              'x.y = x; '
-              'print(nameof(x.y, full=False))')
-    code = compile(source, filename="<string2>", mode="exec")
-    with pytest.raises(VarnameRetrievingError, match='Source code unavailable'):
-        exec(code)
+def test_ignore_function_warning():
 
-def test_debug(capsys):
-    a = 1
-    b = object()
-    debug(a)
-    assert 'DEBUG: a=1\n' == capsys.readouterr().out
-    debug(a, b, merge=True)
-    assert 'DEBUG: a=1, b=<object' in capsys.readouterr().out
+    def my_decorator(f):
+        @wraps(f)
+        def wrapper():
+            return f()
+        return wrapper
 
-def test_internal_debug(capsys, enable_debug):
+    @my_decorator
+    def func1():
+        return func2()
+
+    def func2():
+        return varname(ignore=[func1, (func1, 1)])
+
+    with pytest.warns(MaybeDecoratedFunctionWarning,
+                      match="You asked varname to ignore function 'func1'"):
+        f = func1()
+
+def test_ignore_decorated():
     def my_decorator(f):
         def wrapper():
             return f()
         return wrapper
 
     @my_decorator
-    def foo1():
-        return foo2()
+    def foo4():
+        return foo5()
+
+    def foo5():
+        return varname(ignore=(foo4, 1))
+
+    f4 = foo4()
+    assert f4 == 'f4'
 
     @my_decorator
-    def foo2():
-        return foo3()
+    def foo6():
+        return foo7()
 
-    @my_decorator
-    def foo3():
-        return varname(
-            caller=3,
-            ignore=[(
-                sys.modules[__name__],
-                "test_internal_debug.<locals>.my_decorator.<locals>.wrapper"
-            )]
-        )
+    def foo7():
+        return varname(ignore=(foo4, 100))
 
-    x = foo1()
-    assert x == 'x'
-    msgs = capsys.readouterr().err.splitlines()
-    assert "Skipping frame from varname [In 'varname'" in msgs[0]
-    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
-    assert "Ignored [In 'wrapper'" in msgs[2]
-    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
-    assert "Ignored [In 'wrapper'" in msgs[4]
-    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
-    assert "Ignored [In 'wrapper'" in msgs[6]
-    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
-
-def test_inject_varname():
-
-    @inject_varname
-    class Foo:
-        def __init__(self, a=1):
-            self.a = a
-
-    f = Foo()
-    assert f.__varname__ == 'f'
-    assert f.a == 1
-
-    f2 = Foo(2)
-    assert f2.__varname__ == 'f2'
-    assert f2.a == 2
+    with pytest.raises(VarnameRetrievingError):
+        f6 = foo6()
 
 def test_type_anno_varname():
 
@@ -646,7 +385,9 @@ def test_generic_type_varname():
 
     class Foo(Generic[T]):
         def __init__(self):
-            self.id = varname(ignore=[typing])
+            # Standard libraries are ignored by default now (0.6.0)
+            # self.id = varname(ignore=[typing])
+            self.id = varname()
     foo = Foo[int]()
     assert foo.id == 'foo'
 
@@ -657,60 +398,54 @@ def test_generic_type_varname():
     assert baz.id == 'baz'
 
 def test_async_varname():
-
-    import asyncio
-
-    def run_async(coro):
-        if sys.version_info < (3, 7):
-            loop = asyncio.get_event_loop()
-            return loop.run_until_complete(coro)
-        else:
-            return asyncio.run(coro)
+    from . import conftest
 
     async def func():
-        return varname(
-            ignore=[
-                asyncio,
-                (sys.modules[__name__], 'test_async_varname.<locals>.run_async')
-            ]
-        )
+        return varname(ignore=(conftest, 'run_async'))
+
+    async def func2():
+        return varname(ignore=run_async)
 
     x = run_async(func())
     assert x == 'x'
 
-    async def func():
+    x2 = run_async(func2())
+    assert x2 == 'x2'
+
+    # frame and ignore together
+    async def func3():
         # also works this way
-        return varname(
-            caller=2,
-            ignore=[asyncio, (sys.modules[__name__],
-                              'test_async_varname.<locals>.run_async')]
-        )
+        return varname(frame=2, ignore=run_async)
 
     async def main():
-        return await func()
+        return await func3()
 
-    x = run_async(main())
-    assert x == 'x'
+    x3 = run_async(main())
+    assert x3 == 'x3'
+
+def test_invalid_ignores():
+    # unexpected ignore item
+    def func():
+        return varname(ignore=1)
+    with pytest.raises(ValueError):
+        f = func()
+
+    def func():
+        return varname(ignore=(1,2))
+    with pytest.raises(ValueError):
+        f = func()
+
+    def func():
+        return varname(ignore=(1, '2'))
+    with pytest.raises(ValueError):
+        f = func()
 
 def test_qualname_ignore_fail():
-    # not a list
-    def func():
-        return varname(ignore=sys)
-
-    with pytest.raises(AssertionError):
-        f = func()
-
-    # non-existing qualname
-    def func():
-        return varname(ignore=[(sys.modules[__name__], 'nosuchqualname')])
-
-    with pytest.raises(AssertionError):
-        f = func()
-
     # non-unique qualname
     def func():
-        return varname(ignore=[(sys.modules[__name__],
-                                'test_qualname_ignore_fail.<locals>.wrapper')])
+        return varname(ignore=[
+            (SELF, 'test_qualname_ignore_fail.<locals>.wrapper')
+        ])
 
     def wrapper():
         return func()
@@ -719,5 +454,51 @@ def test_qualname_ignore_fail():
     def wrapper():
         return func()
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(QualnameNonUniqueError):
         f = func()
+
+def test_ignore_lambda():
+    def foo():
+        return varname()
+
+    bar = lambda: foo()
+
+    b = bar()
+    assert b == 'b'
+
+def test_internal_debug(capsys, enable_debug):
+    def my_decorator(f):
+        def wrapper():
+            return f()
+        return wrapper
+
+    @my_decorator
+    def foo1():
+        return foo2()
+
+    @my_decorator
+    def foo2():
+        return foo3()
+
+    @my_decorator
+    def foo3():
+        return varname(
+            frame=3,
+            ignore=[
+                (SELF, "*.wrapper"),
+                # unrelated qualname will not be hit at all
+                (sys, 'wrapper')
+            ]
+        )
+
+    x = foo1()
+    assert x == 'x'
+    msgs = capsys.readouterr().err.splitlines()
+    assert "Ignored by IgnoreModule('varname')" in msgs[0]
+    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[2]
+    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[4]
+    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[6]
+    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
