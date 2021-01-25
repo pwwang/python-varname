@@ -209,7 +209,7 @@ class IgnoreFilenameQualname(IgnoreElem, attrs=['filename', 'qualname']):
         check_qualname_by_source(source, self.filename, self.qualname)
 
         return fnmatch(
-            Source.for_frame(frame).code_qualname(frame.f_code),
+            source.code_qualname(frame.f_code),
             self.qualname
         )
 
