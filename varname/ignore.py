@@ -58,8 +58,8 @@ class IgnoreElem(ABC):
                 *ign_args: Optional[Union[str, int, ModuleType, FunctionType]]
         ) -> None:
             """__init__ function for subclasses"""
-            for i, attr in enumerate(attrs):
-                setattr(self, attr, ign_args[i])
+            for attr, arg in zip(attrs, ign_args):
+                setattr(self, attr, arg)
 
             self._post_init()
 
