@@ -200,19 +200,21 @@ class IgnoreModuleQualname(IgnoreElem, attrs=['module', 'qualname']):
 class IgnoreFilenameQualname(IgnoreElem, attrs=['filename', 'qualname']):
     """Ignore calls with given qualname in the module with the filename"""
 
-    # check qualname uniqueness in this as well?
-    # But where to find module.__dict__ for Source.for_filename?
-
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
 
-        return (
-            path.realpath(frame.f_code.co_filename) ==
-            path.realpath(self.filename) and
-            fnmatch(
-                Source.for_frame(frame).code_qualname(frame.f_code),
-                self.qualname
-            )
+        frame_filename = path.realpath(frame.f_code.co_filename)
+        preset_filename = path.realpath(self.filename)
+        # return earlier to avoid qualname uniqueness check
+        if frame_filename != preset_filename:
+            return False
+
+        source = Source.for_frame(frame)
+        check_qualname_by_source(source, self.filename, self.qualname)
+
+        return fnmatch(
+            Source.for_frame(frame).code_qualname(frame.f_code),
+            self.qualname
         )
 
     def __repr__(self) -> str:
