@@ -20,6 +20,7 @@ pip install -U varname
   - Retrieving names of variables a function/class call is assigned to from inside it, using `varname`.
   - Retrieving variable names directly, using `nameof`
   - Detecting next immediate attribute name, using `will`
+  - Fetching argument names/sources passed to a function using `argname`
 
 - Other helper APIs (built based on core features):
 
@@ -254,6 +255,26 @@ awesome = AwesomeClass()
 awesome.do() # AttributeError: You don't have permission to do
 awesome.permit() # AttributeError: Should do something with AwesomeClass object
 awesome.permit().do() == 'I am doing!'
+```
+
+### Fetching argument names/sources using `argname`
+```python
+from varname import argname
+
+def func(a, b=1):
+    print(argname(a))
+
+x = y = 2
+func(x) # prints 'x'
+
+def func2(a, b=1):
+    print(argname(a, b))
+func2(y, b=x) # prints ('y', 'x')
+
+# allow expressions
+def func3(a, b=1):
+    print(argname(a, b, vars_only=False))
+func3(x+y, y+x) # prints ('x+y', 'y+x')
 ```
 
 ### Value wrapper

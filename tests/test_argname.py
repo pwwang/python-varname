@@ -22,6 +22,11 @@ def test_argname():
     names3 = func3(z)
     assert names3 == 'z'
 
+    def func4(a, b=1):
+        return argname(a, b)
+    names4 = func4(y, b=x)
+    assert names4 == ('y', 'x')
+
 def test_argname_lambda():
     func = lambda a, b, c, d=4: argname(b)
     x = y = z = 1
