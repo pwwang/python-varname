@@ -259,7 +259,9 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
 class IgnoreList:
     """The ignore list to match the frames to see if they should be ignored"""
     @classmethod
-    def create(cls, ignore: Optional[IgnoreType]) -> "IgnoreList":
+    def create(cls,
+               ignore: Optional[IgnoreType] = None,
+               ignore_lambda: bool = True) -> "IgnoreList":
         """Create an IgnoreList object
 
         Args:
@@ -278,9 +280,10 @@ class IgnoreList:
 
         ignore_list = [
             create_ignore_elem(sysconfig.get_python_lib(standard_lib=True)),
-            create_ignore_elem(sys.modules[__package__]),
-            create_ignore_elem((None, '*<lambda>')),
+            create_ignore_elem(sys.modules[__package__])
         ]
+        if ignore_lambda:
+            ignore_list.append(create_ignore_elem((None, '*<lambda>')))
         for ignore_elem in ignore:
             ignore_list.append(create_ignore_elem(ignore_elem))
 

@@ -16,7 +16,7 @@ import inspect
 from os import path
 from functools import lru_cache
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Optional, Tuple, Union, List
+from typing import Optional, Tuple, Union, List, MutableMapping
 
 from executing import Source
 
@@ -48,6 +48,10 @@ class QualnameNonUniqueError(Exception):
     """When a qualified name is used as an ignore element but references to
     multiple objects in a module"""
 
+class NonVariableArgumentError(Exception):
+    """When vars_only is True but try to retrieve name of
+    a non-variable argument"""
+
 class MaybeDecoratedFunctionWarning(Warning):
     """When a suspecious decorated function used as ignore function directly"""
 
@@ -63,7 +67,8 @@ def cached_getmodule(codeobj: CodeType):
 def get_node(
         frame: int,
         ignore: Optional[IgnoreType] = None,
-        raise_exc: bool = True
+        raise_exc: bool = True,
+        ignore_lambda: bool = True
 ) -> Optional[ast.AST]:
     """Try to get node from the executing object.
 
@@ -74,7 +79,7 @@ def get_node(
     When the node can not be retrieved, try to return the first statement.
     """
     from .ignore import IgnoreList
-    ignore = IgnoreList.create(ignore)
+    ignore = IgnoreList.create(ignore, ignore_lambda=ignore_lambda)
     try:
         frame = ignore.get_frame(frame)
     except VarnameRetrievingError:
@@ -123,7 +128,7 @@ def node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
 def bytecode_nameof(frame: int = 1) -> str:
     """Bytecode version of nameof as a fallback"""
     from .ignore import IgnoreList
-    frame = IgnoreList.create(None).get_frame(frame)
+    frame = IgnoreList.create().get_frame(frame)
     return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
 
 @lru_cache()
@@ -225,3 +230,49 @@ def debug_ignore_frame(
         msg = (f'{msg} [In {frameinfo.function!r} at '
                f'{frameinfo.filename}:{frameinfo.lineno}]')
     sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')
+
+def funcsig_from_ast_call(node: ast.Call,
+                          globs: dict,
+                          locs: dict) -> inspect.Signature:
+    """Get the function signature from an ast.Call node"""
+    expr = ast.Expression(node.func)
+    code = compile(expr, '<ast-call>', 'eval')
+    func = eval(code, globs, locs) # pylint: disable=eval-used
+    return inspect.signature(func)
+
+def argnode_source(source: Source, node: ast.AST, vars_only: bool) -> str:
+    """Get the source of an argument node"""
+    if vars_only:
+        if not isinstance(node, ast.Name):
+            raise NonVariableArgumentError(
+                f'Argument {ast.dump(node)} is not a variable.'
+            )
+        return node.id
+    return source.asttokens().get_text(node)
+
+@lru_cache()
+def get_argument_sources(node: ast.Call,
+                         vars_only: bool = True) -> MutableMapping[str, str]:
+    """Get the sources for argument from an ast.Call node
+
+    >>> def func(a, b, c, d=4):
+    >>>  ...
+    >>> x = y = z = 1
+    >>> func(y, x, c=z)
+    >>> # argument_sources = {'a': 'y', 'b', 'x', 'c': 'z'}
+    """
+    from .ignore import IgnoreList
+    frame = IgnoreList.create(ignore_lambda=False).get_frame(2)
+    # <Signature (a, b, c, d=4)>
+    signature = funcsig_from_ast_call(node, frame.f_globals, frame.f_locals)
+    # func(y, x, c=z)
+    # ['y', 'x'], {'c': 'z'}
+    source = Source.for_frame(frame)
+    arg_sources = [argnode_source(source, argnode, vars_only)
+                   for argnode in node.args]
+    kwarg_sources = {argnode.arg: argnode_source(source,
+                                                 argnode.value,
+                                                 vars_only)
+                     for argnode in node.keywords}
+    bound_args = signature.bind_partial(*arg_sources, **kwarg_sources)
+    return bound_args.arguments

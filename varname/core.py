@@ -1,13 +1,14 @@
 """Provide core features for varname"""
-
 import ast
 import warnings
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, Any
+
 from .utils import (
     bytecode_nameof,
     get_node,
     lookfor_parent_assign,
     node_name,
+    get_argument_sources,
     VarnameRetrievingError,
     MultiTargetAssignmentWarning
 )
@@ -237,7 +238,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         # of frame retrieval again
 
         # may raise exception, just leave it as is
-        frame = IgnoreList.create(None).get_frame(frame)
+        frame = IgnoreList.create().get_frame(frame)
         source = frame.f_code.co_filename
         if source == '<stdin>':
             raise VarnameRetrievingError(
@@ -282,3 +283,66 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
             ret.append('.'.join(reversed(full_name)))
 
     return ret[0] if not more_vars else tuple(ret)
+
+def argname(arg: Any, # pylint: disable=unused-argument
+            *more_args: Any,
+            vars_only: bool = True) -> Union[str, Tuple[str]]:
+    """Get the argument names/sources of a function call
+
+    Note:
+        When vars_only is False, then asttokens has to be installed.
+
+    Args:
+        arg: Parameter of the function, used to map the argument passed to
+            the function
+        *args: Other parameters of the function, used to map more arguments
+            passed to the function
+        vars_only: Require the arguments to be variables only
+
+    Returns:
+        The argument source when no more_args passed, otherwise a tuple of
+        argument sources
+
+    Raises:
+        NonVariableArgumentError: When vars_only is True, and we are trying
+            to retrieve the source of an argument that is not a variable
+            (i.e. an expression)
+        VarnameRetrievingError: When failed to get the frame or node
+    """
+    # where argname(...) is called
+    argname_node = get_node(1, ignore_lambda=False)
+    if not argname_node:
+        raise VarnameRetrievingError(
+            "Unable to retrieve the call node of 'argname'."
+        )
+
+    # where func(...) is called
+    func_node = get_node(2, ignore_lambda=False)
+    if not func_node: # pragma: no cover
+        raise VarnameRetrievingError(
+            "Unable to retrieve the call node of the function. "
+        )
+
+    if not isinstance(func_node, ast.Call):
+        raise VarnameRetrievingError(
+            f"Expect an 'ast.Call' node, but got {type(func_node)!r}. "
+            "Are you using 'argname' inside a function?"
+        )
+
+    argument_sources = get_argument_sources(func_node, vars_only)
+
+    ret = []
+    for argnode in argname_node.args:
+        if not isinstance(argnode, ast.Name):
+            raise VarnameRetrievingError(
+                "Arguments of 'argname' must be argument variables."
+            )
+        try:
+            ret.append(argument_sources[argnode.id])
+        except KeyError:
+            raise VarnameRetrievingError(
+                f"No value passed for argument {argnode.id!r}, "
+                "or it is not an argument at all."
+            )
+
+    return ret[0] if not more_args else tuple(ret)
