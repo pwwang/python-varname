@@ -44,7 +44,7 @@ def test_argname_argname_node_fail(no_getframe):
 def test_argname_non_argument():
     x = 1
     y = lambda: argname(x)
-    with pytest.raises(VarnameRetrievingError,
+    with pytest.raises(ValueError,
                        match="No value passed for argument 'x'"):
         y()
 
@@ -61,8 +61,8 @@ def test_argname_argname_argument_non_variable():
         return argname(1)
 
     x = y = z = 1
-    with pytest.raises(VarnameRetrievingError,
-                       match="Arguments of 'argname' must be argument variables"):
+    with pytest.raises(ValueError,
+                       match="Arguments of 'argname' must be"):
         func(x, y, z)
 
 def test_argname_funcnode_not_call():
@@ -83,3 +83,56 @@ def test_argname_get_source():
 
     name = func(1+2)
     assert name == '1+2'
+
+def test_argname_star_args():
+    def func(*args, **kwargs):
+        return argname(args, kwargs)
+
+    x = y = z = 1
+    arg_source, kwarg_source = func(x, y, c=z)
+
+    assert arg_source == ('x', 'y')
+    assert kwarg_source == {'c': 'z'}
+
+    def func(*args, **kwargs):
+        return argname(args, kwargs, vars_only=False)
+
+    arg_source, kwarg_source = func(1+2, 2+3, c=4*5)
+    assert arg_source == ('1+2', '2+3')
+    assert kwarg_source == {'c': '4*5'}
+
+def test_argname_star_args_individual():
+    def func(*args, **kwargs):
+        return argname(args[1]), argname(kwargs['c'])
+
+    x = y = z = 1
+    second_name = func(x, y, c=z)
+    assert second_name == ('y', 'z')
+
+    m = [1]
+    def func(*args, **kwargs):
+        return argname(m[0])
+
+    with pytest.raises(ValueError, match="'m' is not an argument"):
+        func()
+
+    def func(a, *args, **kwargs):
+        return argname(a[0])
+    with pytest.raises(ValueError, match="'a' is not a positional argument"):
+        func(m)
+
+    n = {'e': 1}
+    def func(a, *args, **kwargs):
+        return argname(a['e'])
+    with pytest.raises(ValueError, match="'a' is not a keyword argument"):
+        func(n)
+
+    def func(*args, **kwargs):
+        return argname([args][0])
+    with pytest.raises(ValueError, match="to be a variable"):
+        func()
+
+    def func(*args, **kwargs):
+        return argname(args[1+1])
+    with pytest.raises(ValueError, match="to be a constant"):
+        func(x, y, z)

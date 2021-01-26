@@ -9,6 +9,7 @@ from .utils import (
     lookfor_parent_assign,
     node_name,
     get_argument_sources,
+    parse_argname_subscript,
     VarnameRetrievingError,
     MultiTargetAssignmentWarning
 )
@@ -308,6 +309,9 @@ def argname(arg: Any, # pylint: disable=unused-argument
             to retrieve the source of an argument that is not a variable
             (i.e. an expression)
         VarnameRetrievingError: When failed to get the frame or node
+        ValueError: When the arguments passed to this function is invalid.
+            Only variables and subscripts of variables are allow to be passed
+            to this function.
     """
     # where argname(...) is called
     argname_node = get_node(1, ignore_lambda=False)
@@ -333,16 +337,37 @@ def argname(arg: Any, # pylint: disable=unused-argument
 
     ret = []
     for argnode in argname_node.args:
-        if not isinstance(argnode, ast.Name):
-            raise VarnameRetrievingError(
-                "Arguments of 'argname' must be argument variables."
+        if not isinstance(argnode, (ast.Name, ast.Subscript)):
+            raise ValueError(
+                "Arguments of 'argname' must be "
+                f"(subscripts of) argument variables."
             )
-        try:
+
+        if isinstance(argnode, ast.Name):
+            if argnode.id not in argument_sources:
+                raise ValueError(
+                    f"No value passed for argument {argnode.id!r}, "
+                    "or it is not an argument at all."
+                )
             ret.append(argument_sources[argnode.id])
-        except KeyError:
-            raise VarnameRetrievingError(
-                f"No value passed for argument {argnode.id!r}, "
-                "or it is not an argument at all."
-            ) from None
+
+        else:
+            name, subscript = parse_argname_subscript(argnode)
+            if name not in argument_sources:
+                raise ValueError(f"{name!r} is not an argument.")
+
+            if (isinstance(subscript, int) and
+                    not isinstance(argument_sources[name], tuple)):
+                raise ValueError(
+                    f"{name!r} is not a positional argument "
+                    "(*args, for example)."
+                )
+            if (isinstance(subscript, str) and
+                    not isinstance(argument_sources[name], dict)):
+                raise ValueError(
+                    f"{name!r} is not a keyword argument "
+                    "(**kwargs, for example)."
+                )
+            ret.append(argument_sources[name][subscript])
 
     return ret[0] if not more_args else tuple(ret)

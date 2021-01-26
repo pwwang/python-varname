@@ -276,3 +276,26 @@ def get_argument_sources(node: ast.Call,
                      for argnode in node.keywords}
     bound_args = signature.bind_partial(*arg_sources, **kwarg_sources)
     return bound_args.arguments
+
+def parse_argname_subscript(node: ast.Subscript):
+    """Parse the ast.Subscript node passed to argname
+
+    Make sure:
+    1. node.value is an ast.Name node
+    2. node.slice is a ast.Constant node
+
+    This is separated as a function, since we want to see in the future whether
+    non-ast.Constant node can be supported as node.slice.
+    """
+    name = node.value
+    if not isinstance(name, ast.Name):
+        raise ValueError(f"Expect {ast.dump(name)} to be a variable.")
+
+    subscript = node.slice.value
+    if not isinstance(subscript, (ast.Str, ast.Num, ast.Index, ast.Constant)):
+        raise ValueError(f"Expect {ast.dump(subscript)} to be a constant.")
+
+    subscript = getattr(subscript, 'value', subscript) # ast.Index
+    subscript = getattr(subscript, 'n', subscript) # ast.Num
+    subscript = getattr(subscript, 's', subscript) # ast.Str
+    return name.id, subscript
