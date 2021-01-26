@@ -340,7 +340,7 @@ def argname(arg: Any, # pylint: disable=unused-argument
         if not isinstance(argnode, (ast.Name, ast.Subscript)):
             raise ValueError(
                 "Arguments of 'argname' must be "
-                f"(subscripts of) argument variables."
+                "(subscripts of) argument variables."
             )
 
         if isinstance(argnode, ast.Name):

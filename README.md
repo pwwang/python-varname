@@ -264,17 +264,22 @@ from varname import argname
 def func(a, b=1):
     print(argname(a))
 
-x = y = 2
-func(x) # prints 'x'
+x = y = z = 2
+func(x) # prints: x
 
 def func2(a, b=1):
     print(argname(a, b))
-func2(y, b=x) # prints ('y', 'x')
+func2(y, b=x) # prints: ('y', 'x')
 
 # allow expressions
 def func3(a, b=1):
     print(argname(a, b, vars_only=False))
-func3(x+y, y+x) # prints ('x+y', 'y+x')
+func3(x+y, y+x) # prints: ('x+y', 'y+x')
+
+# positional and keyword arguments
+def func4(*args, **kwargs):
+    print(argname(args[1], kwargs['c']))
+func4(y, x, c=z) # prints: ('x', 'z')
 ```
 
 ### Value wrapper
