@@ -343,6 +343,6 @@ def argname(arg: Any, # pylint: disable=unused-argument
             raise VarnameRetrievingError(
                 f"No value passed for argument {argnode.id!r}, "
                 "or it is not an argument at all."
-            )
+            ) from None
 
     return ret[0] if not more_args else tuple(ret)
