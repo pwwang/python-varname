@@ -53,7 +53,7 @@ def test_argname_non_variable():
         return argname(b)
 
     with pytest.raises(NonVariableArgumentError,
-                       match=r"Argument Num\(n=1\) is not a variable"):
+                       match=r"is not a variable"):
         func(1,1,1)
 
 def test_argname_argname_argument_non_variable():
