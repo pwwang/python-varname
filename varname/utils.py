@@ -291,11 +291,14 @@ def parse_argname_subscript(node: ast.Subscript):
     if not isinstance(name, ast.Name):
         raise ValueError(f"Expect {ast.dump(name)} to be a variable.")
 
-    subscript = node.slice.value
-    if not isinstance(subscript, (ast.Str, ast.Num, ast.Index, ast.Constant)):
+    subscript = node.slice
+    if isinstance(subscript, ast.Index):
+        subscript = subscript.value
+    if not isinstance(subscript, (ast.Str, ast.Num, ast.Constant)):
         raise ValueError(f"Expect {ast.dump(subscript)} to be a constant.")
 
-    subscript = getattr(subscript, 'value', subscript) # ast.Index
+    subscript = getattr(subscript, 'value', subscript) # ast.Index, ast.Constant
     subscript = getattr(subscript, 'n', subscript) # ast.Num
     subscript = getattr(subscript, 's', subscript) # ast.Str
+
     return name.id, subscript

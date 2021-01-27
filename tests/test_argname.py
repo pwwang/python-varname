@@ -136,3 +136,8 @@ def test_argname_star_args_individual():
         return argname(args[1+1])
     with pytest.raises(ValueError, match="to be a constant"):
         func(x, y, z)
+
+    def func(*args, **kwargs):
+        return argname(args[x])
+    with pytest.raises(ValueError, match="to be a constant"):
+        func(x, y, z)

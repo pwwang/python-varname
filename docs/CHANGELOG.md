@@ -1,3 +1,6 @@
+## v0.6.1
+- Add `argname` to retrieve argument names/sources passed to a function
+
 ## v0.6.0
 - Changed:
     - `Wrapper`, `register` and `debug` moved to `varname.helpers`
