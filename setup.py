@@ -35,5 +35,5 @@ setup(
     package_dir={"": "."},
     package_data={},
     install_requires=['executing'],
-    extras_require={"dev": ["asttokens==2.*", "pytest", "pytest-cov"]},
+    extras_require={"dev": ["asttokens==2.*", "pure-eval==0.*", "pytest", "pytest-cov"]},
 )

@@ -12,11 +12,12 @@ Attributes:
 import sys
 import dis
 import ast
+import warnings
 import inspect
 from os import path
 from functools import lru_cache
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Optional, Tuple, Union, List, MutableMapping
+from typing import Optional, Tuple, Union, List, MutableMapping, Callable
 
 from executing import Source
 
@@ -85,6 +86,13 @@ def get_node(
     except VarnameRetrievingError:
         return None
 
+    return get_node_by_frame(frame, raise_exc)
+
+def get_node_by_frame(
+        frame: FrameType,
+        raise_exc: bool = True
+) -> Optional[ast.AST]:
+    """Get the node by frame, raise errors if possible"""
     exect = Source.executing(frame)
 
     if exect.node:
@@ -231,15 +239,6 @@ def debug_ignore_frame(
                f'{frameinfo.filename}:{frameinfo.lineno}]')
     sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')
 
-def funcsig_from_ast_call(node: ast.Call,
-                          globs: dict,
-                          locs: dict) -> inspect.Signature:
-    """Get the function signature from an ast.Call node"""
-    expr = ast.Expression(node.func)
-    code = compile(expr, '<ast-call>', 'eval')
-    func = eval(code, globs, locs) # pylint: disable=eval-used
-    return inspect.signature(func)
-
 def argnode_source(source: Source, node: ast.AST, vars_only: bool) -> str:
     """Get the source of an argument node"""
     if vars_only:
@@ -250,9 +249,12 @@ def argnode_source(source: Source, node: ast.AST, vars_only: bool) -> str:
         return node.id
     return source.asttokens().get_text(node)
 
-@lru_cache()
-def get_argument_sources(node: ast.Call,
-                         vars_only: bool = True) -> MutableMapping[str, str]:
+def get_argument_sources(
+        frame: FrameType,
+        node: ast.Call,
+        func: Callable,
+        vars_only: bool = True
+) -> MutableMapping[str, str]:
     """Get the sources for argument from an ast.Call node
 
     >>> def func(a, b, c, d=4):
@@ -264,7 +266,7 @@ def get_argument_sources(node: ast.Call,
     from .ignore import IgnoreList
     frame = IgnoreList.create(ignore_lambda=False).get_frame(2)
     # <Signature (a, b, c, d=4)>
-    signature = funcsig_from_ast_call(node, frame.f_globals, frame.f_locals)
+    signature = inspect.signature(func, follow_wrapped=False)
     # func(y, x, c=z)
     # ['y', 'x'], {'c': 'z'}
     source = Source.for_frame(frame)
@@ -276,6 +278,50 @@ def get_argument_sources(node: ast.Call,
                      for argnode in node.keywords}
     bound_args = signature.bind_partial(*arg_sources, **kwarg_sources)
     return bound_args.arguments
+
+def get_function_called_argname(
+        frame: FrameType,
+        node: ast.AST
+) -> Callable:
+    """Get the function who called argname"""
+    # We need node to be ast.Call
+    if not isinstance(node, ast.Call):
+        raise VarnameRetrievingError(
+            f"Expect an 'ast.Call' node, but got {type(node)!r}. "
+            "Are you using 'argname' inside a function?"
+        )
+
+    # variable
+    if isinstance(node.func, ast.Name):
+        return frame.f_locals.get(node.func.id,
+                                  frame.f_globals.get(node.func.id))
+
+    # use pure_eval
+    pure_eval_fail_msg = None
+    try:
+        from pure_eval import Evaluator, CannotEval
+    except ImportError:
+        pure_eval_fail_msg = "'pure_eval' is not installed."
+    else:
+        try:
+            evaluator = Evaluator.from_frame(frame)
+            return evaluator[node.func]
+        except CannotEval:
+            pure_eval_fail_msg = (
+                f"Cannot evaluate node {ast.dump(node.func)} "
+                "using 'pure_eval'."
+            )
+
+    # try eval
+    warnings.warn(
+        f"{pure_eval_fail_msg} "
+        "Using 'eval' to get the function that calls 'argname'. "
+        "Pass the function to 'argname' explicitly to get rid of this warning."
+    )
+    expr = ast.Expression(node.func)
+    code = compile(expr, '<ast-call>', 'eval')
+    # pylint: disable=eval-used
+    return eval(code, frame.f_globals, frame.f_locals)
 
 def parse_argname_subscript(node: ast.Subscript):
     """Parse the ast.Subscript node passed to argname

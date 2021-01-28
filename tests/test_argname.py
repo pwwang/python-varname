@@ -33,13 +33,30 @@ def test_argname_lambda():
     names = func(x, y, z)
     assert names == 'y'
 
-def test_argname_argname_node_fail(no_getframe):
-    def func(a, b, c, d=4):
-        return argname(b)
-    x = y = z = 1
-    with pytest.raises(VarnameRetrievingError,
-                       match="Unable to retrieve the call node of 'argname'"):
-        func(x, y, z)
+def test_argname_pure_eval():
+    def func(a):
+        return argname(a)
+    x = 1
+    funcs = [func]
+    name = funcs[0](x)
+    assert name == 'x'
+
+def test_argname_eval():
+    x = 1
+    with pytest.warns(UserWarning, match="Cannot evaluate node"):
+        name = (lambda a: argname(a))(x)
+    assert name == 'x'
+
+def test_argname_no_pure_eval(no_pure_eval):
+    def func(a):
+        return argname(a)
+    x = 1
+    funcs = [func]
+
+    with pytest.warns(UserWarning, match="'pure_eval' is not installed"):
+        name = funcs[0](x)
+    assert name == 'x'
+
 
 def test_argname_non_argument():
     x = 1

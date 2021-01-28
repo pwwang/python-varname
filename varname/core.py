@@ -1,14 +1,16 @@
 """Provide core features for varname"""
 import ast
 import warnings
-from typing import Optional, Tuple, Union, Any
+from typing import Optional, Tuple, Union, Any, Callable
 
 from .utils import (
     bytecode_nameof,
     get_node,
+    get_node_by_frame,
     lookfor_parent_assign,
     node_name,
     get_argument_sources,
+    get_function_called_argname,
     parse_argname_subscript,
     VarnameRetrievingError,
     MultiTargetAssignmentWarning
@@ -287,17 +289,28 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
 
 def argname(arg: Any, # pylint: disable=unused-argument
             *more_args: Any,
+            # *, keyword-only argument, only available with python3.8+
+            func: Optional[Callable] = None,
             vars_only: bool = True) -> Union[str, Tuple[str]]:
-    """Get the argument names/sources of a function call
-
-    Note:
-        When vars_only is False, then asttokens has to be installed.
+    """Get the argument names/sources passed to a function
 
     Args:
         arg: Parameter of the function, used to map the argument passed to
             the function
-        *args: Other parameters of the function, used to map more arguments
+        *more_args: Other parameters of the function, used to map more arguments
             passed to the function
+        func: The function. If not provided, the AST node of the function call
+            will be used to fetch the function:
+            - If a variable (ast.Name) used as function, the `node.id` will
+                be used to get the function from `locals()` or `globals()`.
+            - If variable (ast.Name), attributes (ast.Attribute),
+                subscripts (ast.Subscript), and combinations of those and
+                literals used as function, `pure_eval` will be used to evaluate
+                the node
+            - If `pure_eval` is not installed or failed to evaluate, `eval`
+                will be used. A warning will be shown since malicious code may
+                be evaluated in this case.
+            You are encouraged to always pass the function explicitly.
         vars_only: Require the arguments to be variables only
 
     Returns:
@@ -313,27 +326,23 @@ def argname(arg: Any, # pylint: disable=unused-argument
             Only variables and subscripts of variables are allow to be passed
             to this function.
     """
+    ignore_list = IgnoreList.create(ignore_lambda=False)
     # where argname(...) is called
-    argname_node = get_node(1, ignore_lambda=False)
-    if not argname_node:
-        raise VarnameRetrievingError(
-            "Unable to retrieve the call node of 'argname'."
-        )
-
+    argname_frame = ignore_list.get_frame(1)
+    argname_node = get_node_by_frame(argname_frame)
     # where func(...) is called
-    func_node = get_node(2, ignore_lambda=False)
-    if not func_node: # pragma: no cover
-        raise VarnameRetrievingError(
-            "Unable to retrieve the call node of the function. "
-        )
+    func_frame = ignore_list.get_frame(2)
+    func_node = get_node_by_frame(func_frame)
 
-    if not isinstance(func_node, ast.Call):
-        raise VarnameRetrievingError(
-            f"Expect an 'ast.Call' node, but got {type(func_node)!r}. "
-            "Are you using 'argname' inside a function?"
-        )
+    if not callable(func):
+        func = get_function_called_argname(func_frame, func_node)
 
-    argument_sources = get_argument_sources(func_node, vars_only)
+    argument_sources = get_argument_sources(
+        func_frame,
+        func_node,
+        func,
+        vars_only=vars_only
+    )
 
     ret = []
     for argnode in argname_node.args:

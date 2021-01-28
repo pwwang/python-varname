@@ -2,6 +2,10 @@ import sys
 import importlib.util
 import textwrap
 import asyncio
+from functools import wraps
+
+from varname import core
+from varname.ignore import IgnoreList
 
 import pytest
 from varname import config, ignore
@@ -22,6 +26,29 @@ def no_getframe():
     finally:
         sys._getframe = orig_getframe
 
+@pytest.fixture
+def no_get_node_by_frame():
+    """
+    Monkey-patch sys._getframe to fail,
+    simulating environments that don't support varname
+    """
+    def get_node_by_frame(frame):
+        return None
+
+    orig_get_node_by_frame = core.get_node_by_frame
+    try:
+        core.get_node_by_frame = get_node_by_frame
+        yield
+    finally:
+        core.get_node_by_frame = orig_get_node_by_frame
+
+@pytest.fixture
+def no_pure_eval():
+    sys.modules['pure_eval'] = None
+    try:
+        yield
+    finally:
+        del sys.modules['pure_eval']
 
 @pytest.fixture
 def enable_debug():
@@ -64,3 +91,15 @@ def module_from_source(name, source, tmp_path):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+def decor(func):
+    """Decorator just for test purpose"""
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+def decor_wraps(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
