@@ -1,13 +1,17 @@
 """Provide core features for varname"""
-
 import ast
 import warnings
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, Any, Callable
+
 from .utils import (
     bytecode_nameof,
     get_node,
+    get_node_by_frame,
     lookfor_parent_assign,
     node_name,
+    get_argument_sources,
+    get_function_called_argname,
+    parse_argname_subscript,
     VarnameRetrievingError,
     MultiTargetAssignmentWarning
 )
@@ -237,7 +241,7 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
         # of frame retrieval again
 
         # may raise exception, just leave it as is
-        frame = IgnoreList.create(None).get_frame(frame)
+        frame = IgnoreList.create().get_frame(frame)
         source = frame.f_code.co_filename
         if source == '<stdin>':
             raise VarnameRetrievingError(
@@ -282,3 +286,97 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
             ret.append('.'.join(reversed(full_name)))
 
     return ret[0] if not more_vars else tuple(ret)
+
+def argname(arg: Any, # pylint: disable=unused-argument
+            *more_args: Any,
+            # *, keyword-only argument, only available with python3.8+
+            func: Optional[Callable] = None,
+            vars_only: bool = True) -> Union[str, Tuple[str]]:
+    """Get the argument names/sources passed to a function
+
+    Args:
+        arg: Parameter of the function, used to map the argument passed to
+            the function
+        *more_args: Other parameters of the function, used to map more arguments
+            passed to the function
+        func: The function. If not provided, the AST node of the function call
+            will be used to fetch the function:
+            - If a variable (ast.Name) used as function, the `node.id` will
+                be used to get the function from `locals()` or `globals()`.
+            - If variable (ast.Name), attributes (ast.Attribute),
+                subscripts (ast.Subscript), and combinations of those and
+                literals used as function, `pure_eval` will be used to evaluate
+                the node
+            - If `pure_eval` is not installed or failed to evaluate, `eval`
+                will be used. A warning will be shown since unwanted side
+                effects may happen in this case.
+            You are encouraged to always pass the function explicitly.
+        vars_only: Require the arguments to be variables only
+
+    Returns:
+        The argument source when no more_args passed, otherwise a tuple of
+        argument sources
+
+    Raises:
+        NonVariableArgumentError: When vars_only is True, and we are trying
+            to retrieve the source of an argument that is not a variable
+            (i.e. an expression)
+        VarnameRetrievingError: When failed to get the frame or node
+        ValueError: When the arguments passed to this function is invalid.
+            Only variables and subscripts of variables are allow to be passed
+            to this function.
+    """
+    ignore_list = IgnoreList.create(ignore_lambda=False)
+    # where argname(...) is called
+    argname_frame = ignore_list.get_frame(1)
+    argname_node = get_node_by_frame(argname_frame)
+    # where func(...) is called
+    func_frame = ignore_list.get_frame(2)
+    func_node = get_node_by_frame(func_frame)
+
+    if not callable(func):
+        func = get_function_called_argname(func_frame, func_node)
+
+    argument_sources = get_argument_sources(
+        func_frame,
+        func_node,
+        func,
+        vars_only=vars_only
+    )
+
+    ret = []
+    for argnode in argname_node.args:
+        if not isinstance(argnode, (ast.Name, ast.Subscript)):
+            raise ValueError(
+                "Arguments of 'argname' must be "
+                "(subscripts of) argument variables."
+            )
+
+        if isinstance(argnode, ast.Name):
+            if argnode.id not in argument_sources:
+                raise ValueError(
+                    f"No value passed for argument {argnode.id!r}, "
+                    "or it is not an argument at all."
+                )
+            ret.append(argument_sources[argnode.id])
+
+        else:
+            name, subscript = parse_argname_subscript(argnode)
+            if name not in argument_sources:
+                raise ValueError(f"{name!r} is not an argument.")
+
+            if (isinstance(subscript, int) and
+                    not isinstance(argument_sources[name], tuple)):
+                raise ValueError(
+                    f"{name!r} is not a positional argument "
+                    "(*args, for example)."
+                )
+            if (isinstance(subscript, str) and
+                    not isinstance(argument_sources[name], dict)):
+                raise ValueError(
+                    f"{name!r} is not a keyword argument "
+                    "(**kwargs, for example)."
+                )
+            ret.append(argument_sources[name][subscript])
+
+    return ret[0] if not more_args else tuple(ret)

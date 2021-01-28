@@ -24,7 +24,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='varname',
-    version='0.6.0',
+    version='0.6.1',
     description='Dark magics about variable names in python.',
     python_requires='==3.*,>=3.6.0',
     project_urls={"homepage": "https://github.com/pwwang/python-varname", "repository": "https://github.com/pwwang/python-varname"},
@@ -35,5 +35,5 @@ setup(
     package_dir={"": "."},
     package_data={},
     install_requires=['executing'],
-    extras_require={"dev": ["pytest", "pytest-cov"]},
+    extras_require={"dev": ["asttokens==2.*", "pure-eval==0.*", "pytest", "pytest-cov"]},
 )
