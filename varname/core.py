@@ -308,8 +308,8 @@ def argname(arg: Any, # pylint: disable=unused-argument
                 literals used as function, `pure_eval` will be used to evaluate
                 the node
             - If `pure_eval` is not installed or failed to evaluate, `eval`
-                will be used. A warning will be shown since malicious code may
-                be evaluated in this case.
+                will be used. A warning will be shown since unwanted side
+                effects may happen in this case.
             You are encouraged to always pass the function explicitly.
         vars_only: Require the arguments to be variables only
 

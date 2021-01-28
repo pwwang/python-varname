@@ -293,8 +293,16 @@ def get_function_called_argname(
 
     # variable
     if isinstance(node.func, ast.Name):
-        return frame.f_locals.get(node.func.id,
-                                  frame.f_globals.get(node.func.id))
+        func = frame.f_locals.get(
+            node.func.id,
+            frame.f_globals.get(node.func.id)
+        )
+        if func is None: # pragma: no cover
+            # not sure how it would happen but in case
+            raise VarnameRetrievingError(
+                f"Cannot retrieve the function by {node.func.id!r}."
+            )
+        return func
 
     # use pure_eval
     pure_eval_fail_msg = None
@@ -316,7 +324,8 @@ def get_function_called_argname(
     warnings.warn(
         f"{pure_eval_fail_msg} "
         "Using 'eval' to get the function that calls 'argname'. "
-        "Pass the function to 'argname' explicitly to get rid of this warning."
+        "Try calling it using a variable reference to the function, or "
+        "passing the function to 'argname' explicitly."
     )
     expr = ast.Expression(node.func)
     code = compile(expr, '<ast-call>', 'eval')
