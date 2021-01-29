@@ -326,6 +326,8 @@ def argname(arg: Any, # pylint: disable=unused-argument
             Only variables and subscripts of variables are allow to be passed
             to this function.
     """
+    # // TODO: check if both nodes can be fetched
+    # // TODO: check if func can always be fetched
     ignore_list = IgnoreList.create(ignore_lambda=False)
     # where argname(...) is called
     argname_frame = ignore_list.get_frame(1)
