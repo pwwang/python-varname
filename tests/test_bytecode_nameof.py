@@ -1,12 +1,22 @@
+import sys
+
 import pytest
 import unittest
-from varname.utils import bytecode_nameof
-from varname import nameof, varname, VarnameRetrievingError
+from varname.utils import bytecode_nameof as bytecode_nameof_cached
+from varname import *
+# config.debug = True
 
-def nameof_both(*args):
+def bytecode_nameof(frame):
+    frame = sys._getframe(frame)
+    return bytecode_nameof_cached(frame.f_code, frame.f_lasti)
+
+def nameof_both(var, *more_vars):
     """Test both implementations at the same time"""
-    result = nameof(*args, frame=2)
-    if len(args) == 1:
+    if more_vars:
+        res, more = nameof(var, more_vars, frame=2)
+        result = (res, *more)
+    else:
+        result = nameof(var, frame=2)
         assert result == bytecode_nameof(frame=2)
     return result
 
@@ -24,7 +34,7 @@ class TestNameof(unittest.TestCase):
     def test_bytecode_nameof_wrong_node(self):
         with pytest.raises(
                 VarnameRetrievingError,
-                match='Did you call nameof in a weird way',
+                match="Did you call 'nameof' in a weird way",
         ):
             Weird() + Weird()
 
@@ -60,7 +70,7 @@ class TestNameof(unittest.TestCase):
         self.assertEqual(fname, 'f')
         self.assertEqual(fname1, 'f')
 
-        with pytest.raises(VarnameRetrievingError):
+        with pytest.raises(NonVariableArgumentError):
             nameof_both(a==1)
 
         with pytest.raises(VarnameRetrievingError):

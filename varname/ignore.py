@@ -261,7 +261,8 @@ class IgnoreList:
     @classmethod
     def create(cls,
                ignore: Optional[IgnoreType] = None,
-               ignore_lambda: bool = True) -> "IgnoreList":
+               ignore_lambda: bool = True,
+               ignore_varname: bool = True) -> "IgnoreList":
         """Create an IgnoreList object
 
         Args:
@@ -270,6 +271,8 @@ class IgnoreList:
                 A tuple of module (or filename) and qualified name
                 A function
                 A tuple of function and number of decorators
+            ignore_lambda: whether ignore lambda functions
+            ignore_varname: whether the calls from this package
 
         Returns:
             The IgnoreList object
@@ -279,9 +282,10 @@ class IgnoreList:
             ignore = [ignore]
 
         ignore_list = [
-            create_ignore_elem(sysconfig.get_python_lib(standard_lib=True)),
-            create_ignore_elem(sys.modules[__package__])
+            create_ignore_elem(sysconfig.get_python_lib(standard_lib=True))
         ]
+        if ignore_varname:
+            ignore_list.append(create_ignore_elem(sys.modules[__package__]))
         if ignore_lambda:
             ignore_list.append(create_ignore_elem((None, '*<lambda>')))
         for ignore_elem in ignore:

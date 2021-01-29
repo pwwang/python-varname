@@ -4,7 +4,7 @@ from functools import partial, wraps
 from typing import Any, Callable, Optional, Union
 
 from .utils import IgnoreType
-from .core import nameof, varname
+from .core import argname, varname
 
 
 def register(
@@ -129,7 +129,8 @@ class Wrapper:
 def debug(var, *more_vars,
           prefix: str = 'DEBUG: ',
           merge: bool = False,
-          repr: bool = True) -> None: # pylint: disable=redefined-builtin
+          repr: bool = True, # pylint: disable=redefined-builtin
+          vars_only: bool = False) -> None:
     """Print variable names and values.
 
     Examples:
@@ -149,13 +150,28 @@ def debug(var, *more_vars,
         merge: Whether merge all variables in one line or not
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
-    var_names = nameof(var, *more_vars, full=True)
-    if not isinstance(var_names, tuple):
-        var_names = (var_names, )
-    variables = (var, *more_vars)
-    name_and_values = [f"{var_name}={variables[i]!r}" if repr
-                       else f"{var_name}={variables[i]}"
-                       for i, var_name in enumerate(var_names)]
+    if more_vars:
+        name, more_names = argname(
+            var, more_vars,
+            pos_only=True,
+            vars_only=vars_only,
+            func=debug
+        )
+        var_names = (name, *more_names)
+    else:
+        var_names = (argname(
+            var,
+            pos_only=True,
+            vars_only=vars_only,
+            func=debug
+        ), )
+
+    values = (var, *more_vars)
+    name_and_values = [
+        f"{var_name}={value!r}" if repr else f"{var_name}={value}"
+        for var_name, value in zip(var_names, values)
+    ]
+
     if merge:
         print(f"{prefix}{', '.join(name_and_values)}")
     else:

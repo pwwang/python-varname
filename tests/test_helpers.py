@@ -36,6 +36,9 @@ def test_debug(capsys):
     assert 'DEBUG: a=1\n' == capsys.readouterr().out
     debug(a, b, merge=True)
     assert 'DEBUG: a=1, b=<object' in capsys.readouterr().out
+    debug(a+a, vars_only=False)
+    assert 'DEBUG: a+a=2' in capsys.readouterr().out
+
 
 def test_register_to_class():
 
