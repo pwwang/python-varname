@@ -201,8 +201,7 @@ def test_argname_wrapper():
 
     def decorator(f):
         def wrapper(arg, *more_args):
-            name, more = f(arg, more_args, frame=2)
-            return (name, *more)
+            return f(arg, *more_args, frame=2)
 
         return wrapper
 
@@ -214,3 +213,27 @@ def test_argname_wrapper():
     x = y = 1
     names = func(x, y)
     assert names == ('x', 'y')
+
+def test_argname_varpos_arg():
+    def func(a, *args, **kwargs):
+        return argname(kwargs, a, *args)
+
+    x = y = z = 1
+    names = func(x, y, kw=z)
+    assert names == ({'kw': 'z'}, 'x', 'y')
+
+    names = func(x)
+    assert names == ({}, 'x')
+
+def test_argname_nosuch_varpos_arg():
+    def func(a, *args):
+        another = []
+        return argname(a, *another)
+
+    x = y = 1
+    with pytest.raises(
+            ValueError,
+            match="No such variable positional argument"
+    ):
+        func(x, y)
+

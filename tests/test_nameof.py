@@ -88,8 +88,7 @@ def test_nameof_wrapper():
 
     def decorator(f):
         def wrapper(var, *more_vars):
-            name, more = f(var, more_vars, frame=2)
-            return (name, *more)
+            return f(var, *more_vars, frame=2)
 
         return wrapper
 

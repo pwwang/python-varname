@@ -150,21 +150,14 @@ def debug(var, *more_vars,
         merge: Whether merge all variables in one line or not
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
-    if more_vars:
-        name, more_names = argname(
-            var, more_vars,
-            pos_only=True,
-            vars_only=vars_only,
-            func=debug
-        )
-        var_names = (name, *more_names)
-    else:
-        var_names = (argname(
-            var,
-            pos_only=True,
-            vars_only=vars_only,
-            func=debug
-        ), )
+    var_names = argname(
+        var, *more_vars,
+        pos_only=True,
+        vars_only=vars_only,
+        func=debug
+    )
+    if not isinstance(var_names, tuple):
+        var_names = (var_names, )
 
     values = (var, *more_vars)
     name_and_values = [

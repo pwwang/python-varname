@@ -271,18 +271,8 @@ def nameof(var, *more_vars,
             "a single variable, and argument `full` should not be specified."
         )
 
-    if more_vars:
-        name, more_names = argname(
-            var, more_vars,
-            func=nameof,
-            frame=frame,
-            vars_only=vars_only,
-            pos_only=True
-        )
-        return (name, *more_names)
-
     return argname(
-        var,
+        var, *more_vars,
         func=nameof,
         frame=frame,
         vars_only=vars_only,
@@ -369,13 +359,26 @@ def argname(arg: Any, # pylint: disable=unused-argument
 
     ret = []
     for argnode in argname_node.args:
-        if not isinstance(argnode, (ast.Name, ast.Subscript)):
+        if not isinstance(argnode, (ast.Name, ast.Subscript, ast.Starred)):
             raise ValueError(
                 "Arguments of 'argname' must be "
-                "(subscripts of) argument variables."
+                "function arguments themselves or subscripts of them."
             )
 
-        if isinstance(argnode, ast.Name):
+        if isinstance(argnode, ast.Starred):
+            if (
+                    not isinstance(argnode.value, ast.Name) or
+                    argnode.value.id not in argument_sources or
+                    not isinstance(argument_sources[argnode.value.id], tuple)
+            ):
+                posvar = argnode.value
+                posvar = getattr(posvar, 'id', posvar)
+                raise ValueError(
+                    f"No such variable positional argument {posvar!r}"
+                )
+            ret.extend(argument_sources[argnode.value.id])
+
+        elif isinstance(argnode, ast.Name):
             if argnode.id not in argument_sources:
                 raise ValueError(
                     f"No value passed for argument {argnode.id!r}, "

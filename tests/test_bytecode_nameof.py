@@ -12,11 +12,9 @@ def bytecode_nameof(frame):
 
 def nameof_both(var, *more_vars):
     """Test both implementations at the same time"""
-    if more_vars:
-        res, more = nameof(var, more_vars, frame=2)
-        result = (res, *more)
-    else:
-        result = nameof(var, frame=2)
+    result = nameof(var, *more_vars, frame=2)
+
+    if not more_vars:
         assert result == bytecode_nameof(frame=2)
     return result
 

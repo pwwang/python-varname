@@ -282,7 +282,15 @@ def get_argument_sources(
         for argnode in node.keywords
     } if not pos_only else {}
     bound_args = signature.bind_partial(*arg_sources, **kwarg_sources)
-    return bound_args.arguments
+    argument_sources = bound_args.arguments
+    # see if *args and **kwargs have anything assigned
+    # if not, assign () and {} to them
+    for parameter in signature.parameters.values():
+        if parameter.kind == inspect.Parameter.VAR_POSITIONAL:
+            argument_sources.setdefault(parameter.name, ())
+        if parameter.kind == inspect.Parameter.VAR_KEYWORD:
+            argument_sources.setdefault(parameter.name, {})
+    return argument_sources
 
 def get_function_called_argname(
         frame: FrameType,
