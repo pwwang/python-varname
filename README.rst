@@ -388,6 +388,8 @@ Debugging with ``debug``
    debug(a, b, merge=True)
    # DEBUG: a='value', b=<object object at 0x2b70580e5f20>
    debug(a, repr=False, prefix='') # a=value
+   # also debug an expression
+   debug(a+a, vars_only=False) # DEBUG: a+a='valuevalue'
 
 Reliability and limitations
 ---------------------------

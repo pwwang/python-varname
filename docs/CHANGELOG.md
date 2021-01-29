@@ -1,3 +1,11 @@
+## v0.6.2
+- Remove argument `full` for `nameof`, use `vars_only` instead. When `vars_only=False`, source of the argument returned.
+- Add argument `frame` to `argname`, so that it can be wrapped.
+- Allow `argname` to fetch the source of variable keyword arguments (`**kwargs`), which will be an empty dict (`{}`) when no keyword arguments passed.
+- Add argument `pos_only` to `argname` to only match the positional arguments
+- Allow variable positional arguments for `argname` so that `argname(*args)` is allowed
+- Add `vars_only` argument to `helpers.debug` so source of expression becomes available
+
 ## v0.6.1
 - Add `argname` to retrieve argument names/sources passed to a function
 
