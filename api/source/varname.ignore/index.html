@@ -1,0 +1,789 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="shortcut icon" href="../../../favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.6">
+    
+    
+      
+        <title>varname.ignore - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.cb6bc1d0.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.39b8e14a.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#2094f3">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../../style.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue" data-md-color-accent="">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnameignore" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="varname" class="md-header-nav__button md-logo" aria-label="varname">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              varname.ignore
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="varname" class="md-nav__button md-logo" aria-label="varname">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" >
+      
+      <label class="md-nav__link" for="nav-1">
+        
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="" data-md-level="1">
+        <label class="md-nav__title" for="nav-1">
+          <span class="md-nav__icon md-icon"></span>
+          
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-1" type="checkbox" id="nav-1-1" >
+      
+      <label class="md-nav__link" for="nav-1-1">
+        varname
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="varname" data-md-level="2">
+        <label class="md-nav__title" for="nav-1-1">
+          <span class="md-nav__icon md-icon"></span>
+          varname
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        varname
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.utils/" class="md-nav__link">
+        varname.utils
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.ignore/" class="md-nav__link">
+        varname.ignore
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.helpers/" class="md-nav__link">
+        varname.helpers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.core/" class="md-nav__link">
+        varname.core
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        Change Log
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <div class="mkapi-node">
+<h1 id="" class="mkapi-object mkapi-object-code plain">
+<span class="mkapi-object-kind mkapi-object-kind-code">SOURCE CODE</span>
+<span class="mkapi-object-prefix">varname.</span><span class="mkapi-object-name">ignore</span>
+<span id="varname.ignore"></span><a class="mkapi-docs-link" href="../../varname.ignore">DOCS</a>
+</h1>
+
+<div class="mkapi-code">
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;The frame ignoring system for varname</span>
+
+<span class="sd">There 4 mechanisms to ignore intermediate frames to determine the desired one</span>
+<span class="sd">so that a variable name should be retrieved at that frame.</span>
+
+<span class="sd">1. Ignore frames by a given module. Any calls inside it and inside its</span>
+<span class="sd">   submodules will be ignored. A filename (path) to a module is also acceptable</span>
+<span class="sd">   and recommended when code is executed by `exec` without module available.</span>
+<span class="sd">2. Ignore frames by a given pair of module and a qualified name (qualname).</span>
+<span class="sd">   See 1) for acceptable modules. The qualname should be unique in that module.</span>
+<span class="sd">3. Ignore frames by a (non-decorated) function.</span>
+<span class="sd">4. Ignore frames by a decorated function. In this case, you can specified a</span>
+<span class="sd">   tuple with the function and the number of decorators of it. The decorators</span>
+<span class="sd">   on the wrapper function inside the decorators should also be counted.</span>
+
+<span class="sd">Any frames in `varname`, standard libraries, and frames of any expressions like</span>
+<span class="sd">&lt;lambda&gt; are ignored by default.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">distutils.sysconfig</span> <span class="k">as</span> <span class="nn">sysconfig</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">fnmatch</span> <span class="kn">import</span> <span class="n">fnmatch</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">FrameType</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">,</span> <span class="n">FunctionType</span>
+
+<span class="kn">from</span> <span class="nn">executing</span> <span class="kn">import</span> <span class="n">Source</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IgnoreElemType</span><span class="p">,</span>
+    <span class="n">IgnoreType</span><span class="p">,</span>
+    <span class="n">MaybeDecoratedFunctionWarning</span><span class="p">,</span>
+    <span class="n">cached_getmodule</span><span class="p">,</span>
+    <span class="n">attach_ignore_id_to_module</span><span class="p">,</span>
+    <span class="n">frame_matches_module_by_ignore_id</span><span class="p">,</span>
+    <span class="n">check_qualname_by_source</span><span class="p">,</span>
+    <span class="n">debug_ignore_frame</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IgnoreElem</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span><span id="varname.ignore.IgnoreElem"></span><a class="mkapi-docs-link" title="varname.ignore.IgnoreElem" href="../../varname.ignore/#varname.ignore.IgnoreElem">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;An element of the ignore list&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attrs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span><span id="varname.ignore.IgnoreElem.__init_subclass__"></span><a class="mkapi-docs-link" title="varname.ignore.IgnoreElem.__init_subclass__" href="../../varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__">DOCS</a>
+        <span class="sd">&quot;&quot;&quot;Define different attributes for subclasses&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">subclass_init</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="c1"># IgnoreModule: ModuleType</span>
+                <span class="c1"># IgnoreFilename/IgnoreDirname: str</span>
+                <span class="c1"># IgnoreFunction: FunctionType</span>
+                <span class="c1"># IgnoreDecorated: FunctionType, int</span>
+                <span class="c1"># IgnoreModuleQualname/IgnoreFilenameQualname:</span>
+                <span class="c1">#   ModuleType/str, str</span>
+                <span class="c1"># IgnoreOnlyQualname: None, str</span>
+                <span class="o">*</span><span class="n">ign_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">,</span> <span class="n">FunctionType</span><span class="p">]]</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="sd">&quot;&quot;&quot;__init__ function for subclasses&quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">ign_args</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_post_init</span><span class="p">()</span>
+
+        <span class="c1"># save it for __repr__</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">subclass_init</span>
+
+    <span class="k">def</span> <span class="nf">_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Setups after __init__&quot;&quot;&quot;</span>
+
+    <span class="nd">@abstractmethod</span><span id="varname.ignore.IgnoreElem.match"></span><a class="mkapi-docs-link" title="varname.ignore.IgnoreElem.match" href="../../varname.ignore/#varname.ignore.IgnoreElem.match">DOCS</a>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Whether the frame matches the ignore element&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><span id="varname.ignore.IgnoreElem.__repr__"></span><a class="mkapi-docs-link" title="varname.ignore.IgnoreElem.__repr__" href="../../varname.ignore/#varname.ignore.IgnoreElem.__repr__">DOCS</a>
+        <span class="sd">&quot;&quot;&quot;Representation of the element&quot;&quot;&quot;</span>
+        <span class="n">attr_values</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="c1"># get __name__ if possible</span>
+        <span class="n">attr_values</span> <span class="o">=</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">attr_value</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">,</span> <span class="n">attr_value</span><span class="p">))</span>
+                       <span class="k">for</span> <span class="n">attr_value</span> <span class="ow">in</span> <span class="n">attr_values</span><span class="p">)</span>
+        <span class="n">attr_values</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">attr_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">attr_values</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<span class="k">class</span> <span class="nc">IgnoreModule</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]):</span><span id="varname.ignore.IgnoreModule"></span><a class="mkapi-docs-link" title="varname.ignore.IgnoreModule" href="../../varname.ignore/#varname.ignore.IgnoreModule">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Ignore calls from a module or its submodules&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">attach_ignore_id_to_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">cached_getmodule</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">module</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">or</span>
+                    <span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">frame_matches_module_by_ignore_id</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IgnoreFilename</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore calls from a module by matching its filename&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+
+        <span class="c1"># in case of symbolic links</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span><span class="p">)</span> <span class="o">==</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">IgnoreDirname</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;dirname&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore calls from modules inside a directory</span>
+
+<span class="sd">    Currently used internally to ignore calls from standard libraries.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># pylint: disable=access-member-before-definition</span>
+        <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dirname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dirname</span><span class="si">}{</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+
+        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirname</span><span class="p">)</span>
+        <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IgnoreFunction</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;func&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore a non-decorated function&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+                <span class="c1"># without functools.wraps</span>
+                <span class="s1">&#39;&lt;locals&gt;&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_name</span>
+        <span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;You asked varname to ignore function </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s1">, &#39;</span>
+                <span class="s1">&#39;which may be decorated. If it is not intended, you may need &#39;</span>
+                <span class="s1">&#39;to ignore all intermediate frames with a tuple of &#39;</span>
+                <span class="s1">&#39;the function and the number of its decorators.&#39;</span><span class="p">,</span>
+                <span class="n">MaybeDecoratedFunctionWarning</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+        <span class="k">return</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_code</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__code__</span>
+
+<span class="k">class</span> <span class="nc">IgnoreDecorated</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;func&#39;</span><span class="p">,</span> <span class="s1">&#39;n_decor&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore a decorated function&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_decor</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_code</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__code__</span>
+
+<span class="k">class</span> <span class="nc">IgnoreModuleQualname</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">,</span> <span class="s1">&#39;qualname&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore calls by qualified name in the module&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">attach_ignore_id_to_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="c1"># check uniqueness of qualname</span>
+        <span class="n">modfile</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">modfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_qualname_by_source</span><span class="p">(</span>
+                <span class="n">Source</span><span class="o">.</span><span class="n">for_filename</span><span class="p">(</span><span class="n">modfile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">cached_getmodule</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="p">)</span>
+
+        <span class="c1"># Return earlier to avoid qualname uniqueness check</span>
+        <span class="k">if</span> <span class="n">module</span> <span class="ow">and</span> <span class="n">module</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+                <span class="ow">not</span> <span class="n">module</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="n">frame_matches_module_by_ignore_id</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">for_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">check_qualname_by_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fnmatch</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">code_qualname</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span>
+        <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IgnoreFilenameQualname</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;qualname&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore calls with given qualname in the module with the filename&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+
+        <span class="n">frame_filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span><span class="p">)</span>
+        <span class="n">preset_filename</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="c1"># return earlier to avoid qualname uniqueness check</span>
+        <span class="k">if</span> <span class="n">frame_filename</span> <span class="o">!=</span> <span class="n">preset_filename</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">for_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">check_qualname_by_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fnmatch</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">.</span><span class="n">code_qualname</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span>
+        <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IgnoreOnlyQualname</span><span class="p">(</span><span class="n">IgnoreElem</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_none&#39;</span><span class="p">,</span> <span class="s1">&#39;qualname&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Ignore calls that match the given qualname, across all frames.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+
+        <span class="c1"># module is None, check qualname only</span>
+        <span class="k">return</span> <span class="n">fnmatch</span><span class="p">(</span>
+            <span class="n">Source</span><span class="o">.</span><span class="n">for_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span><span class="o">.</span><span class="n">code_qualname</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qualname</span>
+        <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">create_ignore_elem</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">:</span> <span class="n">IgnoreElemType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IgnoreElem</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create an ignore element according to the type&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">,</span> <span class="n">ModuleType</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">IgnoreModule</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">IgnoreDirname</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">IgnoreFilename</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">,</span> <span class="s1">&#39;__code__&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">IgnoreFunction</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unexpected ignore item: </span><span class="si">{</span><span class="n">ignore_elem</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1"># is tuple and len == 2</span>
+    <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;__code__&#39;</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="k">return</span> <span class="n">IgnoreDecorated</span><span class="p">(</span><span class="o">*</span><span class="n">ignore_elem</span><span class="p">)</span>
+    <span class="c1"># otherwise, the second element should be qualname</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unexpected ignore item: </span><span class="si">{</span><span class="n">ignore_elem</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ModuleType</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">IgnoreModuleQualname</span><span class="p">(</span><span class="o">*</span><span class="n">ignore_elem</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">IgnoreFilenameQualname</span><span class="p">(</span><span class="o">*</span><span class="n">ignore_elem</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ignore_elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">IgnoreOnlyQualname</span><span class="p">(</span><span class="o">*</span><span class="n">ignore_elem</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unexpected ignore item: </span><span class="si">{</span><span class="n">ignore_elem</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">IgnoreList</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The ignore list to match the frames to see if they should be ignored&quot;&quot;&quot;</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
+               <span class="n">ignore</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IgnoreType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+               <span class="n">ignore_lambda</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;IgnoreList&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an IgnoreList object</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ignore: An element of the ignore list, either</span>
+<span class="sd">                A module (or filename of a module)</span>
+<span class="sd">                A tuple of module (or filename) and qualified name</span>
+<span class="sd">                A function</span>
+<span class="sd">                A tuple of function and number of decorators</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The IgnoreList object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="n">ignore</span><span class="p">]</span>
+
+        <span class="n">ignore_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">create_ignore_elem</span><span class="p">(</span><span class="n">sysconfig</span><span class="o">.</span><span class="n">get_python_lib</span><span class="p">(</span><span class="n">standard_lib</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+            <span class="n">create_ignore_elem</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">__package__</span><span class="p">])</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">ignore_lambda</span><span class="p">:</span>
+            <span class="n">ignore_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">create_ignore_elem</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;*&lt;lambda&gt;&#39;</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">ignore_elem</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
+            <span class="n">ignore_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">create_ignore_elem</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">ignore_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ignore_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">IgnoreElemType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span> <span class="o">=</span> <span class="n">ignore_list</span>
+
+    <span class="k">def</span> <span class="nf">nextframe_to_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                           <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                           <span class="n">frameinfos</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Find the next frame to check</span>
+
+<span class="sd">        In modst cases, the next frame to check is the next adjacent frame.</span>
+<span class="sd">        But for IgnoreDecorated, the next frame to check should be the next</span>
+<span class="sd">        `ignore[1]`th frame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame_no: The index of current frame to check</span>
+<span class="sd">            frameinfos: The frame info objects</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A number for Next `N`th frame to check. 0 if no frame matched.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ignore_elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_list</span><span class="p">:</span>
+            <span class="n">matched</span> <span class="o">=</span> <span class="n">ignore_elem</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">frame_no</span><span class="p">,</span> <span class="n">frameinfos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matched</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_elem</span><span class="p">,</span> <span class="n">IgnoreDecorated</span><span class="p">):</span>
+                <span class="n">debug_ignore_frame</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ignored by </span><span class="si">{</span><span class="n">ignore_elem</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                   <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">])</span>
+                <span class="k">return</span> <span class="n">ignore_elem</span><span class="o">.</span><span class="n">n_decor</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">matched</span><span class="p">:</span>
+                <span class="n">debug_ignore_frame</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ignored by </span><span class="si">{</span><span class="n">ignore_elem</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                   <span class="n">frameinfos</span><span class="p">[</span><span class="n">frame_no</span><span class="p">])</span>
+                <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">get_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FrameType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the right frame by the frame number</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame_no: The index of the frame to get</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The desired frame</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            VarnameRetrievingError: if any exceptions raised during the process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># since this function will be called by APIs</span>
+            <span class="c1"># so we should skip that</span>
+            <span class="n">frames</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getouterframes</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">):</span>
+                <span class="n">nextframe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nextframe_to_check</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">frames</span><span class="p">)</span>
+                <span class="c1"># ignored</span>
+                <span class="k">if</span> <span class="n">nextframe</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="n">nextframe</span>
+                    <span class="k">continue</span>
+
+                <span class="n">frame_no</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">frame_no</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">debug_ignore_frame</span><span class="p">(</span><span class="s1">&#39;Gotcha!&#39;</span><span class="p">,</span> <span class="n">frames</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">return</span> <span class="n">frames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">frame</span>
+
+                <span class="n">debug_ignore_frame</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;Skipping (</span><span class="si">{</span><span class="n">frame_no</span> <span class="o">-</span> <span class="mi">1</span><span class="si">}</span><span class="s1"> more to skip)&#39;</span><span class="p">,</span>
+                    <span class="n">frames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">VarnameRetrievingError</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span> <span class="kn">from</span> <span class="nn">exc</span>
+</code></pre></div>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.53cc9318.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.9c0e82ba.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>

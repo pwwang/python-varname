@@ -1,0 +1,786 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="shortcut icon" href="../../../favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.6">
+    
+    
+      
+        <title>varname.utils - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.cb6bc1d0.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.39b8e14a.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#2094f3">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../../style.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="blue" data-md-color-accent="">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnameutils" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../../.." title="varname" class="md-header-nav__button md-logo" aria-label="varname">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              varname.utils
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="varname" class="md-nav__button md-logo" aria-label="varname">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" >
+      
+      <label class="md-nav__link" for="nav-1">
+        
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="" data-md-level="1">
+        <label class="md-nav__title" for="nav-1">
+          <span class="md-nav__icon md-icon"></span>
+          
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1-1" type="checkbox" id="nav-1-1" >
+      
+      <label class="md-nav__link" for="nav-1-1">
+        varname
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="varname" data-md-level="2">
+        <label class="md-nav__title" for="nav-1-1">
+          <span class="md-nav__icon md-icon"></span>
+          varname
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        varname
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.utils/" class="md-nav__link">
+        varname.utils
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.ignore/" class="md-nav__link">
+        varname.ignore
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.helpers/" class="md-nav__link">
+        varname.helpers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.core/" class="md-nav__link">
+        varname.core
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        API
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        Change Log
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <div class="mkapi-node">
+<h1 id="" class="mkapi-object mkapi-object-code plain">
+<span class="mkapi-object-kind mkapi-object-kind-code">SOURCE CODE</span>
+<span class="mkapi-object-prefix">varname.</span><span class="mkapi-object-name">utils</span>
+<span id="varname.utils"></span><a class="mkapi-docs-link" href="../../varname.utils">DOCS</a>
+</h1>
+
+<div class="mkapi-code">
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Some internal utilities for varname</span>
+
+
+<span class="sd">Attributes:</span>
+
+<span class="sd">    IgnoreElemType: The type for ignore elements</span>
+<span class="sd">    IgnoreType: The type for the ignore argument</span>
+<span class="sd">    MODULE_IGNORE_ID_NAME: The name of the ignore id injected to the module.</span>
+<span class="sd">        Espectially for modules that can&#39;t be retrieved by</span>
+<span class="sd">        `inspect.getmodule(frame)`</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">dis</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">ModuleType</span><span class="p">,</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">CodeType</span><span class="p">,</span> <span class="n">FrameType</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">from</span> <span class="nn">executing</span> <span class="kn">import</span> <span class="n">Source</span>
+
+<span class="n">IgnoreElemType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="c1"># module</span>
+    <span class="n">ModuleType</span><span class="p">,</span>
+    <span class="c1"># filename of a module</span>
+    <span class="nb">str</span><span class="p">,</span>
+    <span class="n">FunctionType</span><span class="p">,</span>
+    <span class="c1"># the module (filename) and qualname</span>
+    <span class="c1"># If module is None, then all qualname matches the 2nd element</span>
+    <span class="c1"># will be ignored. Used to ignore &lt;lambda&gt; internally</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="c1"># Function and number of its decorators</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">FunctionType</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="n">IgnoreType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">IgnoreElemType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">IgnoreElemType</span><span class="p">]]</span>
+
+<span class="n">MODULE_IGNORE_ID_NAME</span> <span class="o">=</span> <span class="s1">&#39;__varname_ignore_id__&#39;</span>
+
+<span class="k">class</span> <span class="nc">config</span><span class="p">:</span> <span class="c1"># pylint: disable=invalid-name</span><span id="varname.utils.config"></span><a class="mkapi-docs-link" title="varname.utils.config" href="../../varname.utils/#varname.utils.config">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Global configurations for varname&quot;&quot;&quot;</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">class</span> <span class="nc">VarnameRetrievingError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span><span id="varname.utils.VarnameRetrievingError"></span><a class="mkapi-docs-link" title="varname.utils.VarnameRetrievingError" href="../../varname.utils/#varname.utils.VarnameRetrievingError">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;When failed to retrieve the varname&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">QualnameNonUniqueError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span><span id="varname.utils.QualnameNonUniqueError"></span><a class="mkapi-docs-link" title="varname.utils.QualnameNonUniqueError" href="../../varname.utils/#varname.utils.QualnameNonUniqueError">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;When a qualified name is used as an ignore element but references to</span>
+<span class="sd">    multiple objects in a module&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">NonVariableArgumentError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span><span id="varname.utils.NonVariableArgumentError"></span><a class="mkapi-docs-link" title="varname.utils.NonVariableArgumentError" href="../../varname.utils/#varname.utils.NonVariableArgumentError">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;When vars_only is True but try to retrieve name of</span>
+<span class="sd">    a non-variable argument&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">MaybeDecoratedFunctionWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span><span id="varname.utils.MaybeDecoratedFunctionWarning"></span><a class="mkapi-docs-link" title="varname.utils.MaybeDecoratedFunctionWarning" href="../../varname.utils/#varname.utils.MaybeDecoratedFunctionWarning">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;When a suspecious decorated function used as ignore function directly&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">MultiTargetAssignmentWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span><span id="varname.utils.MultiTargetAssignmentWarning"></span><a class="mkapi-docs-link" title="varname.utils.MultiTargetAssignmentWarning" href="../../varname.utils/#varname.utils.MultiTargetAssignmentWarning">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;When varname tries to retrieve variable name in</span>
+<span class="sd">    a multi-target assignment&quot;&quot;&quot;</span>
+
+<span class="nd">@lru_cache</span><span class="p">()</span><span id="varname.utils.cached_getmodule"></span><a class="mkapi-docs-link" title="varname.utils.cached_getmodule" href="../../varname.utils/#varname.utils.cached_getmodule">DOCS</a>
+<span class="k">def</span> <span class="nf">cached_getmodule</span><span class="p">(</span><span class="n">codeobj</span><span class="p">:</span> <span class="n">CodeType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Cached version of inspect.getmodule&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">codeobj</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_node</span><span class="p">(</span><span id="varname.utils.get_node"></span><a class="mkapi-docs-link" title="varname.utils.get_node" href="../../varname.utils/#varname.utils.get_node">DOCS</a>
+        <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">ignore</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IgnoreType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">ignore_lambda</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Try to get node from the executing object.</span>
+
+<span class="sd">    This can fail when a frame is failed to retrieve.</span>
+<span class="sd">    One case should be when python code is executed in</span>
+<span class="sd">    R pacakge `reticulate`, where only first frame is kept.</span>
+
+<span class="sd">    When the node can not be retrieved, try to return the first statement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.ignore</span> <span class="kn">import</span> <span class="n">IgnoreList</span>
+    <span class="n">ignore</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">ignore</span><span class="p">,</span> <span class="n">ignore_lambda</span><span class="o">=</span><span class="n">ignore_lambda</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">ignore</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">VarnameRetrievingError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">get_node_by_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">raise_exc</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_node_by_frame</span><span class="p">(</span><span id="varname.utils.get_node_by_frame"></span><a class="mkapi-docs-link" title="varname.utils.get_node_by_frame" href="../../varname.utils/#varname.utils.get_node_by_frame">DOCS</a>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span>
+        <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Get the node by frame, raise errors if possible&quot;&quot;&quot;</span>
+    <span class="n">exect</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">executing</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">exect</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">exect</span><span class="o">.</span><span class="n">node</span>
+
+    <span class="k">if</span> <span class="n">exect</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="n">exect</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">tree</span> <span class="ow">and</span> <span class="n">raise_exc</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="s2">&quot;Couldn&#39;t retrieve the call node. &quot;</span>
+            <span class="s2">&quot;This may happen if you&#39;re using some other AST magic at the &quot;</span>
+            <span class="s2">&quot;same time, such as pytest, ipython, macropy, or birdseye.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">lookfor_parent_assign</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">]:</span><span id="varname.utils.lookfor_parent_assign"></span><a class="mkapi-docs-link" title="varname.utils.lookfor_parent_assign" href="../../varname.utils/#varname.utils.lookfor_parent_assign">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Look for an ast.Assign node in the parents&quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s1">&#39;parent&#39;</span><span class="p">):</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">node</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">node_name</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]]]]:</span><span id="varname.utils.node_name"></span><a class="mkapi-docs-link" title="varname.utils.node_name" href="../../varname.utils/#varname.utils.node_name">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Get the node node name.</span>
+
+<span class="sd">    Raises VarnameRetrievingError when failed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">attr</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">List</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Tuple</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">node_name</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">elts</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Can only get name of a variable or attribute, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">bytecode_nameof</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><span id="varname.utils.bytecode_nameof"></span><a class="mkapi-docs-link" title="varname.utils.bytecode_nameof" href="../../varname.utils/#varname.utils.bytecode_nameof">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Bytecode version of nameof as a fallback&quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.ignore</span> <span class="kn">import</span> <span class="n">IgnoreList</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">()</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_bytecode_nameof_cached</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_lasti</span><span class="p">)</span>
+
+<span class="nd">@lru_cache</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">_bytecode_nameof_cached</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="n">CodeType</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Cached Bytecode version of nameof</span>
+
+<span class="sd">    We are trying this version only when the sourcecode is unavisible. In most</span>
+<span class="sd">    cases, this will happen when user is trying to run a script in REPL/</span>
+<span class="sd">    python shell, with `eval`, or other circumstances where the code is</span>
+<span class="sd">    manipulated to run but sourcecode is not available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instructions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dis</span><span class="o">.</span><span class="n">get_instructions</span><span class="p">(</span><span class="n">code</span><span class="p">))</span>
+    <span class="p">(</span><span class="n">current_instruction_index</span><span class="p">,</span> <span class="n">current_instruction</span><span class="p">),</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">instruction</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">instructions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">instruction</span><span class="o">.</span><span class="n">offset</span> <span class="o">==</span> <span class="n">offset</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_instruction</span><span class="o">.</span><span class="n">opname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;CALL_FUNCTION&quot;</span><span class="p">,</span> <span class="s2">&quot;CALL_METHOD&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span><span class="s2">&quot;Did you call nameof in a weird way?&quot;</span><span class="p">)</span>
+
+    <span class="n">name_instruction</span> <span class="o">=</span> <span class="n">instructions</span><span class="p">[</span>
+        <span class="n">current_instruction_index</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name_instruction</span><span class="o">.</span><span class="n">opname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;LOAD_&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span><span class="s2">&quot;Argument must be a variable or attribute&quot;</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name_instruction</span><span class="o">.</span><span class="n">argrepr</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Found the variable name </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> which is obviously wrong. &quot;</span>
+            <span class="s2">&quot;This may happen if you&#39;re using some other AST magic at the &quot;</span>
+            <span class="s2">&quot;same time, such as pytest, ipython, macropy, or birdseye.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">name</span>
+
+<span class="k">def</span> <span class="nf">attach_ignore_id_to_module</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span><span id="varname.utils.attach_ignore_id_to_module"></span><a class="mkapi-docs-link" title="varname.utils.attach_ignore_id_to_module" href="../../varname.utils/#varname.utils.attach_ignore_id_to_module">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Attach the ignore id to module</span>
+
+<span class="sd">    This is useful when a module cannot be retrieved by frames using</span>
+<span class="sd">    `inspect.getmodule`, then we can use this id, which will exist in</span>
+<span class="sd">    `frame.f_globals` to check if the module matches in ignore.</span>
+
+<span class="sd">    Do it only when the __file__ is not avaiable or does not exist for</span>
+<span class="sd">    the module. Since this probably means the source is not avaiable and</span>
+<span class="sd">    `inspect.getmodule` would not work</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">module_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;__file__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">module_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">module_file</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="c1"># or it&#39;s already been set</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;&lt;varname-ignore-</span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="n">module</span><span class="p">)</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">frame_matches_module_by_ignore_id</span><span class="p">(</span><span id="varname.utils.frame_matches_module_by_ignore_id"></span><a class="mkapi-docs-link" title="varname.utils.frame_matches_module_by_ignore_id" href="../../varname.utils/#varname.utils.frame_matches_module_by_ignore_id">DOCS</a>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span>
+        <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Check if the frame is from the module by ignore id&quot;&quot;&quot;</span>
+    <span class="n">ignore_id_attached</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">,</span> <span class="nb">object</span><span class="p">())</span>
+    <span class="n">ignore_id_from_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">,</span> <span class="nb">object</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">ignore_id_attached</span> <span class="o">==</span> <span class="n">ignore_id_from_frame</span>
+
+<span class="nd">@lru_cache</span><span class="p">()</span><span id="varname.utils.check_qualname_by_source"></span><a class="mkapi-docs-link" title="varname.utils.check_qualname_by_source" href="../../varname.utils/#varname.utils.check_qualname_by_source">DOCS</a>
+<span class="k">def</span> <span class="nf">check_qualname_by_source</span><span class="p">(</span>
+        <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+        <span class="n">modname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">qualname</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Check if a qualname in module is unique&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="o">.</span><span class="n">tree</span><span class="p">:</span>
+        <span class="c1"># no way to check it, skip</span>
+        <span class="k">return</span>
+    <span class="n">nobj</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">_qualnames</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">qualname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nobj</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">QualnameNonUniqueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Qualname </span><span class="si">{</span><span class="n">qualname</span><span class="si">!r}</span><span class="s2"> in &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modname</span><span class="si">!r}</span><span class="s2"> refers to multiple objects.&quot;</span>
+        <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">debug_ignore_frame</span><span class="p">(</span><span id="varname.utils.debug_ignore_frame"></span><a class="mkapi-docs-link" title="varname.utils.debug_ignore_frame" href="../../varname.utils/#varname.utils.debug_ignore_frame">DOCS</a>
+        <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">frameinfo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Print the debug message for a given frame info object</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg: The debugging message</span>
+<span class="sd">        frameinfo: The FrameInfo object for the frame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">frameinfo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s1"> [In </span><span class="si">{</span><span class="n">frameinfo</span><span class="o">.</span><span class="n">function</span><span class="si">!r}</span><span class="s1"> at &#39;</span>
+               <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">frameinfo</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">frameinfo</span><span class="o">.</span><span class="n">lineno</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">] DEBUG: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">argnode_source</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><span id="varname.utils.argnode_source"></span><a class="mkapi-docs-link" title="varname.utils.argnode_source" href="../../varname.utils/#varname.utils.argnode_source">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Get the source of an argument node&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">vars_only</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">NonVariableArgumentError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Argument </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s1"> is not a variable.&#39;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
+    <span class="k">return</span> <span class="n">source</span><span class="o">.</span><span class="n">asttokens</span><span class="p">()</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_argument_sources</span><span class="p">(</span><span id="varname.utils.get_argument_sources"></span><a class="mkapi-docs-link" title="varname.utils.get_argument_sources" href="../../varname.utils/#varname.utils.get_argument_sources">DOCS</a>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">,</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Get the sources for argument from an ast.Call node</span>
+
+<span class="sd">    &gt;&gt;&gt; def func(a, b, c, d=4):</span>
+<span class="sd">    &gt;&gt;&gt;  ...</span>
+<span class="sd">    &gt;&gt;&gt; x = y = z = 1</span>
+<span class="sd">    &gt;&gt;&gt; func(y, x, c=z)</span>
+<span class="sd">    &gt;&gt;&gt; # argument_sources = {&#39;a&#39;: &#39;y&#39;, &#39;b&#39;, &#39;x&#39;, &#39;c&#39;: &#39;z&#39;}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.ignore</span> <span class="kn">import</span> <span class="n">IgnoreList</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">ignore_lambda</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># &lt;Signature (a, b, c, d=4)&gt;</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">follow_wrapped</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># func(y, x, c=z)</span>
+    <span class="c1"># [&#39;y&#39;, &#39;x&#39;], {&#39;c&#39;: &#39;z&#39;}</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">for_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="n">arg_sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">argnode_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">argnode</span><span class="p">,</span> <span class="n">vars_only</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">argnode</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+    <span class="n">kwarg_sources</span> <span class="o">=</span> <span class="p">{</span><span class="n">argnode</span><span class="o">.</span><span class="n">arg</span><span class="p">:</span> <span class="n">argnode_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span>
+                                                 <span class="n">argnode</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                                 <span class="n">vars_only</span><span class="p">)</span>
+                     <span class="k">for</span> <span class="n">argnode</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">keywords</span><span class="p">}</span>
+    <span class="n">bound_args</span> <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">bind_partial</span><span class="p">(</span><span class="o">*</span><span class="n">arg_sources</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg_sources</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bound_args</span><span class="o">.</span><span class="n">arguments</span>
+
+<span class="k">def</span> <span class="nf">get_function_called_argname</span><span class="p">(</span><span id="varname.utils.get_function_called_argname"></span><a class="mkapi-docs-link" title="varname.utils.get_function_called_argname" href="../../varname.utils/#varname.utils.get_function_called_argname">DOCS</a>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span>
+        <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Get the function who called argname&quot;&quot;&quot;</span>
+    <span class="c1"># We need node to be ast.Call</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expect an &#39;ast.Call&#39; node, but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Are you using &#39;argname&#39; inside a function?&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># variable</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># pragma: no cover</span>
+            <span class="c1"># not sure how it would happen but in case</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot retrieve the function by </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="c1"># use pure_eval</span>
+    <span class="n">pure_eval_fail_msg</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pure_eval</span> <span class="kn">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">CannotEval</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">pure_eval_fail_msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;pure_eval&#39; is not installed.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="o">.</span><span class="n">from_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">evaluator</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">CannotEval</span><span class="p">:</span>
+            <span class="n">pure_eval_fail_msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot evaluate node </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;using &#39;pure_eval&#39;.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># try eval</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pure_eval_fail_msg</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="s2">&quot;Using &#39;eval&#39; to get the function that calls &#39;argname&#39;. &quot;</span>
+        <span class="s2">&quot;Try calling it using a variable reference to the function, or &quot;</span>
+        <span class="s2">&quot;passing the function to &#39;argname&#39; explicitly.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="s1">&#39;&lt;ast-call&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;eval&#39;</span><span class="p">)</span>
+    <span class="c1"># pylint: disable=eval-used</span>
+    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">parse_argname_subscript</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">):</span><span id="varname.utils.parse_argname_subscript"></span><a class="mkapi-docs-link" title="varname.utils.parse_argname_subscript" href="../../varname.utils/#varname.utils.parse_argname_subscript">DOCS</a>
+    <span class="sd">&quot;&quot;&quot;Parse the ast.Subscript node passed to argname</span>
+
+<span class="sd">    Make sure:</span>
+<span class="sd">    1. node.value is an ast.Name node</span>
+<span class="sd">    2. node.slice is a ast.Constant node</span>
+
+<span class="sd">    This is separated as a function, since we want to see in the future whether</span>
+<span class="sd">    non-ast.Constant node can be supported as node.slice.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expect </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2"> to be a variable.&quot;</span><span class="p">)</span>
+
+    <span class="n">subscript</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">slice</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subscript</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Index</span><span class="p">):</span>
+        <span class="n">subscript</span> <span class="o">=</span> <span class="n">subscript</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subscript</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Num</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expect </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">subscript</span><span class="p">)</span><span class="si">}</span><span class="s2"> to be a constant.&quot;</span><span class="p">)</span>
+
+    <span class="n">subscript</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">subscript</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">subscript</span><span class="p">)</span> <span class="c1"># ast.Index, ast.Constant</span>
+    <span class="n">subscript</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">subscript</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="n">subscript</span><span class="p">)</span> <span class="c1"># ast.Num</span>
+    <span class="n">subscript</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">subscript</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">subscript</span><span class="p">)</span> <span class="c1"># ast.Str</span>
+
+    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">subscript</span>
+</code></pre></div>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/vendor.53cc9318.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.e9c9f54f.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../../assets/javascripts/worker/search.9c0e82ba.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>
