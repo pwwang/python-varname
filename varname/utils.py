@@ -242,24 +242,39 @@ def debug_ignore_frame(
                f'{frameinfo.filename}:{frameinfo.lineno}]')
     sys.stderr.write(f'[{__package__}] DEBUG: {msg}\n')
 
-@lru_cache()
-def argnode_source(source: Source, node: ast.AST, vars_only: bool) -> str:
-    """Get the source of an argument node"""
+def argnode_source(source: Source,
+                   node: ast.AST,
+                   vars_only: bool) -> Union[str, ast.AST]:
+    """Get the source of an argument node
+
+    Args:
+        source: The executing source object
+        node: The node to get the source from
+        vars_only: Whether only allow variables and attributes
+
+    Returns:
+        The source of the node (node.id for ast.Name,
+            node.attr for ast.Attribute). Or the node itself if the source
+            cannot be fetched.
+    """
     if vars_only:
-        if not isinstance(node, (ast.Name, ast.Attribute)):
-            raise NonVariableArgumentError(
-                f'Argument {ast.dump(node)} is not a variable or an attribute.'
-            )
-        return node.id if isinstance(node, ast.Name) else node.attr
+        return (
+            node.id if isinstance(node, ast.Name)
+            else node.attr if isinstance(node, ast.Attribute)
+            else node
+        )
+
+    # requires asttokens
     return source.asttokens().get_text(node)
 
+@lru_cache()
 def get_argument_sources(
-        frame: FrameType,
+        source: Source,
         node: ast.Call,
         func: Callable,
         vars_only: bool,
         pos_only: bool
-) -> MutableMapping[str, str]:
+) -> MutableMapping[str, Union[ast.AST, str]]:
     """Get the sources for argument from an ast.Call node
 
     >>> def func(a, b, c, d=4):
@@ -267,12 +282,13 @@ def get_argument_sources(
     >>> x = y = z = 1
     >>> func(y, x, c=z)
     >>> # argument_sources = {'a': 'y', 'b', 'x', 'c': 'z'}
+    >>> func(y, x, c=1)
+    >>> # argument_sources = {'a': 'y', 'b', 'x', 'c': ast.Num(n=1)}
     """
     # <Signature (a, b, c, d=4)>
     signature = inspect.signature(func, follow_wrapped=False)
     # func(y, x, c=z)
     # ['y', 'x'], {'c': 'z'}
-    source = Source.for_frame(frame)
     arg_sources = [argnode_source(source, argnode, vars_only)
                    for argnode in node.args]
     kwarg_sources = {

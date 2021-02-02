@@ -3,6 +3,8 @@ import ast
 import warnings
 from typing import Optional, Tuple, Union, Any, Callable
 
+from executing import Source
+
 from .utils import (
     bytecode_nameof,
     get_node,
@@ -13,6 +15,7 @@ from .utils import (
     get_function_called_argname,
     parse_argname_subscript,
     VarnameRetrievingError,
+    NonVariableArgumentError,
     MultiTargetAssignmentWarning
 )
 from .ignore import IgnoreList, IgnoreType
@@ -349,8 +352,13 @@ def argname(arg: Any, # pylint: disable=unused-argument
     if not func:
         func = get_function_called_argname(func_frame, func_node)
 
+    # don't pass the target arguments so that we can cache the sources in
+    # the same call. For example:
+    # >>> def func(a, b):
+    # >>>   a_name = argname(a)
+    # >>>   b_name = argname(b)
     argument_sources = get_argument_sources(
-        func_frame,
+        Source.for_frame(func_frame),
         func_node,
         func,
         vars_only=vars_only,
@@ -404,5 +412,13 @@ def argname(arg: Any, # pylint: disable=unused-argument
                     "(**kwargs, for example)."
                 )
             ret.append(argument_sources[name][subscript])
+
+    if vars_only:
+        for source in ret:
+            if isinstance(source, ast.AST):
+                raise NonVariableArgumentError(
+                    f'Argument {ast.dump(source)} is not a variable '
+                    'or an attribute.'
+                )
 
     return ret[0] if not more_args else tuple(ret)

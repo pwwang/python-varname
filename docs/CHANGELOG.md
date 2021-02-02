@@ -1,10 +1,70 @@
 ## v0.6.2
 - Remove argument `full` for `nameof`, use `vars_only` instead. When `vars_only=False`, source of the argument returned.
+  ```python
+  # before:
+  nameof(a.b, full=True) # 'a.b'
+  nameof(x[0], full=True) # unable to fetch
+  # after (requires asttoken):
+  nameof(a.b, vars_only=False) # 'a.b'
+  nameof(x[0], vars_only=False) # 'x[0]'
+  ```
 - Add argument `frame` to `argname`, so that it can be wrapped.
+  ```python
+  def argname2(arg, *more_args):
+      return argname(arg, *more_args, frame=2)
+  ```
 - Allow `argname` to fetch the source of variable keyword arguments (`**kwargs`), which will be an empty dict (`{}`) when no keyword arguments passed.
+  ```python
+  def func(a, **kwargs):
+      return argname(a, kwargs)
+  # before:
+  func(x) # raises error
+  # after:
+  func(x) # returns ('x', {})
+  ```
 - Add argument `pos_only` to `argname` to only match the positional arguments
+  ```python
+  # before
+  def func(a, b=1):
+    return argname(a)
+  func(x) # 'x'
+  func(x, b=2) # error since 2 is not ast.Name
+
+  # after
+  def func(a, b=1):
+    return argname(a, pos_only=True)
+  func(x) # 'x'
+  func(x, b=2) # 'x'
+  ```
+- Parse the arguments only if needed
+  ```python
+  # before
+  def func(a, b):
+    return argname(a)
+  func(x, 1) # NonVariableArgumentError
+
+  # after
+  func(x, 1) # 'x'
+  ```
 - Allow variable positional arguments for `argname` so that `argname(*args)` is allowed
-- Add `vars_only` argument to `helpers.debug` so source of expression becomes available
+  ```python
+  # before
+  def func(arg, *args):
+    return argname(arg, args) # *args not allowed
+  x = y = 1
+  func(x, y) # ('x', ('y', 1))
+
+  # after
+  def func(arg, *args):
+    return argname(arg, *args)
+  x = y = 1
+  func(x, y) # ('x', 'y')
+  ```
+- Add `vars_only` (defaults to `False`) argument to `helpers.debug` so source of expression becomes available
+  ```python
+  a=1
+  debug(a+a) # DEBUG: a+a=2
+  ```
 
 ## v0.6.1
 - Add `argname` to retrieve argument names/sources passed to a function

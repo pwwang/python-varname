@@ -237,3 +237,10 @@ def test_argname_nosuch_varpos_arg():
     ):
         func(x, y)
 
+def test_argname_target_arg():
+    def func(a, b):
+        return argname(a)
+
+    x = 1
+    names = func(x, 1)
+    assert names == 'x'
