@@ -315,6 +315,10 @@ debug(a, b)
 debug(a, b, merge=True)
 # DEBUG: a='value', b=<object object at 0x2b70580e5f20>
 debug(a, repr=False, prefix='') # a=value
+# also debug an expression
+debug(a+a) # DEBUG: a+a='valuevalue'
+# If you want to disable it:
+debug(a+a, vars_only=True) # error
 ```
 
 ## Reliability and limitations
@@ -331,14 +335,12 @@ For example:
 - This will not work with `pytest`:
   ```python
   a = 1
-  assert nameof(a) == 'a'
+  assert nameof(a) == 'a' # pytest manipulated the ast here
 
   # do this instead
   name_a = nameof(a)
   assert name_a == 'a'
   ```
-
-- `R` with `reticulate`.
 
 [1]: https://github.com/pwwang/python-varname
 [2]: https://github.com/HanyuuLu

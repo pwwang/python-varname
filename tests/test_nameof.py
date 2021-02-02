@@ -28,33 +28,33 @@ def test_nameof_full():
     assert name == 'a'
     name = nameof(a.b)
     assert name == 'b'
-    name = nameof(a.b, full=True)
+    name = nameof(a.b, vars_only=False)
     assert name == 'a.b'
     name = nameof(a.b.c)
     assert name == 'c'
-    name = nameof(a.b.c, full=True)
+    name = nameof(a.b.c, vars_only=False)
     assert name == 'a.b.c'
 
     d = [a, a]
     with pytest.raises(
-            VarnameRetrievingError,
-            match='Can only retrieve full names of'
+            NonVariableArgumentError,
+            match='is not a variable or an attribute'
     ):
-        name = nameof(d[0].b, full=True)
+        name = nameof(d[0], vars_only=True)
 
     # we are not able to retreive full names without source code available
     with pytest.raises(
             VarnameRetrievingError,
             match=('Are you trying to call nameof from exec/eval')
     ):
-        eval('nameof(a.b, full=False)')
+        eval('nameof(a.b, a)')
 
 
 def test_nameof_from_stdin():
     code = ('from varname import nameof; '
             'x = lambda: 0; '
             'x.y = x; '
-            'print(nameof(x.y, full=False))')
+            'print(nameof(x.y, x))')
     p = subprocess.Popen([sys.executable],
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
@@ -69,7 +69,30 @@ def test_nameof_node_not_retrieved():
     source = ('from varname import nameof; '
               'x = lambda: 0; '
               'x.y = x; '
-              'print(nameof(x.y, full=False))')
+              'print(nameof(x.y, x))')
     code = compile(source, filename="<string2>", mode="exec")
     with pytest.raises(VarnameRetrievingError, match='Source code unavailable'):
         exec(code)
+
+    source = ('from varname import nameof; '
+              'x = lambda: 0; '
+              'x.y = x; '
+              'print(nameof(x.y, vars_only=True))')
+    code = compile(source, filename="<string3>", mode="exec")
+    with pytest.raises(
+            VarnameRetrievingError,
+            match="'nameof' can only be called with a single positional argument"):
+        exec(code)
+
+def test_nameof_wrapper():
+
+    def decorator(f):
+        def wrapper(var, *more_vars):
+            return f(var, *more_vars, frame=2)
+
+        return wrapper
+
+    wrap1 = decorator(nameof)
+    x = y = 1
+    name = wrap1(x, y)
+    assert name == ('x', 'y')

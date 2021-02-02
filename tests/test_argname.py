@@ -1,3 +1,5 @@
+import textwrap
+
 import pytest
 from varname import *
 
@@ -158,3 +160,87 @@ def test_argname_star_args_individual():
         return argname(args[x])
     with pytest.raises(ValueError, match="to be a constant"):
         func(x, y, z)
+
+def test_argname_argname_node_na():
+    source = textwrap.dedent(f"""\
+        from varname import argname
+        def func(a):
+            return argname(a)
+
+        x = 1
+        print(func(x))
+    """)
+    code = compile(source, '<string343>', 'exec')
+    with pytest.raises(
+            VarnameRetrievingError,
+            match="The source code of 'argname' calling is not available"
+    ):
+        exec(code)
+
+def test_argname_func_node_na():
+    def func(a):
+        return argname(a)
+
+    with pytest.raises(
+            VarnameRetrievingError,
+            match="The source code of 'argname' calling is not available"
+    ):
+        exec('x=1; func(x)')
+
+def test_argname_func_na():
+    def func(a):
+        return argname(a)
+
+    with pytest.raises(
+            VarnameRetrievingError,
+            match="The source code of 'argname' calling is not available"
+    ):
+        exec('x=1; func(x)')
+
+def test_argname_wrapper():
+
+    def decorator(f):
+        def wrapper(arg, *more_args):
+            return f(arg, *more_args, frame=2)
+
+        return wrapper
+
+    argname2 = decorator(argname)
+
+    def func(a, b):
+        return argname2(a, b)
+
+    x = y = 1
+    names = func(x, y)
+    assert names == ('x', 'y')
+
+def test_argname_varpos_arg():
+    def func(a, *args, **kwargs):
+        return argname(kwargs, a, *args)
+
+    x = y = z = 1
+    names = func(x, y, kw=z)
+    assert names == ({'kw': 'z'}, 'x', 'y')
+
+    names = func(x)
+    assert names == ({}, 'x')
+
+def test_argname_nosuch_varpos_arg():
+    def func(a, *args):
+        another = []
+        return argname(a, *another)
+
+    x = y = 1
+    with pytest.raises(
+            ValueError,
+            match="No such variable positional argument"
+    ):
+        func(x, y)
+
+def test_argname_target_arg():
+    def func(a, b):
+        return argname(a)
+
+    x = 1
+    names = func(x, 1)
+    assert names == 'x'

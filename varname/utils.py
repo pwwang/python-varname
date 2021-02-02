@@ -133,14 +133,8 @@ def node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
         f"not {ast.dump(node)}"
     )
 
-def bytecode_nameof(frame: int = 1) -> str:
-    """Bytecode version of nameof as a fallback"""
-    from .ignore import IgnoreList
-    frame = IgnoreList.create().get_frame(frame)
-    return _bytecode_nameof_cached(frame.f_code, frame.f_lasti)
-
 @lru_cache()
-def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
+def bytecode_nameof(code: CodeType, offset: int) -> str:
     """Cached Bytecode version of nameof
 
     We are trying this version only when the sourcecode is unavisible. In most
@@ -155,8 +149,17 @@ def _bytecode_nameof_cached(code: CodeType, offset: int) -> str:
         if instruction.offset == offset
     )
 
+    if current_instruction.opname in (
+            "CALL_FUNCTION_EX",
+            "CALL_FUNCTION_KW"
+    ):
+        raise VarnameRetrievingError(
+            "'nameof' can only be called with a single positional argument "
+            "when source code is not avaiable."
+        )
+
     if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
-        raise VarnameRetrievingError("Did you call nameof in a weird way?")
+        raise VarnameRetrievingError("Did you call 'nameof' in a weird way?")
 
     name_instruction = instructions[
         current_instruction_index - 1
@@ -237,24 +240,41 @@ def debug_ignore_frame(
     if frameinfo is not None:
         msg = (f'{msg} [In {frameinfo.function!r} at '
                f'{frameinfo.filename}:{frameinfo.lineno}]')
-    sys.stderr.write(f'[{__name__}] DEBUG: {msg}\n')
+    sys.stderr.write(f'[{__package__}] DEBUG: {msg}\n')
 
-def argnode_source(source: Source, node: ast.AST, vars_only: bool) -> str:
-    """Get the source of an argument node"""
+def argnode_source(source: Source,
+                   node: ast.AST,
+                   vars_only: bool) -> Union[str, ast.AST]:
+    """Get the source of an argument node
+
+    Args:
+        source: The executing source object
+        node: The node to get the source from
+        vars_only: Whether only allow variables and attributes
+
+    Returns:
+        The source of the node (node.id for ast.Name,
+            node.attr for ast.Attribute). Or the node itself if the source
+            cannot be fetched.
+    """
     if vars_only:
-        if not isinstance(node, ast.Name):
-            raise NonVariableArgumentError(
-                f'Argument {ast.dump(node)} is not a variable.'
-            )
-        return node.id
+        return (
+            node.id if isinstance(node, ast.Name)
+            else node.attr if isinstance(node, ast.Attribute)
+            else node
+        )
+
+    # requires asttokens
     return source.asttokens().get_text(node)
 
+@lru_cache()
 def get_argument_sources(
-        frame: FrameType,
+        source: Source,
         node: ast.Call,
         func: Callable,
-        vars_only: bool = True
-) -> MutableMapping[str, str]:
+        vars_only: bool,
+        pos_only: bool
+) -> MutableMapping[str, Union[ast.AST, str]]:
     """Get the sources for argument from an ast.Call node
 
     >>> def func(a, b, c, d=4):
@@ -262,22 +282,31 @@ def get_argument_sources(
     >>> x = y = z = 1
     >>> func(y, x, c=z)
     >>> # argument_sources = {'a': 'y', 'b', 'x', 'c': 'z'}
+    >>> func(y, x, c=1)
+    >>> # argument_sources = {'a': 'y', 'b', 'x', 'c': ast.Num(n=1)}
     """
-    from .ignore import IgnoreList
-    frame = IgnoreList.create(ignore_lambda=False).get_frame(2)
     # <Signature (a, b, c, d=4)>
     signature = inspect.signature(func, follow_wrapped=False)
     # func(y, x, c=z)
     # ['y', 'x'], {'c': 'z'}
-    source = Source.for_frame(frame)
     arg_sources = [argnode_source(source, argnode, vars_only)
                    for argnode in node.args]
-    kwarg_sources = {argnode.arg: argnode_source(source,
-                                                 argnode.value,
-                                                 vars_only)
-                     for argnode in node.keywords}
+    kwarg_sources = {
+        argnode.arg: argnode_source(source,
+                                    argnode.value,
+                                    vars_only)
+        for argnode in node.keywords
+    } if not pos_only else {}
     bound_args = signature.bind_partial(*arg_sources, **kwarg_sources)
-    return bound_args.arguments
+    argument_sources = bound_args.arguments
+    # see if *args and **kwargs have anything assigned
+    # if not, assign () and {} to them
+    for parameter in signature.parameters.values():
+        if parameter.kind == inspect.Parameter.VAR_POSITIONAL:
+            argument_sources.setdefault(parameter.name, ())
+        if parameter.kind == inspect.Parameter.VAR_KEYWORD:
+            argument_sources.setdefault(parameter.name, {})
+    return argument_sources
 
 def get_function_called_argname(
         frame: FrameType,

@@ -3,6 +3,8 @@ import ast
 import warnings
 from typing import Optional, Tuple, Union, Any, Callable
 
+from executing import Source
+
 from .utils import (
     bytecode_nameof,
     get_node,
@@ -13,6 +15,7 @@ from .utils import (
     get_function_called_argname,
     parse_argname_subscript,
     VarnameRetrievingError,
+    NonVariableArgumentError,
     MultiTargetAssignmentWarning
 )
 from .ignore import IgnoreList, IgnoreType
@@ -183,9 +186,10 @@ def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
     return node.attr
 
 
-def nameof(var, *more_vars, # pylint: disable=unused-argument
+def nameof(var, *more_vars,
+           # *, keyword only argument, supported with python3.8+
            frame: int = 1,
-           full: Optional[bool] = None) -> Union[str, Tuple[str]]:
+           vars_only: bool = True) -> Union[str, Tuple[str]]:
     """Get the names of the variables passed in
 
     Examples:
@@ -211,38 +215,48 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
     Args:
         var: The variable to retrieve the name of
         *more_vars: Other variables to retrieve the names of
-        frame: The depth of the frame (this function) is called.
-            This is useful if you want to wrap this function.
-            Note that the calls from varname and builtin modules are ignored.
-        full: Whether report the full path of the variable.
-            For example: `nameof(a.b.c, full=True)` give you `a.b.c`
-            instead of `c`
+        frame: The this function is called from the wrapper of it. `frame=1`
+            means no wrappers.
+            Note that the calls from standard libraries are ignored.
+            Also note that the wrapper has to have signature as this one.
+        vars_only: Whether only allow variables/attributes as arguments or
+            any expressions. If `True`, then the sources of the arguments
+            will be returned.
 
     Returns:
-        The names of variables passed in. If a single varialble is passed,
-            return the name of it. If multiple variables are passed, return
-            a tuple of their names.
+        The names/sources of variables/expressions passed in.
+            If a single argument is passed, return the name/source of it.
+            If multiple variables are passed, return a tuple of their
+            names/sources.
+            If the argument is an attribute (e.g. `a.b`) and `vars_only` is
+            `False`, only `"b"` will returned. Set `vars_only` to `True` to
+            get `"a.b"`.
 
     Raises:
         VarnameRetrievingError: When the callee's node cannot be retrieved or
             trying to retrieve the full name of non attribute series calls.
     """
-    node = get_node(frame, raise_exc=True)
+    # Frame is anyway used in get_node
+    frameobj = IgnoreList.create(
+        ignore_lambda=False,
+        ignore_varname=False
+    ).get_frame(frame)
+    node = get_node_by_frame(frameobj, raise_exc=True)
     if not node:
         # We can't retrieve the node by executing.
         # It can be due to running code from python/shell, exec/eval or
         # other environments where sourcecode cannot be reached
         # make sure we keep it simple (only single variable passed and no
-        # full passed) to use _bytecode_nameof
-        if not more_vars and full is None:
-            return bytecode_nameof(frame)
+        # full passed) to use bytecode_nameof
+        #
+        # We don't have to check keyword arguments here, as the instruction
+        # will then be CALL_FUNCTION_KW.
+        if not more_vars:
+            return bytecode_nameof(frameobj.f_code, frameobj.f_lasti)
 
         # We are anyway raising exceptions, no worries about additional burden
         # of frame retrieval again
-
-        # may raise exception, just leave it as is
-        frame = IgnoreList.create().get_frame(frame)
-        source = frame.f_code.co_filename
+        source = frameobj.f_code.co_filename
         if source == '<stdin>':
             raise VarnameRetrievingError(
                 "Are you trying to call nameof in REPL/python shell? "
@@ -260,38 +274,21 @@ def nameof(var, *more_vars, # pylint: disable=unused-argument
             "a single variable, and argument `full` should not be specified."
         )
 
-    ret = []
-    for arg in node.args:
-        if not full or isinstance(arg, ast.Name):
-            ret.append(node_name(arg))
-        else:
-            # traverse the node to get the full name: nameof(a.b.c)
-            # arg:
-            # Attribute(value=Attribute(value=Name(id='a', ctx=Load()),
-            #                           attr='b',
-            #                           ctx=Load()),
-            #           attr='c',
-            #           ctx=Load())
-            full_name = []
-            while not isinstance(arg, ast.Name):
-                if not isinstance(arg, ast.Attribute):
-                    raise VarnameRetrievingError(
-                        'Can only retrieve full names of '
-                        '(chained) attribute calls by nameof.'
-                    )
-                full_name.append(arg.attr)
-                arg = arg.value
-            # now it is an ast.Name
-            full_name.append(arg.id)
-            ret.append('.'.join(reversed(full_name)))
-
-    return ret[0] if not more_vars else tuple(ret)
+    return argname(
+        var, *more_vars,
+        func=nameof,
+        frame=frame,
+        vars_only=vars_only,
+        pos_only=True
+    )
 
 def argname(arg: Any, # pylint: disable=unused-argument
             *more_args: Any,
             # *, keyword-only argument, only available with python3.8+
             func: Optional[Callable] = None,
-            vars_only: bool = True) -> Union[str, Tuple[str]]:
+            frame: int = 1,
+            vars_only: bool = True,
+            pos_only: bool = False) -> Union[str, Tuple[str]]:
     """Get the argument names/sources passed to a function
 
     Args:
@@ -299,8 +296,8 @@ def argname(arg: Any, # pylint: disable=unused-argument
             the function
         *more_args: Other parameters of the function, used to map more arguments
             passed to the function
-        func: The function. If not provided, the AST node of the function call
-            will be used to fetch the function:
+        func: The target function. If not provided, the AST node of the
+            function call will be used to fetch the function:
             - If a variable (ast.Name) used as function, the `node.id` will
                 be used to get the function from `locals()` or `globals()`.
             - If variable (ast.Name), attributes (ast.Attribute),
@@ -311,7 +308,13 @@ def argname(arg: Any, # pylint: disable=unused-argument
                 will be used. A warning will be shown since unwanted side
                 effects may happen in this case.
             You are encouraged to always pass the function explicitly.
-        vars_only: Require the arguments to be variables only
+        frame: The frame where target function is called from this call.
+            The intermediate calls will be the wrappers of this function.
+            However, keep in mind that the wrappers must have the same
+            signature as this function. When `pos_only` is `True`, only the
+            positional arguments have to be the same
+        vars_only: Require the arguments to be variables only,
+        pos_only: Only fetch the names/sources for positional arguments.
 
     Returns:
         The argument source when no more_args passed, otherwise a tuple of
@@ -326,35 +329,64 @@ def argname(arg: Any, # pylint: disable=unused-argument
             Only variables and subscripts of variables are allow to be passed
             to this function.
     """
-    # // TODO: check if both nodes can be fetched
-    # // TODO: check if func can always be fetched
-    ignore_list = IgnoreList.create(ignore_lambda=False)
+    ignore_list = IgnoreList.create(
+        ignore_lambda=False,
+        ignore_varname=False
+    )
     # where argname(...) is called
-    argname_frame = ignore_list.get_frame(1)
+    argname_frame = ignore_list.get_frame(frame)
     argname_node = get_node_by_frame(argname_frame)
     # where func(...) is called
-    func_frame = ignore_list.get_frame(2)
+    func_frame = ignore_list.get_frame(frame + 1)
     func_node = get_node_by_frame(func_frame)
+    # Only do it when both nodes are available
+    if not argname_node or not func_node:
+        # We can do something at bytecode level, when a single positional
+        # argument passed to both functions (argname and the target function)
+        # However, it's hard to ensure that there is only a single positional
+        # arguments passed to the target function, at bytecode level.
+        raise VarnameRetrievingError(
+            "The source code of 'argname' calling is not available."
+        )
 
-    if not callable(func):
+    if not func:
         func = get_function_called_argname(func_frame, func_node)
 
+    # don't pass the target arguments so that we can cache the sources in
+    # the same call. For example:
+    # >>> def func(a, b):
+    # >>>   a_name = argname(a)
+    # >>>   b_name = argname(b)
     argument_sources = get_argument_sources(
-        func_frame,
+        Source.for_frame(func_frame),
         func_node,
         func,
-        vars_only=vars_only
+        vars_only=vars_only,
+        pos_only=pos_only
     )
 
     ret = []
     for argnode in argname_node.args:
-        if not isinstance(argnode, (ast.Name, ast.Subscript)):
+        if not isinstance(argnode, (ast.Name, ast.Subscript, ast.Starred)):
             raise ValueError(
                 "Arguments of 'argname' must be "
-                "(subscripts of) argument variables."
+                "function arguments themselves or subscripts of them."
             )
 
-        if isinstance(argnode, ast.Name):
+        if isinstance(argnode, ast.Starred):
+            if (
+                    not isinstance(argnode.value, ast.Name) or
+                    argnode.value.id not in argument_sources or
+                    not isinstance(argument_sources[argnode.value.id], tuple)
+            ):
+                posvar = argnode.value
+                posvar = getattr(posvar, 'id', posvar)
+                raise ValueError(
+                    f"No such variable positional argument {posvar!r}"
+                )
+            ret.extend(argument_sources[argnode.value.id])
+
+        elif isinstance(argnode, ast.Name):
             if argnode.id not in argument_sources:
                 raise ValueError(
                     f"No value passed for argument {argnode.id!r}, "
@@ -380,5 +412,13 @@ def argname(arg: Any, # pylint: disable=unused-argument
                     "(**kwargs, for example)."
                 )
             ret.append(argument_sources[name][subscript])
+
+    if vars_only:
+        for source in ret:
+            if isinstance(source, ast.AST):
+                raise NonVariableArgumentError(
+                    f'Argument {ast.dump(source)} is not a variable '
+                    'or an attribute.'
+                )
 
     return ret[0] if not more_args else tuple(ret)
