@@ -22,6 +22,7 @@ import inspect
 import distutils.sysconfig as sysconfig
 import warnings
 from os import path
+from pathlib import Path
 from fnmatch import fnmatch
 from abc import ABC, abstractmethod
 from typing import List, Optional, Union
@@ -116,6 +117,8 @@ class IgnoreDirname(IgnoreElem, attrs=['dirname']):
     def _post_init(self) -> None:
         # pylint: disable=access-member-before-definition
         # pylint: disable=attribute-defined-outside-init
+
+        # Path object will turn into str here
         self.dirname = path.realpath(self.dirname)
 
         if not self.dirname.endswith(path.sep):
@@ -247,7 +250,7 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
     """Create an ignore element according to the type"""
     if isinstance(ignore_elem, ModuleType):
         return IgnoreModule(ignore_elem)
-    if isinstance(ignore_elem, str):
+    if isinstance(ignore_elem, (Path, str)):
         return (IgnoreDirname(ignore_elem)
                 if path.isdir(ignore_elem)
                 else IgnoreFilename(ignore_elem))
@@ -267,7 +270,7 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
 
     if isinstance(ignore_elem[0], ModuleType):
         return IgnoreModuleQualname(*ignore_elem)
-    if isinstance(ignore_elem[0], str):
+    if isinstance(ignore_elem[0], (Path, str)):
         return IgnoreFilenameQualname(*ignore_elem)
     if ignore_elem[0] is None:
         return IgnoreOnlyQualname(*ignore_elem)

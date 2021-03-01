@@ -15,6 +15,7 @@ import ast
 import warnings
 import inspect
 from os import path
+from pathlib import Path
 from functools import lru_cache
 from types import ModuleType, FunctionType, CodeType, FrameType
 from typing import Optional, Tuple, Union, List, MutableMapping, Callable
@@ -26,6 +27,7 @@ IgnoreElemType = Union[
     ModuleType,
     # filename of a module
     str,
+    Path,
     FunctionType,
     # the module (filename) and qualname
     # If module is None, then all qualname matches the 2nd element
