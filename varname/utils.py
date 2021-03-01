@@ -41,6 +41,7 @@ MODULE_IGNORE_ID_NAME = '__varname_ignore_id__'
 class config: # pylint: disable=invalid-name
     """Global configurations for varname"""
     debug = False
+    ignore_stdlib = True
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""

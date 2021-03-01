@@ -34,7 +34,7 @@ from .utils import (
     IgnoreType,
     MaybeDecoratedFunctionWarning,
     cached_getmodule,
-    attach_ignore_id_to_module,
+    attach_ignore_id_to_module, config,
     frame_matches_module_by_ignore_id,
     check_qualname_by_source,
     debug_ignore_frame
@@ -283,7 +283,7 @@ class IgnoreList:
 
         ignore_list = [
             create_ignore_elem(sysconfig.get_python_lib(standard_lib=True))
-        ]
+        ] if config.ignore_stdlib else []
         if ignore_varname:
             ignore_list.append(create_ignore_elem(sys.modules[__package__]))
         if ignore_lambda:
