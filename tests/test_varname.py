@@ -374,13 +374,13 @@ def test_ignore_dirname(tmp_path):
         'ignore_dirname',
         """
         from varname import varname
-        def bar():
-            return varname(ignore=[%r])
-        """ % tmp_path.as_posix(),
+        def bar(dirname):
+            return varname(ignore=[dirname])
+        """,
         tmp_path
     )
     def foo():
-        return module.bar()
+        return module.bar(tmp_path)
 
     f = foo()
     assert f == 'f'
