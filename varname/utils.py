@@ -39,7 +39,15 @@ IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
 MODULE_IGNORE_ID_NAME = '__varname_ignore_id__'
 
 class config: # pylint: disable=invalid-name
-    """Global configurations for varname"""
+    """Global configurations for varname
+
+    Attributes:
+        debug: Show debug information for frames being ignored
+        ignore_stdlib: Whether ignore calls from standard libraries or not.
+            This is set to False by default, since some environments can put
+            3rd-party library in the standard path (i.e. binder). You can
+            set it to True if you are not expecting those situations.
+    """
     debug = False
     ignore_stdlib = False
 
