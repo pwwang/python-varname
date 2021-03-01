@@ -96,6 +96,11 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
         return varname()
 
     func = asyncio.run(function()) # func == 'func'
+
+    # you can switch it off by:
+    # config.ignore_stdlib = False
+    # then you have to specify the library yourself:
+    # varname(ignore=[asyncio])
     ```
 
 - Retrieving name of a class instance
