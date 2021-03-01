@@ -116,14 +116,32 @@ class IgnoreDirname(IgnoreElem, attrs=['dirname']):
     def _post_init(self) -> None:
         # pylint: disable=access-member-before-definition
         # pylint: disable=attribute-defined-outside-init
+        self.dirname = path.realpath(self.dirname)
+
         if not self.dirname.endswith(path.sep):
             self.dirname = f'{self.dirname}{path.sep}'
 
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
         frame = frameinfos[frame_no].frame
+        filename = path.realpath(frame.f_code.co_filename)
 
-        return path.realpath(frame.f_code.co_filename).startswith(
-            path.realpath(self.dirname)
+        return filename.startswith(self.dirname)
+
+class IgnoreStdlib(IgnoreDirname, attrs=['dirname']):
+    """Ignore standard libraries in sysconfig.get_python_lib(standard_lib=True)
+
+    But we need to ignore 3rd-party packages under site-packages/.
+    """
+
+    def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
+        frame = frameinfos[frame_no].frame
+        third_party_lib = f'{self.dirname}site-packages{path.sep}'
+        filename = path.realpath(frame.f_code.co_filename)
+
+        return (
+            filename.startswith(self.dirname) and
+            # Exclude 3rd-party libraries in site-packages
+            not filename.startswith(third_party_lib)
         )
 
 class IgnoreFunction(IgnoreElem, attrs=['func']):
@@ -282,7 +300,7 @@ class IgnoreList:
             ignore = [ignore]
 
         ignore_list = [
-            create_ignore_elem(sysconfig.get_python_lib(standard_lib=True))
+            IgnoreStdlib(sysconfig.get_python_lib(standard_lib=True))
         ]
         if ignore_varname:
             ignore_list.append(create_ignore_elem(sys.modules[__package__]))

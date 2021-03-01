@@ -155,6 +155,11 @@ Retrieving the variable names using ``varname(...)``
 
        func = asyncio.run(function()) # func == 'func'
 
+       # you can switch it off by:
+       # config.ignore_stdlib = False
+       # then you have to specify the library yourself:
+       # varname(ignore=[asyncio])
+
 * 
   Retrieving name of a class instance
 
@@ -292,10 +297,10 @@ Getting variable names directly using ``nameof``
 
    # get full names of (chained) attribute calls
    func.a = func
-   nameof(func.a, full=True) # 'func.a'
+   nameof(func.a, vars_only=False) # 'func.a'
 
    func.a.b = 1
-   nameof(func.a.b, full=True) # 'func.a.b'
+   nameof(func.a.b, vars_only=False) # 'func.a.b'
 
 Detecting next immediate attribute name
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -389,7 +394,9 @@ Debugging with ``debug``
    # DEBUG: a='value', b=<object object at 0x2b70580e5f20>
    debug(a, repr=False, prefix='') # a=value
    # also debug an expression
-   debug(a+a, vars_only=False) # DEBUG: a+a='valuevalue'
+   debug(a+a) # DEBUG: a+a='valuevalue'
+   # If you want to disable it:
+   debug(a+a, vars_only=True) # error
 
 Reliability and limitations
 ---------------------------
@@ -411,11 +418,8 @@ For example:
   .. code-block:: python
 
      a = 1
-     assert nameof(a) == 'a'
+     assert nameof(a) == 'a' # pytest manipulated the ast here
 
      # do this instead
      name_a = nameof(a)
      assert name_a == 'a'
-
-* 
-  ``R`` with ``reticulate``.

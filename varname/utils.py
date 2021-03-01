@@ -39,7 +39,11 @@ IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
 MODULE_IGNORE_ID_NAME = '__varname_ignore_id__'
 
 class config: # pylint: disable=invalid-name
-    """Global configurations for varname"""
+    """Global configurations for varname
+
+    Attributes:
+        debug: Show debug information for frames being ignored
+    """
     debug = False
 
 class VarnameRetrievingError(Exception):

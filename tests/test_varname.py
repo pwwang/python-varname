@@ -1,5 +1,6 @@
 import sys
 import subprocess
+from pathlib import Path
 from functools import wraps
 
 import pytest
@@ -367,6 +368,22 @@ def test_ignore_decorated():
 
     with pytest.raises(VarnameRetrievingError):
         f6 = foo6()
+
+def test_ignore_dirname(tmp_path):
+    module = module_from_source(
+        'ignore_dirname',
+        """
+        from varname import varname
+        def bar():
+            return varname(ignore=[%r])
+        """ % tmp_path.as_posix(),
+        tmp_path
+    )
+    def foo():
+        return module.bar()
+
+    f = foo()
+    assert f == 'f'
 
 def test_type_anno_varname():
 

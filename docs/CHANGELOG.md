@@ -1,3 +1,6 @@
+## v0.6.3
+- Fix standard library ignoring ignores 3rd-party libraries under site-packages/
+
 ## v0.6.2
 - Remove argument `full` for `nameof`, use `vars_only` instead. When `vars_only=False`, source of the argument returned.
   ```python

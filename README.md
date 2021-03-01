@@ -226,10 +226,10 @@ nameof(f)  # 'f'
 
 # get full names of (chained) attribute calls
 func.a = func
-nameof(func.a, full=True) # 'func.a'
+nameof(func.a, vars_only=False) # 'func.a'
 
 func.a.b = 1
-nameof(func.a.b, full=True) # 'func.a.b'
+nameof(func.a.b, vars_only=False) # 'func.a.b'
 ```
 
 ### Detecting next immediate attribute name
