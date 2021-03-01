@@ -1,3 +1,7 @@
+## v0.6.3
+- Add config.ignore_stdlib
+- Set config.ignore_stdlib to False (You have to set it to True to ignore standard library by default)
+
 ## v0.6.2
 - Remove argument `full` for `nameof`, use `vars_only` instead. When `vars_only=False`, source of the argument returned.
   ```python
