@@ -56,10 +56,8 @@ def varname(
                 You can use Unix shell-style wildcards to match the qualname.
                 Otherwise the qualname must appear exactly once in the
                 module/file.
-            By default, all calls from `varname` package and lambda functions
-            are ignored.
-            When config.ignore_stdlib is set to True, calls from standard
-            libraries will be ignored by default as well.
+            By default, all calls from `varname` package, python standard
+            libraries and lambda functions are ignored.
         multi_vars: Whether allow multiple variables on left-hand side (LHS).
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.

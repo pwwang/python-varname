@@ -43,13 +43,8 @@ class config: # pylint: disable=invalid-name
 
     Attributes:
         debug: Show debug information for frames being ignored
-        ignore_stdlib: Whether ignore calls from standard libraries or not.
-            This is set to False by default, since some environments can put
-            3rd-party library in the standard path (i.e. binder). You can
-            set it to True if you are not expecting those situations.
     """
     debug = False
-    ignore_stdlib = False
 
 class VarnameRetrievingError(Exception):
     """When failed to retrieve the varname"""

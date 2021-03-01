@@ -1,5 +1,6 @@
 import sys
 import subprocess
+from pathlib import Path
 from functools import wraps
 
 import pytest
@@ -368,6 +369,22 @@ def test_ignore_decorated():
     with pytest.raises(VarnameRetrievingError):
         f6 = foo6()
 
+def test_ignore_dirname(tmp_path):
+    module = module_from_source(
+        'ignore_dirname',
+        """
+        from varname import varname
+        def bar():
+            return varname(ignore=[%r])
+        """ % tmp_path.as_posix(),
+        tmp_path
+    )
+    def foo():
+        return module.bar()
+
+    f = foo()
+    assert f == 'f'
+
 def test_type_anno_varname():
 
     class Foo:
@@ -383,53 +400,45 @@ def test_generic_type_varname():
 
     T = TypeVar("T")
 
-    try:
-        config.ignore_stdlib = True
-        class Foo(Generic[T]):
-            def __init__(self):
-                # Standard libraries are ignored by default now (0.6.0)
-                # self.id = varname(ignore=[typing])
-                self.id = varname()
-        foo = Foo[int]()
-        assert foo.id == 'foo'
+    class Foo(Generic[T]):
+        def __init__(self):
+            # Standard libraries are ignored by default now (0.6.0)
+            # self.id = varname(ignore=[typing])
+            self.id = varname()
+    foo = Foo[int]()
+    assert foo.id == 'foo'
 
-        bar:Foo = Foo[str]()
-        assert bar.id == 'bar'
+    bar:Foo = Foo[str]()
+    assert bar.id == 'bar'
 
-        baz = Foo()
-        assert baz.id == 'baz'
-    finally:
-        config.ignore_stdlib = False
+    baz = Foo()
+    assert baz.id == 'baz'
 
 def test_async_varname():
     from . import conftest
 
-    try:
-        config.ignore_stdlib = True
-        async def func():
-            return varname(ignore=(conftest, 'run_async'))
+    async def func():
+        return varname(ignore=(conftest, 'run_async'))
 
-        async def func2():
-            return varname(ignore=run_async)
+    async def func2():
+        return varname(ignore=run_async)
 
-        x = run_async(func())
-        assert x == 'x'
+    x = run_async(func())
+    assert x == 'x'
 
-        x2 = run_async(func2())
-        assert x2 == 'x2'
+    x2 = run_async(func2())
+    assert x2 == 'x2'
 
-        # frame and ignore together
-        async def func3():
-            # also works this way
-            return varname(frame=2, ignore=run_async)
+    # frame and ignore together
+    async def func3():
+        # also works this way
+        return varname(frame=2, ignore=run_async)
 
-        async def main():
-            return await func3()
+    async def main():
+        return await func3()
 
-        x3 = run_async(main())
-        assert x3 == 'x3'
-    finally:
-        config.ignore_stdlib = False
+    x3 = run_async(main())
+    assert x3 == 'x3'
 
 def test_invalid_ignores():
     # unexpected ignore item
