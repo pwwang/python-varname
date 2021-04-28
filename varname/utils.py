@@ -59,12 +59,26 @@ class NonVariableArgumentError(Exception):
     """When vars_only is True but try to retrieve name of
     a non-variable argument"""
 
+class ImproperUseError(VarnameRetrievingError):
+    """When varname() is improperly used"""
+    def __init__(self, message: str) -> None:
+        message = (
+            f"{message}\n\n"
+            "(Warning: `ImproperUseError` is a subclass of "
+            "`VarnameRetrievingError` for now for backward compatibility, "
+            "so you can still use `VarnameRetrievingError` to catch it. "
+            "But it will be independent of `VarnameRetrievingError` "
+            "in the future.)"
+        )
+        super().__init__(message)
+
 class MaybeDecoratedFunctionWarning(Warning):
     """When a suspecious decorated function used as ignore function directly"""
 
 class MultiTargetAssignmentWarning(Warning):
     """When varname tries to retrieve variable name in
     a multi-target assignment"""
+
 
 @lru_cache()
 def cached_getmodule(codeobj: CodeType):
@@ -125,7 +139,7 @@ def lookfor_parent_assign(node: ast.AST) -> Optional[ast.Assign]:
 def node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
     """Get the node node name.
 
-    Raises VarnameRetrievingError when failed
+    Raises ImproperUseError when failed
     """
     if isinstance(node, ast.Name):
         return node.id
@@ -134,7 +148,7 @@ def node_name(node: ast.AST) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
     if isinstance(node, (ast.List, ast.Tuple)):
         return tuple(node_name(elem) for elem in node.elts)
 
-    raise VarnameRetrievingError(
+    raise ImproperUseError(
         f"Can only get name of a variable or attribute, "
         f"not {ast.dump(node)}"
     )

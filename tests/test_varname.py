@@ -7,7 +7,7 @@ import pytest
 from executing import Source
 from varname import *
 from varname.helpers import *
-from varname.utils import get_node
+from varname.utils import ImproperUseError, get_node
 
 
 from .conftest import run_async, module_from_source
@@ -93,11 +93,11 @@ def test_single_var_lhs_required():
     def function():
         return varname()
 
-    with pytest.raises(VarnameRetrievingError,
+    with pytest.raises(ImproperUseError,
                        match='Expect a single variable on left-hand side'):
         x, y = function()
 
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(ImproperUseError):
         x, y = function(), function()
 
 def test_multi_vars_lhs():
@@ -122,7 +122,7 @@ def test_multi_vars_lhs():
 
     # Not all LHS are variables
     with pytest.raises(
-        VarnameRetrievingError,
+        ImproperUseError,
         match='Can only get name of a variable or attribute, not Starred'
     ):
         a, *b = function()
