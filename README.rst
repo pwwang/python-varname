@@ -155,11 +155,6 @@ Retrieving the variable names using ``varname(...)``
 
        func = asyncio.run(function()) # func == 'func'
 
-       # you can switch it off by:
-       # config.ignore_stdlib = False
-       # then you have to specify the library yourself:
-       # varname(ignore=[asyncio])
-
 * 
   Retrieving name of a class instance
 

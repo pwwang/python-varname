@@ -3,6 +3,7 @@
 from .utils import (
     config,
     VarnameRetrievingError,
+    ImproperUseError,
     QualnameNonUniqueError,
     NonVariableArgumentError,
     MultiTargetAssignmentWarning,
@@ -10,4 +11,4 @@ from .utils import (
 )
 from .core import varname, nameof, will, argname
 
-__version__ = "0.6.3"
+__version__ = "0.6.4"
