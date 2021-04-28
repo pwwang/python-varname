@@ -15,6 +15,7 @@ from .utils import (
     get_function_called_argname,
     parse_argname_subscript,
     VarnameRetrievingError,
+    ImproperUseError,
     NonVariableArgumentError,
     MultiTargetAssignmentWarning
 )
@@ -62,9 +63,12 @@ def varname(
             If `True`, this function returns a tuple of the variable names,
             even there is only one variable on LHS.
             If `False`, and multiple variables on LHS, a
-            `VarnameRetrievingError` will be raised.
+            `ImproperUseError` will be raised.
         raise_exc: Whether we should raise an exception if failed
-            to retrieve the name.
+            to retrieve the ast node.
+            Note that set this to `False` will not supress the exception when
+            the use of `varname` is improper (i.e. multiple variables on
+            LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
@@ -77,6 +81,11 @@ def varname(
             invalid number of variables used on the LHS; or
             when we are unable to retrieve the variable name and `raise_exc`
             is set to `True`.
+
+        ImproperUseError: When the use of `varname()` is improper. For example:
+            - When LHS is not an `ast.Name` or `ast.Attribute` node or not a
+                list/tuple of them
+            - When there are multiple variables on LHS but `multi_vars` is False
 
         UserWarning: When there are multiple target
             in the assign node. (e.g: `a = b = func()`, in such a case,
@@ -118,7 +127,7 @@ def varname(
         return names
 
     if len(names) > 1:
-        raise VarnameRetrievingError(
+        raise ImproperUseError(
             f"Expect a single variable on left-hand side, got {len(names)}."
         )
 

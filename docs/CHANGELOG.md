@@ -1,3 +1,6 @@
+## v0.6.4
+- Add ImproperUseError to distinguish node retrieving error from improper varname use #49
+
 ## v0.6.3
 - Fix standard library ignoring ignores 3rd-party libraries under site-packages/
 - Allow pathlib.Path object to be used in ignore items
