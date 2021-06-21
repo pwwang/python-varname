@@ -130,6 +130,7 @@ def debug(var, *more_vars,
           prefix: str = 'DEBUG: ',
           merge: bool = False,
           repr: bool = True, # pylint: disable=redefined-builtin
+          sep: str = '=',
           vars_only: bool = False) -> None:
     """Print variable names and values.
 
@@ -148,6 +149,7 @@ def debug(var, *more_vars,
         *more_vars: Other variables to print
         prefix: A prefix to print for each line
         merge: Whether merge all variables in one line or not
+        sep: The separator between the variable name and value
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
     var_names = argname(
@@ -161,7 +163,7 @@ def debug(var, *more_vars,
 
     values = (var, *more_vars)
     name_and_values = [
-        f"{var_name}={value!r}" if repr else f"{var_name}={value}"
+        f"{var_name}{sep}{value!r}" if repr else f"{var_name}{sep}{value}"
         for var_name, value in zip(var_names, values)
     ]
 
