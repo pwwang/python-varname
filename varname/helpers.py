@@ -149,6 +149,7 @@ def debug(var, *more_vars,
         *more_vars: Other variables to print
         prefix: A prefix to print for each line
         merge: Whether merge all variables in one line or not
+        sep: The separator between the variable name and value
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
     var_names = argname(

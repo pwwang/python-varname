@@ -1,3 +1,6 @@
+## v0.6.5
+- Add `sep` argument to `helpers.debug()`
+
 ## v0.6.4
 - Add ImproperUseError to distinguish node retrieving error from improper varname use #49
 
