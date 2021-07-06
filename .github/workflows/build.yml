@@ -39,12 +39,12 @@ jobs:
         if: ${{ always() }}
       - name: Upload Coverage
         if: matrix.python-version == 3.7
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: .coverage.xml
         run: |
           export CODACY_PROJECT_TOKEN ${{ project-token }}
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r ${{ coverage-reports }}
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: .coverage.xml
 
   deploy:
     needs: build
