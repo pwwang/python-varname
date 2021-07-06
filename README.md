@@ -20,7 +20,8 @@ pip install -U varname
   - Retrieving names of variables a function/class call is assigned to from inside it, using `varname`.
   - Retrieving variable names directly, using `nameof`
   - Detecting next immediate attribute name, using `will`
-  - Fetching argument names/sources passed to a function using `argname`
+  - Fetching argument names/sources passed to a function using `argname2`
+    (`argname` is superseded by `argname2`)
 
 - Other helper APIs (built based on core features):
 
@@ -257,28 +258,28 @@ awesome.permit() # AttributeError: Should do something with AwesomeClass object
 awesome.permit().do() == 'I am doing!'
 ```
 
-### Fetching argument names/sources using `argname`
+### Fetching argument names/sources using `argname2`
 ```python
-from varname import argname
+from varname import argname2
 
 def func(a, b=1):
-    print(argname(a))
+    print(argname2('a'))
 
 x = y = z = 2
 func(x) # prints: x
 
 def func2(a, b=1):
-    print(argname(a, b))
+    print(argname2('a', 'b'))
 func2(y, b=x) # prints: ('y', 'x')
 
 # allow expressions
 def func3(a, b=1):
-    print(argname(a, b, vars_only=False))
+    print(argname2('a', 'b', vars_only=False))
 func3(x+y, y+x) # prints: ('x+y', 'y+x')
 
 # positional and keyword arguments
 def func4(*args, **kwargs):
-    print(argname(args[1], kwargs['c']))
+    print(argname2('args[1]', 'kwargs["c"]'))
 func4(y, x, c=z) # prints: ('x', 'z')
 ```
 
@@ -353,9 +354,9 @@ For example:
 [9]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
 [10]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
 [11]: https://mybinder.org/v2/gh/pwwang/python-varname/dev?filepath=playground%2Fplayground.ipynb
-[12]: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
-[13]: https://app.codacy.com/manual/pwwang/python-varname/dashboard
-[14]: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+[12]: https://img.shields.io/codacy/grade/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
+[13]: https://app.codacy.com/gh/pwwang/python-varname/dashboard
+[14]: https://img.shields.io/codacy/coverage/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
 [15]: https://pwwang.github.io/python-varname/api/varname
 [16]: https://pwwang.github.io/python-varname/CHANGELOG/
 [17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square

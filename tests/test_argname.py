@@ -1,4 +1,5 @@
 import textwrap
+from functools import singledispatch
 
 import pytest
 from varname import *
@@ -244,3 +245,138 @@ def test_argname_target_arg():
     x = 1
     names = func(x, 1)
     assert names == 'x'
+
+def test_argname_singledispatched():
+    # GH53
+    @singledispatch
+    def add(a, b):
+        aname = argname(a, b, func=add.dispatch(object))
+        return aname + (1, ) # distinguish
+
+    @add.register(int)
+    def add_int(a, b):
+        aname = argname(a, b, func=add_int)
+        return aname + (2, )
+
+    @add.register(str)
+    def add_str(a, b):
+        aname = argname(a, b, dispatch=str)
+        return aname + (3, )
+
+    x = y = 1
+    out = add(x, y)
+    assert out == ('x', 'y', 2)
+
+    t = s = 'a'
+    out = add(t, s)
+    assert out == ('t', 's', 3)
+
+    p = q = 1.2
+    out = add(p, q)
+    assert out == ('p', 'q', 1)
+
+def test_argname2():
+
+    def func(a, b, c, d=4):
+        return argname2('c', 'b')
+
+    x = y = z = 1
+    names = func(x, y, z)
+    assert names == ('z', 'y')
+
+    def func2(a, b, c, d=4):
+        return argname2('b')
+
+    names2 = func2(x, y, z)
+    assert names2 == 'y'
+
+    def func3(e=1):
+        return argname2('e')
+
+    names3 = func3(z)
+    assert names3 == 'z'
+
+    def func4(a, b=1):
+        return argname2('a', 'b')
+    names4 = func4(y, b=x)
+    assert names4 == ('y', 'x')
+
+def test_argname2_func_na():
+    def func(a):
+        return argname2('a')
+
+    with pytest.raises(
+            VarnameRetrievingError,
+            match="Cannot retrieve the node where the function is called"
+    ):
+        exec('x=1; func(x)')
+
+def test_argname2_singledispatched():
+    # GH53
+    @singledispatch
+    def add(a, b):
+        aname = argname2('a', 'b', func=add.dispatch(object))
+        return aname + (1, ) # distinguish
+
+    @add.register(int)
+    def add_int(a, b):
+        aname = argname2('a', 'b', func=add_int)
+        return aname + (2, )
+
+    @add.register(str)
+    def add_str(a, b):
+        aname = argname2('a', 'b', dispatch=str)
+        return aname + (3, )
+
+    x = y = 1
+    out = add(x, y)
+    assert out == ('x', 'y', 2)
+
+    t = s = 'a'
+    out = add(t, s)
+    assert out == ('t', 's', 3)
+
+    p = q = 1.2
+    out = add(p, q)
+    assert out == ('p', 'q', 1)
+
+def test_argname2_nosucharg():
+
+    def func(a):
+        return argname2('x')
+
+    x = 1
+    with pytest.raises(ValueError):
+        func(x)
+
+def test_argname2_subscript_star():
+
+    def func1(*args, **kwargs):
+        return argname2('args[0]', 'kwargs[x]')
+
+    def func2(*args, **kwargs):
+        return argname2('*args')
+
+    x = y = 1
+    out = func1(y, x=x)
+    assert out == ('y', 'x')
+
+    out = func2(x, y)
+    assert out == ('x', 'y')
+
+def test_argname2_nonvar():
+
+    def func(x):
+        return argname2('x')
+
+    with pytest.raises(NonVariableArgumentError):
+        func(1)
+
+def test_argname2_frame_error():
+
+    def func(x):
+        return argname2('x', frame=2)
+
+    with pytest.raises(VarnameRetrievingError):
+        func(1)
+

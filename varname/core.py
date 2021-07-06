@@ -1,7 +1,8 @@
 """Provide core features for varname"""
 import ast
+import re
 import warnings
-from typing import Optional, Tuple, Union, Any, Callable
+from typing import List, Tuple, Type, Union, Any, Callable
 
 from executing import Source
 
@@ -14,19 +15,21 @@ from .utils import (
     get_argument_sources,
     get_function_called_argname,
     parse_argname_subscript,
+    ArgSourceType,
     VarnameRetrievingError,
     ImproperUseError,
     NonVariableArgumentError,
-    MultiTargetAssignmentWarning
+    MultiTargetAssignmentWarning,
 )
 from .ignore import IgnoreList, IgnoreType
 
+
 def varname(
-        frame: int = 1,
-        ignore: Optional[IgnoreType] = None,
-        multi_vars: bool = False,
-        raise_exc: bool = True
-) -> Optional[Union[str, Tuple[Union[str, tuple]]]]:
+    frame: int = 1,
+    ignore: IgnoreType = None,
+    multi_vars: bool = False,
+    raise_exc: bool = True,
+) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
 
@@ -103,7 +106,7 @@ def varname(
     if not node:
         if raise_exc:
             raise VarnameRetrievingError(
-                'Failed to retrieve the variable name.'
+                "Failed to retrieve the variable name."
             )
         return None
 
@@ -113,15 +116,17 @@ def varname(
         # Need to actually check that there's just one
         # give warnings if: a = b = func()
         if len(node.targets) > 1:
-            warnings.warn("Multiple targets in assignment, variable name "
-                          "on the very left will be used.",
-                          MultiTargetAssignmentWarning)
+            warnings.warn(
+                "Multiple targets in assignment, variable name "
+                "on the very left will be used.",
+                MultiTargetAssignmentWarning,
+            )
         target = node.targets[0]
 
     names = node_name(target)
 
     if not isinstance(names, tuple):
-        names = (names, )
+        names = (names,)
 
     if multi_vars:
         return names
@@ -133,7 +138,8 @@ def varname(
 
     return names[0]
 
-def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
+
+def will(frame: int = 1, raise_exc: bool = True) -> str:
     """Detect the attribute name right immediately after a function call.
 
     Examples:
@@ -195,10 +201,13 @@ def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
     return node.attr
 
 
-def nameof(var, *more_vars,
-           # *, keyword only argument, supported with python3.8+
-           frame: int = 1,
-           vars_only: bool = True) -> Union[str, Tuple[str]]:
+def nameof(
+    var, # pylint: disable=unused-argument
+    *more_vars,
+    # *, keyword only argument, supported with python3.8+
+    frame: int = 1,
+    vars_only: bool = True,
+) -> Union[str, Tuple[str, ...]]:
     """Get the names of the variables passed in
 
     Examples:
@@ -247,8 +256,7 @@ def nameof(var, *more_vars,
     """
     # Frame is anyway used in get_node
     frameobj = IgnoreList.create(
-        ignore_lambda=False,
-        ignore_varname=False
+        ignore_lambda=False, ignore_varname=False
     ).get_frame(frame)
     node = get_node_by_frame(frameobj, raise_exc=True)
     if not node:
@@ -266,13 +274,13 @@ def nameof(var, *more_vars,
         # We are anyway raising exceptions, no worries about additional burden
         # of frame retrieval again
         source = frameobj.f_code.co_filename
-        if source == '<stdin>':
+        if source == "<stdin>":
             raise VarnameRetrievingError(
                 "Are you trying to call nameof in REPL/python shell? "
                 "In such a case, nameof can only be called with single "
                 "argument and no keyword arguments."
             )
-        if source == '<string>':
+        if source == "<string>":
             raise VarnameRetrievingError(
                 "Are you trying to call nameof from exec/eval? "
                 "In such a case, nameof can only be called with single "
@@ -283,22 +291,25 @@ def nameof(var, *more_vars,
             "a single variable, and argument `full` should not be specified."
         )
 
-    return argname(
-        var, *more_vars,
-        func=nameof,
-        frame=frame,
-        vars_only=vars_only,
-        pos_only=True
+    out = argname2(
+        "var", "*more_vars", func=nameof, frame=frame, vars_only=vars_only
     )
+    return out if more_vars else out[0] # type: ignore
 
-def argname(arg: Any, # pylint: disable=unused-argument
-            *more_args: Any,
-            # *, keyword-only argument, only available with python3.8+
-            func: Optional[Callable] = None,
-            frame: int = 1,
-            vars_only: bool = True,
-            pos_only: bool = False) -> Union[str, Tuple[str]]:
+
+def argname( # pylint: disable=unused-argument,too-many-branches
+    arg: Any,
+    *more_args: Any,
+    # *, keyword-only argument, only available with python3.8+
+    func: Callable = None,
+    dispatch: Type = None,
+    frame: int = 1,
+    vars_only: bool = True,
+    pos_only: bool = False,
+) -> ArgSourceType:
     """Get the argument names/sources passed to a function
+
+    Superseded by `argname2()`
 
     Args:
         arg: Parameter of the function, used to map the argument passed to
@@ -317,6 +328,9 @@ def argname(arg: Any, # pylint: disable=unused-argument
                 will be used. A warning will be shown since unwanted side
                 effects may happen in this case.
             You are encouraged to always pass the function explicitly.
+        dispatch: If a function is a single-dispatched function, you can
+            specify a type for it to dispatch the real function. If this is
+            specified, expect `func` to be the generic function if provided.
         frame: The frame where target function is called from this call.
             The intermediate calls will be the wrappers of this function.
             However, keep in mind that the wrappers must have the same
@@ -338,10 +352,12 @@ def argname(arg: Any, # pylint: disable=unused-argument
             Only variables and subscripts of variables are allow to be passed
             to this function.
     """
-    ignore_list = IgnoreList.create(
-        ignore_lambda=False,
-        ignore_varname=False
+    warnings.warn(
+        "`argname()` is superseded by `argname2()`, "
+        "and will be removed in v0.8.0",
+        DeprecationWarning,
     )
+    ignore_list = IgnoreList.create(ignore_lambda=False, ignore_varname=False)
     # where argname(...) is called
     argname_frame = ignore_list.get_frame(frame)
     argname_node = get_node_by_frame(argname_frame)
@@ -361,6 +377,9 @@ def argname(arg: Any, # pylint: disable=unused-argument
     if not func:
         func = get_function_called_argname(func_frame, func_node)
 
+    if dispatch:
+        func = func.dispatch(dispatch)
+
     # don't pass the target arguments so that we can cache the sources in
     # the same call. For example:
     # >>> def func(a, b):
@@ -371,10 +390,10 @@ def argname(arg: Any, # pylint: disable=unused-argument
         func_node,
         func,
         vars_only=vars_only,
-        pos_only=pos_only
+        pos_only=pos_only,
     )
 
-    ret = []
+    ret = [] # type: List[ArgSourceType]
     for argnode in argname_node.args:
         if not isinstance(argnode, (ast.Name, ast.Subscript, ast.Starred)):
             raise ValueError(
@@ -384,16 +403,16 @@ def argname(arg: Any, # pylint: disable=unused-argument
 
         if isinstance(argnode, ast.Starred):
             if (
-                    not isinstance(argnode.value, ast.Name) or
-                    argnode.value.id not in argument_sources or
-                    not isinstance(argument_sources[argnode.value.id], tuple)
+                not isinstance(argnode.value, ast.Name)
+                or argnode.value.id not in argument_sources
+                or not isinstance(argument_sources[argnode.value.id], tuple)
             ):
                 posvar = argnode.value
-                posvar = getattr(posvar, 'id', posvar)
+                posvar = getattr(posvar, "id", posvar)
                 raise ValueError(
                     f"No such variable positional argument {posvar!r}"
                 )
-            ret.extend(argument_sources[argnode.value.id])
+            ret.extend(argument_sources[argnode.value.id]) # type: ignore
 
         elif isinstance(argnode, ast.Name):
             if argnode.id not in argument_sources:
@@ -408,26 +427,169 @@ def argname(arg: Any, # pylint: disable=unused-argument
             if name not in argument_sources:
                 raise ValueError(f"{name!r} is not an argument.")
 
-            if (isinstance(subscript, int) and
-                    not isinstance(argument_sources[name], tuple)):
+            if isinstance(subscript, int) and not isinstance(
+                argument_sources[name], tuple
+            ):
                 raise ValueError(
                     f"{name!r} is not a positional argument "
                     "(*args, for example)."
                 )
-            if (isinstance(subscript, str) and
-                    not isinstance(argument_sources[name], dict)):
+            if isinstance(subscript, str) and not isinstance(
+                argument_sources[name], dict
+            ):
                 raise ValueError(
                     f"{name!r} is not a keyword argument "
                     "(**kwargs, for example)."
                 )
-            ret.append(argument_sources[name][subscript])
+            ret.append(argument_sources[name][subscript]) # type: ignore
 
     if vars_only:
         for source in ret:
             if isinstance(source, ast.AST):
                 raise NonVariableArgumentError(
-                    f'Argument {ast.dump(source)} is not a variable '
-                    'or an attribute.'
+                    f"Argument {ast.dump(source)} is not a variable "
+                    "or an attribute."
                 )
 
-    return ret[0] if not more_args else tuple(ret)
+    return ret[0] if not more_args else tuple(ret) # type: ignore
+
+
+def argname2(
+    arg: str,
+    *more_args: str,
+    # *, keyword-only argument, only available with python3.8+
+    func: Callable = None,
+    dispatch: Type = None,
+    frame: int = 1,
+    vars_only: bool = True,
+) -> ArgSourceType:
+    """Get the names/sources of arguments passed to a function.
+
+    Instead of passing the argument variables themselves to this function
+    (like `argname()` does), you should pass their names instead.
+
+    Args:
+        arg: and
+        *more_args: The names of the arguments that you want to retrieve
+            names/sources of.
+            You can also use subscripts to get parts of the results.
+            >>> def func(*args, **kwargs):
+            >>>     return argname2('args[0]', 'kwargs[x]') # no quote needed
+
+            Star argument is also allowed:
+            >>> def func(*args, x = 1):
+            >>>     return argname2('*args', 'x')
+            >>> a = b = c = 1
+            >>> func(a, b, x=c) # ('a', 'b', 'c')
+
+            Note the difference:
+            >>> def func(*args, x = 1):
+            >>>     return argname2('args', 'x')
+            >>> a = b = c = 1
+            >>> func(a, b, x=c) # (('a', 'b'), 'c')
+
+        func: The target function. If not provided, the AST node of the
+            function call will be used to fetch the function:
+            - If a variable (ast.Name) used as function, the `node.id` will
+                be used to get the function from `locals()` or `globals()`.
+            - If variable (ast.Name), attributes (ast.Attribute),
+                subscripts (ast.Subscript), and combinations of those and
+                literals used as function, `pure_eval` will be used to evaluate
+                the node
+            - If `pure_eval` is not installed or failed to evaluate, `eval`
+                will be used. A warning will be shown since unwanted side
+                effects may happen in this case.
+            You are very encouraged to always pass the function explicitly.
+        dispatch: If a function is a single-dispatched function, you can
+            specify a type for it to dispatch the real function. If this is
+            specified, expect `func` to be the generic function if provided.
+        frame: The frame where target function is called from this call.
+            Calls from python standard libraries are ignored.
+        vars_only: Require the arguments to be variables only.
+            If False, `asttokens` is required to retrieve the source.
+
+    Returns:
+        Scalar string if
+
+    """
+    ignore_list = IgnoreList.create(ignore_lambda=False, ignore_varname=False)
+    # where func(...) is called, skip the argname2() call
+    func_frame = ignore_list.get_frame(frame + 1)
+    func_node = get_node_by_frame(func_frame)
+    # Only do it when func_node are available
+    if not func_node:
+        # We can do something at bytecode level, when a single positional
+        # argument passed to both functions (argname and the target function)
+        # However, it's hard to ensure that there is only a single positional
+        # arguments passed to the target function, at bytecode level.
+        raise VarnameRetrievingError(
+            "Cannot retrieve the node where the function is called."
+        )
+
+    if not func:
+        func = get_function_called_argname(func_frame, func_node)
+
+    if dispatch:
+        func = func.dispatch(dispatch)
+
+    # don't pass the target arguments so that we can cache the sources in
+    # the same call. For example:
+    # >>> def func(a, b):
+    # >>>   a_name = argname(a)
+    # >>>   b_name = argname(b)
+    try:
+        argument_sources = get_argument_sources(
+            Source.for_frame(func_frame),
+            func_node,
+            func,
+            vars_only=vars_only,
+            pos_only=False,
+        )
+    except TypeError as terr:
+        raise VarnameRetrievingError(
+            "Have you specified the right `frame`?"
+        ) from terr
+
+    out = [] # type: List[ArgSourceType]
+    farg_star = False
+    for farg in (arg, *more_args):
+
+        farg_name = farg
+        farg_subscript = None # type: str | int
+        match = re.match(r"^([\w_]+)\[(.+)\]$", farg)
+        if match:
+            farg_name = match.group(1)
+            farg_subscript = match.group(2)
+            if farg_subscript.isdigit():
+                farg_subscript = int(farg_subscript)
+        else:
+            match = re.match(r"^\*([\w_]+)$", farg)
+            if match:
+                farg_name = match.group(1)
+                farg_star = True
+
+        if farg_name not in argument_sources:
+            raise ValueError(
+                f"{farg_name!r} is not a valid argument "
+                f"of {func.__qualname__!r}."
+            )
+
+        source = argument_sources[farg_name]
+        if isinstance(source, ast.AST):
+            raise NonVariableArgumentError(
+                f"Argument {ast.dump(source)} is not a variable "
+                "or an attribute."
+            )
+
+        if farg_subscript is not None:
+            out.append(source[farg_subscript]) # type: ignore
+        elif farg_star:
+            out.extend(source)
+        else:
+            out.append(source)
+
+    return (
+        out[0]
+        if not more_args and not farg_star
+        else tuple(out) # type: ignore
+    )
