@@ -27,14 +27,14 @@
    :target: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
    :alt: Docs and API
  <https://pwwang.github.io/python-varname/api/varname>`_ `
-.. image:: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
-   :target: https://img.shields.io/codacy/grade/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+.. image:: https://img.shields.io/codacy/grade/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
+   :target: https://img.shields.io/codacy/grade/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
    :alt: Codacy
- <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_ `
-.. image:: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
-   :target: https://img.shields.io/codacy/coverage/ed851ff47b194e3e9389b2a44d6f21da?style=flat-square
+ <https://app.codacy.com/gh/pwwang/python-varname/dashboard>`_ `
+.. image:: https://img.shields.io/codacy/coverage/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
+   :target: https://img.shields.io/codacy/coverage/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
    :alt: Codacy coverage
- <https://app.codacy.com/manual/pwwang/python-varname/dashboard>`_
+ <https://app.codacy.com/gh/pwwang/python-varname/dashboard>`_
 `
 .. image:: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
    :target: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
@@ -63,7 +63,8 @@ Features
   * Retrieving names of variables a function/class call is assigned to from inside it, using ``varname``.
   * Retrieving variable names directly, using ``nameof``
   * Detecting next immediate attribute name, using ``will``
-  * Fetching argument names/sources passed to a function using ``argname``
+  * Fetching argument names/sources passed to a function using ``argname2``
+    (\ ``argname`` is superseded by ``argname2``\ )
 
 * 
   Other helper APIs (built based on core features):
@@ -324,31 +325,31 @@ Detecting next immediate attribute name
    awesome.permit() # AttributeError: Should do something with AwesomeClass object
    awesome.permit().do() == 'I am doing!'
 
-Fetching argument names/sources using ``argname``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fetching argument names/sources using ``argname2``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-   from varname import argname
+   from varname import argname2
 
    def func(a, b=1):
-       print(argname(a))
+       print(argname2('a'))
 
    x = y = z = 2
    func(x) # prints: x
 
    def func2(a, b=1):
-       print(argname(a, b))
+       print(argname2('a', 'b'))
    func2(y, b=x) # prints: ('y', 'x')
 
    # allow expressions
    def func3(a, b=1):
-       print(argname(a, b, vars_only=False))
+       print(argname2('a', 'b', vars_only=False))
    func3(x+y, y+x) # prints: ('x+y', 'y+x')
 
    # positional and keyword arguments
    def func4(*args, **kwargs):
-       print(argname(args[1], kwargs['c']))
+       print(argname2('args[1]', 'kwargs["c"]'))
    func4(y, x, c=z) # prints: ('x', 'z')
 
 Value wrapper

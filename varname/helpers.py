@@ -1,19 +1,20 @@
 """Some helper functions builtin based upon core features"""
 import inspect
 from functools import partial, wraps
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Type, Union
 
 from .utils import IgnoreType
-from .core import argname, varname
+from .core import argname2, varname
 
 
 def register(
-        cls_or_func: type = None, *,
-        frame: int = 1,
-        ignore: Optional[IgnoreType] = None,
-        multi_vars: bool = False,
-        raise_exc: bool = True
-) -> Union[type, Callable[[type], type]]:
+    cls_or_func: type = None,
+    *,
+    frame: int = 1,
+    ignore: IgnoreType = None,
+    multi_vars: bool = False,
+    raise_exc: bool = True,
+) -> Union[Type, Callable]:
     """A decorator to register __varname__ to a class or function
 
     When registered to a class, it can be accessed by `self.__varname__`;
@@ -47,45 +48,50 @@ def register(
         if it is specified explictly.
     """
     if inspect.isclass(cls_or_func):
-        orig_init = cls_or_func.__init__
+        orig_init = cls_or_func.__init__  # type: ignore
 
-        @wraps(cls_or_func.__init__)
+        @wraps(cls_or_func.__init__)  # type: ignore
         def wrapped_init(self, *args, **kwargs):
             """Wrapped init function to replace the original one"""
             self.__varname__ = varname(
-                frame-1,
+                frame - 1,
                 ignore=ignore,
                 multi_vars=multi_vars,
-                raise_exc=raise_exc
+                raise_exc=raise_exc,
             )
             orig_init(self, *args, **kwargs)
 
-        cls_or_func.__init__ = wrapped_init
+        cls_or_func.__init__ = wrapped_init  # type: ignore
         return cls_or_func
 
     if inspect.isfunction(cls_or_func):
+
         @wraps(cls_or_func)
         def wrapper(*args, **kwargs):
             """The wrapper to register `__varname__` to a function"""
-            cls_or_func.__globals__['__varname__'] = varname(
-                frame-1,
+            cls_or_func.__globals__["__varname__"] = varname(
+                frame - 1,
                 ignore=ignore,
                 multi_vars=multi_vars,
-                raise_exc=raise_exc
+                raise_exc=raise_exc,
             )
 
             try:
                 return cls_or_func(*args, **kwargs)
             finally:
-                del cls_or_func.__globals__['__varname__']
+                del cls_or_func.__globals__["__varname__"]
+
         return wrapper
 
     # None, meaning we have other arguments
-    return partial(register,
-                   frame=frame,
-                   ignore=ignore,
-                   multi_vars=multi_vars,
-                   raise_exc=raise_exc)
+    return partial(
+        register,
+        frame=frame,
+        ignore=ignore,
+        multi_vars=multi_vars,
+        raise_exc=raise_exc,
+    )
+
 
 class Wrapper:
     """A wrapper with ability to retrieve the variable name
@@ -109,29 +115,36 @@ class Wrapper:
         value: The value this wrapper wraps
     """
 
-    def __init__(self,
-                 value: Any,
-                 frame: int = 1,
-                 ignore: Optional[IgnoreType] = None,
-                 raise_exc: bool = True):
+    def __init__(
+        self,
+        value: Any,
+        frame: int = 1,
+        ignore: IgnoreType = None,
+        raise_exc: bool = True,
+    ):
         # This call is ignored, since it's inside varname
-        self.name = varname(frame-1, ignore=ignore, raise_exc=raise_exc)
+        self.name = varname(frame - 1, ignore=ignore, raise_exc=raise_exc)
         self.value = value
 
     def __str__(self) -> str:
         return repr(self.value)
 
     def __repr__(self) -> str:
-        return (f"<{self.__class__.__name__} "
-                f"(name={self.name!r}, value={self.value!r})>")
+        return (
+            f"<{self.__class__.__name__} "
+            f"(name={self.name!r}, value={self.value!r})>"
+        )
 
 
-def debug(var, *more_vars,
-          prefix: str = 'DEBUG: ',
-          merge: bool = False,
-          repr: bool = True, # pylint: disable=redefined-builtin
-          sep: str = '=',
-          vars_only: bool = False) -> None:
+def debug(
+    var,
+    *more_vars,
+    prefix: str = "DEBUG: ",
+    merge: bool = False,
+    repr: bool = True,  # pylint: disable=redefined-builtin
+    sep: str = "=",
+    vars_only: bool = False,
+) -> None:
     """Print variable names and values.
 
     Examples:
@@ -152,19 +165,12 @@ def debug(var, *more_vars,
         sep: The separator between the variable name and value
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
-    var_names = argname(
-        var, *more_vars,
-        pos_only=True,
-        vars_only=vars_only,
-        func=debug
-    )
-    if not isinstance(var_names, tuple):
-        var_names = (var_names, )
+    var_names = argname2("var", "*more_vars", vars_only=vars_only, func=debug)
 
     values = (var, *more_vars)
     name_and_values = [
         f"{var_name}{sep}{value!r}" if repr else f"{var_name}{sep}{value}"
-        for var_name, value in zip(var_names, values)
+        for var_name, value in zip(var_names, values) # type: ignore
     ]
 
     if merge:

@@ -7,8 +7,8 @@ from .utils import (
     QualnameNonUniqueError,
     NonVariableArgumentError,
     MultiTargetAssignmentWarning,
-    MaybeDecoratedFunctionWarning
+    MaybeDecoratedFunctionWarning,
 )
-from .core import varname, nameof, will, argname
+from .core import varname, nameof, will, argname, argname2
 
-__version__ = "0.6.5"
+__version__ = "0.7.0"

@@ -1,6 +1,9 @@
 name: Build and Deploy
 
-on: [push, pull_request]
+on:
+  push:
+  release:
+    types: [published]
 
 jobs:
 
@@ -21,11 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pylint=='2.8.*'
           python -m pip install poetry
+          poetry config virtualenvs.create false
           poetry install -v
       - name: Run pylint
         run: pylint varname
       - name: Test with pytest
-        run: poetry run pytest tests/ --junitxml=junit/test-results-${{ matrix.python-version }}.xml
+        run: pytest tests/ --junitxml=junit/test-results-${{ matrix.python-version }}.xml
       - name: Upload pytest test results
         uses: actions/upload-artifact@v2
         with:
@@ -43,10 +47,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    if: github.event_name == 'release'
     strategy:
       matrix:
-        python-version: [3.8]
+        python-version: [3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python # Set Python version

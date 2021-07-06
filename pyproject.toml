@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "varname"
-version = "0.6.5"
+version = "0.7.0"
 description = "Dark magics about variable names in python."
 authors = [ "pwwang <pwwang@pwwang.com>",]
 license = "MIT"
@@ -23,3 +23,20 @@ pytest = "*"
 pytest-cov = "*"
 asttokens = "2.*"
 pure_eval = "0.*"
+
+[tool.pytest.ini_options]
+addopts = "-vv -W error::UserWarning --cov-config=.coveragerc --cov=varname --cov-report xml:.coverage.xml --cov-report term-missing"
+console_output_style = "progress"
+junit_family = "xunit1"
+
+[tool.mypy]
+ignore_missing_imports = true
+allow_redefinition = true
+disable_error_code = ["attr-defined", "no-redef"]
+show_error_codes = true
+strict_optional = false
+
+[tool.black]
+line-length = 80
+target-version = ['py37', 'py38', 'py39']
+include = '\.pyi?$'

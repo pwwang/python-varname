@@ -1,3 +1,12 @@
+## v0.7.0
+- `ImproperUseError` is now independent of `VarnameRetrievingError`
+- Deprecate `argname`, superseded by `argname2`
+  ```python
+    >>> argname(a, b, ...) # before
+    >>> argname2('a', 'b', ...) # after
+  ```
+- Add `dispatch` argument to `argname`/`argment2` to be used for single-dispatched functions.
+
 ## v0.6.5
 - Add `sep` argument to `helpers.debug()`
 

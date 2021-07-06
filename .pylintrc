@@ -159,7 +159,8 @@ disable=print-statement,
         unsubscriptable-object,
         unused-arguments,
         fixme,
-        consider-using-dict-items
+        consider-using-dict-items,
+        C0330
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
