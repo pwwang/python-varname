@@ -371,3 +371,12 @@ def test_argname2_nonvar():
 
     with pytest.raises(NonVariableArgumentError):
         func(1)
+
+def test_argname2_frame_error():
+
+    def func(x):
+        return argname2('x', frame=2)
+
+    with pytest.raises(VarnameRetrievingError):
+        func(1)
+

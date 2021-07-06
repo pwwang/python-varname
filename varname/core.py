@@ -537,13 +537,18 @@ def argname2(
     # >>> def func(a, b):
     # >>>   a_name = argname(a)
     # >>>   b_name = argname(b)
-    argument_sources = get_argument_sources(
-        Source.for_frame(func_frame),
-        func_node,
-        func,
-        vars_only=vars_only,
-        pos_only=False,
-    )
+    try:
+        argument_sources = get_argument_sources(
+            Source.for_frame(func_frame),
+            func_node,
+            func,
+            vars_only=vars_only,
+            pos_only=False,
+        )
+    except TypeError as terr:
+        raise VarnameRetrievingError(
+            "Have you specified the right `frame`?"
+        ) from terr
 
     out = [] # type: List[ArgSourceType]
     farg_star = False
