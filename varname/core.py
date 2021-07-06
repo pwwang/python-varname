@@ -1,7 +1,7 @@
 """Provide core features for varname"""
 import ast
 import warnings
-from typing import Optional, Tuple, Union, Any, Callable
+from typing import Optional, Tuple, Type, Union, Any, Callable
 
 from executing import Source
 
@@ -291,10 +291,11 @@ def nameof(var, *more_vars,
         pos_only=True
     )
 
-def argname(arg: Any, # pylint: disable=unused-argument
+def argname(arg: Any, # pylint: disable=unused-argument,too-many-branches
             *more_args: Any,
             # *, keyword-only argument, only available with python3.8+
             func: Optional[Callable] = None,
+            dispatch: Optional[Type] = None,
             frame: int = 1,
             vars_only: bool = True,
             pos_only: bool = False) -> Union[str, Tuple[str]]:
@@ -317,6 +318,8 @@ def argname(arg: Any, # pylint: disable=unused-argument
                 will be used. A warning will be shown since unwanted side
                 effects may happen in this case.
             You are encouraged to always pass the function explicitly.
+        dispatch: If a function is a single-dispatched function, you can
+            specify a type for it to dispatch the real function.
         frame: The frame where target function is called from this call.
             The intermediate calls will be the wrappers of this function.
             However, keep in mind that the wrappers must have the same
@@ -360,6 +363,9 @@ def argname(arg: Any, # pylint: disable=unused-argument
 
     if not func:
         func = get_function_called_argname(func_frame, func_node)
+
+    if dispatch:
+        func = func.dispatch(dispatch)
 
     # don't pass the target arguments so that we can cache the sources in
     # the same call. For example:

@@ -1,4 +1,5 @@
 import textwrap
+from functools import singledispatch
 
 import pytest
 from varname import *
@@ -244,3 +245,32 @@ def test_argname_target_arg():
     x = 1
     names = func(x, 1)
     assert names == 'x'
+
+def test_argname_singledispatched():
+    # GH53
+    @singledispatch
+    def add(a, b):
+        aname = argname(a, b, func=add.dispatch(object))
+        return aname + (1, ) # distinguish
+
+    @add.register(int)
+    def add_int(a, b):
+        aname = argname(a, b, func=add_int)
+        return aname + (2, )
+
+    @add.register(str)
+    def add_str(a, b):
+        aname = argname(a, b, dispatch=str)
+        return aname + (3, )
+
+    x = y = 1
+    out = add(x, y)
+    assert out == ('x', 'y', 2)
+
+    t = s = 'a'
+    out = add(t, s)
+    assert out == ('t', 's', 3)
+
+    p = q = 1.2
+    out = add(p, q)
+    assert out == ('p', 'q', 1)
