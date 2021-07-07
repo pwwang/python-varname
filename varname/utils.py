@@ -324,6 +324,7 @@ def get_argument_sources(
         {
             argnode.arg: argnode_source(source, argnode.value, vars_only)
             for argnode in node.keywords
+            if argnode.arg is not None
         }
         if not pos_only
         else {}

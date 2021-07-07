@@ -202,7 +202,7 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
 
 
 def nameof(
-    var, # pylint: disable=unused-argument
+    var,  # pylint: disable=unused-argument
     *more_vars,
     # *, keyword only argument, supported with python3.8+
     frame: int = 1,
@@ -294,10 +294,10 @@ def nameof(
     out = argname2(
         "var", "*more_vars", func=nameof, frame=frame, vars_only=vars_only
     )
-    return out if more_vars else out[0] # type: ignore
+    return out if more_vars else out[0]  # type: ignore
 
 
-def argname( # pylint: disable=unused-argument,too-many-branches
+def argname(  # pylint: disable=unused-argument,too-many-branches
     arg: Any,
     *more_args: Any,
     # *, keyword-only argument, only available with python3.8+
@@ -393,7 +393,7 @@ def argname( # pylint: disable=unused-argument,too-many-branches
         pos_only=pos_only,
     )
 
-    ret = [] # type: List[ArgSourceType]
+    ret = []  # type: List[ArgSourceType]
     for argnode in argname_node.args:
         if not isinstance(argnode, (ast.Name, ast.Subscript, ast.Starred)):
             raise ValueError(
@@ -412,7 +412,7 @@ def argname( # pylint: disable=unused-argument,too-many-branches
                 raise ValueError(
                     f"No such variable positional argument {posvar!r}"
                 )
-            ret.extend(argument_sources[argnode.value.id]) # type: ignore
+            ret.extend(argument_sources[argnode.value.id])  # type: ignore
 
         elif isinstance(argnode, ast.Name):
             if argnode.id not in argument_sources:
@@ -441,7 +441,7 @@ def argname( # pylint: disable=unused-argument,too-many-branches
                     f"{name!r} is not a keyword argument "
                     "(**kwargs, for example)."
                 )
-            ret.append(argument_sources[name][subscript]) # type: ignore
+            ret.append(argument_sources[name][subscript])  # type: ignore
 
     if vars_only:
         for source in ret:
@@ -451,7 +451,7 @@ def argname( # pylint: disable=unused-argument,too-many-branches
                     "or an attribute."
                 )
 
-    return ret[0] if not more_args else tuple(ret) # type: ignore
+    return ret[0] if not more_args else tuple(ret)  # type: ignore
 
 
 def argname2(
@@ -461,6 +461,7 @@ def argname2(
     func: Callable = None,
     dispatch: Type = None,
     frame: int = 1,
+    ignore: IgnoreType = None,
     vars_only: bool = True,
 ) -> ArgSourceType:
     """Get the names/sources of arguments passed to a function.
@@ -505,6 +506,7 @@ def argname2(
             specified, expect `func` to be the generic function if provided.
         frame: The frame where target function is called from this call.
             Calls from python standard libraries are ignored.
+        ignore: The intermediate calls to be ignored. See `varname.ignore`
         vars_only: Require the arguments to be variables only.
             If False, `asttokens` is required to retrieve the source.
 
@@ -512,7 +514,11 @@ def argname2(
         Scalar string if
 
     """
-    ignore_list = IgnoreList.create(ignore_lambda=False, ignore_varname=False)
+    ignore_list = IgnoreList.create(
+        ignore,
+        ignore_lambda=False,
+        ignore_varname=False,
+    )
     # where func(...) is called, skip the argname2() call
     func_frame = ignore_list.get_frame(frame + 1)
     func_node = get_node_by_frame(func_frame)
@@ -545,17 +551,17 @@ def argname2(
             vars_only=vars_only,
             pos_only=False,
         )
-    except TypeError as terr:
+    except Exception as err:
         raise VarnameRetrievingError(
             "Have you specified the right `frame`?"
-        ) from terr
+        ) from err
 
-    out = [] # type: List[ArgSourceType]
+    out = []  # type: List[ArgSourceType]
     farg_star = False
     for farg in (arg, *more_args):
 
         farg_name = farg
-        farg_subscript = None # type: str | int
+        farg_subscript = None  # type: str | int
         match = re.match(r"^([\w_]+)\[(.+)\]$", farg)
         if match:
             farg_name = match.group(1)
@@ -582,7 +588,7 @@ def argname2(
             )
 
         if farg_subscript is not None:
-            out.append(source[farg_subscript]) # type: ignore
+            out.append(source[farg_subscript])  # type: ignore
         elif farg_star:
             out.extend(source)
         else:
@@ -591,5 +597,5 @@ def argname2(
     return (
         out[0]
         if not more_args and not farg_star
-        else tuple(out) # type: ignore
+        else tuple(out)  # type: ignore
     )

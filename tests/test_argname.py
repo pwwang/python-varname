@@ -373,10 +373,19 @@ def test_argname2_nonvar():
         func(1)
 
 def test_argname2_frame_error():
-
     def func(x):
         return argname2('x', frame=2)
 
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(ValueError):
         func(1)
 
+def test_argname2_ignore():
+    def target(*args):
+        return argname2('*args', ignore=wrapper)
+
+    def wrapper(*args):
+        return target(*args)
+
+    x = y = 1
+    out = wrapper(x, y)
+    assert out == ('x', 'y')

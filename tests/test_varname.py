@@ -511,11 +511,12 @@ def test_internal_debug(capsys, enable_debug):
     x = foo1()
     assert x == 'x'
     msgs = capsys.readouterr().err.splitlines()
-    assert "Ignored by IgnoreModule('varname')" in msgs[0]
-    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[1]
-    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[2]
-    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[3]
-    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[4]
-    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[5]
-    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[6]
-    assert "Gotcha! [In 'test_internal_debug'" in msgs[7]
+    assert ">>> IgnoreList initiated <<<" in msgs[0]
+    assert "Ignored by IgnoreModule('varname')" in msgs[1]
+    assert "Skipping (2 more to skip) [In 'foo3'" in msgs[2]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[3]
+    assert "Skipping (1 more to skip) [In 'foo2'" in msgs[4]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[5]
+    assert "Skipping (0 more to skip) [In 'foo1'" in msgs[6]
+    assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[7]
+    assert "Gotcha! [In 'test_internal_debug'" in msgs[8]
