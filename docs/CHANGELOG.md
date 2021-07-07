@@ -1,5 +1,6 @@
 ## v0.7.1
 - Add `ignore` argument to `argname2()`
+- Fix Fix utils.get_argument_sources() when kwargs is given as `**kwargs`.
 
 ## v0.7.0
 - `ImproperUseError` is now independent of `VarnameRetrievingError`
