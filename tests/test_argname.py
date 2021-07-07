@@ -380,3 +380,13 @@ def test_argname2_frame_error():
     with pytest.raises(VarnameRetrievingError):
         func(1)
 
+def test_argname2_ignore():
+    def target(*args):
+        return argname2('*args', ignore=wrapper)
+
+    def wrapper(*args):
+        return target(*args)
+
+    x = y = 1
+    out = wrapper(x, y)
+    assert out == ('x', 'y')

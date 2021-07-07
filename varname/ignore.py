@@ -331,6 +331,9 @@ class IgnoreList:
 
     def __init__(self, ignore_list: List[IgnoreElemType]) -> None:
         self.ignore_list = ignore_list
+        debug_ignore_frame(
+            '>>> IgnoreList initiated <<<'
+        )
 
     def nextframe_to_check(
         self, frame_no: int, frameinfos: List[inspect.FrameInfo]

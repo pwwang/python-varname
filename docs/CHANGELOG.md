@@ -1,3 +1,6 @@
+## v0.7.1
+- Add `ignore` argument to `argname2()`
+
 ## v0.7.0
 - `ImproperUseError` is now independent of `VarnameRetrievingError`
 - Deprecate `argname`, superseded by `argname2`
