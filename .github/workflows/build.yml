@@ -2,6 +2,8 @@ name: Build and Deploy
 
 on:
   push:
+  pull_request:
+    types: [assigned, labeled]
   release:
     types: [published]
 
