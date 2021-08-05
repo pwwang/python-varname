@@ -29,6 +29,7 @@ def varname(
     ignore: IgnoreType = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
+    direct: bool = False,
 ) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
@@ -72,6 +73,8 @@ def varname(
             Note that set this to `False` will not supress the exception when
             the use of `varname` is improper (i.e. multiple variables on
             LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
+        direct: Whether to only return the variable name if the result of
+            the call is assigned to it directly.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
@@ -102,7 +105,8 @@ def varname(
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
         return None
 
-    node = lookfor_parent_assign(node)
+    node = lookfor_parent_assign(node, direct=direct)
+
     if not node:
         if raise_exc:
             raise VarnameRetrievingError(

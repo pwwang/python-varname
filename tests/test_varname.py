@@ -140,6 +140,26 @@ def test_raise_exc():
     name += str(get_name(False))
     assert name == '0None'
 
+def test_direct():
+
+    def foo(x):
+        return x
+
+    def function():
+        return varname(direct=True)
+
+    func = function()
+    assert func == 'func'
+
+    with pytest.raises(VarnameRetrievingError):
+        func = function() + "_"
+
+    with pytest.raises(VarnameRetrievingError):
+        func = foo(function())
+
+    with pytest.raises(VarnameRetrievingError):
+        func = [function()]
+
 def test_multiple_targets():
 
     def function():
