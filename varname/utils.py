@@ -41,6 +41,11 @@ IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
 ArgSourceType = Union[ast.AST, str]
 ArgSourceType = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
 ArgSourceType = Union[ArgSourceType, Mapping[str, ArgSourceType]]
+AssignType = (
+    Union[ast.Assign, ast.AnnAssign, ast.NamedExpr]
+    if sys.version_info >= (3, 8)
+    else Union[ast.Assign, ast.AnnAssign]
+)
 
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
 
@@ -135,12 +140,18 @@ def get_node_by_frame(
 def lookfor_parent_assign(
     node: ast.AST,
     direct: bool = False,
-) -> Union[ast.Assign, ast.AnnAssign]:
+    named_expr: bool = False
+) -> AssignType:
     """Look for an ast.Assign node in the parents"""
+    if named_expr:
+        types = (ast.AnnAssign, ast.Assign, ast.NamedExpr)
+    else:
+        types = (ast.AnnAssign, ast.Assign)
+
     while hasattr(node, "parent"):
         node = node.parent
 
-        if isinstance(node, (ast.AnnAssign, ast.Assign)):
+        if isinstance(node, types):
             return node
 
         if direct:

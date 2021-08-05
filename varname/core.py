@@ -30,6 +30,7 @@ def varname(
     multi_vars: bool = False,
     raise_exc: bool = True,
     direct: bool = False,
+    named_expr: bool = False,
 ) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
@@ -75,6 +76,8 @@ def varname(
             LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
         direct: Whether to only return the variable name if the result of
             the call is assigned to it directly.
+        named_expr: Whether to consider a named expression (x := y) as an
+            assignment.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
@@ -105,7 +108,11 @@ def varname(
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
         return None
 
-    node = lookfor_parent_assign(node, direct=direct)
+    node = lookfor_parent_assign(
+        node,
+        direct=direct,
+        named_expr=named_expr,
+    )
 
     if not node:
         if raise_exc:
@@ -114,9 +121,7 @@ def varname(
             )
         return None
 
-    if isinstance(node, ast.AnnAssign):
-        target = node.target
-    else:
+    if isinstance(node, ast.Assign):
         # Need to actually check that there's just one
         # give warnings if: a = b = func()
         if len(node.targets) > 1:
@@ -126,6 +131,8 @@ def varname(
                 MultiTargetAssignmentWarning,
             )
         target = node.targets[0]
+    else:
+        target = node.target
 
     names = node_name(target)
 
