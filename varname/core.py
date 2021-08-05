@@ -29,6 +29,7 @@ def varname(
     ignore: IgnoreType = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
+    strict: bool = None,
 ) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
@@ -72,6 +73,8 @@ def varname(
             Note that set this to `False` will not supress the exception when
             the use of `varname` is improper (i.e. multiple variables on
             LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
+        strict: Whether to only return the variable name if the result of
+            the call is assigned to it directly.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
@@ -94,6 +97,9 @@ def varname(
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
+    strict_given = strict is not None
+    strict = strict if strict_given else True
+
     # Skip one more frame, as it is supposed to be called
     # inside another function
     node = get_node(frame + 1, ignore, raise_exc=raise_exc)
@@ -102,12 +108,30 @@ def varname(
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
         return None
 
-    node = lookfor_parent_assign(node)
+    node = lookfor_parent_assign(node, strict=strict)
     if not node:
-        if raise_exc:
-            raise VarnameRetrievingError(
-                "Failed to retrieve the variable name."
+        if strict and not strict_given:
+            warnings.warn(
+                "Use `varname(strict=False)` to get the variable name"
+                " if the caller does not assign the result directly to"
+                " that variable."
+                " An ImproperUseError will be raised in v0.8.0",
+                DeprecationWarning,
             )
+            return varname(
+                frame=frame,
+                ignore=ignore,
+                multi_vars=multi_vars,
+                raise_exc=raise_exc,
+                strict=False,
+            )
+
+        if raise_exc:
+            if strict:
+                msg = "Expression is not the direct RHS of an assignment."
+            else:
+                msg = "Expression is not part of an assignment."
+            raise ImproperUseError(msg)
         return None
 
     if isinstance(node, ast.AnnAssign):
