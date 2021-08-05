@@ -132,13 +132,19 @@ def get_node_by_frame(
     return None
 
 
-def lookfor_parent_assign(node: ast.AST) -> Union[ast.Assign, ast.AnnAssign]:
+def lookfor_parent_assign(
+    node: ast.AST,
+    strict: bool = True,
+) -> Union[ast.Assign, ast.AnnAssign]:
     """Look for an ast.Assign node in the parents"""
     while hasattr(node, "parent"):
         node = node.parent
 
         if isinstance(node, (ast.AnnAssign, ast.Assign)):
             return node
+
+        if strict:
+            break
     return None
 
 

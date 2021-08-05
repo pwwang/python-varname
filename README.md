@@ -99,6 +99,20 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = asyncio.run(function()) # func == 'func'
     ```
 
+    Use `strict` to control whether the call should be assigned to
+    the variable directly:
+    ```python
+    def function(strict):
+        return varname(strict=strict)
+
+    func = function(True)     # OK, direct assignment, func == 'func'
+
+    func = [function(True)]   # Not a direct assignment, raises ImproperUseError
+    func = [function(False)]  # OK, func == ['func']
+
+    func = function(False), function(False)   # OK, func = ('func', 'func')
+    ```
+
 - Retrieving name of a class instance
 
     ```python
@@ -137,12 +151,6 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     ```python
     def function():
         return varname()
-
-    func = [function()]    # func == ['func']
-
-    func = [function(), function()] # func == ['func', 'func']
-
-    func = function(), function()   # func = ('func', 'func')
 
     func = func1 = function()  # func == func1 == 'func'
     # a warning will be shown
