@@ -134,9 +134,7 @@ def varname(
             raise ImproperUseError(msg)
         return None
 
-    if isinstance(node, ast.AnnAssign):
-        target = node.target
-    else:
+    if isinstance(node, ast.Assign):
         # Need to actually check that there's just one
         # give warnings if: a = b = func()
         if len(node.targets) > 1:
@@ -146,6 +144,8 @@ def varname(
                 MultiTargetAssignmentWarning,
             )
         target = node.targets[0]
+    else:
+        target = node.target
 
     names = node_name(target)
 

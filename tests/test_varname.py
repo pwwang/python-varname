@@ -168,6 +168,14 @@ def test_not_strict():
     func = (function(), function())
     assert func == ('func', 'func')
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 8),
+    reason="named expressions require Python >= 3.8"
+)
+def test_named_expr():
+    from .named_expr import a
+    assert a == ["b", "c"]
+
 def test_multiple_targets():
 
     def function():
