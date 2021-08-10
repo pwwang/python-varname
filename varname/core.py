@@ -70,11 +70,11 @@ def varname(
             `ImproperUseError` will be raised.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the ast node.
-            Note that set this to `False` will not supress the exception when
+            Note that set this to `False` will NOT supress the exception when
             the use of `varname` is improper (i.e. multiple variables on
             LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
-        strict: Whether to only return the variable name if the result of
-            the call is assigned to it directly.
+        strict: Whether to only return the variable name(s) if the result of
+            the call is assigned to it/them directly.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
@@ -92,6 +92,8 @@ def varname(
             - When LHS is not an `ast.Name` or `ast.Attribute` node or not a
                 list/tuple of them
             - When there are multiple variables on LHS but `multi_vars` is False
+            - When `strict` is True, but the result is not assigned to
+                variable(s) directly
 
         UserWarning: When there are multiple target
             in the assign node. (e.g: `a = b = func()`, in such a case,
@@ -112,10 +114,11 @@ def varname(
     if not node:
         if strict and not strict_given:
             warnings.warn(
-                "Use `varname(strict=False)` to get the variable name"
-                " if the caller does not assign the result directly to"
-                " that variable."
-                " An ImproperUseError will be raised in v0.8.0",
+                "Calling `varname()` without passing `strict` "
+                "(that defaults to False) to get the variable name but the "
+                "caller does not assign the result directly to that variable. "
+                "`strict` will default to True and an `ImproperUseError` "
+                "will be raised in v0.8.0.",
                 DeprecationWarning,
             )
             return varname(
@@ -140,7 +143,8 @@ def varname(
         if len(node.targets) > 1:
             warnings.warn(
                 "Multiple targets in assignment, variable name "
-                "on the very left will be used.",
+                "on the very left will be used. "
+                "In v0.8.0, the very right one will be used",
                 MultiTargetAssignmentWarning,
             )
         target = node.targets[0]
@@ -377,8 +381,8 @@ def argname(  # pylint: disable=unused-argument,too-many-branches
             to this function.
     """
     warnings.warn(
-        "`argname()` is superseded by `argname2()`, "
-        "and will be removed in v0.8.0",
+        "`argname()` is superseded by `argname2()`, and will become an alias "
+        "of `argname2()` in v0.8.0",
         DeprecationWarning,
     )
     ignore_list = IgnoreList.create(ignore_lambda=False, ignore_varname=False)
@@ -575,7 +579,8 @@ def argname2(
             vars_only=vars_only,
             pos_only=False,
         )
-    except Exception as err:
+    except Exception as err: # pragma: no cover
+        # find a test case?
         raise VarnameRetrievingError(
             "Have you specified the right `frame`?"
         ) from err

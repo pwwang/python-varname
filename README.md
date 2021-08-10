@@ -42,8 +42,14 @@ Thanks goes to these awesome people/projects:
       </a>
     </td>
     <td align="center" style="min-width: 75px">
+      <a href="https://github.com/breuleux">
+        <img src="https://avatars.githubusercontent.com/u/599820?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@breuleux</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki/executing">
-        <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
+        <img src="https://ui-avatars.com/api/?color=3333ff&background=ffffff&bold=true&name=e&size=400" width="50px;" alt=""/>
         <br /><sub><b>executing</b></sub>
       </a>
     </td>

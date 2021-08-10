@@ -43,11 +43,11 @@ ArgSourceType = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
 ArgSourceType = Union[ArgSourceType, Mapping[str, ArgSourceType]]
 
 if sys.version_info >= (3, 8):
-    assign_types = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
-    AssignType = Union[assign_types]
-else:
-    assign_types = (ast.Assign, ast.AnnAssign)
-    AssignType = Union[assign_types]
+    ASSIGN_TYPES = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
+    AssignType = Union[ASSIGN_TYPES]
+else: # pragma: no cover
+    ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
+    AssignType = Union[ASSIGN_TYPES]
 
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
 
@@ -144,7 +144,7 @@ def lookfor_parent_assign(node: ast.AST, strict: bool = True) -> AssignType:
     while hasattr(node, "parent"):
         node = node.parent
 
-        if isinstance(node, assign_types):
+        if isinstance(node, ASSIGN_TYPES):
             return node
 
         if strict:
@@ -417,7 +417,7 @@ def parse_argname_subscript(node: ast.Subscript):
 
     subscript = node.slice # type: ast.AST
     if isinstance(subscript, ast.Index):
-        subscript = subscript.value
+        subscript = subscript.value # pragma: no cover
     if not isinstance(subscript, (ast.Str, ast.Num, ast.Constant)):
         raise ValueError(f"Expect {ast.dump(subscript)} to be a constant.")
 

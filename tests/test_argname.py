@@ -376,12 +376,12 @@ def test_argname2_frame_error():
     def func(x):
         return argname2('x', frame=2)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="is not a valid argument"):
         func(1)
 
 def test_argname2_ignore():
     def target(*args):
-        return argname2('*args', ignore=wrapper)
+        return argname2('*args', ignore=(wrapper, 0))
 
     def wrapper(*args):
         return target(*args)

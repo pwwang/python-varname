@@ -43,7 +43,7 @@ jobs:
         run: |
           export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r .coverage.xml
-        if: matrix.python-version == 3.7
+        if: matrix.python-version == 3.9 && github.event_name != 'pull_request'
 
   deploy:
     needs: build
