@@ -91,8 +91,14 @@ Thanks goes to these awesome people/projects:
          </a>
        </td>
        <td align="center" style="min-width: 75px">
+         <a href="https://github.com/breuleux">
+           <img src="https://avatars.githubusercontent.com/u/599820?s=400&v=4" width="50px;" alt=""/>
+           <br /><sub><b>@breuleux</b></sub>
+         </a>
+       </td>
+       <td align="center" style="min-width: 75px">
          <a href="https://github.com/alexmojaki/executing">
-           <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
+           <img src="https://ui-avatars.com/api/?color=3333ff&background=ffffff&bold=true&name=e&size=400" width="50px;" alt=""/>
            <br /><sub><b>executing</b></sub>
          </a>
        </td>
@@ -156,6 +162,21 @@ Retrieving the variable names using ``varname(...)``
 
        func = asyncio.run(function()) # func == 'func'
 
+    Use ``strict`` to control whether the call should be assigned to
+    the variable directly:
+
+  .. code-block:: python
+
+       def function(strict):
+           return varname(strict=strict)
+
+       func = function(True)     # OK, direct assignment, func == 'func'
+
+       func = [function(True)]   # Not a direct assignment, raises ImproperUseError
+       func = [function(False)]  # OK, func == ['func']
+
+       func = function(False), function(False)   # OK, func = ('func', 'func')
+
 * 
   Retrieving name of a class instance
 
@@ -198,12 +219,6 @@ Retrieving the variable names using ``varname(...)``
 
        def function():
            return varname()
-
-       func = [function()]    # func == ['func']
-
-       func = [function(), function()] # func == ['func', 'func']
-
-       func = function(), function()   # func = ('func', 'func')
 
        func = func1 = function()  # func == func1 == 'func'
        # a warning will be shown

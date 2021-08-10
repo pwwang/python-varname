@@ -42,8 +42,14 @@ Thanks goes to these awesome people/projects:
       </a>
     </td>
     <td align="center" style="min-width: 75px">
+      <a href="https://github.com/breuleux">
+        <img src="https://avatars.githubusercontent.com/u/599820?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@breuleux</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki/executing">
-        <img src="https://via.placeholder.com/50?text=executing" width="50px;" alt=""/>
+        <img src="https://ui-avatars.com/api/?color=3333ff&background=ffffff&bold=true&name=e&size=400" width="50px;" alt=""/>
         <br /><sub><b>executing</b></sub>
       </a>
     </td>
@@ -99,6 +105,20 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = asyncio.run(function()) # func == 'func'
     ```
 
+    Use `strict` to control whether the call should be assigned to
+    the variable directly:
+    ```python
+    def function(strict):
+        return varname(strict=strict)
+
+    func = function(True)     # OK, direct assignment, func == 'func'
+
+    func = [function(True)]   # Not a direct assignment, raises ImproperUseError
+    func = [function(False)]  # OK, func == ['func']
+
+    func = function(False), function(False)   # OK, func = ('func', 'func')
+    ```
+
 - Retrieving name of a class instance
 
     ```python
@@ -137,12 +157,6 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     ```python
     def function():
         return varname()
-
-    func = [function()]    # func == ['func']
-
-    func = [function(), function()] # func == ['func', 'func']
-
-    func = function(), function()   # func = ('func', 'func')
 
     func = func1 = function()  # func == func1 == 'func'
     # a warning will be shown

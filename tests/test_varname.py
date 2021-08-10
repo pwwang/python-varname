@@ -22,18 +22,6 @@ def test_function():
     func = function()
     assert func == 'func'
 
-    func = [function()]
-    assert func == ['func']
-
-    func = [function(), function()]
-    assert func == ['func', 'func']
-
-    func = (function(), )
-    assert func == ('func', )
-
-    func = (function(), function())
-    assert func == ('func', 'func')
-
 def test_function_with_frame_arg():
 
     def function():
@@ -132,13 +120,61 @@ def test_raise_exc():
     def get_name(raise_exc):
         return varname(raise_exc=raise_exc)
 
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(ImproperUseError):
         get_name(True)
 
     name = "0"
     # we can't get it in such way.
     name += str(get_name(False))
     assert name == '0None'
+
+def test_strict():
+
+    def foo(x):
+        return x
+
+    def function():
+        return varname(strict=True)
+
+    func = function()
+    assert func == 'func'
+
+    with pytest.raises(ImproperUseError):
+        func = function() + "_"
+
+    with pytest.raises(ImproperUseError):
+        func = foo(function())
+
+    with pytest.raises(ImproperUseError):
+        func = [function()]
+
+def test_not_strict():
+
+    def function():
+        return varname(strict=False)
+
+    func = function()
+    assert func == 'func'
+
+    func = [function()]
+    assert func == ['func']
+
+    func = [function(), function()]
+    assert func == ['func', 'func']
+
+    func = (function(), )
+    assert func == ('func', )
+
+    func = (function(), function())
+    assert func == ('func', 'func')
+
+@pytest.mark.skipif(
+    sys.version_info < (3, 8),
+    reason="named expressions require Python >= 3.8"
+)
+def test_named_expr():
+    from .named_expr import a
+    assert a == ["b", "c"]
 
 def test_multiple_targets():
 
@@ -160,7 +196,7 @@ def test_unusual():
     assert xyz == 'z'
 
     x = 'a'
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(ImproperUseError):
         x += function()
     assert x == 'a'
 
@@ -366,7 +402,7 @@ def test_ignore_decorated():
     def foo7():
         return varname(ignore=(foo4, 100))
 
-    with pytest.raises(VarnameRetrievingError):
+    with pytest.raises(ImproperUseError):
         f6 = foo6()
 
 def test_ignore_dirname(tmp_path):

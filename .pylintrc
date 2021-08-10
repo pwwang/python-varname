@@ -160,6 +160,7 @@ disable=print-statement,
         unused-arguments,
         fixme,
         consider-using-dict-items,
+        unexpected-keyword-arg,
         C0330
 
 # Enable the message, report, category or checker with the given id(s). You can

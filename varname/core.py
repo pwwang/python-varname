@@ -29,6 +29,7 @@ def varname(
     ignore: IgnoreType = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
+    strict: bool = None,
 ) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
@@ -69,9 +70,11 @@ def varname(
             `ImproperUseError` will be raised.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the ast node.
-            Note that set this to `False` will not supress the exception when
+            Note that set this to `False` will NOT supress the exception when
             the use of `varname` is improper (i.e. multiple variables on
             LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
+        strict: Whether to only return the variable name(s) if the result of
+            the call is assigned to it/them directly.
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
@@ -89,11 +92,16 @@ def varname(
             - When LHS is not an `ast.Name` or `ast.Attribute` node or not a
                 list/tuple of them
             - When there are multiple variables on LHS but `multi_vars` is False
+            - When `strict` is True, but the result is not assigned to
+                variable(s) directly
 
         UserWarning: When there are multiple target
             in the assign node. (e.g: `a = b = func()`, in such a case,
             `b == 'a'`, may not be the case you want)
     """
+    strict_given = strict is not None
+    strict = strict if strict_given else True
+
     # Skip one more frame, as it is supposed to be called
     # inside another function
     node = get_node(frame + 1, ignore, raise_exc=raise_exc)
@@ -102,26 +110,46 @@ def varname(
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
         return None
 
-    node = lookfor_parent_assign(node)
+    node = lookfor_parent_assign(node, strict=strict)
     if not node:
-        if raise_exc:
-            raise VarnameRetrievingError(
-                "Failed to retrieve the variable name."
+        if strict and not strict_given:
+            warnings.warn(
+                "Calling `varname()` without passing `strict` "
+                "(that defaults to False) to get the variable name but the "
+                "caller does not assign the result directly to that variable. "
+                "`strict` will default to True and an `ImproperUseError` "
+                "will be raised in v0.8.0.",
+                DeprecationWarning,
             )
+            return varname(
+                frame=frame,
+                ignore=ignore,
+                multi_vars=multi_vars,
+                raise_exc=raise_exc,
+                strict=False,
+            )
+
+        if raise_exc:
+            if strict:
+                msg = "Expression is not the direct RHS of an assignment."
+            else:
+                msg = "Expression is not part of an assignment."
+            raise ImproperUseError(msg)
         return None
 
-    if isinstance(node, ast.AnnAssign):
-        target = node.target
-    else:
+    if isinstance(node, ast.Assign):
         # Need to actually check that there's just one
         # give warnings if: a = b = func()
         if len(node.targets) > 1:
             warnings.warn(
                 "Multiple targets in assignment, variable name "
-                "on the very left will be used.",
+                "on the very left will be used. "
+                "In v0.8.0, the very right one will be used",
                 MultiTargetAssignmentWarning,
             )
         target = node.targets[0]
+    else:
+        target = node.target
 
     names = node_name(target)
 
@@ -353,8 +381,8 @@ def argname(  # pylint: disable=unused-argument,too-many-branches
             to this function.
     """
     warnings.warn(
-        "`argname()` is superseded by `argname2()`, "
-        "and will be removed in v0.8.0",
+        "`argname()` is superseded by `argname2()`, and will become an alias "
+        "of `argname2()` in v0.8.0",
         DeprecationWarning,
     )
     ignore_list = IgnoreList.create(ignore_lambda=False, ignore_varname=False)
@@ -551,7 +579,8 @@ def argname2(
             vars_only=vars_only,
             pos_only=False,
         )
-    except Exception as err:
+    except Exception as err: # pragma: no cover
+        # find a test case?
         raise VarnameRetrievingError(
             "Have you specified the right `frame`?"
         ) from err

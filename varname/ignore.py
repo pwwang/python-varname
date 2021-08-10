@@ -19,7 +19,7 @@ Any frames in `varname`, standard libraries, and frames of any expressions like
 """
 import sys
 import inspect
-import distutils.sysconfig as sysconfig
+from distutils import sysconfig
 import warnings
 from os import path
 from pathlib import Path

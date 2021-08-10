@@ -14,6 +14,7 @@ def register(
     ignore: IgnoreType = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
+    strict: bool = None,
 ) -> Union[Type, Callable]:
     """A decorator to register __varname__ to a class or function
 
@@ -31,6 +32,8 @@ def register(
             `VarnameRetrievingError` will be raised.
         raise_exc: Whether we should raise an exception if failed
             to retrieve the name.
+        strict: Whether to only return the variable name if the result of
+            the call is assigned to it directly.
 
     Examples:
         >>> @varname.register
@@ -58,6 +61,7 @@ def register(
                 ignore=ignore,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc,
+                strict=strict,
             )
             orig_init(self, *args, **kwargs)
 
@@ -74,6 +78,7 @@ def register(
                 ignore=ignore,
                 multi_vars=multi_vars,
                 raise_exc=raise_exc,
+                strict=strict,
             )
 
             try:
@@ -90,6 +95,7 @@ def register(
         ignore=ignore,
         multi_vars=multi_vars,
         raise_exc=raise_exc,
+        strict=strict,
     )
 
 
@@ -109,6 +115,8 @@ class Wrapper:
     Args:
         value: The value to be wrapped
         raise_exc: Whether to raise exception when varname is failed to retrieve
+        strict: Whether to only return the variable name if the wrapper is
+            assigned to it directly.
 
     Attributes:
         name: The variable name to which the instance is assigned
@@ -121,9 +129,15 @@ class Wrapper:
         frame: int = 1,
         ignore: IgnoreType = None,
         raise_exc: bool = True,
+        strict: bool = None,
     ):
         # This call is ignored, since it's inside varname
-        self.name = varname(frame - 1, ignore=ignore, raise_exc=raise_exc)
+        self.name = varname(
+            frame=frame - 1,
+            ignore=ignore,
+            raise_exc=raise_exc,
+            strict=strict,
+        )
         self.value = value
 
     def __str__(self) -> str:
