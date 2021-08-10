@@ -184,7 +184,7 @@ def debug(
     values = (var, *more_vars)
     name_and_values = [
         f"{var_name}{sep}{value!r}" if repr else f"{var_name}{sep}{value}"
-        for var_name, value in zip(var_names, values) # type: ignore
+        for var_name, value in zip(var_names, values)  # type: ignore
     ]
 
     if merge:

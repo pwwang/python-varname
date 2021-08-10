@@ -15,6 +15,7 @@ from .utils import (
     get_argument_sources,
     get_function_called_argname,
     parse_argname_subscript,
+    rich_exc_message,
     ArgSourceType,
     VarnameRetrievingError,
     ImproperUseError,
@@ -104,13 +105,13 @@ def varname(
 
     # Skip one more frame, as it is supposed to be called
     # inside another function
-    node = get_node(frame + 1, ignore, raise_exc=raise_exc)
-    if not node:
+    refnode = get_node(frame + 1, ignore, raise_exc=raise_exc)
+    if not refnode:
         if raise_exc:
             raise VarnameRetrievingError("Unable to retrieve the ast node.")
         return None
 
-    node = lookfor_parent_assign(node, strict=strict)
+    node = lookfor_parent_assign(refnode, strict=strict)
     if not node:
         if strict and not strict_given:
             warnings.warn(
@@ -134,7 +135,7 @@ def varname(
                 msg = "Expression is not the direct RHS of an assignment."
             else:
                 msg = "Expression is not part of an assignment."
-            raise ImproperUseError(msg)
+            raise ImproperUseError(rich_exc_message(msg, refnode))
         return None
 
     if isinstance(node, ast.Assign):
@@ -161,7 +162,11 @@ def varname(
 
     if len(names) > 1:
         raise ImproperUseError(
-            f"Expect a single variable on left-hand side, got {len(names)}."
+            rich_exc_message(
+                "Expect a single variable on left-hand side, "
+                f"got {len(names)}.",
+                refnode,
+            )
         )
 
     return names[0]
@@ -539,8 +544,12 @@ def argname2(
             If False, `asttokens` is required to retrieve the source.
 
     Returns:
-        Scalar string if
+        The argument source when no more_args passed, otherwise a tuple of
+        argument sources
 
+    Raises:
+        VarnameRetrievingError: When the ast node where the function is called
+            cannot be retrieved
     """
     ignore_list = IgnoreList.create(
         ignore,
@@ -579,7 +588,7 @@ def argname2(
             vars_only=vars_only,
             pos_only=False,
         )
-    except Exception as err: # pragma: no cover
+    except Exception as err:  # pragma: no cover
         # find a test case?
         raise VarnameRetrievingError(
             "Have you specified the right `frame`?"

@@ -40,6 +40,14 @@ repos:
         language: system
         files: pyproject.toml
         pass_filenames: false
+    -   id: mypycheck
+        name: Type checking by mypy
+        entry: mypy
+        language: system
+        files: ^pipda/.+$
+        pass_filenames: false
+        types: [python]
+        args: [-p, varname]
     -   id: pytest
         name: Run pytest
         entry: pytest
