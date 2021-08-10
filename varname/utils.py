@@ -62,29 +62,37 @@ class config:  # pylint: disable=invalid-name
     debug = False
 
 
-class VarnameRetrievingError(Exception):
+class VarnameException(Exception):
+    """Root exception for all varname exceptions"""
+
+
+class VarnameRetrievingError(VarnameException):
     """When failed to retrieve the varname"""
 
 
-class QualnameNonUniqueError(Exception):
+class QualnameNonUniqueError(VarnameException):
     """When a qualified name is used as an ignore element but references to
     multiple objects in a module"""
 
 
-class NonVariableArgumentError(Exception):
+class NonVariableArgumentError(VarnameException):
     """When vars_only is True but try to retrieve name of
     a non-variable argument"""
 
 
-class ImproperUseError(Exception):
+class ImproperUseError(VarnameException):
     """When varname() is improperly used"""
 
 
-class MaybeDecoratedFunctionWarning(Warning):
+class VarnameWarning(Warning):
+    """Root warning for all varname warnings"""
+
+
+class MaybeDecoratedFunctionWarning(VarnameWarning):
     """When a suspecious decorated function used as ignore function directly"""
 
 
-class MultiTargetAssignmentWarning(Warning):
+class MultiTargetAssignmentWarning(VarnameWarning):
     """When varname tries to retrieve variable name in
     a multi-target assignment"""
 
