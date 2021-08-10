@@ -1,3 +1,7 @@
+## v0.7.2
+- Add `strict` mode to `varname()` (#57)
+- Support the walrus operator (`:=`) (#58)
+
 ## v0.7.1
 - Add `ignore` argument to `argname2()`
 - Fix Fix utils.get_argument_sources() when kwargs is given as `**kwargs`.
