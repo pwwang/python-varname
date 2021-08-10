@@ -544,8 +544,12 @@ def argname2(
             If False, `asttokens` is required to retrieve the source.
 
     Returns:
-        Scalar string if
+        The argument source when no more_args passed, otherwise a tuple of
+        argument sources
 
+    Raises:
+        VarnameRetrievingError: When the ast node where the function is called
+            cannot be retrieved
     """
     ignore_list = IgnoreList.create(
         ignore,

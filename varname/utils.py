@@ -454,10 +454,10 @@ def rich_exc_message(msg: str, node: ast.AST) -> str:
         # wired shift
         lineno -= 1  # pragma: no cover
 
-    linenos = tuple(map(str, range(*line_range)))
-    lineno_width = max(map(len, linenos))
-    hiline = lineno - startlineno
-    codes = []
+    linenos = tuple(map(str, range(*line_range)))  # type: Tuple[str, ...]
+    lineno_width = max(map(len, linenos))  # type: int
+    hiline = lineno - startlineno  # type: int
+    codes = []  # type: List[str]
     for i, lno in enumerate(linenos):
         lno = lno.ljust(lineno_width)
         if i == hiline:
@@ -466,6 +466,8 @@ def rich_exc_message(msg: str, node: ast.AST) -> str:
         else:
             codes.append(f"    | {lno}  {lines[i]}")
 
-    codeblock = f"  {filename}:{lineno+1}:{col_offset+1}\n{''.join(codes)}"
-
-    return f"{msg}\n\n{codeblock}\n"
+    return (
+        f"{msg}\n\n"
+        f"  {filename}:{lineno+1}:{col_offset+1}\n"
+        f"{''.join(codes)}\n"
+    )
