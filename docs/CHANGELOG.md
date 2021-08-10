@@ -1,3 +1,7 @@
+## v0.7.3
+- Indicate where the `ImproperUseError` happens for `varname()` (Close #60)
+- Add `VarnameException` and `VarnameWarning` as root for all varname-defined exceptions and warnings.
+
 ## v0.7.2
 - Add `strict` mode to `varname()` (#57)
 - Support the walrus operator (`:=`) (#58)
