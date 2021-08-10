@@ -41,6 +41,7 @@ from .utils import (
     debug_ignore_frame,
 )
 
+
 class IgnoreElem(ABC):
     """An element of the ignore list"""
 
@@ -66,7 +67,7 @@ class IgnoreElem(ABC):
 
         # save it for __repr__
         cls.attrs = attrs
-        cls.__init__ = subclass_init # type: ignore
+        cls.__init__ = subclass_init  # type: ignore
 
     def _post_init(self) -> None:
         """Setups after __init__"""
@@ -127,7 +128,7 @@ class IgnoreDirname(IgnoreElem, attrs=["dirname"]):
         # pylint: disable=attribute-defined-outside-init
 
         # Path object will turn into str here
-        self.dirname = path.realpath(self.dirname) # type: str
+        self.dirname = path.realpath(self.dirname)  # type: str
 
         if not self.dirname.endswith(path.sep):
             self.dirname = f"{self.dirname}{path.sep}"
@@ -264,23 +265,23 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
         return (
             IgnoreDirname(ignore_elem)  # type: ignore
             if path.isdir(ignore_elem)
-            else IgnoreFilename(ignore_elem) # type: ignore
+            else IgnoreFilename(ignore_elem)  # type: ignore
         )
     if hasattr(ignore_elem, "__code__"):
-        return IgnoreFunction(ignore_elem) # type: ignore
+        return IgnoreFunction(ignore_elem)  # type: ignore
     if not isinstance(ignore_elem, tuple) or len(ignore_elem) != 2:
         raise ValueError(f"Unexpected ignore item: {ignore_elem!r}")
     # is tuple and len == 2
     if hasattr(ignore_elem[0], "__code__") and isinstance(ignore_elem[1], int):
-        return IgnoreDecorated(*ignore_elem) # type: ignore
+        return IgnoreDecorated(*ignore_elem)  # type: ignore
     # otherwise, the second element should be qualname
     if not isinstance(ignore_elem[1], str):
         raise ValueError(f"Unexpected ignore item: {ignore_elem!r}")
 
     if isinstance(ignore_elem[0], ModuleType):
-        return IgnoreModuleQualname(*ignore_elem) # type: ignore
+        return IgnoreModuleQualname(*ignore_elem)  # type: ignore
     if isinstance(ignore_elem[0], (Path, str)):
-        return IgnoreFilenameQualname(*ignore_elem) # type: ignore
+        return IgnoreFilenameQualname(*ignore_elem)  # type: ignore
     if ignore_elem[0] is None:
         return IgnoreOnlyQualname(*ignore_elem)
 
@@ -316,10 +317,10 @@ class IgnoreList:
             ignore = [ignore]
 
         ignore_list = [
-            IgnoreStdlib( # type: ignore
+            IgnoreStdlib(  # type: ignore
                 sysconfig.get_python_lib(standard_lib=True)
             )
-        ] # type: List[IgnoreElem]
+        ]  # type: List[IgnoreElem]
         if ignore_varname:
             ignore_list.append(create_ignore_elem(sys.modules[__package__]))
         if ignore_lambda:
@@ -327,13 +328,11 @@ class IgnoreList:
         for ignore_elem in ignore:
             ignore_list.append(create_ignore_elem(ignore_elem))
 
-        return cls(ignore_list) # type: ignore
+        return cls(ignore_list)  # type: ignore
 
     def __init__(self, ignore_list: List[IgnoreElemType]) -> None:
         self.ignore_list = ignore_list
-        debug_ignore_frame(
-            '>>> IgnoreList initiated <<<'
-        )
+        debug_ignore_frame(">>> IgnoreList initiated <<<")
 
     def nextframe_to_check(
         self, frame_no: int, frameinfos: List[inspect.FrameInfo]
@@ -352,7 +351,7 @@ class IgnoreList:
             A number for Next `N`th frame to check. 0 if no frame matched.
         """
         for ignore_elem in self.ignore_list:
-            matched = ignore_elem.match(frame_no, frameinfos) # type: ignore
+            matched = ignore_elem.match(frame_no, frameinfos)  # type: ignore
             if matched and isinstance(ignore_elem, IgnoreDecorated):
                 debug_ignore_frame(
                     f"Ignored by {ignore_elem!r}", frameinfos[frame_no]
@@ -406,4 +405,4 @@ class IgnoreList:
 
             raise VarnameRetrievingError from exc
 
-        return None # pragma: no cover
+        return None  # pragma: no cover

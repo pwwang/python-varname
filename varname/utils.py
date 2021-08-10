@@ -44,10 +44,10 @@ ArgSourceType = Union[ArgSourceType, Mapping[str, ArgSourceType]]
 
 if sys.version_info >= (3, 8):
     ASSIGN_TYPES = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
-    AssignType = Union[ASSIGN_TYPES]
-else: # pragma: no cover
+    AssignType = Union[ASSIGN_TYPES]  # type: ignore
+else:  # pragma: no cover
     ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
-    AssignType = Union[ASSIGN_TYPES]
+    AssignType = Union[ASSIGN_TYPES]  # type: ignore
 
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
 
@@ -120,13 +120,14 @@ def get_node(
     return get_node_by_frame(frameobj, raise_exc)
 
 
-def get_node_by_frame(
-    frame: FrameType, raise_exc: bool = True
-) -> ast.AST:
+def get_node_by_frame(frame: FrameType, raise_exc: bool = True) -> ast.AST:
     """Get the node by frame, raise errors if possible"""
     exect = Source.executing(frame)
 
     if exect.node:
+        # attach the frame for better exception message
+        # (ie. where ImproperUseError happens)
+        exect.node.__frame__ = frame
         return exect.node
 
     if exect.source.text and exect.source.tree and raise_exc:
@@ -257,10 +258,7 @@ def check_qualname_by_source(
         )
 
 
-def debug_ignore_frame(
-    msg: str,
-    frameinfo: inspect.FrameInfo = None
-) -> None:
+def debug_ignore_frame(msg: str, frameinfo: inspect.FrameInfo = None) -> None:
     """Print the debug message for a given frame info object
 
     Args:
@@ -415,9 +413,9 @@ def parse_argname_subscript(node: ast.Subscript):
     if not isinstance(name, ast.Name):
         raise ValueError(f"Expect {ast.dump(name)} to be a variable.")
 
-    subscript = node.slice # type: ast.AST
+    subscript = node.slice  # type: ast.AST
     if isinstance(subscript, ast.Index):
-        subscript = subscript.value # pragma: no cover
+        subscript = subscript.value  # pragma: no cover
     if not isinstance(subscript, (ast.Str, ast.Num, ast.Constant)):
         raise ValueError(f"Expect {ast.dump(subscript)} to be a constant.")
 
@@ -428,3 +426,38 @@ def parse_argname_subscript(node: ast.Subscript):
     subscript = getattr(subscript, "s", subscript)  # ast.Str
 
     return name.id, subscript
+
+
+def rich_exc_message(msg: str, node: ast.AST) -> str:
+    """Attach the source code from the node to message to
+    get a rich message for exceptions
+
+    If package 'rich' is not install or 'node.__frame__' doesn't exist, fall
+    to plain message (with basic information), otherwise show a better message
+    with full information
+    """
+    frame = node.__frame__  # type: FrameType
+    lineno = node.lineno  # type: int
+    col_offset = node.col_offset  # type: int
+    filename = frame.f_code.co_filename  # type: str
+    lines, startlineno = inspect.getsourcelines(frame)
+    line_range = (startlineno + 1, startlineno + len(lines) + 1)
+    if startlineno == 0:
+        # wired shift
+        lineno -= 1  # pragma: no cover
+
+    linenos = tuple(map(str, range(*line_range)))
+    lineno_width = max(map(len, linenos))
+    hiline = lineno - startlineno
+    codes = []
+    for i, lno in enumerate(linenos):
+        lno = lno.ljust(lineno_width)
+        if i == hiline:
+            codes.append(f"  > | {lno}  {lines[i]}")
+            codes.append(f"    | {' ' * (lineno_width + col_offset + 2)}^\n")
+        else:
+            codes.append(f"    | {lno}  {lines[i]}")
+
+    codeblock = f"  {filename}:{lineno+1}:{col_offset+1}\n{''.join(codes)}"
+
+    return f"{msg}\n\n{codeblock}\n"
