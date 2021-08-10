@@ -24,10 +24,11 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='varname',
-    version='0.7.2',
+    version='0.7.3',
     description='Dark magics about variable names in python.',
     python_requires='==3.*,>=3.6.0',
-    project_urls={"homepage": "https://github.com/pwwang/python-varname", "repository": "https://github.com/pwwang/python-varname"},
+    project_urls={"homepage": "https://github.com/pwwang/python-varname",
+                  "repository": "https://github.com/pwwang/python-varname"},
     author='pwwang',
     author_email='pwwang@pwwang.com',
     license='MIT',
