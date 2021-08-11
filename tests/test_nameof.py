@@ -37,7 +37,7 @@ def test_nameof_full():
 
     d = [a, a]
     with pytest.raises(
-            NonVariableArgumentError,
+            ImproperUseError,
             match='is not a variable or an attribute'
     ):
         name = nameof(d[0], vars_only=True)

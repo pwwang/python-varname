@@ -2,7 +2,7 @@
 import ast
 import re
 import warnings
-from typing import List, Tuple, Type, Union, Any, Callable
+from typing import List, Tuple, Type, Union, Callable
 
 from executing import Source
 
@@ -14,12 +14,10 @@ from .utils import (
     node_name,
     get_argument_sources,
     get_function_called_argname,
-    parse_argname_subscript,
     rich_exc_message,
     ArgSourceType,
     VarnameRetrievingError,
     ImproperUseError,
-    NonVariableArgumentError,
     MultiTargetAssignmentWarning,
 )
 from .ignore import IgnoreList, IgnoreType
@@ -30,7 +28,7 @@ def varname(
     ignore: IgnoreType = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
-    strict: bool = None,
+    strict: bool = True,
 ) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
@@ -79,30 +77,27 @@ def varname(
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
-            we failed to retrieve the variable name.
+            we failed to retrieve the ast node for the variable(s).
         A tuple or a hierarchy (tuple of tuples) of variable names
             when `multi_vars` is `True`.
 
     Raises:
-        VarnameRetrievingError: When there is invalid variables or
-            invalid number of variables used on the LHS; or
-            when we are unable to retrieve the variable name and `raise_exc`
-            is set to `True`.
+        VarnameRetrievingError: When we are unable to retrieve the ast node
+            for the variable(s) and `raise_exc` is set to `True`.
 
-        ImproperUseError: When the use of `varname()` is improper. For example:
+        ImproperUseError: When the use of `varname()` is improper, including:
             - When LHS is not an `ast.Name` or `ast.Attribute` node or not a
                 list/tuple of them
             - When there are multiple variables on LHS but `multi_vars` is False
             - When `strict` is True, but the result is not assigned to
                 variable(s) directly
 
-        UserWarning: When there are multiple target
-            in the assign node. (e.g: `a = b = func()`, in such a case,
-            `b == 'a'`, may not be the case you want)
-    """
-    strict_given = strict is not None
-    strict = strict if strict_given else True
+            Note that `raise_exc=False` will NOT suppress this exception.
 
+        MultiTargetAssignmentWarning: When there are multiple target
+            in the assign node. (e.g: `a = b = func()`, in such a case,
+            `a == 'b'`, may not be the case you want)
+    """
     # Skip one more frame, as it is supposed to be called
     # inside another function
     refnode = get_node(frame + 1, ignore, raise_exc=raise_exc)
@@ -112,31 +107,13 @@ def varname(
         return None
 
     node = lookfor_parent_assign(refnode, strict=strict)
-    if not node:
-        if strict and not strict_given:
-            warnings.warn(
-                "Calling `varname()` without passing `strict` "
-                "(that defaults to False) to get the variable name but the "
-                "caller does not assign the result directly to that variable. "
-                "`strict` will default to True and an `ImproperUseError` "
-                "will be raised in v0.8.0.",
-                DeprecationWarning,
-            )
-            return varname(
-                frame=frame,
-                ignore=ignore,
-                multi_vars=multi_vars,
-                raise_exc=raise_exc,
-                strict=False,
-            )
+    if not node:  # improper use
+        if strict:
+            msg = "Caller doesn't assign the result directly to variable(s)."
+        else:
+            msg = "Expression is not part of an assignment."
 
-        if raise_exc:
-            if strict:
-                msg = "Expression is not the direct RHS of an assignment."
-            else:
-                msg = "Expression is not part of an assignment."
-            raise ImproperUseError(rich_exc_message(msg, refnode))
-        return None
+        raise ImproperUseError(rich_exc_message(msg, refnode))
 
     if isinstance(node, ast.Assign):
         # Need to actually check that there's just one
@@ -144,11 +121,10 @@ def varname(
         if len(node.targets) > 1:
             warnings.warn(
                 "Multiple targets in assignment, variable name "
-                "on the very left will be used. "
-                "In v0.8.0, the very right one will be used",
+                "on the very right is used. ",
                 MultiTargetAssignmentWarning,
             )
-        target = node.targets[0]
+        target = node.targets[-1]
     else:
         target = node.target
 
@@ -203,15 +179,20 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
 
     Args:
         frame: At which frame this function is called.
-        raise_exc: Raise exception we failed to detect
+        raise_exc: Raise exception we failed to detect the ast node
+            This will NOT supress the `ImproperUseError`
 
     Returns:
-        The attribute name right after the function call
-        If there is no attribute attached and `raise_exc` is `False`
+        The attribute name right after the function call.
+        `None` if ast node cannot be retrieved and `raise_exc` is `False`
 
     Raises:
         VarnameRetrievingError: When `raise_exc` is `True` and we failed to
             detect the attribute name (including not having one)
+
+        ImproperUseError: When (the wraper of) this function is not called
+            inside a method/property of a class instance.
+            Note that this exception will not be suppressed by `raise_exc=False`
     """
     node = get_node(frame + 1, raise_exc=raise_exc)
     if not node:
@@ -225,7 +206,7 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
     # see test_will_fail
     if not isinstance(node, ast.Attribute):
         if raise_exc:
-            raise VarnameRetrievingError(
+            raise ImproperUseError(
                 "Function `will` has to be called within "
                 "a method/property of a class."
             )
@@ -289,8 +270,10 @@ def nameof(
     """
     # Frame is anyway used in get_node
     frameobj = IgnoreList.create(
-        ignore_lambda=False, ignore_varname=False
+        ignore_lambda=False,
+        ignore_varname=False,
     ).get_frame(frame)
+
     node = get_node_by_frame(frameobj, raise_exc=True)
     if not node:
         # We can't retrieve the node by executing.
@@ -324,170 +307,17 @@ def nameof(
             "a single variable, and argument `full` should not be specified."
         )
 
-    out = argname2(
-        "var", "*more_vars", func=nameof, frame=frame, vars_only=vars_only
+    out = argname(
+        "var",
+        "*more_vars",
+        func=nameof,
+        frame=frame,
+        vars_only=vars_only,
     )
     return out if more_vars else out[0]  # type: ignore
 
 
-def argname(  # pylint: disable=unused-argument,too-many-branches
-    arg: Any,
-    *more_args: Any,
-    # *, keyword-only argument, only available with python3.8+
-    func: Callable = None,
-    dispatch: Type = None,
-    frame: int = 1,
-    vars_only: bool = True,
-    pos_only: bool = False,
-) -> ArgSourceType:
-    """Get the argument names/sources passed to a function
-
-    Superseded by `argname2()`
-
-    Args:
-        arg: Parameter of the function, used to map the argument passed to
-            the function
-        *more_args: Other parameters of the function, used to map more arguments
-            passed to the function
-        func: The target function. If not provided, the AST node of the
-            function call will be used to fetch the function:
-            - If a variable (ast.Name) used as function, the `node.id` will
-                be used to get the function from `locals()` or `globals()`.
-            - If variable (ast.Name), attributes (ast.Attribute),
-                subscripts (ast.Subscript), and combinations of those and
-                literals used as function, `pure_eval` will be used to evaluate
-                the node
-            - If `pure_eval` is not installed or failed to evaluate, `eval`
-                will be used. A warning will be shown since unwanted side
-                effects may happen in this case.
-            You are encouraged to always pass the function explicitly.
-        dispatch: If a function is a single-dispatched function, you can
-            specify a type for it to dispatch the real function. If this is
-            specified, expect `func` to be the generic function if provided.
-        frame: The frame where target function is called from this call.
-            The intermediate calls will be the wrappers of this function.
-            However, keep in mind that the wrappers must have the same
-            signature as this function. When `pos_only` is `True`, only the
-            positional arguments have to be the same
-        vars_only: Require the arguments to be variables only,
-        pos_only: Only fetch the names/sources for positional arguments.
-
-    Returns:
-        The argument source when no more_args passed, otherwise a tuple of
-        argument sources
-
-    Raises:
-        NonVariableArgumentError: When vars_only is True, and we are trying
-            to retrieve the source of an argument that is not a variable
-            (i.e. an expression)
-        VarnameRetrievingError: When failed to get the frame or node
-        ValueError: When the arguments passed to this function is invalid.
-            Only variables and subscripts of variables are allow to be passed
-            to this function.
-    """
-    warnings.warn(
-        "`argname()` is superseded by `argname2()`, and will become an alias "
-        "of `argname2()` in v0.8.0",
-        DeprecationWarning,
-    )
-    ignore_list = IgnoreList.create(ignore_lambda=False, ignore_varname=False)
-    # where argname(...) is called
-    argname_frame = ignore_list.get_frame(frame)
-    argname_node = get_node_by_frame(argname_frame)
-    # where func(...) is called
-    func_frame = ignore_list.get_frame(frame + 1)
-    func_node = get_node_by_frame(func_frame)
-    # Only do it when both nodes are available
-    if not argname_node or not func_node:
-        # We can do something at bytecode level, when a single positional
-        # argument passed to both functions (argname and the target function)
-        # However, it's hard to ensure that there is only a single positional
-        # arguments passed to the target function, at bytecode level.
-        raise VarnameRetrievingError(
-            "The source code of 'argname' calling is not available."
-        )
-
-    if not func:
-        func = get_function_called_argname(func_frame, func_node)
-
-    if dispatch:
-        func = func.dispatch(dispatch)
-
-    # don't pass the target arguments so that we can cache the sources in
-    # the same call. For example:
-    # >>> def func(a, b):
-    # >>>   a_name = argname(a)
-    # >>>   b_name = argname(b)
-    argument_sources = get_argument_sources(
-        Source.for_frame(func_frame),
-        func_node,
-        func,
-        vars_only=vars_only,
-        pos_only=pos_only,
-    )
-
-    ret = []  # type: List[ArgSourceType]
-    for argnode in argname_node.args:
-        if not isinstance(argnode, (ast.Name, ast.Subscript, ast.Starred)):
-            raise ValueError(
-                "Arguments of 'argname' must be "
-                "function arguments themselves or subscripts of them."
-            )
-
-        if isinstance(argnode, ast.Starred):
-            if (
-                not isinstance(argnode.value, ast.Name)
-                or argnode.value.id not in argument_sources
-                or not isinstance(argument_sources[argnode.value.id], tuple)
-            ):
-                posvar = argnode.value
-                posvar = getattr(posvar, "id", posvar)
-                raise ValueError(
-                    f"No such variable positional argument {posvar!r}"
-                )
-            ret.extend(argument_sources[argnode.value.id])  # type: ignore
-
-        elif isinstance(argnode, ast.Name):
-            if argnode.id not in argument_sources:
-                raise ValueError(
-                    f"No value passed for argument {argnode.id!r}, "
-                    "or it is not an argument at all."
-                )
-            ret.append(argument_sources[argnode.id])
-
-        else:
-            name, subscript = parse_argname_subscript(argnode)
-            if name not in argument_sources:
-                raise ValueError(f"{name!r} is not an argument.")
-
-            if isinstance(subscript, int) and not isinstance(
-                argument_sources[name], tuple
-            ):
-                raise ValueError(
-                    f"{name!r} is not a positional argument "
-                    "(*args, for example)."
-                )
-            if isinstance(subscript, str) and not isinstance(
-                argument_sources[name], dict
-            ):
-                raise ValueError(
-                    f"{name!r} is not a keyword argument "
-                    "(**kwargs, for example)."
-                )
-            ret.append(argument_sources[name][subscript])  # type: ignore
-
-    if vars_only:
-        for source in ret:
-            if isinstance(source, ast.AST):
-                raise NonVariableArgumentError(
-                    f"Argument {ast.dump(source)} is not a variable "
-                    "or an attribute."
-                )
-
-    return ret[0] if not more_args else tuple(ret)  # type: ignore
-
-
-def argname2(
+def argname(  # pylint: disable=too-many-branches
     arg: str,
     *more_args: str,
     # *, keyword-only argument, only available with python3.8+
@@ -586,7 +416,6 @@ def argname2(
             func_node,
             func,
             vars_only=vars_only,
-            pos_only=False,
         )
     except Exception as err:  # pragma: no cover
         # find a test case?
@@ -613,16 +442,26 @@ def argname2(
                 farg_star = True
 
         if farg_name not in argument_sources:
-            raise ValueError(
+            raise ImproperUseError(
                 f"{farg_name!r} is not a valid argument "
                 f"of {func.__qualname__!r}."
             )
 
         source = argument_sources[farg_name]
         if isinstance(source, ast.AST):
-            raise NonVariableArgumentError(
+            raise ImproperUseError(
                 f"Argument {ast.dump(source)} is not a variable "
                 "or an attribute."
+            )
+
+        if isinstance(farg_subscript, int) and not isinstance(source, tuple):
+            raise ImproperUseError(
+                f"`{farg_name}` is not a positional argument."
+            )
+
+        if isinstance(farg_subscript, str) and not isinstance(source, dict):
+            raise ImproperUseError(
+                f"`{farg_name}` is not a keyword argument."
             )
 
         if farg_subscript is not None:
@@ -636,4 +475,31 @@ def argname2(
         out[0]
         if not more_args and not farg_star
         else tuple(out)  # type: ignore
+    )
+
+
+def argname2(
+    arg: str,
+    *more_args: str,
+    # *, keyword-only argument, only available with python3.8+
+    func: Callable = None,
+    dispatch: Type = None,
+    frame: int = 1,
+    ignore: IgnoreType = None,
+    vars_only: bool = True,
+) -> ArgSourceType:
+    """Alias of argname, will be removed in v0.9.0"""
+    warnings.warn(
+        "`argname2()` is deprecated and will be removed in v0.9.0. "
+        "Use `argname()` instead.",
+        DeprecationWarning
+    )
+    return argname(
+        arg,
+        *more_args,
+        func=func,
+        dispatch=dispatch,
+        frame=frame+1,
+        ignore=ignore,
+        vars_only=vars_only,
     )

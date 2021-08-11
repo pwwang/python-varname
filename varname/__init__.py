@@ -2,12 +2,14 @@
 # pylint: disable=unused-import
 from .utils import (
     config,
+    VarnameException,
     VarnameRetrievingError,
     ImproperUseError,
     QualnameNonUniqueError,
-    NonVariableArgumentError,
+    VarnameWarning,
     MultiTargetAssignmentWarning,
     MaybeDecoratedFunctionWarning,
+    UsingExecWarning,
 )
 from .core import varname, nameof, will, argname, argname2
 

@@ -118,15 +118,15 @@ def test_multi_vars_lhs():
 def test_raise_exc():
 
     def get_name(raise_exc):
-        return varname(raise_exc=raise_exc)
+        return varname(raise_exc=raise_exc, strict=False)
 
     with pytest.raises(ImproperUseError):
         get_name(True)
 
     name = "0"
-    # we can't get it in such way.
-    name += str(get_name(False))
-    assert name == '0None'
+    # we can't get it in such way, even with strict=False
+    with pytest.raises(ImproperUseError):
+        name += str(get_name(False))
 
 def test_strict():
 
@@ -184,12 +184,12 @@ def test_multiple_targets():
     with pytest.warns(MultiTargetAssignmentWarning,
                       match="Multiple targets in assignment"):
         y = x = function()
-    assert y == x == 'y'
+    assert y == x == 'x'
 
 def test_unusual():
 
     def function():
-        return varname()
+        return varname(strict=False)
 
     # something ridiculous
     xyz = function()[-1:]
