@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "varname"
-version = "0.7.3"
+version = "0.8.0"
 description = "Dark magics about variable names in python."
 authors = [ "pwwang <pwwang@pwwang.com>",]
 license = "MIT"

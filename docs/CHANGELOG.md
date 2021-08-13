@@ -1,3 +1,23 @@
+## v0.8.0
+
+Compared to `v0.7.3`
+- Add `UsingExecWarning` when `exec` is used to retrieve `func` for `argname()`.
+- Remove `NonVariableArgumentError`. Use `ImproperUseError` instead.
+- Add `VarnameError` and `VarnameWarning` as root for varname-related exceptions and warnings, respectively.
+- Default `strict` to `True` for `varname()`, `helpers.register()` and `helpers.Wrapper()`
+- Limit number of context lines for showing where `ImproperUseError` happens
+
+Compared to `v0.7.0`
+- Add `UsingExecWarning` when `exec` is used to retrieve `func` for `argname()`.
+- Remove `NonVariableArgumentError`. Use `ImproperUseError` instead.
+- Add `VarnameError` and `VarnameWarning` as root for varname-related exceptions and warnings, respectively.
+- Add `strict` mode to `varname()`, `helpers.register()` and `helpers.Wrapper()` (#57)
+- Support the walrus operator (`:=`) (#58)
+- Change `argname()` to accept argument names instead of arguments themselves
+- Remove `pos_only` argument from `argname()`
+- Add `ignore` argument to `argname()` to ignore intermediate frames
+- Limit `VarnameRetrievingError` to the situations only when the AST node is not able to be retrieved.
+
 ## v0.7.3
 - Indicate where the `ImproperUseError` happens for `varname()` (Close #60)
 - Add `VarnameException` and `VarnameWarning` as root for all varname-defined exceptions and warnings.
