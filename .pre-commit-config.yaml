@@ -29,17 +29,21 @@ repos:
 -   repo: local
     hooks:
     -   id: poetry2setuppy
+        # keep setup.py for github to trace dependencies/dependents
+        # and for "pip install -e ." to work
         name: Convert pyproject.toml to setup.py
-        entry: dephell deps convert --from=poetry --to=setup.py
+        entry: |
+            bash -c "poetry build --format sdist;
+            tar --wildcards -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py"
         language: system
         files: pyproject.toml
         pass_filenames: false
-    -   id: poetry2requirements
-        name: Convert pyproject.toml to requirements.txt
-        entry: dephell deps convert --from=poetry --to=requirements.txt
-        language: system
-        files: pyproject.toml
-        pass_filenames: false
+    # -   id: poetry2requirements
+    #     name: Convert pyproject.toml to requirements.txt
+    #     entry: poetry export -f requirements.txt --without-hashes -o requirements.txt
+    #     language: system
+    #     files: pyproject.toml
+    #     pass_filenames: false
     -   id: mypycheck
         name: Type checking by mypy
         entry: mypy
@@ -55,3 +59,10 @@ repos:
         args: [tests/]
         pass_filenames: false
         files: ^tests/.+$|^varname/.+$
+    -   id: compile-readme
+        name: Make README.md
+        entry: python make_readme.py README.raw.md > README.md
+        language: system
+        files: README.raw.md
+        pass_filenames: false
+        always_run: true

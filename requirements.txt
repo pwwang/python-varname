@@ -1,5 +1,4 @@
-asttokens==2.*
-executing
-pure-eval==0.*
-pytest
-pytest-cov
+asttokens==2.0.5
+executing==0.8.0
+pure-eval==0.2.1
+six==1.16.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.3.0"
