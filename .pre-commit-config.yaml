@@ -66,3 +66,9 @@ repos:
         files: README.raw.md
         pass_filenames: false
         always_run: true
+    -   id: execute-playground
+        name: Run playground notebook
+        entry: jupyter nbconvert playground/playground.ipynb --execute --to notebook
+        language: system
+        files: playground/playground.ipynb
+        pass_filenames: false
