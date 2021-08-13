@@ -1,5 +1,0 @@
-asttokens==2.*
-executing
-pure-eval==0.*
-pytest
-pytest-cov

@@ -75,11 +75,6 @@ class QualnameNonUniqueError(VarnameException):
     multiple objects in a module"""
 
 
-class NonVariableArgumentError(VarnameException):
-    """When vars_only is True but try to retrieve name of
-    a non-variable argument"""
-
-
 class ImproperUseError(VarnameException):
     """When varname() is improperly used"""
 
@@ -95,6 +90,9 @@ class MaybeDecoratedFunctionWarning(VarnameWarning):
 class MultiTargetAssignmentWarning(VarnameWarning):
     """When varname tries to retrieve variable name in
     a multi-target assignment"""
+
+class UsingExecWarning(VarnameWarning):
+    """When exec is used to retrieve function name for `argname()`"""
 
 
 @lru_cache()
@@ -317,7 +315,6 @@ def get_argument_sources(
     node: ast.Call,
     func: Callable,
     vars_only: bool,
-    pos_only: bool,
 ) -> Mapping[str, ArgSourceType]:
     """Get the sources for argument from an ast.Call node
 
@@ -334,17 +331,14 @@ def get_argument_sources(
     # func(y, x, c=z)
     # ['y', 'x'], {'c': 'z'}
     arg_sources = [
-        argnode_source(source, argnode, vars_only) for argnode in node.args
+        argnode_source(source, argnode, vars_only)
+        for argnode in node.args
     ]
-    kwarg_sources = (
-        {
-            argnode.arg: argnode_source(source, argnode.value, vars_only)
-            for argnode in node.keywords
-            if argnode.arg is not None
-        }
-        if not pos_only
-        else {}
-    )
+    kwarg_sources = {
+        argnode.arg: argnode_source(source, argnode.value, vars_only)
+        for argnode in node.keywords
+        if argnode.arg is not None
+    }
     bound_args = signature.bind_partial(*arg_sources, **kwarg_sources)
     argument_sources = bound_args.arguments
     # see if *args and **kwargs have anything assigned
@@ -399,7 +393,8 @@ def get_function_called_argname(frame: FrameType, node: ast.AST) -> Callable:
         f"{pure_eval_fail_msg} "
         "Using 'eval' to get the function that calls 'argname'. "
         "Try calling it using a variable reference to the function, or "
-        "passing the function to 'argname' explicitly."
+        "passing the function to 'argname' explicitly.",
+        UsingExecWarning
     )
     expr = ast.Expression(node.func)
     code = compile(expr, "<ast-call>", "eval")
@@ -407,36 +402,7 @@ def get_function_called_argname(frame: FrameType, node: ast.AST) -> Callable:
     return eval(code, frame.f_globals, frame.f_locals)
 
 
-def parse_argname_subscript(node: ast.Subscript):
-    """Parse the ast.Subscript node passed to argname
-
-    Make sure:
-    1. node.value is an ast.Name node
-    2. node.slice is a ast.Constant node
-
-    This is separated as a function, since we want to see in the future whether
-    non-ast.Constant node can be supported as node.slice.
-    """
-    name = node.value
-    if not isinstance(name, ast.Name):
-        raise ValueError(f"Expect {ast.dump(name)} to be a variable.")
-
-    subscript = node.slice  # type: ast.AST
-    if isinstance(subscript, ast.Index):
-        subscript = subscript.value  # pragma: no cover
-    if not isinstance(subscript, (ast.Str, ast.Num, ast.Constant)):
-        raise ValueError(f"Expect {ast.dump(subscript)} to be a constant.")
-
-    subscript = getattr(
-        subscript, "value", subscript
-    )  # ast.Index, ast.Constant
-    subscript = getattr(subscript, "n", subscript)  # ast.Num
-    subscript = getattr(subscript, "s", subscript)  # ast.Str
-
-    return name.id, subscript
-
-
-def rich_exc_message(msg: str, node: ast.AST) -> str:
+def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
     """Attach the source code from the node to message to
     get a rich message for exceptions
 
@@ -445,20 +411,20 @@ def rich_exc_message(msg: str, node: ast.AST) -> str:
     with full information
     """
     frame = node.__frame__  # type: FrameType
-    lineno = node.lineno  # type: int
+    lineno = node.lineno - 1  # type: int
     col_offset = node.col_offset  # type: int
     filename = frame.f_code.co_filename  # type: str
     lines, startlineno = inspect.getsourcelines(frame)
+    startlineno = 0 if startlineno == 0 else startlineno - 1
     line_range = (startlineno + 1, startlineno + len(lines) + 1)
-    if startlineno == 0:
-        # wired shift
-        lineno -= 1  # pragma: no cover
 
     linenos = tuple(map(str, range(*line_range)))  # type: Tuple[str, ...]
     lineno_width = max(map(len, linenos))  # type: int
     hiline = lineno - startlineno  # type: int
     codes = []  # type: List[str]
     for i, lno in enumerate(linenos):
+        if i < hiline - context_lines or i > hiline + context_lines:
+            continue
         lno = lno.ljust(lineno_width)
         if i == hiline:
             codes.append(f"  > | {lno}  {lines[i]}")

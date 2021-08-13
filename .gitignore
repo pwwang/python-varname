@@ -112,3 +112,5 @@ docs/api/
 
 # vscode's local history extension
 .history/
+
+playground/playground.nbconvert.ipynb

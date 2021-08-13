@@ -50,7 +50,7 @@ def test_will_property():
             return 'I will do something'
 
     c = C()
-    c.iwill
+    x = c.iwill
     assert c.will is None
 
     result = c.iwill.do()
@@ -163,14 +163,12 @@ def test_will_decorated():
 
 def test_will_fail():
 
-    def get_will(raise_exc):
-        return will(raise_exc=raise_exc)
+    def get_will():
+        return will()
 
-    with pytest.raises(VarnameRetrievingError):
-        get_will(True)
+    with pytest.raises(ImproperUseError):
+        get_will()
 
-    the_will = get_will(False)
-    assert the_will is None
 
 def test_frame_fail_will(no_getframe):
     def func(raise_exc):

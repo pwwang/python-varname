@@ -68,7 +68,7 @@ class TestNameof(unittest.TestCase):
         self.assertEqual(fname, 'f')
         self.assertEqual(fname1, 'f')
 
-        with pytest.raises(NonVariableArgumentError):
+        with pytest.raises(ImproperUseError):
             nameof_both(a==1)
 
         with pytest.raises(VarnameRetrievingError):

@@ -68,7 +68,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def function():
         return varname()
 
-    func = function()  # func == 'func'
+    func = function()  # func == {func!r}
     ```
 
     When there are intermediate frames:
@@ -80,7 +80,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
         # retrieve the variable name at the 2nd frame from this one
         return varname(frame=2)
 
-    func = wrapped() # func == 'func'
+    func = wrapped() # func == {func!r}
     ```
 
     Or use `ignore` to ignore the wrapped frame:
@@ -91,7 +91,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def function():
         return varname(ignore=wrapped)
 
-    func = wrapped() # func == 'func'
+    func = wrapped() # func == {func!r}
     ```
 
     Calls from standard libraries are ignored by default:
@@ -101,7 +101,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     async def function():
         return varname()
 
-    func = asyncio.run(function()) # func == 'func'
+    func = asyncio.run(function()) # func == {func!r}
     ```
 
     Use `strict` to control whether the call should be assigned to
@@ -110,12 +110,12 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def function(strict):
         return varname(strict=strict)
 
-    func = function(True)     # OK, direct assignment, func == 'func'
+    func = function(True)     # OK, direct assignment, func == {func!r}
 
-    func = [function(True)]   # Not a direct assignment, raises ImproperUseError
-    func = [function(False)]  # OK, func == ['func']
+    func = [function(True)]   # Not a direct assignment, raises {_exc}
+    func = [function(False)]  # OK, func == {func!r}
 
-    func = function(False), function(False)   # OK, func = ('func', 'func')
+    func = function(False), function(False)   # OK, func = {func!r}
     ```
 
 - Retrieving name of a class instance
@@ -131,9 +131,9 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
             copied.id = varname() # assign id to whatever variable name
             return copied
 
-    foo = Foo()   # foo.id == 'foo'
+    foo = Foo()   # foo.id == {foo.id!r}
 
-    foo2 = foo.copy() # foo2.id == 'foo2'
+    foo2 = foo.copy() # foo2.id == {foo2.id!r}
     ```
 
 - Multiple variables on Left-hand side
@@ -143,12 +143,12 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def func():
         return varname(multi_vars=True)
 
-    a = func() # a == ('a',)
-    a, b = func() # (a, b) == ('a', 'b')
-    [a, b] = func() # (a, b) == ('a', 'b')
+    a = func() # a == {a!r}
+    a, b = func() # (a, b) == ({a!r}, {b!r})
+    [a, b] = func() # (a, b) == ({a!r}, {b!r})
 
     # hierarchy is also possible
-    a, (b, c) = func() # (a, b, c) == ('a', 'b', 'c')
+    a, (b, c) = func() # (a, b, c) == ({a!r}, {b!r}, {c!r})
     ```
 
 - Some unusual use
@@ -157,10 +157,10 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def function(**kwargs):
         return varname(strict=False)
 
-    func = func1 = function()  # func == func1 == 'func1'
+    func = func1 = function()  # func == func1 == {func1!r}
     # if varname < 0.8: func == func1 == 'func'
     # a warning will be shown
-    # since you may not want func to be 'func1'
+    # since you may not want func to be {func1!r}
 
     x = function(y = function())  # x == 'x'
 
@@ -186,7 +186,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def function():
         return __varname__
 
-    func = function() # func == 'func'
+    func = function() # func == {func!r}
     ```
 
     ```python
@@ -198,7 +198,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     def wrapped():
         return function()
 
-    func = wrapped() # func == 'func'
+    func = wrapped() # func == {func!r}
     ```
 
 - Registering `__varname__` as a class property
@@ -209,7 +209,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
         ...
 
     foo = Foo()
-    # foo.__varname__ == 'foo'
+    # foo.__varname__ == {foo.__varname__!r}
     ```
 
 ### Getting variable names directly using `nameof`
@@ -218,23 +218,23 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
 from varname import varname, nameof
 
 a = 1
-nameof(a) # 'a'
+nameof(a) # {_expr!r}
 
 b = 2
-nameof(a, b) # ('a', 'b')
+nameof(a, b) # {_expr!r}
 
 def func():
     return varname() + '_suffix'
 
-f = func() # f == 'f_suffix'
-nameof(f)  # 'f'
+f = func() # f == {f!r}
+nameof(f)  # {_expr!r}
 
 # get full names of (chained) attribute calls
 func.a = func
-nameof(func.a, vars_only=False) # 'func.a'
+nameof(func.a, vars_only=False) # {_expr!r}
 
 func.a.b = 1
-nameof(func.a.b, vars_only=False) # 'func.a.b'
+nameof(func.a.b, vars_only=False) # {_expr!r}
 ```
 
 ### Detecting next immediate attribute name
@@ -257,8 +257,8 @@ class AwesomeClass:
         return 'I am doing!'
 
 awesome = AwesomeClass()
-awesome.do() # AttributeError: You don't have permission to do
-awesome.permit() # AttributeError: Should do something with AwesomeClass object
+awesome.do() # {_exc_msg}
+awesome.permit() # {_exc_msg}
 awesome.permit().do() == 'I am doing!'
 ```
 
@@ -270,25 +270,21 @@ def func(a, b=1):
     print(argname('a'))
 
 x = y = z = 2
-func(x) # prints: x
-
+func(x) # prints: {_out}
 
 def func2(a, b=1):
     print(argname('a', 'b'))
-func2(y, b=x) # prints: ('y', 'x')
-
+func2(y, b=x) # prints: {_out}
 
 # allow expressions
 def func3(a, b=1):
     print(argname('a', 'b', vars_only=False))
-func3(x+y, y+x) # prints: ('x+y', 'y+x')
-
+func3(x+y, y+x) # prints: {_out}
 
 # positional and keyword arguments
 def func4(*args, **kwargs):
     print(argname('args[1]', 'kwargs[c]'))
-func4(y, x, c=z) # prints: ('x', 'z')
-
+func4(y, x, c=z) # prints: {_out}
 ```
 
 ### Value wrapper
@@ -297,17 +293,17 @@ func4(y, x, c=z) # prints: ('x', 'z')
 from varname.helpers import Wrapper
 
 foo = Wrapper(True)
-# foo.name == 'foo'
-# foo.value == True
+# foo.name == {foo.name!r}
+# foo.value == {foo.value!r}
 bar = Wrapper(False)
-# bar.name == 'bar'
-# bar.value == False
+# bar.name == {bar.name!r}
+# bar.value == {bar.value!r}
 
 def values_to_dict(*args):
     return {val.name: val.value for val in args}
 
 mydict = values_to_dict(foo, bar)
-# {'foo': True, 'bar': False}
+# {mydict}
 ```
 
 ### Debugging with `debug`
@@ -317,20 +313,20 @@ from varname.helpers import debug
 a = 'value'
 b = ['val']
 debug(a)
-# "DEBUG: a='value'\n"
+# {_out!r}
 debug(b)
-# "DEBUG: b=['val']\n"
+# {_out!r}
 debug(a, b)
-# "DEBUG: a='value'\nDEBUG: b=['val']\n"
+# {_out!r}
 debug(a, b, merge=True)
-# "DEBUG: a='value', b=['val']\n"
+# {_out!r}
 debug(a, repr=False, prefix='')
-# 'a=value\n'
+# {_out!r}
 # also debug an expression
 debug(a+a)
-# "DEBUG: a+a='valuevalue'\n"
+# {_out!r}
 # If you want to disable it:
-debug(a+a, vars_only=True) # ImproperUseError
+debug(a+a, vars_only=True) # {_exc}
 ```
 
 ## Reliability and limitations

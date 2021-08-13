@@ -4,17 +4,17 @@ from functools import partial, wraps
 from typing import Any, Callable, Type, Union
 
 from .utils import IgnoreType
-from .core import argname2, varname
+from .core import argname, varname
 
 
 def register(
     cls_or_func: type = None,
-    *,
+    # *, keyword-only argument, only available with python3.8+
     frame: int = 1,
     ignore: IgnoreType = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
-    strict: bool = None,
+    strict: bool = True,
 ) -> Union[Type, Callable]:
     """A decorator to register __varname__ to a class or function
 
@@ -129,7 +129,7 @@ class Wrapper:
         frame: int = 1,
         ignore: IgnoreType = None,
         raise_exc: bool = True,
-        strict: bool = None,
+        strict: bool = True,
     ):
         # This call is ignored, since it's inside varname
         self.name = varname(
@@ -179,7 +179,7 @@ def debug(
         sep: The separator between the variable name and value
         repr: Print the value as `repr(var)`? otherwise `str(var)`
     """
-    var_names = argname2("var", "*more_vars", vars_only=vars_only, func=debug)
+    var_names = argname("var", "*more_vars", vars_only=vars_only, func=debug)
 
     values = (var, *more_vars)
     name_and_values = [
