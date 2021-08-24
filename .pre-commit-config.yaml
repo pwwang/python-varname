@@ -45,12 +45,12 @@ repos:
         language: system
         files: pyproject.toml
         pass_filenames: false
-    # -   id: poetry2requirements
-    #     name: Convert pyproject.toml to requirements.txt
-    #     entry: poetry export -f requirements.txt --without-hashes -o requirements.txt
-    #     language: system
-    #     files: pyproject.toml
-    #     pass_filenames: false
+    -   id: poetry2requirements
+        name: Convert pyproject.toml to requirements.txt
+        entry: poetry export -f requirements.txt --without-hashes -o requirements.txt
+        language: system
+        files: pyproject.toml
+        pass_filenames: false
     -   id: mypycheck
         name: Type checking by mypy
         entry: mypy
