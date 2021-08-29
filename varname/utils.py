@@ -414,7 +414,10 @@ def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
     lineno = node.lineno - 1  # type: int
     col_offset = node.col_offset  # type: int
     filename = frame.f_code.co_filename  # type: str
-    lines, startlineno = inspect.getsourcelines(frame)
+    try:
+        lines, startlineno = inspect.getsourcelines(frame)
+    except OSError: # could not get source code
+        return f"{msg}\n"
     startlineno = 0 if startlineno == 0 else startlineno - 1
     line_range = (startlineno + 1, startlineno + len(lines) + 1)
 
