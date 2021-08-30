@@ -1,3 +1,6 @@
+## v0.8.1
+- Handle inspect raises "could not get source code" when printing rich exception message
+
 ## v0.8.0
 
 Compared to `v0.7.3`
