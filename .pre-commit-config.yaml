@@ -4,7 +4,7 @@ fail_fast: false
 exclude: '^README.rst$|^tests/|^setup.py$|^examples/'
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 5df1a4bf6f04a1ed3a643167b38d502575e29aef
+    rev: 8c2e6113ec9f1b3013544e26c0943456befb07bf
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -19,7 +19,7 @@ repos:
         always_run: true
         language: system
 -   repo: https://github.com/pre-commit/mirrors-pylint
-    rev: v2.4.4
+    rev: v2.7.4
     hooks:
     -   id: pylint
         files: ^varname/.+$
@@ -39,15 +39,9 @@ repos:
         # keep setup.py for github to trace dependencies/dependents
         # and for "pip install -e ." to work
         name: Convert pyproject.toml to setup.py
+        always_run: true
         entry: |
-            bash -c "poetry build --format sdist;
-            tar --wildcards -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py"
-        language: system
-        files: pyproject.toml
-        pass_filenames: false
-    -   id: poetry2requirements
-        name: Convert pyproject.toml to requirements.txt
-        entry: poetry export -f requirements.txt --without-hashes -o requirements.txt
+            bash -c "poetry build --format sdist | tail -1 | sed 's|.\+varname|cat dist/varname|' | bash | tar --wildcards --no-anchored '*/setup.py' -O -zxf - | sed \"s/'name': /# 'name': /\" | sed \"s/setup(/setup(name='varname', /\"  > setup.py"
         language: system
         files: pyproject.toml
         pass_filenames: false
@@ -55,7 +49,7 @@ repos:
         name: Type checking by mypy
         entry: mypy
         language: system
-        files: ^pipda/.+$
+        files: ^varname/.+$
         pass_filenames: false
         types: [python]
         args: [-p, varname]
