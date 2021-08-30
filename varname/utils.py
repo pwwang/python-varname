@@ -416,7 +416,8 @@ def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
     filename = frame.f_code.co_filename  # type: str
     try:
         lines, startlineno = inspect.getsourcelines(frame)
-    except OSError: # could not get source code
+    except OSError: # pragma: no cover
+        # could not get source code
         return f"{msg}\n"
     startlineno = 0 if startlineno == 0 else startlineno - 1
     line_range = (startlineno + 1, startlineno + len(lines) + 1)
