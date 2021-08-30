@@ -23,6 +23,7 @@ setup_kwargs = {
     'packages': packages,
     'package_data': package_data,
     'install_requires': install_requires,
+	'extras_require': {"dev": ["pytest", "pytest-cov"]},
     'python_requires': '>=3.6,<4.0',
 }
 
