@@ -233,7 +233,7 @@ def nameof(
 
         >>> x = lambda: None
         >>> x.y = 1
-        >>> nameof(x.y, full=True) # 'x.y'
+        >>> nameof(x.y, vars_only=False) # 'x.y'
 
     Note:
         This function works with the environments where source code is
@@ -252,7 +252,7 @@ def nameof(
             Note that the calls from standard libraries are ignored.
             Also note that the wrapper has to have signature as this one.
         vars_only: Whether only allow variables/attributes as arguments or
-            any expressions. If `True`, then the sources of the arguments
+            any expressions. If `False`, then the sources of the arguments
             will be returned.
 
     Returns:
@@ -261,7 +261,7 @@ def nameof(
             If multiple variables are passed, return a tuple of their
             names/sources.
             If the argument is an attribute (e.g. `a.b`) and `vars_only` is
-            `False`, only `"b"` will returned. Set `vars_only` to `True` to
+            `True`, only `"b"` will returned. Set `vars_only` to `False` to
             get `"a.b"`.
 
     Raises:
