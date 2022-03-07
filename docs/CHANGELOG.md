@@ -1,4 +1,14 @@
+## v0.8.2
+
+### Fixes
+- 🩹 Use sysconfig instead of distutils.sysconfig to avoid deprecatewarning for python 3.10+
+
+### Housekeeping
+- 👷 Add python3.10 in CI
+- 📄 Add license back
+
 ## v0.8.1
+
 - Handle inspect raises "could not get source code" when printing rich exception message
 
 ## v0.8.0
