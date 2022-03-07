@@ -13,4 +13,4 @@ from .utils import (
 )
 from .core import varname, nameof, will, argname, argname2
 
-__version__ = "0.8.1"
+__version__ = "0.8.2"
