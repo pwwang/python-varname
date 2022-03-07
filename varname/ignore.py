@@ -19,7 +19,6 @@ Any frames in `varname`, standard libraries, and frames of any expressions like
 """
 import sys
 import inspect
-from distutils import sysconfig
 import warnings
 from os import path
 from pathlib import Path
@@ -29,6 +28,14 @@ from typing import List, Union
 from types import FrameType, ModuleType, FunctionType
 
 from executing import Source
+
+try:
+    import sysconfig  # 3.10+
+except ImportError:  # pragma: no cover
+    from distutils import sysconfig
+    STANDLIB_PATH = sysconfig.get_python_lib(standard_lib=True)
+else:
+    STANDLIB_PATH = sysconfig.get_path('stdlib')
 
 from .utils import (
     IgnoreElemType,
@@ -317,9 +324,7 @@ class IgnoreList:
             ignore = [ignore]
 
         ignore_list = [
-            IgnoreStdlib(  # type: ignore
-                sysconfig.get_python_lib(standard_lib=True)
-            )
+            IgnoreStdlib(STANDLIB_PATH)  # type: ignore
         ]  # type: List[IgnoreElem]
         if ignore_varname:
             ignore_list.append(create_ignore_elem(sys.modules[__package__]))
