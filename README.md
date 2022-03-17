@@ -6,7 +6,7 @@
 
 Dark magics about variable names in python
 
-[Change Log][16] | [API][15] | [Playground][11]
+[CHANGELOG][16] | [API][15] | [Playground][11] | :fire: [StackOverflow answer][20]
 
 ## Installation
 ```shell
@@ -28,12 +28,19 @@ pip install -U varname
   - A decorator to register `__varname__` to functions/classes, using `register`
   - A `debug` function to print variables with their names and values
 
+
 ## Credits
 
 Thanks goes to these awesome people/projects:
 
 <table>
   <tr>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/alexmojaki/executing">
+        <img src="https://ui-avatars.com/api/?color=3333ff&background=ffffff&bold=true&name=e&size=400" width="50px;" alt=""/>
+        <br /><sub><b>executing</b></sub>
+      </a>
+    </td>
     <td align="center" style="min-width: 75px">
       <a href="https://github.com/alexmojaki">
         <img src="https://avatars0.githubusercontent.com/u/3627481?s=400&v=4" width="50px;" alt=""/>
@@ -47,9 +54,21 @@ Thanks goes to these awesome people/projects:
       </a>
     </td>
     <td align="center" style="min-width: 75px">
-      <a href="https://github.com/alexmojaki/executing">
-        <img src="https://ui-avatars.com/api/?color=3333ff&background=ffffff&bold=true&name=e&size=400" width="50px;" alt=""/>
-        <br /><sub><b>executing</b></sub>
+      <a href="https://github.com/ElCuboNegro">
+        <img src="https://avatars.githubusercontent.com/u/5524219?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@ElCuboNegro</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/thewchan">
+        <img src="https://avatars.githubusercontent.com/u/49702524?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@thewchan</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/LawsOfSympathy">
+        <img src="https://avatars.githubusercontent.com/u/96355982?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@LawsOfSympathy</b></sub>
       </a>
     </td>
   </tr>
@@ -373,3 +392,4 @@ For example:
 [17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
 [18]: https://gitter.im/python-varname/community
 [19]: https://github.com/alexmojaki/executing#is-it-reliable
+[20]: https://stackoverflow.com/a/59364138/5088165
