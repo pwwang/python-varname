@@ -52,7 +52,7 @@ else:  # pragma: no cover
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
 
 
-class config:  # pylint: disable=invalid-name
+class config:
     """Global configurations for varname
 
     Attributes:
@@ -90,6 +90,7 @@ class MaybeDecoratedFunctionWarning(VarnameWarning):
 class MultiTargetAssignmentWarning(VarnameWarning):
     """When varname tries to retrieve variable name in
     a multi-target assignment"""
+
 
 class UsingExecWarning(VarnameWarning):
     """When exec is used to retrieve function name for `argname()`"""
@@ -398,7 +399,6 @@ def get_function_called_argname(frame: FrameType, node: ast.AST) -> Callable:
     )
     expr = ast.Expression(node.func)
     code = compile(expr, "<ast-call>", "eval")
-    # pylint: disable=eval-used
     return eval(code, frame.f_globals, frame.f_locals)
 
 
@@ -416,7 +416,7 @@ def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
     filename = frame.f_code.co_filename  # type: str
     try:
         lines, startlineno = inspect.getsourcelines(frame)
-    except OSError: # pragma: no cover
+    except OSError:  # pragma: no cover
         # could not get source code
         return f"{msg}\n"
     startlineno = 0 if startlineno == 0 else startlineno - 1
