@@ -1,3 +1,11 @@
+## v0.8.3
+
+This is more of a housekeeping release:
+
+- ⬆️ Upgrade `executing` to 0.8.3 to make varname work with ipython 8+
+- 📝 Update `README.md` to add new contributors
+- 🚨 Use `flake8` instead of `pylint` for linting
+
 ## v0.8.2
 
 ### Fixes
