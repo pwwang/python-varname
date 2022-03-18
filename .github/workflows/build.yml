@@ -24,15 +24,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pylint=='2.8.*'
+          python -m pip install flake8
           python -m pip install mypy
           python -m pip install poetry
           poetry config virtualenvs.create false
           poetry install -v
       - name: Run mypy check
         run: mypy -p varname
-      - name: Run pylint
-        run: pylint varname
+      - name: Run flake8
+        run: flake8 varname
       - name: Test with pytest
         run: pytest tests/ --junitxml=junit/test-results-${{ matrix.python-version }}.xml
       - name: Upload pytest test results

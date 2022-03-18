@@ -216,7 +216,7 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
 
 
 def nameof(
-    var,  # pylint: disable=unused-argument
+    var,
     *more_vars,
     # *, keyword only argument, supported with python3.8+
     frame: int = 1,
@@ -317,7 +317,7 @@ def nameof(
     return out if more_vars else out[0]  # type: ignore
 
 
-def argname(  # pylint: disable=too-many-branches
+def argname(
     arg: str,
     *more_args: str,
     # *, keyword-only argument, only available with python3.8+
@@ -499,7 +499,7 @@ def argname2(
         *more_args,
         func=func,
         dispatch=dispatch,
-        frame=frame+1,
+        frame=frame + 1,
         ignore=ignore,
         vars_only=vars_only,
     )

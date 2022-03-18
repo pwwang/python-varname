@@ -95,7 +95,6 @@ class CodeBlock:
         with open(sourcefile, 'w') as fsrc:
             fsrc.write(code)
         code = compile(code, sourcefile, mode='exec')
-        # pylint: disable=exec-used
         sio = StringIO()
         with redirect_stdout(sio):
             exec(code, self.envs)

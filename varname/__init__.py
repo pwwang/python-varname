@@ -1,5 +1,5 @@
 """Dark magics about variable names in python"""
-# pylint: disable=unused-import
+
 from .utils import (
     config,
     VarnameException,

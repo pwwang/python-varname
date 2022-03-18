@@ -155,7 +155,7 @@ def debug(
     *more_vars,
     prefix: str = "DEBUG: ",
     merge: bool = False,
-    repr: bool = True,  # pylint: disable=redefined-builtin
+    repr: bool = True,
     sep: str = "=",
     vars_only: bool = False,
 ) -> None:

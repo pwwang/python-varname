@@ -131,8 +131,6 @@ class IgnoreDirname(IgnoreElem, attrs=["dirname"]):
     Currently used internally to ignore calls from standard libraries."""
 
     def _post_init(self) -> None:
-        # pylint: disable=access-member-before-definition
-        # pylint: disable=attribute-defined-outside-init
 
         # Path object will turn into str here
         self.dirname = path.realpath(self.dirname)  # type: str
@@ -160,9 +158,8 @@ class IgnoreStdlib(IgnoreDirname, attrs=["dirname"]):
 
         return (
             filename.startswith(self.dirname)
-            and
             # Exclude 3rd-party libraries in site-packages
-            not filename.startswith(third_party_lib)
+            and not filename.startswith(third_party_lib)
         )
 
 
