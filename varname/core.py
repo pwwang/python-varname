@@ -339,17 +339,17 @@ def argname(
             names/sources of.
             You can also use subscripts to get parts of the results.
             >>> def func(*args, **kwargs):
-            >>>     return argname2('args[0]', 'kwargs[x]') # no quote needed
+            >>>     return argname('args[0]', 'kwargs[x]') # no quote needed
 
             Star argument is also allowed:
             >>> def func(*args, x = 1):
-            >>>     return argname2('*args', 'x')
+            >>>     return argname('*args', 'x')
             >>> a = b = c = 1
             >>> func(a, b, x=c) # ('a', 'b', 'c')
 
             Note the difference:
             >>> def func(*args, x = 1):
-            >>>     return argname2('args', 'x')
+            >>>     return argname('args', 'x')
             >>> a = b = c = 1
             >>> func(a, b, x=c) # (('a', 'b'), 'c')
 
@@ -390,7 +390,7 @@ def argname(
         ignore_lambda=False,
         ignore_varname=False,
     )
-    # where func(...) is called, skip the argname2() call
+    # where func(...) is called, skip the argname() call
     func_frame = ignore_list.get_frame(frame + 1)
     func_node = get_node_by_frame(func_frame)
     # Only do it when func_node are available
@@ -480,30 +480,4 @@ def argname(
         out[0]
         if not more_args and not farg_star
         else tuple(out)  # type: ignore
-    )
-
-
-def argname2(
-    arg: str,
-    *more_args: str,
-    func: Callable = None,
-    dispatch: Type = None,
-    frame: int = 1,
-    ignore: IgnoreType = None,
-    vars_only: bool = True,
-) -> ArgSourceType:
-    """Alias of argname, will be removed in v0.9.0"""
-    warnings.warn(
-        "`argname2()` is deprecated and will be removed in v0.9.0. "
-        "Use `argname()` instead.",
-        DeprecationWarning
-    )
-    return argname(
-        arg,
-        *more_args,
-        func=func,
-        dispatch=dispatch,
-        frame=frame + 1,
-        ignore=ignore,
-        vars_only=vars_only,
     )

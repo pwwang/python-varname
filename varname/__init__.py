@@ -11,6 +11,6 @@ from .utils import (
     MaybeDecoratedFunctionWarning,
     UsingExecWarning,
 )
-from .core import varname, nameof, will, argname, argname2
+from .core import varname, nameof, will, argname
 
 __version__ = "0.8.3"

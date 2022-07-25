@@ -34,36 +34,6 @@ def test_argname():
     names4 = func4(y, b=x)
     assert names4 == ("y", "x")
 
-def test_argname2():
-    def func(a, b, c, d=4):
-        return argname2("c", "b")
-
-    x = y = z = 1
-    with pytest.warns(DeprecationWarning):
-        names = func(x, y, z)
-    assert names == ("z", "y")
-
-    def func2(a, b, c, d=4):
-        return argname2("b")
-
-    with pytest.warns(DeprecationWarning):
-        names2 = func2(x, y, z)
-    assert names2 == "y"
-
-    def func3(e=1):
-        return argname2("e")
-
-    with pytest.warns(DeprecationWarning):
-        names3 = func3(z)
-    assert names3 == "z"
-
-    def func4(a, b=1):
-        return argname2("a", "b")
-
-    with pytest.warns(DeprecationWarning):
-        names4 = func4(y, b=x)
-    assert names4 == ("y", "x")
-
 
 def test_argname_lambda():
     func = lambda a, b, c, d=4: argname("b")
