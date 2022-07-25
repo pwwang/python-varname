@@ -458,7 +458,6 @@ def _(node: ast.Attribute | ast.Subscript) -> ast.Call:
         "lineno": node.lineno,
         "col_offset": node.col_offset,
     }
-
     keynode = (
         node.slice
         if isinstance(node, ast.Subscript)
@@ -526,8 +525,6 @@ def _(node: ast.Compare) -> ast.Call:
     nodemeta = {
         "lineno": node.lineno,
         "col_offset": node.col_offset,
-        "end_lineno": node.end_lineno,
-        "end_col_offset": node.end_col_offset,
     }
     return ast.Call(
         func=ast.Attribute(
@@ -549,8 +546,6 @@ def _(node: ast.BinOp) -> ast.Call:
     nodemeta = {
         "lineno": node.lineno,
         "col_offset": node.col_offset,
-        "end_lineno": node.end_lineno,
-        "end_col_offset": node.end_col_offset,
     }
     return ast.Call(
         func=ast.Attribute(
