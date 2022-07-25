@@ -26,6 +26,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
           python -m pip install mypy
+          python -m pip install typing_extensions
           python -m pip install poetry
           poetry config virtualenvs.create false
           poetry install -v
