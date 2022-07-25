@@ -101,7 +101,7 @@ export/
 site/
 
 # poetry
-poetry.lock
+# poetry.lock
 
 # backup files
 *.bak
