@@ -21,8 +21,9 @@ pure_eval = { version = "0.*", optional = true }
 [tool.poetry.dev-dependencies]
 pytest = "^7"
 pytest-cov = "^3"
-asttokens = "2.*"
-pure_eval = "0.*"
+
+[tool.poetry.extras]
+all = ["asttokens", "pure_eval"]
 
 [tool.pytest.ini_options]
 addopts = "-vv -p no:asyncio -W error::UserWarning --cov-config=.coveragerc --cov=varname --cov-report xml:.coverage.xml --cov-report term-missing"
