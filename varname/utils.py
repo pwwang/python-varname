@@ -457,8 +457,6 @@ def _(node: ast.Attribute | ast.Subscript) -> ast.Call:
     nodemeta = {
         "lineno": node.lineno,
         "col_offset": node.col_offset,
-        "end_lineno": node.end_lineno,
-        "end_col_offset": node.end_col_offset,
     }
 
     keynode = (
