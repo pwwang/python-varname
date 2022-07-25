@@ -28,7 +28,6 @@ pip install -U varname
   - A decorator to register `__varname__` to functions/classes, using `register`
   - A `debug` function to print variables with their names and values
 
-
 ## Credits
 
 Thanks goes to these awesome people/projects:
@@ -307,6 +306,16 @@ func3(x+y, y+x) # prints: ('x+y', 'y+x')
 def func4(*args, **kwargs):
     print(argname('args[1]', 'kwargs[c]'))
 func4(y, x, c=z) # prints: ('x', 'z')
+
+
+# As of 0.9.0
+# Can also fetch the source of the argument for
+# __getattr__/__getitem__/__setattr/__setitem__/__add__/__lt__, etc.
+class Foo:
+    def __setattr__(self, name, value):
+        print(argname("name", "value"))
+
+Foo().a = 1 # prints: ("'a'", '1')
 
 ```
 

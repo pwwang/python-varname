@@ -9,7 +9,6 @@ from .core import argname, varname
 
 def register(
     cls_or_func: type = None,
-    # *, keyword-only argument, only available with python3.8+
     frame: int = 1,
     ignore: IgnoreType = None,
     multi_vars: bool = False,

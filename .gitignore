@@ -114,3 +114,4 @@ docs/api/
 .history/
 
 playground/playground.nbconvert.ipynb
+test.py

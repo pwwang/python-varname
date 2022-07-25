@@ -1,8 +1,10 @@
 """Provide core features for varname"""
+from __future__ import annotations
+
 import ast
 import re
 import warnings
-from typing import List, Tuple, Type, Union, Callable
+from typing import List, Tuple, Type, Callable
 
 from executing import Source
 
@@ -15,6 +17,7 @@ from .utils import (
     get_argument_sources,
     get_function_called_argname,
     rich_exc_message,
+    reconstruct_func_node,
     ArgSourceType,
     VarnameRetrievingError,
     ImproperUseError,
@@ -29,7 +32,7 @@ def varname(
     multi_vars: bool = False,
     raise_exc: bool = True,
     strict: bool = True,
-) -> Union[str, Tuple[Union[str, Tuple], ...]]:
+) -> str | Tuple[str | Tuple, ...]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
 
@@ -218,10 +221,9 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
 def nameof(
     var,
     *more_vars,
-    # *, keyword only argument, supported with python3.8+
     frame: int = 1,
     vars_only: bool = True,
-) -> Union[str, Tuple[str, ...]]:
+) -> str | Tuple[str, ...]:
     """Get the names of the variables passed in
 
     Examples:
@@ -320,7 +322,6 @@ def nameof(
 def argname(
     arg: str,
     *more_args: str,
-    # *, keyword-only argument, only available with python3.8+
     func: Callable = None,
     dispatch: Type = None,
     frame: int = 1,
@@ -376,10 +377,13 @@ def argname(
     Returns:
         The argument source when no more_args passed, otherwise a tuple of
         argument sources
+        Note that when an argument is an `ast.Constant`, `repr(arg.value)`
+        is returned, so `argname()` return `'a'` for `func("a")`
 
     Raises:
         VarnameRetrievingError: When the ast node where the function is called
             cannot be retrieved
+        ImproperUseError: When frame or func is incorrectly specified.
     """
     ignore_list = IgnoreList.create(
         ignore,
@@ -399,6 +403,8 @@ def argname(
             "Cannot retrieve the node where the function is called."
         )
 
+    func_node = reconstruct_func_node(func_node)
+
     if not func:
         func = get_function_called_argname(func_frame, func_node)
 
@@ -417,10 +423,9 @@ def argname(
             func,
             vars_only=vars_only,
         )
-    except Exception as err:  # pragma: no cover
-        # find a test case?
-        raise VarnameRetrievingError(
-            "Have you specified the right `frame`?"
+    except Exception as err:
+        raise ImproperUseError(
+            "Have you specified the right `frame` or `func`?"
         ) from err
 
     out = []  # type: List[ArgSourceType]
@@ -481,7 +486,6 @@ def argname(
 def argname2(
     arg: str,
     *more_args: str,
-    # *, keyword-only argument, only available with python3.8+
     func: Callable = None,
     dispatch: Type = None,
     frame: int = 1,
