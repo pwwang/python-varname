@@ -221,7 +221,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "d80b63bee9d23c8490d8accdd1327abdbca651934385fd4bac3d475c03f888d2"
+content-hash = "c0cee23f7280330270e00dd47aef14368473dc1c6d399516fa48bd4bda582873"
 
 [metadata.files]
 asttokens = [

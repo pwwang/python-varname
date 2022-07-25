@@ -489,8 +489,8 @@ def _(node: ast.Attribute | ast.Subscript) -> ast.Call:
     # x[a] = b, x.a = b
     if (
         not hasattr(node, "parent")
-        or not isinstance(node.parent, ast.Assign)
-        or len(node.parent.targets) != 1
+        or not isinstance(node.parent, ast.Assign)  # type: ignore
+        or len(node.parent.targets) != 1  # type: ignore
     ):
         raise ImproperUseError(
             rich_exc_message(
@@ -511,7 +511,7 @@ def _(node: ast.Attribute | ast.Subscript) -> ast.Call:
             ctx=ast.Load(),
             **nodemeta,
         ),
-        args=[keynode, node.parent.value],
+        args=[keynode, node.parent.value],  # type: ignore
         keywords=[],
         starargs=None,
         kwargs=None,
