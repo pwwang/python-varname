@@ -1,4 +1,4 @@
-## 0.9.0
+## v0.9.0
 
 - ⬆️ Upgrade executing to 0.9
 - 🗑️ Remove deprecated `argname2`
