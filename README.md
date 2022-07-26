@@ -308,7 +308,7 @@ def func4(*args, **kwargs):
 func4(y, x, c=z) # prints: ('x', 'z')
 
 
-# As of 0.9.0
+# As of 0.9.0 (see: https://pwwang.github.io/python-varname/CHANGELOG/#v090)
 # Can also fetch the source of the argument for
 # __getattr__/__getitem__/__setattr/__setitem__/__add__/__lt__, etc.
 class Foo:
