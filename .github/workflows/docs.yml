@@ -28,7 +28,7 @@ jobs:
           cp ../logo.png ./
           cd ..
           poetry run mkdocs build --clean
-          if: success()
+        if: success()
       - name: Deploy docs
         run: |
           poetry run mkdocs gh-deploy --clean --force
