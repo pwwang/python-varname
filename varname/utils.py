@@ -9,8 +9,6 @@ Attributes:
         Espectially for modules that can't be retrieved by
         `inspect.getmodule(frame)`
 """
-from __future__ import annotations
-
 import sys
 import dis
 import ast
@@ -188,7 +186,7 @@ def lookfor_parent_assign(node: ast.AST, strict: bool = True) -> AssignType:
     return None
 
 
-def node_name(node: ast.AST) -> str | Tuple[str | Tuple, ...]:
+def node_name(node: ast.AST) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the node node name.
 
     Raises ImproperUseError when failed
@@ -314,7 +312,7 @@ def debug_ignore_frame(msg: str, frameinfo: inspect.FrameInfo = None) -> None:
 
 def argnode_source(
     source: Source, node: ast.AST, vars_only: bool
-) -> str | ast.AST:
+) -> Union[str, ast.AST]:
     """Get the source of an argument node
 
     Args:
@@ -330,6 +328,16 @@ def argnode_source(
     if isinstance(node, ast.Constant):
         return repr(node.value)
 
+    if sys.version_info < (3, 9):  # pragma: no cover
+        if isinstance(node, ast.Index):
+            node = node.value
+        if isinstance(node, ast.Num):
+            return repr(node.n)
+        if isinstance(node, (ast.Bytes, ast.Str)):
+            return repr(node.s)
+        if isinstance(node, ast.NameConstant):
+            return repr(node.value)
+
     if vars_only:
         return (
             node.id
@@ -343,7 +351,6 @@ def argnode_source(
     return source.asttokens().get_text(node)
 
 
-@lru_cache()
 def get_argument_sources(
     source: Source,
     node: ast.Call,
@@ -451,7 +458,7 @@ def _(node: ast.Call) -> ast.Call:
 
 @reconstruct_func_node.register(ast.Attribute)
 @reconstruct_func_node.register(ast.Subscript)
-def _(node: ast.Attribute | ast.Subscript) -> ast.Call:
+def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
     """Reconstruct the function node for
     `x.__getitem__/__setitem__/__getattr__/__setattr__`"""
     nodemeta = {
