@@ -5,7 +5,6 @@ on: [push, pull_request]
 jobs:
   docs:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     strategy:
       matrix:
         python-version: [3.9]
@@ -28,8 +27,12 @@ jobs:
           cp ../README.md index.md
           cp ../logo.png ./
           cd ..
+          poetry run mkdocs build --clean
+          if: success()
+      - name: Deploy docs
+        run: |
           poetry run mkdocs gh-deploy --clean --force
-        if: success()
+        if: success() && github.ref == 'refs/heads/master'
 
   fix-index:
     needs: docs
