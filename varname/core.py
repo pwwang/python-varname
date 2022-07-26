@@ -15,6 +15,7 @@ from .utils import (
     get_argument_sources,
     get_function_called_argname,
     rich_exc_message,
+    reconstruct_func_node,
     ArgSourceType,
     VarnameRetrievingError,
     ImproperUseError,
@@ -218,7 +219,6 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
 def nameof(
     var,
     *more_vars,
-    # *, keyword only argument, supported with python3.8+
     frame: int = 1,
     vars_only: bool = True,
 ) -> Union[str, Tuple[str, ...]]:
@@ -320,7 +320,6 @@ def nameof(
 def argname(
     arg: str,
     *more_args: str,
-    # *, keyword-only argument, only available with python3.8+
     func: Callable = None,
     dispatch: Type = None,
     frame: int = 1,
@@ -338,17 +337,17 @@ def argname(
             names/sources of.
             You can also use subscripts to get parts of the results.
             >>> def func(*args, **kwargs):
-            >>>     return argname2('args[0]', 'kwargs[x]') # no quote needed
+            >>>     return argname('args[0]', 'kwargs[x]') # no quote needed
 
             Star argument is also allowed:
             >>> def func(*args, x = 1):
-            >>>     return argname2('*args', 'x')
+            >>>     return argname('*args', 'x')
             >>> a = b = c = 1
             >>> func(a, b, x=c) # ('a', 'b', 'c')
 
             Note the difference:
             >>> def func(*args, x = 1):
-            >>>     return argname2('args', 'x')
+            >>>     return argname('args', 'x')
             >>> a = b = c = 1
             >>> func(a, b, x=c) # (('a', 'b'), 'c')
 
@@ -376,17 +375,20 @@ def argname(
     Returns:
         The argument source when no more_args passed, otherwise a tuple of
         argument sources
+        Note that when an argument is an `ast.Constant`, `repr(arg.value)`
+        is returned, so `argname()` return `'a'` for `func("a")`
 
     Raises:
         VarnameRetrievingError: When the ast node where the function is called
             cannot be retrieved
+        ImproperUseError: When frame or func is incorrectly specified.
     """
     ignore_list = IgnoreList.create(
         ignore,
         ignore_lambda=False,
         ignore_varname=False,
     )
-    # where func(...) is called, skip the argname2() call
+    # where func(...) is called, skip the argname() call
     func_frame = ignore_list.get_frame(frame + 1)
     func_node = get_node_by_frame(func_frame)
     # Only do it when func_node are available
@@ -398,6 +400,8 @@ def argname(
         raise VarnameRetrievingError(
             "Cannot retrieve the node where the function is called."
         )
+
+    func_node = reconstruct_func_node(func_node)
 
     if not func:
         func = get_function_called_argname(func_frame, func_node)
@@ -417,10 +421,9 @@ def argname(
             func,
             vars_only=vars_only,
         )
-    except Exception as err:  # pragma: no cover
-        # find a test case?
-        raise VarnameRetrievingError(
-            "Have you specified the right `frame`?"
+    except Exception as err:
+        raise ImproperUseError(
+            "Have you specified the right `frame` or `func`?"
         ) from err
 
     out = []  # type: List[ArgSourceType]
@@ -475,31 +478,4 @@ def argname(
         out[0]
         if not more_args and not farg_star
         else tuple(out)  # type: ignore
-    )
-
-
-def argname2(
-    arg: str,
-    *more_args: str,
-    # *, keyword-only argument, only available with python3.8+
-    func: Callable = None,
-    dispatch: Type = None,
-    frame: int = 1,
-    ignore: IgnoreType = None,
-    vars_only: bool = True,
-) -> ArgSourceType:
-    """Alias of argname, will be removed in v0.9.0"""
-    warnings.warn(
-        "`argname2()` is deprecated and will be removed in v0.9.0. "
-        "Use `argname()` instead.",
-        DeprecationWarning
-    )
-    return argname(
-        arg,
-        *more_args,
-        func=func,
-        dispatch=dispatch,
-        frame=frame + 1,
-        ignore=ignore,
-        vars_only=vars_only,
     )

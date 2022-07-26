@@ -13,6 +13,9 @@ def test_argname():
     names = func(x, y, z)
     assert names == ("z", "y")
 
+    names = func(x, "a", 1)
+    assert names == ('1', "'a'")
+
     def func2(a, b, c, d=4):
         return argname("b")
 
@@ -29,36 +32,6 @@ def test_argname():
         return argname("a", "b")
 
     names4 = func4(y, b=x)
-    assert names4 == ("y", "x")
-
-def test_argname2():
-    def func(a, b, c, d=4):
-        return argname2("c", "b")
-
-    x = y = z = 1
-    with pytest.warns(DeprecationWarning):
-        names = func(x, y, z)
-    assert names == ("z", "y")
-
-    def func2(a, b, c, d=4):
-        return argname2("b")
-
-    with pytest.warns(DeprecationWarning):
-        names2 = func2(x, y, z)
-    assert names2 == "y"
-
-    def func3(e=1):
-        return argname2("e")
-
-    with pytest.warns(DeprecationWarning):
-        names3 = func3(z)
-    assert names3 == "z"
-
-    def func4(a, b=1):
-        return argname2("a", "b")
-
-    with pytest.warns(DeprecationWarning):
-        names4 = func4(y, b=x)
     assert names4 == ("y", "x")
 
 
@@ -110,7 +83,7 @@ def test_argname_non_variable():
         return argname("b")
 
     with pytest.raises(ImproperUseError, match=r"is not a variable"):
-        func(1, 1, 1)
+        func(1, {1}, 1)
 
 
 def test_argname_argname_argument_non_variable():
@@ -126,16 +99,16 @@ def test_argname_funcnode_not_call():
     x = 1
 
     class Foo:
-        @property
-        def prop(self):
-            y = argname("x")
+
+        def __neg__(self):
+            return argname("self")
 
     foo = Foo()
     with pytest.raises(
         VarnameRetrievingError,
-        match="Are you using 'argname' inside a function",
+        match="Cannot reconstruct ast.Call node from UnaryOp",
     ):
-        foo.prop
+        -foo
 
 
 def test_argname_get_source():
@@ -410,7 +383,7 @@ def test_argname_nonvar():
         return argname("x")
 
     with pytest.raises(ImproperUseError):
-        func(1)
+        func({1})
 
 
 def test_argname_frame_error():
@@ -431,3 +404,108 @@ def test_argname_ignore():
     x = y = 1
     out = wrapper(x, y)
     assert out == ("x", "y")
+
+
+def test_argname_attribute_item():
+    class A:
+        def __init__(self):
+            self.__dict__["meta"] = {}
+
+        def __getattr__(self, name):
+            return argname("name")
+
+        def __setattr__(self, name, value) -> None:
+            self.__dict__["meta"]["name"] = argname("name")
+            self.__dict__["meta"]["name2"] = argname("name", vars_only=False)
+            self.__dict__["meta"]["value"] = argname("value")
+
+        def __getitem__(self, name):
+            return argname("name")
+
+        def __setitem__(self, name, value) -> None:
+            self.__dict__["meta"]["name"] = argname("name")
+            self.__dict__["meta"]["name2"] = argname("name", vars_only=False)
+            self.__dict__["meta"]["value"] = argname("value")
+
+
+    a = A()
+    out = a.x
+    assert out == "'x'"
+
+    a.__getattr__("x")
+    assert out == "'x'"
+
+    a.y = 1
+    assert a.meta["name"] == "'y'"
+    assert a.meta["name2"] == "'y'"
+    assert a.meta["value"] == "1"
+
+    a.__setattr__("y", 1)
+    assert a.meta["name"] == "'y'"
+    assert a.meta["name2"] == "'y'"
+    assert a.meta["value"] == "1"
+
+    out = a[1]
+    assert out == "1"
+
+    a[1] = 2
+    assert a.meta["name"] == "1"
+    assert a.meta["name2"] == "1"
+    assert a.meta["value"] == "2"
+
+    with pytest.raises(ImproperUseError):
+        a.x = a.y = 1
+
+
+def test_argname_compare():
+    class A:
+        def __init__(self):
+            self.meta = None
+
+        def __eq__(self, other):
+            self.meta = argname("other")
+            return True
+
+        def __lt__(self, other):
+            self.meta = argname("other")
+            return True
+
+        def __gt__(self, other):
+            self.meta = argname("other")
+            return True
+
+    a = A()
+    a == 1
+    assert a.meta == '1'
+
+    a < 2
+    assert a.meta == '2'
+
+    a > 3
+    assert a.meta == '3'
+
+
+def test_argname_binop():
+    class A:
+        def __init__(self):
+            self.meta = None
+
+        def __add__(self, other):
+            self.meta = argname("other")
+            return 1
+
+    a = A()
+    out = a + 1
+    assert out == 1
+    assert a.meta == '1'
+
+
+def test_argname_wrong_frame():
+    def func(x):
+        return argname("x", func=property.getter)
+
+    with pytest.raises(
+        ImproperUseError,
+        match="Have you specified the right `frame` or `func`",
+    ):
+        func(1)

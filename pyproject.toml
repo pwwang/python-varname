@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "varname"
-version = "0.8.3"
+version = "0.9.0"
 description = "Dark magics about variable names in python."
 authors = [ "pwwang <pwwang@pwwang.com>",]
 license = "MIT"
@@ -14,18 +14,19 @@ repository = "https://github.com/pwwang/python-varname"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-executing = "^0.8.3"
+executing = "^0.9"
 asttokens = { version = "2.*", optional = true }
 pure_eval = { version = "0.*", optional = true }
 
 [tool.poetry.dev-dependencies]
-pytest = "*"
-pytest-cov = "*"
-asttokens = "2.*"
-pure_eval = "0.*"
+pytest = "^7"
+pytest-cov = "^3"
+
+[tool.poetry.extras]
+all = ["asttokens", "pure_eval"]
 
 [tool.pytest.ini_options]
-addopts = "-vv -W error::UserWarning --cov-config=.coveragerc --cov=varname --cov-report xml:.coverage.xml --cov-report term-missing"
+addopts = "-vv -p no:asyncio -W error::UserWarning --cov-config=.coveragerc --cov=varname --cov-report xml:.coverage.xml --cov-report term-missing"
 console_output_style = "progress"
 junit_family = "xunit1"
 

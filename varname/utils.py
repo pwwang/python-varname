@@ -16,11 +16,36 @@ import warnings
 import inspect
 from os import path
 from pathlib import Path
-from functools import lru_cache
+from functools import lru_cache, singledispatch
 from types import ModuleType, FunctionType, CodeType, FrameType
 from typing import Tuple, Union, List, Mapping, Callable
 
 from executing import Source
+
+OP2MAGIC = {
+    ast.Add: "__add__",
+    ast.Sub: "__sub__",
+    ast.Mult: "__mul__",
+    ast.Div: "__truediv__",
+    ast.FloorDiv: "__floordiv__",
+    ast.Mod: "__mod__",
+    ast.Pow: "__pow__",
+    ast.LShift: "__lshift__",
+    ast.RShift: "__rshift__",
+    ast.BitOr: "__or__",
+    ast.BitXor: "__xor__",
+    ast.BitAnd: "__and__",
+    ast.MatMult: "__matmul__",
+}
+
+CMP2MAGIC = {
+    ast.Eq: "__eq__",
+    ast.NotEq: "__ne__",
+    ast.Lt: "__lt__",
+    ast.LtE: "__le__",
+    ast.Gt: "__gt__",
+    ast.GtE: "__ge__",
+}
 
 IgnoreElemType = Union[
     # module
@@ -206,7 +231,9 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
     name_instruction = instructions[current_instruction_index - 1]
 
     if not name_instruction.opname.startswith("LOAD_"):
-        raise VarnameRetrievingError("Argument must be a variable or attribute")
+        raise VarnameRetrievingError(
+            "Argument must be a variable or attribute"
+        )
 
     name = name_instruction.argrepr
     if not name.isidentifier():
@@ -297,6 +324,19 @@ def argnode_source(
             node.attr for ast.Attribute). Or the node itself if the source
             cannot be fetched.
     """
+    if isinstance(node, ast.Constant):
+        return repr(node.value)
+
+    if sys.version_info < (3, 9):  # pragma: no cover
+        if isinstance(node, ast.Index):
+            node = node.value
+        if isinstance(node, ast.Num):
+            return repr(node.n)
+        if isinstance(node, (ast.Bytes, ast.Str)):
+            return repr(node.s)
+        if isinstance(node, ast.NameConstant):
+            return repr(node.value)
+
     if vars_only:
         return (
             node.id
@@ -310,7 +350,6 @@ def argnode_source(
     return source.asttokens().get_text(node)
 
 
-@lru_cache()
 def get_argument_sources(
     source: Source,
     node: ast.Call,
@@ -332,8 +371,7 @@ def get_argument_sources(
     # func(y, x, c=z)
     # ['y', 'x'], {'c': 'z'}
     arg_sources = [
-        argnode_source(source, argnode, vars_only)
-        for argnode in node.args
+        argnode_source(source, argnode, vars_only) for argnode in node.args
     ]
     kwarg_sources = {
         argnode.arg: argnode_source(source, argnode.value, vars_only)
@@ -352,15 +390,8 @@ def get_argument_sources(
     return argument_sources
 
 
-def get_function_called_argname(frame: FrameType, node: ast.AST) -> Callable:
+def get_function_called_argname(frame: FrameType, node: ast.Call) -> Callable:
     """Get the function who called argname"""
-    # We need node to be ast.Call
-    if not isinstance(node, ast.Call):
-        raise VarnameRetrievingError(
-            f"Expect an 'ast.Call' node, but got {type(node)!r}. "
-            "Are you using 'argname' inside a function?"
-        )
-
     # variable
     if isinstance(node.func, ast.Name):
         func = frame.f_locals.get(
@@ -395,11 +426,145 @@ def get_function_called_argname(frame: FrameType, node: ast.AST) -> Callable:
         "Using 'eval' to get the function that calls 'argname'. "
         "Try calling it using a variable reference to the function, or "
         "passing the function to 'argname' explicitly.",
-        UsingExecWarning
+        UsingExecWarning,
     )
     expr = ast.Expression(node.func)
     code = compile(expr, "<ast-call>", "eval")
     return eval(code, frame.f_globals, frame.f_locals)
+
+
+@singledispatch
+def reconstruct_func_node(node: ast.AST) -> ast.Call:
+    """Reconstruct the ast.Call node from
+
+    `x.a` to `x.__getattr__('a')`
+    `x.a = b` to `x.__setattr__('a', b)`
+    `x[a]` to `x.__getitem__(a)`
+    `x[a] = b` to `x.__setitem__(a, 1)`
+    `x + a` to `x.__add__(a)`
+    `x < a` to `x.__lt__(a)`
+    """
+    raise VarnameRetrievingError(
+        f"Cannot reconstruct ast.Call node from {type(node).__name__}, "
+        "expecting Call, Attribute, Subscript, BinOp, Compare."
+    )
+
+
+@reconstruct_func_node.register(ast.Call)
+def _(node: ast.Call) -> ast.Call:
+    return node
+
+
+@reconstruct_func_node.register(ast.Attribute)
+@reconstruct_func_node.register(ast.Subscript)
+def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
+    """Reconstruct the function node for
+    `x.__getitem__/__setitem__/__getattr__/__setattr__`"""
+    nodemeta = {
+        "lineno": node.lineno,
+        "col_offset": node.col_offset,
+    }
+    keynode = (
+        node.slice
+        if isinstance(node, ast.Subscript)
+        else ast.Constant(value=node.attr)
+    )
+
+    # x[1], x.a
+    if isinstance(node.ctx, ast.Load):
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.value,
+                attr=(
+                    "__getitem__"
+                    if isinstance(node, ast.Subscript)
+                    else "__getattr__"
+                ),
+                ctx=ast.Load(),
+                **nodemeta,
+            ),
+            args=[keynode],
+            keywords=[],
+            starargs=None,
+            kwargs=None,
+        )
+
+    # x[a] = b, x.a = b
+    if (
+        not hasattr(node, "parent")
+        or not isinstance(node.parent, ast.Assign)  # type: ignore
+        or len(node.parent.targets) != 1  # type: ignore
+    ):
+        raise ImproperUseError(
+            rich_exc_message(
+                "Expect `x[a] = b` or `x.a = b` directly, got "
+                f"{ast.dump(node)}.",
+                node,
+            )
+        )
+
+    return ast.Call(
+        func=ast.Attribute(
+            value=node.value,
+            attr=(
+                "__setitem__"
+                if isinstance(node, ast.Subscript)
+                else "__setattr__"
+            ),
+            ctx=ast.Load(),
+            **nodemeta,
+        ),
+        args=[keynode, node.parent.value],  # type: ignore
+        keywords=[],
+        starargs=None,
+        kwargs=None,
+    )
+
+
+@reconstruct_func_node.register(ast.Compare)
+def _(node: ast.Compare) -> ast.Call:
+    """Reconstruct the function node for `x < a`"""
+    # When the node is identified by executing, len(ops) is always 1.
+    # Otherwise, the node cannot be identified.
+    assert len(node.ops) == 1
+
+    nodemeta = {
+        "lineno": node.lineno,
+        "col_offset": node.col_offset,
+    }
+    return ast.Call(
+        func=ast.Attribute(
+            value=node.left,
+            attr=CMP2MAGIC[type(node.ops[0])],
+            ctx=ast.Load(),
+            **nodemeta,
+        ),
+        args=[node.comparators[0]],
+        keywords=[],
+        starargs=None,
+        kwargs=None,
+    )
+
+
+@reconstruct_func_node.register(ast.BinOp)
+def _(node: ast.BinOp) -> ast.Call:
+    """Reconstruct the function node for `x + a`"""
+    nodemeta = {
+        "lineno": node.lineno,
+        "col_offset": node.col_offset,
+    }
+    return ast.Call(
+        func=ast.Attribute(
+            value=node.left,
+            attr=OP2MAGIC[type(node.op)],
+            ctx=ast.Load(),
+            **nodemeta,
+        ),
+        args=[node.right],
+        keywords=[],
+        starargs=None,
+        kwargs=None,
+    )
 
 
 def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
