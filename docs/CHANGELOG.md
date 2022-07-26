@@ -1,3 +1,44 @@
+## 0.9.0
+
+- ⬆️ Upgrade executing to 0.9
+- 🗑️ Remove deprecated `argname2`
+- ✨ Support constants for `argname` even when `vars_only=True`
+- ✨ Support `__getattr__/__setattr__` etc for `argname`
+
+    Now you can do:
+    ```python
+    from varname import argname
+
+    class Foo:
+        def __getattr__(self, name):
+            """Similar for `__getitem__`"""
+            print(argname("name"))
+
+        def __setattr__(self, name, value):
+            """Similar for `__setitem__`"""
+            print(argname("name"))
+            print(argname("value"))
+
+        def __add__(self, other):
+            """Similar for `__sub__`, `__mul__`, `__truediv__`, `__floordiv__`,
+            `__mod__`, `__pow__`, `__lshift__`, `__rshift__`, `__matmul__`,
+            `__and__`, `__xor__`, `__or__`
+            """
+            print(argname("other"))
+
+        def __eq__(self, other):
+            """Similar for `__lt__`, `__le__`, `__gt__`, `__ge__`, `__ne__`
+            """
+            print(argname("other"))
+
+    foo = Foo()
+    b = 1
+    foo.x  # prints: 'x' (note the quotes)
+    foo.x = b  # prints: 'x' and b
+    foo + b  # prints: b
+    foo == b  # prints: b
+    ```
+
 ## v0.8.3
 
 This is more of a housekeeping release:

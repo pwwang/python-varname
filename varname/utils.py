@@ -45,7 +45,6 @@ CMP2MAGIC = {
     ast.LtE: "__le__",
     ast.Gt: "__gt__",
     ast.GtE: "__ge__",
-    ast.In: "__contains__",
 }
 
 IgnoreElemType = Union[
