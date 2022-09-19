@@ -14,7 +14,7 @@ repository = "https://github.com/pwwang/python-varname"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-executing = "^0.9"
+executing = "^1.0"
 asttokens = { version = "2.*", optional = true }
 pure_eval = { version = "0.*", optional = true }
 
