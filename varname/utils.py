@@ -212,23 +212,40 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
     python shell, with `eval`, or other circumstances where the code is
     manipulated to run but sourcecode is not available.
     """
-    instructions = list(dis.get_instructions(code))
+    if sys.version_info[:2] >= (3, 11):
+        kwargs = {"show_caches": True}
+    else:
+        kwargs = {}
+
+    instructions = list(dis.get_instructions(code, **kwargs))
     ((current_instruction_index, current_instruction),) = (
         (index, instruction)
         for index, instruction in enumerate(instructions)
         if instruction.offset == offset
     )
 
+    while current_instruction.opname == "CACHE":
+        current_instruction_index -= 1
+        current_instruction = instructions[current_instruction_index]
+
+    pos_only_error = VarnameRetrievingError(
+        "'nameof' can only be called with a single positional argument "
+        "when source code is not avaiable."
+    )
     if current_instruction.opname in ("CALL_FUNCTION_EX", "CALL_FUNCTION_KW"):
-        raise VarnameRetrievingError(
-            "'nameof' can only be called with a single positional argument "
-            "when source code is not avaiable."
-        )
+        raise pos_only_error
 
-    if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD"):
-        raise VarnameRetrievingError("Did you call 'nameof' in a weird way?")
+    if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD", "CALL"):
+        raise VarnameRetrievingError("Did you call 'nameof' in a weird way? " + str(current_instruction))
 
-    name_instruction = instructions[current_instruction_index - 1]
+    current_instruction_index -= 1
+    name_instruction = instructions[current_instruction_index]
+    while name_instruction.opname in ("CACHE", "PRECALL"):
+        current_instruction_index -= 1
+        name_instruction = instructions[current_instruction_index]
+
+    if name_instruction.opname == "KW_NAMES":
+        raise pos_only_error
 
     if not name_instruction.opname.startswith("LOAD_"):
         raise VarnameRetrievingError(
