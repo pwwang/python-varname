@@ -212,10 +212,7 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
     python shell, with `eval`, or other circumstances where the code is
     manipulated to run but sourcecode is not available.
     """
-    if sys.version_info[:2] >= (3, 11):
-        kwargs = {"show_caches": True}
-    else:
-        kwargs = {}
+    kwargs = {"show_caches": True} if sys.version_info[:2] >= (3, 11) else {}
 
     instructions = list(dis.get_instructions(code, **kwargs))
     ((current_instruction_index, current_instruction),) = (
