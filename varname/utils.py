@@ -18,7 +18,7 @@ from os import path
 from pathlib import Path
 from functools import lru_cache, singledispatch
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Tuple, Union, List, Mapping, Callable
+from typing import Tuple, Union, List, Mapping, Callable, Dict
 
 from executing import Source
 
@@ -212,7 +212,7 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
     python shell, with `eval`, or other circumstances where the code is
     manipulated to run but sourcecode is not available.
     """
-    kwargs = {"show_caches": True} if sys.version_info[:2] >= (3, 11) else {}
+    kwargs: Dict[str, bool] = {"show_caches": True} if sys.version_info[:2] >= (3, 11) else {}
 
     instructions = list(dis.get_instructions(code, **kwargs))
     ((current_instruction_index, current_instruction),) = (
