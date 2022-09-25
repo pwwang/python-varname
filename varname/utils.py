@@ -236,7 +236,7 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
         raise pos_only_error
 
     if current_instruction.opname not in ("CALL_FUNCTION", "CALL_METHOD", "CALL"):
-        raise VarnameRetrievingError("Did you call 'nameof' in a weird way? " + str(current_instruction))
+        raise VarnameRetrievingError("Did you call 'nameof' in a weird way?")
 
     current_instruction_index -= 1
     name_instruction = instructions[current_instruction_index]
