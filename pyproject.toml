@@ -21,6 +21,10 @@ pure_eval = { version = "0.*", optional = true }
 [tool.poetry.dev-dependencies]
 pytest = "^7"
 pytest-cov = "^3"
+coverage = [
+    { version = "^6.4", python = ">=3.7", extras = ["toml"] },
+    { version = "^6.2", python = ">=3.6,<3.7", extras = ["toml"] },
+]
 
 [tool.poetry.extras]
 all = ["asttokens", "pure_eval"]
