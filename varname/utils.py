@@ -223,7 +223,7 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
         if instruction.offset == offset
     )
 
-    while current_instruction.opname == "CACHE":
+    while current_instruction.opname == "CACHE":  # pragma: no cover
         current_instruction_index -= 1
         current_instruction = instructions[current_instruction_index]
 
@@ -231,7 +231,10 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
         "'nameof' can only be called with a single positional argument "
         "when source code is not avaiable."
     )
-    if current_instruction.opname in ("CALL_FUNCTION_EX", "CALL_FUNCTION_KW"):
+    if current_instruction.opname in (  # pragma: no cover
+        "CALL_FUNCTION_EX",
+        "CALL_FUNCTION_KW",
+    ):
         raise pos_only_error
 
     if current_instruction.opname not in (
@@ -243,11 +246,11 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
 
     current_instruction_index -= 1
     name_instruction = instructions[current_instruction_index]
-    while name_instruction.opname in ("CACHE", "PRECALL"):
+    while name_instruction.opname in ("CACHE", "PRECALL"):  # pragma: no cover
         current_instruction_index -= 1
         name_instruction = instructions[current_instruction_index]
 
-    if name_instruction.opname == "KW_NAMES":
+    if name_instruction.opname == "KW_NAMES":  # pragma: no cover
         raise pos_only_error
 
     if not name_instruction.opname.startswith("LOAD_"):
