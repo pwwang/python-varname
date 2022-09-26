@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.10.0
+
+- ✨ Support python 3.11
+
 ## v0.9.1
 
 - ⬆️ Upgrade executing to 1.0
