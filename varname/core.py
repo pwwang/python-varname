@@ -1,10 +1,8 @@
 """Provide core features for varname"""
-from __future__ import annotations
-
 import ast
 import re
 import warnings
-from typing import Any, List, Tuple, Type, Callable  # , overload
+from typing import Any, List, Union, Tuple, Type, Callable  # , overload
 
 from executing import Source
 
@@ -32,7 +30,7 @@ def varname(
     multi_vars: bool = False,
     raise_exc: bool = True,
     strict: bool = True,
-) -> str | Tuple[str | Tuple, ...]:
+) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
 
@@ -240,7 +238,7 @@ def nameof(
     *more_vars: Any,
     frame: int = 1,
     vars_only: bool = True,
-) -> str | Tuple[str, ...]:
+) -> Union[str, Tuple[str, ...]]:
     """Get the names of the variables passed in
 
     Examples:
