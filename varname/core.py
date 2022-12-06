@@ -1,8 +1,10 @@
 """Provide core features for varname"""
+from __future__ import annotations
+
 import ast
 import re
 import warnings
-from typing import List, Tuple, Type, Union, Callable
+from typing import Any, List, Tuple, Type, Union, Callable  # , overload
 
 from executing import Source
 
@@ -216,12 +218,29 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
     return node.attr
 
 
+# @overload
+# def nameof(var: Any, *, frame: int = 1, vars_only: bool = True) -> str:
+#     ...
+
+
+# @overload
+# def nameof(
+#     var: Any,
+#     more_var: Any,
+#     /,  # introduced in python 3.8
+#     *more_vars: Any,
+#     frame: int = 1,
+#     vars_only: bool = True,
+# ) -> Tuple[str, ...]:
+#     ...
+
+
 def nameof(
-    var,
-    *more_vars,
+    var: Any,
+    *more_vars: Any,
     frame: int = 1,
     vars_only: bool = True,
-) -> Union[str, Tuple[str, ...]]:
+) -> str | Tuple[str, ...]:
     """Get the names of the variables passed in
 
     Examples:
@@ -315,6 +334,34 @@ def nameof(
         vars_only=vars_only,
     )
     return out if more_vars else out[0]  # type: ignore
+
+
+# @overload
+# def argname(
+#     arg: str,
+#     *,
+#     func: Callable = None,
+#     dispatch: Type = None,
+#     frame: int = 1,
+#     ignore: IgnoreType = None,
+#     vars_only: bool = True,
+# ):
+#     ...
+
+
+# @overload
+# def argname(
+#     arg: str,
+#     more_arg: str,
+#     /,  # introduced in python 3.8
+#     *more_args: str,
+#     func: Callable = None,
+#     dispatch: Type = None,
+#     frame: int = 1,
+#     ignore: IgnoreType = None,
+#     vars_only: bool = True,
+# ):
+#     ...
 
 
 def argname(
