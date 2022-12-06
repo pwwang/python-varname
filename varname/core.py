@@ -473,7 +473,7 @@ def argname(
             "Have you specified the right `frame` or `func`?"
         ) from err
 
-    out = []  # type: List[ArgSourceType]
+    out: List[ArgSourceType] = []
     farg_star = False
     for farg in (arg, *more_args):
 
