@@ -4,7 +4,7 @@ from __future__ import annotations
 import ast
 import re
 import warnings
-from typing import Any, List, Tuple, Type, Union, Callable  # , overload
+from typing import Any, List, Tuple, Type, Callable  # , overload
 
 from executing import Source
 
@@ -32,7 +32,7 @@ def varname(
     multi_vars: bool = False,
     raise_exc: bool = True,
     strict: bool = True,
-) -> Union[str, Tuple[Union[str, Tuple], ...]]:
+) -> str | Tuple[str | Tuple, ...]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
 
