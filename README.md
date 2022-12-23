@@ -2,7 +2,7 @@
 
 [![Pypi][3]][4] [![Github][5]][6] [![PythonVers][8]][4] ![Building][10]
 [![Docs and API][9]][15] [![Codacy][12]][13] [![Codacy coverage][14]][13]
-[![Chat on gitter][17]][18]
+![Downloads][17]
 
 Dark magics about variable names in python
 
@@ -390,15 +390,14 @@ For example:
 [6]: https://github.com/pwwang/python-varname
 [7]: logo.png
 [8]: https://img.shields.io/pypi/pyversions/varname?style=flat-square
-[9]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20Docs?label=docs&style=flat-square
-[10]: https://img.shields.io/github/workflow/status/pwwang/python-varname/Build%20and%20Deploy?style=flat-square
+[9]: https://img.shields.io/github/actions/workflow/status/pwwang/python-varname/docs.yml?branch=master
+[10]: https://img.shields.io/github/actions/workflow/status/pwwang/python-varname/build.yml?branch=master
 [11]: https://mybinder.org/v2/gh/pwwang/python-varname/dev?filepath=playground%2Fplayground.ipynb
 [12]: https://img.shields.io/codacy/grade/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
 [13]: https://app.codacy.com/gh/pwwang/python-varname/dashboard
 [14]: https://img.shields.io/codacy/coverage/6fdb19c845f74c5c92056e88d44154f7?style=flat-square
 [15]: https://pwwang.github.io/python-varname/api/varname
 [16]: https://pwwang.github.io/python-varname/CHANGELOG/
-[17]: https://img.shields.io/gitter/room/pwwang/python-varname?style=flat-square
-[18]: https://gitter.im/python-varname/community
+[17]: https://img.shields.io/pypi/dm/varname?style=flat-square
 [19]: https://github.com/alexmojaki/executing#is-it-reliable
 [20]: https://stackoverflow.com/a/59364138/5088165
