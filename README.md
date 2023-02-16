@@ -9,9 +9,12 @@ Dark magics about variable names in python
 [CHANGELOG][16] | [API][15] | [Playground][11] | :fire: [StackOverflow answer][20]
 
 ## Installation
+
 ```shell
 pip install -U varname
 ```
+
+Note if you use `python < 3.8`, install `varname < 0.11`
 
 ## Features
 
@@ -90,6 +93,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     ```
 
     When there are intermediate frames:
+
     ```python
     def wrapped():
         return function()
@@ -102,6 +106,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     ```
 
     Or use `ignore` to ignore the wrapped frame:
+
     ```python
     def wrapped():
         return function()
@@ -113,6 +118,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     ```
 
     Calls from standard libraries are ignored by default:
+
     ```python
     import asyncio
 
@@ -124,6 +130,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
 
     Use `strict` to control whether the call should be assigned to
     the variable directly:
+
     ```python
     def function(strict):
         return varname(strict=strict)
@@ -256,6 +263,7 @@ nameof(func.a.b, vars_only=False) # 'func.a.b'
 ```
 
 ### Detecting next immediate attribute name
+
 ```python
 from varname import will
 class AwesomeClass:
@@ -281,6 +289,7 @@ awesome.permit().do() == 'I am doing!'
 ```
 
 ### Fetching argument names/sources using `argname`
+
 ```python
 from varname import argname
 
@@ -339,6 +348,7 @@ mydict = values_to_dict(foo, bar)
 ```
 
 ### Debugging with `debug`
+
 ```python
 from varname.helpers import debug
 
@@ -362,6 +372,7 @@ debug(a+a, vars_only=True) # ImproperUseError
 ```
 
 ## Reliability and limitations
+
 `varname` is all depending on `executing` package to look for the node.
 The node `executing` detects is ensured to be the correct one (see [this][19]).
 
@@ -373,6 +384,7 @@ it at your own risk.
 For example:
 
 - This will not work with `pytest`:
+
   ```python
   a = 1
   assert nameof(a) == 'a' # pytest manipulated the ast here

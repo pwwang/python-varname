@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.11.0
+
+- 📝 Update README for shields badges (#91)
+- 🏷️ Overload types for nameof and argname (#77)
+- 💥 Drop python <3.8  for v0.11
+     If you need support for python <3.8, please use varname <0.11
+
 ## v0.10.0
 
 - ✨ Support python 3.11
