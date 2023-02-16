@@ -343,7 +343,7 @@ def argname(
     frame: int = 1,
     ignore: IgnoreType = None,
     vars_only: bool = True,
-):
+) -> ArgSourceType:
     ...
 
 
@@ -358,7 +358,7 @@ def argname(
     frame: int = 1,
     ignore: IgnoreType = None,
     vars_only: bool = True,
-):
+) -> Tuple[ArgSourceType, ...]:
     ...
 
 
@@ -370,7 +370,7 @@ def argname(
     frame: int = 1,
     ignore: IgnoreType = None,
     vars_only: bool = True,
-) -> ArgSourceType:
+) -> Union[ArgSourceType, Tuple[ArgSourceType, ...]]:
     """Get the names/sources of arguments passed to a function.
 
     Instead of passing the argument variables themselves to this function
