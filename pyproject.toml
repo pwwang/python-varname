@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "varname"
-version = "0.10.0"
+version = "0.11.0"
 description = "Dark magics about variable names in python."
 authors = [ "pwwang <pwwang@pwwang.com>",]
 license = "MIT"
@@ -13,7 +13,7 @@ homepage = "https://github.com/pwwang/python-varname"
 repository = "https://github.com/pwwang/python-varname"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.8"
 executing = "^1.2"
 asttokens = { version = "2.*", optional = true }
 pure_eval = { version = "0.*", optional = true }
@@ -21,10 +21,7 @@ pure_eval = { version = "0.*", optional = true }
 [tool.poetry.dev-dependencies]
 pytest = "^7"
 pytest-cov = "^4"
-coverage = [
-    { version = "^6.4", python = ">=3.7", extras = ["toml"] },
-    { version = "^6.2", python = ">=3.6,<3.7", extras = ["toml"] },
-]
+coverage = { version = "^6.4", extras = ["toml"] }
 
 [tool.poetry.extras]
 all = ["asttokens", "pure_eval"]
@@ -43,5 +40,5 @@ strict_optional = false
 
 [tool.black]
 line-length = 80
-target-version = ['py37', 'py38', 'py39']
+target-version = ['py37', 'py38', 'py39', 'py310']
 include = '\.pyi?$'

@@ -2,7 +2,7 @@
 import ast
 import re
 import warnings
-from typing import Any, List, Union, Tuple, Type, Callable  # , overload
+from typing import Any, List, Union, Tuple, Type, Callable, overload
 
 from executing import Source
 
@@ -216,21 +216,21 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
     return node.attr
 
 
-# @overload
-# def nameof(var: Any, *, frame: int = 1, vars_only: bool = True) -> str:
-#     ...
+@overload
+def nameof(var: Any, *, frame: int = 1, vars_only: bool = True) -> str:
+    ...
 
 
-# @overload
-# def nameof(
-#     var: Any,
-#     more_var: Any,
-#     /,  # introduced in python 3.8
-#     *more_vars: Any,
-#     frame: int = 1,
-#     vars_only: bool = True,
-# ) -> Tuple[str, ...]:
-#     ...
+@overload
+def nameof(
+    var: Any,
+    more_var: Any,
+    /,  # introduced in python 3.8
+    *more_vars: Any,
+    frame: int = 1,
+    vars_only: bool = True,
+) -> Tuple[str, ...]:
+    ...
 
 
 def nameof(
@@ -334,32 +334,32 @@ def nameof(
     return out if more_vars else out[0]  # type: ignore
 
 
-# @overload
-# def argname(
-#     arg: str,
-#     *,
-#     func: Callable = None,
-#     dispatch: Type = None,
-#     frame: int = 1,
-#     ignore: IgnoreType = None,
-#     vars_only: bool = True,
-# ):
-#     ...
+@overload
+def argname(
+    arg: str,
+    *,
+    func: Callable = None,
+    dispatch: Type = None,
+    frame: int = 1,
+    ignore: IgnoreType = None,
+    vars_only: bool = True,
+) -> ArgSourceType:
+    ...
 
 
-# @overload
-# def argname(
-#     arg: str,
-#     more_arg: str,
-#     /,  # introduced in python 3.8
-#     *more_args: str,
-#     func: Callable = None,
-#     dispatch: Type = None,
-#     frame: int = 1,
-#     ignore: IgnoreType = None,
-#     vars_only: bool = True,
-# ):
-#     ...
+@overload
+def argname(
+    arg: str,
+    more_arg: str,
+    /,  # introduced in python 3.8
+    *more_args: str,
+    func: Callable = None,
+    dispatch: Type = None,
+    frame: int = 1,
+    ignore: IgnoreType = None,
+    vars_only: bool = True,
+) -> Tuple[ArgSourceType, ...]:
+    ...
 
 
 def argname(
@@ -370,7 +370,7 @@ def argname(
     frame: int = 1,
     ignore: IgnoreType = None,
     vars_only: bool = True,
-) -> ArgSourceType:
+) -> Union[ArgSourceType, Tuple[ArgSourceType, ...]]:
     """Get the names/sources of arguments passed to a function.
 
     Instead of passing the argument variables themselves to this function

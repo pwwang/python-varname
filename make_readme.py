@@ -44,9 +44,11 @@ from os import path
 from io import StringIO
 from contextlib import redirect_stdout
 
+
 def printn(line):
     """Shortcut to print without new line"""
     print(line, end="")
+
 
 class CodeBlock:
     """The code block
@@ -73,50 +75,50 @@ class CodeBlock:
         stdout: The standard output of current code piece
             It will get overwritten by next code piece
     """
+
     def __init__(self, indent, backticks, lang, index, envs=None):
         self.indent = indent
         self.backticks = backticks
         self.lang = lang
-        self.codes = ''
+        self.codes = ""
         self.envs = envs or {}
-        self.produced = ''
+        self.produced = ""
         self.alive = True
         self.index = index
         self.piece = 0
-        self.stdout = ''
+        self.stdout = ""
 
     def compile_exec(self, code):
         """Compile and execute the code"""
         sourcefile = path.join(
             tempfile._get_default_tempdir(),
             f"codeblock_{self.index}_{self.piece}-"
-            f"{next(tempfile._get_candidate_names())}"
+            f"{next(tempfile._get_candidate_names())}",
         )
-        with open(sourcefile, 'w') as fsrc:
+        with open(sourcefile, "w") as fsrc:
             fsrc.write(code)
-        code = compile(code, sourcefile, mode='exec')
+        code = compile(code, sourcefile, mode="exec")
         sio = StringIO()
         with redirect_stdout(sio):
             exec(code, self.envs)
         self.stdout = sio.getvalue()
         self.piece += 1
 
-
     def feed(self, line):
         """Feed a single line to the code block, with line break"""
-        if self.lang not in ('python', 'python3'):
+        if self.lang not in ("python", "python3"):
             self.produced += line
 
         else:
-            if not line.strip(): # empty line
+            if not line.strip():  # empty line
                 self.codes += "\n"
                 self.produced += line
             else:
-                line = line[len(self.indent):]
+                line = line[len(self.indent) :]
                 if CodeBlock.should_compile(line):
                     if self.codes:
                         self.compile_exec(self.codes)
-                        self.codes = ''
+                        self.codes = ""
                     self.produced += self.indent + self.compile_line(line)
                 else:
                     self.codes += line
@@ -124,19 +126,19 @@ class CodeBlock:
 
     def _compile_expr(self, line):
         """Compile {_expr}"""
-        varname = '_expr'
-        source = f'{varname} = {line}'
+        varname = "_expr"
+        source = f"{varname} = {line}"
         self.compile_exec(source)
-        code, comment = line.split('#', 1)
+        code, comment = line.split("#", 1)
         comment = comment.format(**self.envs)
-        return '#'.join((code, comment))
+        return "#".join((code, comment))
 
     def _compile_out(self, line):
         """Compile {_out}"""
         self.compile_exec(line)
-        code, comment = line.split('#', 1)
+        code, comment = line.split("#", 1)
         comment = comment.format(**self.envs, _out=self.stdout)
-        return '#'.join((code, comment))
+        return "#".join((code, comment))
 
     def _compile_exc(self, line, msg=False):
         """Compile {_exc} and {_exc_msg}"""
@@ -153,36 +155,36 @@ class CodeBlock:
             source += " + ': ' + str(exc)"
         source += "\n"
         self.compile_exec(source)
-        code, comment = line.split('#', 1)
+        code, comment = line.split("#", 1)
         comment = comment.format(**self.envs)
-        return '#'.join((code, comment))
+        return "#".join((code, comment))
 
     def _compile_hidden(self, line):
         """Compile {_hidden}"""
         self.compile_exec(line)
-        return ''
+        return ""
 
     def _compile_var(self, line):
         """Compile variables"""
         self.compile_exec(line)
-        code, comment = line.split('#', 1)
+        code, comment = line.split("#", 1)
         comment = comment.format(**self.envs)
-        return '#'.join((code, comment))
+        return "#".join((code, comment))
 
     def compile_line(self, line):
         """Compile a single line"""
-        code, comment = line.split('#', 1)
+        code, comment = line.split("#", 1)
         if not code:
-            return '#' + comment.format(**self.envs, _out=self.stdout)
-        if '{_hidden}' in comment:
+            return "#" + comment.format(**self.envs, _out=self.stdout)
+        if "{_hidden}" in comment:
             return self._compile_hidden(line)
-        if re.search(r'\{_expr(?:!\w+)?\}', comment):
+        if re.search(r"\{_expr(?:!\w+)?\}", comment):
             return self._compile_expr(line)
-        if re.search(r'\{_out(?:!\w+)?\}', comment):
+        if re.search(r"\{_out(?:!\w+)?\}", comment):
             return self._compile_out(line)
-        if '{_exc}' in comment:
+        if "{_exc}" in comment:
             return self._compile_exc(line)
-        if '{_exc_msg}' in comment:
+        if "{_exc_msg}" in comment:
             return self._compile_exc(line, msg=True)
 
         return self._compile_var(line)
@@ -207,7 +209,9 @@ class CodeBlock:
             return None
 
         indent, backticks, lang = (
-            matches.group(1), matches.group(2), matches.group(3),
+            matches.group(1),
+            matches.group(2),
+            matches.group(3),
         )
         return cls(indent, backticks, lang, index, envs)
 
@@ -218,7 +222,7 @@ class CodeBlock:
             self.alive = False
             if self.codes:
                 self.compile_exec(self.codes)
-                self.codes = ''
+                self.codes = ""
             return True
 
         return False
@@ -226,11 +230,11 @@ class CodeBlock:
     @staticmethod
     def should_compile(line):
         """Whether we should compile a line or treat it as a plain line"""
-        if '#' not in line:
+        if "#" not in line:
             return False
 
-        comment = line.split('#', 1)[1]
-        return re.search(r'\{[^}]+\}', comment)
+        comment = line.split("#", 1)[1]
+        return re.search(r"\{[^}]+\}", comment)
 
 
 def compile_readme(rawfile):
@@ -253,6 +257,7 @@ def compile_readme(rawfile):
                 maybe_codeblock = CodeBlock.try_open(line, envs, index)
                 if maybe_codeblock:
                     codeblock = maybe_codeblock
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
