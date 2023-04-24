@@ -109,11 +109,12 @@ def test_multi_vars_lhs():
     assert (a, b, x.c) == ('a', 'b', 'c')
 
     # Not all LHS are variables
+    y = {}
     with pytest.raises(
         ImproperUseError,
-        match='Can only get name of a variable or attribute, not Starred'
+        match='Can only get name of a variable or attribute, not Subscript'
     ):
-        a, *b = function()
+        a, y["a"] = function()
 
 def test_raise_exc():
 
