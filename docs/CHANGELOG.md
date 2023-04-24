@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.11.1
+
+- ✨ Support starred variable for varname() (#96)
+- ✅ Fix tests
+- 📝 Update docs for `varname(strict=...)`
+
 ## v0.11.0
 
 - 📝 Update README for shields badges (#91)
