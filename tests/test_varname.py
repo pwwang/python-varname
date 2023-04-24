@@ -556,3 +556,14 @@ def test_internal_debug(capsys, enable_debug):
     assert "Skipping (0 more to skip) [In 'foo1'" in msgs[6]
     assert "Ignored by IgnoreModuleQualname('tests.test_varname', '*.wrapper')" in msgs[7]
     assert "Gotcha! [In 'test_internal_debug'" in msgs[8]
+
+
+def test_star_var():
+    def func():
+        v = varname(multi_vars=True)
+        return 1, 2, 3, v
+
+    a, *b, c = func()
+    assert a == 1
+    assert b == [2, 3]
+    assert c == ('a', '*b', 'c')

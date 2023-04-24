@@ -196,6 +196,8 @@ def node_name(node: ast.AST) -> Union[str, Tuple[Union[str, Tuple], ...]]:
         return node.attr
     if isinstance(node, (ast.List, ast.Tuple)):
         return tuple(node_name(elem) for elem in node.elts)
+    if isinstance(node, ast.Starred):
+        return f"*{node_name(node.value)}"
 
     raise ImproperUseError(
         f"Can only get name of a variable or attribute, "
