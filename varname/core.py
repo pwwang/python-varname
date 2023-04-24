@@ -74,7 +74,8 @@ def varname(
             the use of `varname` is improper (i.e. multiple variables on
             LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.
         strict: Whether to only return the variable name(s) if the result of
-            the call is assigned to it/them directly.
+            the call is assigned to it/them directly. For example, `a = func()`
+            rather than `a = [func()]`
 
     Returns:
         The variable name, or `None` when `raise_exc` is `False` and
