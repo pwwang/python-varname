@@ -1,5 +1,21 @@
 # Change Log
 
+## v0.11.2
+
+- ✨ Add `jsobj` to create dict without explicitly specifying the key-value pairs
+
+    ```python
+    from varname.helpers import jsobj
+
+    a = 1
+    b = 2
+    # before
+    dict(a=a, b=b, c=3)  # {'a': 1, 'b': 2, 'c': 3}
+
+    # after
+    jsobj(a, b, c=3)  # {'a': 1, 'b': 2, 'c': 3}
+    ```
+
 ## v0.11.1
 
 - ✨ Support starred variable for varname() (#96)
