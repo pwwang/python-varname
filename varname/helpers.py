@@ -1,7 +1,7 @@
 """Some helper functions builtin based upon core features"""
 import inspect
 from functools import partial, wraps
-from typing import Any, Callable, Mapping, Type, Union
+from typing import Any, Callable, Dict, Tuple, Type, Union
 
 from .utils import IgnoreType
 from .core import argname, varname
@@ -149,7 +149,7 @@ class Wrapper:
         )
 
 
-def jsobj(*args, **kwargs) -> Mapping[str, Any]:
+def jsobj(*args: Any, **kwargs: Any) -> Dict[str, Any]:
     """A wrapper to create a JavaScript-like object
 
     When an argument is passed as positional argument, the name of the variable
@@ -172,7 +172,7 @@ def jsobj(*args, **kwargs) -> Mapping[str, Any]:
     Returns:
         A dict-like object
     """
-    argnames = argname("args")
+    argnames: Tuple[str, ...] = argname("args")  # type: ignore
     out = dict(zip(argnames, args))
     out.update(kwargs)
     return out
