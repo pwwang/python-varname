@@ -12,6 +12,9 @@ readme = "README.md"
 homepage = "https://github.com/pwwang/python-varname"
 repository = "https://github.com/pwwang/python-varname"
 
+[tool.poetry.build]
+generate-setup-file = true
+
 [tool.poetry.dependencies]
 python = "^3.8"
 executing = "^1.2"

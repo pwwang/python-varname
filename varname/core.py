@@ -218,7 +218,12 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
 
 
 @overload
-def nameof(var: Any, *, frame: int = 1, vars_only: bool = True) -> str:
+def nameof(
+    var: Any,
+    *,
+    frame: int = 1,
+    vars_only: bool = True,
+) -> str:  # pragma: no cover
     ...
 
 
@@ -230,7 +235,7 @@ def nameof(
     *more_vars: Any,
     frame: int = 1,
     vars_only: bool = True,
-) -> Tuple[str, ...]:
+) -> Tuple[str, ...]:  # pragma: no cover
     ...
 
 
@@ -344,7 +349,7 @@ def argname(
     frame: int = 1,
     ignore: IgnoreType = None,
     vars_only: bool = True,
-) -> ArgSourceType:
+) -> ArgSourceType:  # pragma: no cover
     ...
 
 
@@ -359,7 +364,7 @@ def argname(
     frame: int = 1,
     ignore: IgnoreType = None,
     vars_only: bool = True,
-) -> Tuple[ArgSourceType, ...]:
+) -> Tuple[ArgSourceType, ...]:  # pragma: no cover
     ...
 
 

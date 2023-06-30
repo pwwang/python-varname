@@ -72,6 +72,18 @@ def test_register_to_class():
     assert foo == "foo"
 
 
+def test_jsobj():
+    obj = jsobj(a=1, b=2)
+    assert obj == {"a": 1, "b": 2}
+    assert obj['a'] == 1
+    assert obj['b'] == 2
+
+    a = 1
+    b = 2
+    obj = jsobj(a, b, c=3)
+    assert obj == {"a": 1, "b": 2, "c": 3}
+
+
 def test_register_to_function():
     @register
     def func():

@@ -29,6 +29,7 @@ Note if you use `python < 3.8`, install `varname < 0.11`
 
   - A value wrapper to store the variable name that a value is assigned to, using `Wrapper`
   - A decorator to register `__varname__` to functions/classes, using `register`
+  - A helper function to create dict without explicitly specifying the key-value pairs, using `jsobj`
   - A `debug` function to print variables with their names and values
 
 ## Credits
@@ -340,6 +341,17 @@ def values_to_dict(*args):
 
 mydict = values_to_dict(foo, bar)
 # {mydict}
+```
+
+### Creating dictionary using `jsobj`
+
+```python
+from varname.helpers import jsobj
+
+a = 1
+b = 2
+jsobj(a, b) # {_expr!r}
+jsobj(a, b, c=3) # {_expr!r}
 ```
 
 ### Debugging with `debug`

@@ -1,7 +1,7 @@
 """Some helper functions builtin based upon core features"""
 import inspect
 from functools import partial, wraps
-from typing import Any, Callable, Type, Union
+from typing import Any, Callable, Mapping, Type, Union
 
 from .utils import IgnoreType
 from .core import argname, varname
@@ -147,6 +147,35 @@ class Wrapper:
             f"<{self.__class__.__name__} "
             f"(name={self.name!r}, value={self.value!r})>"
         )
+
+
+def jsobj(*args, **kwargs) -> Mapping[str, Any]:
+    """A wrapper to create a JavaScript-like object
+
+    When an argument is passed as positional argument, the name of the variable
+    will be used as the key, while the value will be used as the value.
+
+    Examples:
+        >>> obj = jsobj(a=1, b=2)
+        >>> # obj == {'a': 1, 'b': 2}
+        >>> # obj.a == 1
+        >>> # obj.b == 2
+        >>> a = 1
+        >>> b = 2
+        >>> obj = jsobj(a, b, c=3)
+        >>> # obj == {'a': 1, 'b': 2, 'c': 3}
+
+    Args:
+        *args: The positional arguments
+        **kwargs: The keyword arguments
+
+    Returns:
+        A dict-like object
+    """
+    argnames = argname("args")
+    out = dict(zip(argnames, args))
+    out.update(kwargs)
+    return out
 
 
 def debug(
