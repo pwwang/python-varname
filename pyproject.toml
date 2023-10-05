@@ -17,7 +17,7 @@ generate-setup-file = true
 
 [tool.poetry.dependencies]
 python = "^3.8"
-executing = "^1.2"
+executing = "^2.0"
 asttokens = { version = "2.*", optional = true }
 pure_eval = { version = "0.*", optional = true }
 
