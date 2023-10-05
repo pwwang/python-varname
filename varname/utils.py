@@ -626,6 +626,6 @@ def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
 
     return (
         f"{msg}\n\n"
-        f"  {filename}:{lineno+1}:{col_offset+1}\n"
+        f"  {filename}:{lineno+1}:{col_offset + 1}\n"
         f"{''.join(codes)}\n"
     )
