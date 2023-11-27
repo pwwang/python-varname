@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.12.1
+
+- Bump executing to 2.0.1
+
+## v0.12.0
+
+- Support python 3.12
+- Update python3.12 to CI
+- Bump executing to ^2.0
+- Bump up other dependencies
+- Add Dockerfile for codesandbox
+
 ## v0.11.2
 
 - ✨ Add `jsobj` to create dict without explicitly specifying the key-value pairs
