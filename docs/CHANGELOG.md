@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.12.2
+
+- Add `helpers.exec_code` function to replace `exec` so that source code available at runtime
+
 ## 0.12.1
 
 - Bump executing to 2.0.1

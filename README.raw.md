@@ -31,6 +31,7 @@ Note if you use `python < 3.8`, install `varname < 0.11`
   - A decorator to register `__varname__` to functions/classes, using `register`
   - A helper function to create dict without explicitly specifying the key-value pairs, using `jsobj`
   - A `debug` function to print variables with their names and values
+  - `exec_code` to replace `exec` where source code is available at runtime
 
 ## Credits
 
@@ -319,7 +320,7 @@ func4(y, x, c=z) # prints: {_out}
 # __getattr__/__getitem__/__setattr/__setitem__/__add__/__lt__, etc.
 class Foo:
     def __setattr__(self, name, value):
-        print(argname("name", "value"))
+        print(argname("name", "value", func=self.__setattr__))
 
 Foo().a = 1 # prints: {_out}
 ```
@@ -376,6 +377,26 @@ debug(a+a)
 # {_out!r}
 # If you want to disable it:
 debug(a+a, vars_only=True) # {_exc}
+```
+
+### Replacing `exec` with `exec_code`
+
+```python
+from varname import argname
+from varname.helpers import exec_code
+
+class Obj:
+    def __init__(self):
+        self.argnames = []
+
+    def receive(self, arg):
+        self.argnames.append(argname('arg', func=self.receive))
+
+obj = Obj()
+# exec('obj.receive(1)')  # Error
+exec_code('obj.receive(1)')
+exec_code('obj.receive(2)')
+obj.argnames # ['1', '2']
 ```
 
 ## Reliability and limitations

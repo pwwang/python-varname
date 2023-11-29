@@ -1,8 +1,9 @@
 import sys
 
 import pytest
-from varname import *
-from varname.helpers import *
+from varname import varname
+from varname.utils import MaybeDecoratedFunctionWarning, VarnameRetrievingError
+from varname.helpers import Wrapper, debug, jsobj, register, exec_code
 
 
 def test_wrapper():
@@ -87,7 +88,7 @@ def test_jsobj():
 def test_register_to_function():
     @register
     def func():
-        return __varname__
+        return __varname__  # noqa # pyright: ignore
 
     f = func()
     assert f == "f"
@@ -95,7 +96,7 @@ def test_register_to_function():
     # wrapped with other function
     @register(frame=2)
     def func1():
-        return __varname__
+        return __varname__  # noqa # pyright: ignore
 
     def func2():
         return func1()
@@ -109,7 +110,31 @@ def test_register_to_function():
 
     @register(ignore=[(sys.modules[__name__], func3.__qualname__)])
     def func4():
-        return __varname__
+        return __varname__  # noqa # pyright: ignore
 
     f = func3()
     assert f == "f"
+
+
+def test_exec_code(tmp_path):
+    def func():
+        return varname()
+
+    # Normal case works
+    f = func()
+    assert f == "f"
+
+    code = "f1 = func()"
+    with pytest.raises(VarnameRetrievingError):
+        exec(code)
+
+    # works
+    exec_code(code)
+
+    locs = {"func": func}
+    exec_code(code, globals(), locs)
+    assert locs["f1"] == "f1"
+    del locs["f1"]
+
+    exec_code(code, globals(), locs, sourcefile=tmp_path / "test.py")
+    assert locs["f1"] == "f1"
