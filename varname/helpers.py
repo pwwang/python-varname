@@ -1,9 +1,11 @@
 """Some helper functions builtin based upon core features"""
 import inspect
 from functools import partial, wraps
+from os import PathLike
 from typing import Any, Callable, Dict, Tuple, Type, Union
 
 from .utils import IgnoreType
+from .ignore import IgnoreList
 from .core import argname, varname
 
 
@@ -220,3 +222,73 @@ def debug(
     else:
         for name_and_value in name_and_values:
             print(f"{prefix}{name_and_value}")
+
+
+def exec_code(
+    code: str,
+    globals: Dict[str, Any] = None,
+    locals: Dict[str, Any] = None,
+    /,
+    sourcefile: PathLike = None,
+    frame: int = 1,
+    ignore: IgnoreType = None,
+    **kwargs: Any,
+) -> None:
+    """Execute code where source code is visible at runtime.
+
+    This function is useful when you want to execute some code, where you want to
+    retrieve the AST node of the code at runtime. This function will create a
+    temporary file and write the code into it, then execute the code in the
+    file.
+
+    Examples:
+        >>> from varname import varname
+        >>> def func(): return varname()
+        >>> exec('var = func()')  # VarnameRetrievingError:
+        >>>                       #  Unable to retrieve the ast node.
+        >>> from varname.helpers import code_exec
+        >>> code_exec('var = func()')  # var == 'var'
+
+    Args:
+        code: The code to execute.
+        globals: The globals to use.
+        locals: The locals to use.
+        sourcefile: The source file to write the code into.
+            if not given, a temporary file will be used.
+            This file will be deleted after the code is executed.
+        frame: The call stack index. You can understand this as the number of wrappers
+            around this function. This is used to fetch `globals` and `locals` from
+            where the destination function (include the wrappers of this function)
+            is called.
+        ignore: The intermediate calls to be ignored. See `varname.ignore`
+            Note that if both `globals` and `locals` are given, `frame` and `ignore`
+            will be ignored.
+        **kwargs: The keyword arguments to pass to `exec`.
+    """
+    if sourcefile is None:
+        import tempfile
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False
+        ) as f:
+            f.write(code)
+            sourcefile = f.name
+    else:
+        sourcefile = str(sourcefile)
+        with open(sourcefile, "w") as f:
+            f.write(code)
+
+    if globals is None or locals is None:
+        ignore_list = IgnoreList.create(ignore)
+        frame_info = ignore_list.get_frame(frame)
+        if globals is None:
+            globals = frame_info.f_globals
+        if locals is None:
+            locals = frame_info.f_locals
+
+    try:
+        exec(compile(code, sourcefile, "exec"), globals, locals, **kwargs)
+    finally:
+        import os
+
+        os.remove(sourcefile)
