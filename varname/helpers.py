@@ -229,7 +229,7 @@ def exec_code(
     globals: Dict[str, Any] = None,
     locals: Dict[str, Any] = None,
     /,
-    sourcefile: PathLike = None,
+    sourcefile: PathLike | str = None,
     frame: int = 1,
     ignore: IgnoreType = None,
     **kwargs: Any,
