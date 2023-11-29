@@ -258,13 +258,14 @@ def exec_code(
         sourcefile: The source file to write the code into.
             if not given, a temporary file will be used.
             This file will be deleted after the code is executed.
-        frame: The call stack index. You can understand this as the number of wrappers
-            around this function. This is used to fetch `globals` and `locals` from
-            where the destination function (include the wrappers of this function)
+        frame: The call stack index. You can understand this as the number of
+            wrappers around this function. This is used to fetch `globals` and
+            `locals` from where the destination function (include the wrappers
+            of this function)
             is called.
         ignore: The intermediate calls to be ignored. See `varname.ignore`
-            Note that if both `globals` and `locals` are given, `frame` and `ignore`
-            will be ignored.
+            Note that if both `globals` and `locals` are given, `frame` and
+            `ignore` will be ignored.
         **kwargs: The keyword arguments to pass to `exec`.
     """
     if sourcefile is None:
