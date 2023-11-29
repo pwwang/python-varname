@@ -398,10 +398,10 @@ class Obj:
         self.argnames.append(argname('arg', func=self.receive))
 
 obj = Obj()
-# exec('obj.receive(1)')  # VarnameRetrievingError
+# exec('obj.receive(1)')  # Error
 exec_code('obj.receive(1)')
 exec_code('obj.receive(2)')
-obj.argnames #
+obj.argnames # ['1', '2']
 ```
 
 ## Reliability and limitations
