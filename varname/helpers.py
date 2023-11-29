@@ -1,4 +1,6 @@
 """Some helper functions builtin based upon core features"""
+from __future__ import annotations
+
 import inspect
 from functools import partial, wraps
 from os import PathLike
