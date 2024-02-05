@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.13.0
+
+- style: change max line length to 88
+- style: clean up test code styles
+- feat: support subscript node for varname (#104)
+- ci: remove python3.8 from CI
+- breaking!: `varname` of `a.b` now returns `"a.b"` instead of `"a"`
+
 ## 0.12.2
 
 - Add `helpers.exec_code` function to replace `exec` so that source code available at runtime

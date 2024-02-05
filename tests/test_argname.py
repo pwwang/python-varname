@@ -2,7 +2,12 @@ import textwrap
 from functools import singledispatch
 
 import pytest
-from varname import *
+from varname import (
+    argname,
+    UsingExecWarning,
+    ImproperUseError,
+    VarnameRetrievingError,
+)
 
 
 def test_argname():
@@ -72,7 +77,7 @@ def test_argname_no_pure_eval(no_pure_eval):
 
 
 def test_argname_non_argument():
-    x = 1
+    x = 1  # noqa F841
     y = lambda: argname("x")
     with pytest.raises(ImproperUseError, match="'x' is not a valid argument"):
         y()
@@ -96,7 +101,7 @@ def test_argname_argname_argument_non_variable():
 
 
 def test_argname_funcnode_not_call():
-    x = 1
+    x = 1  # noqa F841
 
     class Foo:
 
@@ -194,7 +199,7 @@ def test_argname_star_args_individual():
 
 def test_argname_argname_node_na():
     source = textwrap.dedent(
-        f"""\
+        """\
         from varname import argname
         def func(a):
             return argname(a)
@@ -218,17 +223,6 @@ def test_argname_func_node_na():
     with pytest.raises(
         VarnameRetrievingError,
         match="Cannot retrieve the node where the function is called",
-    ):
-        exec("x=1; func(x)")
-
-
-def test_argname_func_na():
-    def func(a):
-        return argname("a")
-
-    with pytest.raises(
-        VarnameRetrievingError,
-        match="The source code of 'argname' calling is not available",
     ):
         exec("x=1; func(x)")
 
@@ -264,7 +258,7 @@ def test_argname_varpos_arg():
 
 def test_argname_nosuch_varpos_arg():
     def func(a, *args):
-        another = []
+        another = []  # noqa F841
         return argname("a", "*another")
 
     x = y = 1
@@ -281,36 +275,6 @@ def test_argname_target_arg():
     x = 1
     names = func(x, 1)
     assert names == "x"
-
-
-def test_argname_singledispatched():
-    # GH53
-    @singledispatch
-    def add(a, b):
-        aname = argname("a", "b", func=add.dispatch(object))
-        return aname + (1,)  # distinguish
-
-    @add.register(int)
-    def add_int(a, b):
-        aname = argname("a", "b", func=add_int)
-        return aname + (2,)
-
-    @add.register(str)
-    def add_str(a, b):
-        aname = argname("a", "b", dispatch=str)
-        return aname + (3,)
-
-    x = y = 1
-    out = add(x, y)
-    assert out == ("x", "y", 2)
-
-    t = s = "a"
-    out = add(t, s)
-    assert out == ("t", "s", 3)
-
-    p = q = 1.2
-    out = add(p, q)
-    assert out == ("p", "q", 1)
 
 
 def test_argname_func_na():
@@ -426,7 +390,6 @@ def test_argname_attribute_item():
             self.__dict__["meta"]["name"] = argname("name")
             self.__dict__["meta"]["name2"] = argname("name", vars_only=False)
             self.__dict__["meta"]["value"] = argname("value")
-
 
     a = A()
     out = a.x

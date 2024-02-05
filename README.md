@@ -199,7 +199,7 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     func = function2()  # func == 'func'
 
     a = lambda: 0
-    a.b = function() # a.b == 'b'
+    a.b = function() # a.b == 'a.b'
     ```
 
 ### The decorator way to register `__varname__` to functions/classes
