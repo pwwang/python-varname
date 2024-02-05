@@ -185,7 +185,10 @@ def lookfor_parent_assign(node: ast.AST, strict: bool = True) -> AssignType:
     return None
 
 
-def node_name(node: ast.AST) -> Union[str, Tuple[Union[str, Tuple], ...]]:
+def node_name(
+    node: ast.AST,
+    subscript_slice: bool = False,
+) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     """Get the node node name.
 
     Raises ImproperUseError when failed
@@ -193,15 +196,50 @@ def node_name(node: ast.AST) -> Union[str, Tuple[Union[str, Tuple], ...]]:
     if isinstance(node, ast.Name):
         return node.id
     if isinstance(node, ast.Attribute):
-        return node.attr
-    if isinstance(node, (ast.List, ast.Tuple)):
+        return f"{node_name(node.value)}.{node.attr}"
+    if isinstance(node, ast.Constant):
+        return repr(node.value)
+    if isinstance(node, (ast.List, ast.Tuple)) and not subscript_slice:
         return tuple(node_name(elem) for elem in node.elts)
+    if isinstance(node, ast.List):
+        return f"[{', '.join(node_name(elem) for elem in node.elts)}]"  # type: ignore
+    if isinstance(node, ast.Tuple):
+        if len(node.elts) == 1:
+            return f"({node_name(node.elts[0])},)"
+        return f"({', '.join(node_name(elem) for elem in node.elts)})"  # type: ignore
     if isinstance(node, ast.Starred):
         return f"*{node_name(node.value)}"
+    if isinstance(node, ast.Slice):
+        return (
+            f"{node_name(node.lower)}:{node_name(node.upper)}:{node_name(node.step)}"
+            if node.lower is not None
+            and node.upper is not None
+            and node.step is not None
+            else f"{node_name(node.lower)}:{node_name(node.upper)}"
+            if node.lower is not None and node.upper is not None
+            else f"{node_name(node.lower)}:"
+            if node.lower is not None
+            else f":{node_name(node.upper)}"
+            if node.upper is not None
+            else ":"
+        )
+
+    name = type(node).__name__
+    if isinstance(node, ast.Subscript):
+        try:
+            return f"{node_name(node.value)}[{node_name(node.slice, True)}]"
+        except ImproperUseError:
+            name = f"{node_name(node.value)}[{type(node.slice).__name__}]"
 
     raise ImproperUseError(
-        f"Can only get name of a variable or attribute, "
-        f"not {ast.dump(node)}"
+        f"Node {name!r} detected, but only following nodes are supported: \n"
+        "  - ast.Name (e.g. x)\n"
+        "  - ast.Attribute (e.g. x.y, x be other supported nodes)\n"
+        "  - ast.Constant (e.g. 1, 'a')\n"
+        "  - ast.List (e.g. [x, y, z])\n"
+        "  - ast.Tuple (e.g. (x, y, z))\n"
+        "  - ast.Starred (e.g. *x)\n"
+        "  - ast.Subscript with slice of the above nodes (e.g. x[y])"
     )
 
 
