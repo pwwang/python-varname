@@ -42,6 +42,6 @@ show_error_codes = true
 strict_optional = false
 
 [tool.black]
-line-length = 80
+line-length = 88
 target-version = ['py37', 'py38', 'py39', 'py310']
 include = '\.pyi?$'
