@@ -75,6 +75,12 @@ Thanks goes to these awesome people/projects:
         <br /><sub><b>@LawsOfSympathy</b></sub>
       </a>
     </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/elliotgunton">
+        <img src="https://avatars.githubusercontent.com/u/17798778?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@elliotgunton</b></sub>
+      </a>
+    </td>
   </tr>
 </table>
 
