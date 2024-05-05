@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.13.1
+
+- style: create py.typed for mypy compatibility (#109)
+
 ## 0.13.0
 
 - style: change max line length to 88
