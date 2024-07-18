@@ -98,6 +98,16 @@ def test_jsobj():
     assert obj3 == {"vars_only": 3, "x.b": 2}
 
 
+def test_jsobj_wrapping():
+    def myjsobj(*args, **kwargs):
+        return jsobj(*args, vars_only=False, frame=2, **kwargs)
+
+    x = lambda: None
+    x.b = 2
+    obj = myjsobj(x.b)
+    assert obj == {"x.b": 2}
+
+
 def test_register_to_function():
     @register
     def func():
