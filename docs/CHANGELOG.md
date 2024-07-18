@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.13.2
+
+- deps: bump up pytest to v8
+- feat: support vars_only to keep parents of an attribute for `helpers.jsobj()` (#110)
+
 ## 0.13.1
 
 - style: create py.typed for mypy compatibility (#109)
