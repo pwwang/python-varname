@@ -84,6 +84,19 @@ def test_jsobj():
     obj = jsobj(a, b, c=3)
     assert obj == {"a": 1, "b": 2, "c": 3}
 
+    x = lambda: None
+    x.b = 2
+    obj = jsobj(a, x.b)
+    assert obj == {"a": 1, "b": 2}
+    obj1 = jsobj(a, x.b, vars_only=False)
+    assert obj1 == {"a": 1, "x.b": 2}
+
+    vars_only = 3
+    obj2 = jsobj(vars_only, x.b)
+    assert obj2 == {"vars_only": 3, "b": 2}
+    obj3 = jsobj(vars_only, x.b, vars_only=False)
+    assert obj3 == {"vars_only": 3, "x.b": 2}
+
 
 def test_register_to_function():
     @register

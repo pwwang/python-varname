@@ -153,7 +153,7 @@ class Wrapper:
         )
 
 
-def jsobj(*args: Any, **kwargs: Any) -> Dict[str, Any]:
+def jsobj(*args: Any, vars_only: bool = True, **kwargs: Any) -> Dict[str, Any]:
     """A wrapper to create a JavaScript-like object
 
     When an argument is passed as positional argument, the name of the variable
@@ -172,11 +172,12 @@ def jsobj(*args: Any, **kwargs: Any) -> Dict[str, Any]:
     Args:
         *args: The positional arguments
         **kwargs: The keyword arguments
+        vars_only: Whether to only include variables in the output
 
     Returns:
         A dict-like object
     """
-    argnames: Tuple[str, ...] = argname("args")  # type: ignore
+    argnames: Tuple[str, ...] = argname("args", vars_only=vars_only)  # type: ignore
     out = dict(zip(argnames, args))
     out.update(kwargs)
     return out
