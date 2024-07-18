@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.13.3
+
+- feat: support frame to allow wrapping for `helpers.jsobj()` (#111)
+
 ## 0.13.2
 
 - deps: bump up pytest to v8
