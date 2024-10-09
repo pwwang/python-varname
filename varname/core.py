@@ -291,6 +291,11 @@ def nameof(
         VarnameRetrievingError: When the callee's node cannot be retrieved or
             trying to retrieve the full name of non attribute series calls.
     """
+    warnings.warn(
+        "`nameof` is deprecated and will be removed in the future. "
+        "Please use `argname` instead.",
+        DeprecationWarning,
+    )
     # Frame is anyway used in get_node
     frameobj = IgnoreList.create(
         ignore_lambda=False,
