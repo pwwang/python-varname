@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.13.4
+
+- core: switch to poetry-core (#113)
+- deps: bump up dependencies
+- feat: support python 3.13 (#116)
+- ci: use latest CI actions
+- DEPRECATED: add warning to deprecate nameof in the future
+
 ## 0.13.3
 
 - feat: support frame to allow wrapping for `helpers.jsobj()` (#111)
