@@ -465,7 +465,7 @@ def test_argname_binop():
 
 def test_argname_wrong_frame():
     def func(x):
-        return argname("x", func=property.getter)
+        return argname("x", func=int)
 
     with pytest.raises(
         ImproperUseError,

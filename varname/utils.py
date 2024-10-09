@@ -74,6 +74,7 @@ else:  # pragma: no cover
     ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
     AssignType = Union[ASSIGN_TYPES]  # type: ignore
 
+PY311 = sys.version_info >= (3, 11)
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
 
 
@@ -281,6 +282,7 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
         "CALL_FUNCTION",
         "CALL_METHOD",
         "CALL",
+        "CALL_KW",
     ):
         raise VarnameRetrievingError("Did you call 'nameof' in a weird way?")
 
@@ -290,7 +292,7 @@ def bytecode_nameof(code: CodeType, offset: int) -> str:
         current_instruction_index -= 1
         name_instruction = instructions[current_instruction_index]
 
-    if name_instruction.opname == "KW_NAMES":  # pragma: no cover
+    if name_instruction.opname in ("KW_NAMES", "LOAD_CONST"):  # LOAD_CONST python 3.13
         raise pos_only_error
 
     if not name_instruction.opname.startswith("LOAD_"):
@@ -533,22 +535,38 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
 
     # x[1], x.a
     if isinstance(node.ctx, ast.Load):
-        return ast.Call(
-            func=ast.Attribute(
-                value=node.value,
-                attr=(
-                    "__getitem__"
-                    if isinstance(node, ast.Subscript)
-                    else "__getattr__"
+        if PY311:
+            return ast.Call(
+                func=ast.Attribute(
+                    value=node.value,
+                    attr=(
+                        "__getitem__"
+                        if isinstance(node, ast.Subscript)
+                        else "__getattr__"
+                    ),
+                    ctx=ast.Load(),
+                    **nodemeta,
                 ),
-                ctx=ast.Load(),
-                **nodemeta,
-            ),
-            args=[keynode],
-            keywords=[],
-            starargs=None,
-            kwargs=None,
-        )
+                args=[keynode],
+                keywords=[],
+            )
+        else:
+            return ast.Call(
+                func=ast.Attribute(
+                    value=node.value,
+                    attr=(
+                        "__getitem__"
+                        if isinstance(node, ast.Subscript)
+                        else "__getattr__"
+                    ),
+                    ctx=ast.Load(),
+                    **nodemeta,
+                ),
+                args=[keynode],
+                keywords=[],
+                starargs=None,
+                kwargs=None,
+            )
 
     # x[a] = b, x.a = b
     if (
@@ -564,22 +582,38 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
             )
         )
 
-    return ast.Call(
-        func=ast.Attribute(
-            value=node.value,
-            attr=(
-                "__setitem__"
-                if isinstance(node, ast.Subscript)
-                else "__setattr__"
+    if PY311:
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.value,
+                attr=(
+                    "__setitem__"
+                    if isinstance(node, ast.Subscript)
+                    else "__setattr__"
+                ),
+                ctx=ast.Load(),
+                **nodemeta,
             ),
-            ctx=ast.Load(),
-            **nodemeta,
-        ),
-        args=[keynode, node.parent.value],  # type: ignore
-        keywords=[],
-        starargs=None,
-        kwargs=None,
-    )
+            args=[keynode, node.parent.value],  # type: ignore
+            keywords=[],
+        )
+    else:
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.value,
+                attr=(
+                    "__setitem__"
+                    if isinstance(node, ast.Subscript)
+                    else "__setattr__"
+                ),
+                ctx=ast.Load(),
+                **nodemeta,
+            ),
+            args=[keynode, node.parent.value],  # type: ignore
+            keywords=[],
+            starargs=None,
+            kwargs=None,
+        )
 
 
 @reconstruct_func_node.register(ast.Compare)
@@ -593,18 +627,30 @@ def _(node: ast.Compare) -> ast.Call:
         "lineno": node.lineno,
         "col_offset": node.col_offset,
     }
-    return ast.Call(
-        func=ast.Attribute(
-            value=node.left,
-            attr=CMP2MAGIC[type(node.ops[0])],
-            ctx=ast.Load(),
-            **nodemeta,
-        ),
-        args=[node.comparators[0]],
-        keywords=[],
-        starargs=None,
-        kwargs=None,
-    )
+    if PY311:
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.left,
+                attr=CMP2MAGIC[type(node.ops[0])],
+                ctx=ast.Load(),
+                **nodemeta,
+            ),
+            args=[node.comparators[0]],
+            keywords=[],
+        )
+    else:
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.left,
+                attr=CMP2MAGIC[type(node.ops[0])],
+                ctx=ast.Load(),
+                **nodemeta,
+            ),
+            args=[node.comparators[0]],
+            keywords=[],
+            starargs=None,
+            kwargs=None,
+        )
 
 
 @reconstruct_func_node.register(ast.BinOp)
@@ -614,18 +660,31 @@ def _(node: ast.BinOp) -> ast.Call:
         "lineno": node.lineno,
         "col_offset": node.col_offset,
     }
-    return ast.Call(
-        func=ast.Attribute(
-            value=node.left,
-            attr=OP2MAGIC[type(node.op)],
-            ctx=ast.Load(),
-            **nodemeta,
-        ),
-        args=[node.right],
-        keywords=[],
-        starargs=None,
-        kwargs=None,
-    )
+
+    if PY311:
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.left,
+                attr=OP2MAGIC[type(node.op)],
+                ctx=ast.Load(),
+                **nodemeta,
+            ),
+            args=[node.right],
+            keywords=[],
+        )
+    else:
+        return ast.Call(
+            func=ast.Attribute(
+                value=node.left,
+                attr=OP2MAGIC[type(node.op)],
+                ctx=ast.Load(),
+                **nodemeta,
+            ),
+            args=[node.right],
+            keywords=[],
+            starargs=None,
+            kwargs=None,
+        )
 
 
 def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
