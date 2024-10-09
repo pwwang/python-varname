@@ -551,7 +551,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
                 keywords=[],
             )
         else:
-            return ast.Call(
+            return ast.Call(  # type: ignore
                 func=ast.Attribute(
                     value=node.value,
                     attr=(
@@ -639,7 +639,7 @@ def _(node: ast.Compare) -> ast.Call:
             keywords=[],
         )
     else:
-        return ast.Call(
+        return ast.Call(  # type: ignore
             func=ast.Attribute(
                 value=node.left,
                 attr=CMP2MAGIC[type(node.ops[0])],
@@ -673,7 +673,7 @@ def _(node: ast.BinOp) -> ast.Call:
             keywords=[],
         )
     else:
-        return ast.Call(
+        return ast.Call(  # type: ignore
             func=ast.Attribute(
                 value=node.left,
                 attr=OP2MAGIC[type(node.op)],
