@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.13.5
+
+- deps: bump up executing to ^2.1 to fix issues with python3.13
+
 ## 0.13.4
 
 - core: switch to poetry-core (#113)
