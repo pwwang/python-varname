@@ -263,4 +263,4 @@ all = ["asttokens", "pure_eval"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "802782e44d3ec0865daba7729a76fcb27fd22dbac9df72a9fc58939ac4194ca5"
+content-hash = "06517121a978512b23877424a185aa6478cdd1493ab4ea700318326289dcd935"
