@@ -5,10 +5,11 @@ import asyncio
 from functools import wraps
 
 from varname import core
-from varname.ignore import IgnoreList
+# from varname.ignore import IgnoreList
 
 import pytest
 from varname import config, ignore
+
 
 @pytest.fixture
 def no_getframe():
@@ -26,6 +27,7 @@ def no_getframe():
     finally:
         sys._getframe = orig_getframe
 
+
 @pytest.fixture
 def no_get_node_by_frame():
     """
@@ -42,6 +44,7 @@ def no_get_node_by_frame():
     finally:
         core.get_node_by_frame = orig_get_node_by_frame
 
+
 @pytest.fixture
 def no_pure_eval():
     sys.modules['pure_eval'] = None
@@ -49,6 +52,7 @@ def no_pure_eval():
         yield
     finally:
         del sys.modules['pure_eval']
+
 
 @pytest.fixture
 def enable_debug():
@@ -58,6 +62,7 @@ def enable_debug():
     finally:
         config.debug = False
 
+
 @pytest.fixture
 def frame_matches_module_by_ignore_id_false():
     orig_frame_matches_module_by_ignore_id = ignore.frame_matches_module_by_ignore_id
@@ -66,6 +71,7 @@ def frame_matches_module_by_ignore_id_false():
         yield
     finally:
         ignore.frame_matches_module_by_ignore_id = orig_frame_matches_module_by_ignore_id
+
 
 def run_async(coro):
     if sys.version_info < (3, 7):
@@ -92,11 +98,13 @@ def module_from_source(name, source, tmp_path):
     spec.loader.exec_module(module)
     return module
 
+
 def decor(func):
     """Decorator just for test purpose"""
     def wrapper(*args, **kwargs):
         return func(*args, **kwargs)
     return wrapper
+
 
 def decor_wraps(func):
     @wraps(func)
