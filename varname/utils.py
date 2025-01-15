@@ -10,7 +10,6 @@ Attributes:
         `inspect.getmodule(frame)`
 """
 import sys
-import dis
 import ast
 import warnings
 import inspect
@@ -18,7 +17,7 @@ from os import path
 from pathlib import Path
 from functools import lru_cache, singledispatch
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Tuple, Union, List, Mapping, Callable, Dict
+from typing import Tuple, Union, List, Mapping, Callable
 
 from executing import Source
 
@@ -163,11 +162,11 @@ def get_node_by_frame(frame: FrameType, raise_exc: bool = True) -> ast.AST:
         exect.node.__frame__ = frame
         return exect.node
 
-    if exect.source.text and exect.source.tree and raise_exc:
+    if exect.source.text and exect.source.tree and raise_exc:  # pragma: no cover
         raise VarnameRetrievingError(
             "Couldn't retrieve the call node. "
             "This may happen if you're using some other AST magic at the "
-            "same time, such as pytest, ipython, macropy, or birdseye."
+            "same time, such as pytest, macropy, or birdseye."
         )
 
     return None
@@ -242,71 +241,6 @@ def node_name(
         "  - ast.Starred (e.g. *x)\n"
         "  - ast.Subscript with slice of the above nodes (e.g. x[y])"
     )
-
-
-@lru_cache()
-def bytecode_nameof(code: CodeType, offset: int) -> str:
-    """Cached Bytecode version of nameof
-
-    We are trying this version only when the sourcecode is unavisible. In most
-    cases, this will happen when user is trying to run a script in REPL/
-    python shell, with `eval`, or other circumstances where the code is
-    manipulated to run but sourcecode is not available.
-    """
-    kwargs: Dict[str, bool] = (
-        {"show_caches": True} if sys.version_info[:2] >= (3, 11) else {}
-    )
-
-    instructions = list(dis.get_instructions(code, **kwargs))
-    ((current_instruction_index, current_instruction),) = (
-        (index, instruction)
-        for index, instruction in enumerate(instructions)
-        if instruction.offset == offset
-    )
-
-    while current_instruction.opname == "CACHE":  # pragma: no cover
-        current_instruction_index -= 1
-        current_instruction = instructions[current_instruction_index]
-
-    pos_only_error = VarnameRetrievingError(
-        "'nameof' can only be called with a single positional argument "
-        "when source code is not avaiable."
-    )
-    if current_instruction.opname in (  # pragma: no cover
-        "CALL_FUNCTION_EX",
-        "CALL_FUNCTION_KW",
-    ):
-        raise pos_only_error
-
-    if current_instruction.opname not in (
-        "CALL_FUNCTION",
-        "CALL_METHOD",
-        "CALL",
-        "CALL_KW",
-    ):
-        raise VarnameRetrievingError("Did you call 'nameof' in a weird way?")
-
-    current_instruction_index -= 1
-    name_instruction = instructions[current_instruction_index]
-    while name_instruction.opname in ("CACHE", "PRECALL"):  # pragma: no cover
-        current_instruction_index -= 1
-        name_instruction = instructions[current_instruction_index]
-
-    if name_instruction.opname in ("KW_NAMES", "LOAD_CONST"):  # LOAD_CONST python 3.13
-        raise pos_only_error
-
-    if not name_instruction.opname.startswith("LOAD_"):
-        raise VarnameRetrievingError("Argument must be a variable or attribute")
-
-    name = name_instruction.argrepr
-    if not name.isidentifier():
-        raise VarnameRetrievingError(
-            f"Found the variable name {name!r} which is obviously wrong. "
-            "This may happen if you're using some other AST magic at the "
-            "same time, such as pytest, ipython, macropy, or birdseye."
-        )
-
-    return name
 
 
 def attach_ignore_id_to_module(module: ModuleType) -> None:
@@ -550,7 +484,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
                 args=[keynode],
                 keywords=[],
             )
-        else:
+        else:  # pragma: no cover
             return ast.Call(  # type: ignore
                 func=ast.Attribute(
                     value=node.value,
@@ -597,7 +531,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
             args=[keynode, node.parent.value],  # type: ignore
             keywords=[],
         )
-    else:
+    else:  # pragma: no cover
         return ast.Call(
             func=ast.Attribute(
                 value=node.value,
@@ -638,7 +572,7 @@ def _(node: ast.Compare) -> ast.Call:
             args=[node.comparators[0]],
             keywords=[],
         )
-    else:
+    else:  # pragma: no cover
         return ast.Call(  # type: ignore
             func=ast.Attribute(
                 value=node.left,
@@ -672,7 +606,7 @@ def _(node: ast.BinOp) -> ast.Call:
             args=[node.right],
             keywords=[],
         )
-    else:
+    else:  # pragma: no cover
         return ast.Call(  # type: ignore
             func=ast.Attribute(
                 value=node.left,
