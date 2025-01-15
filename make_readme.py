@@ -220,7 +220,7 @@ class CodeBlock:
         line = line.rstrip()
         if line == f"{self.indent}{self.backticks}":
             self.alive = False
-            if self.codes:
+            if self.codes and "{" in self.codes and "}" in self.codes:
                 self.compile_exec(self.codes)
                 self.codes = ""
             return True

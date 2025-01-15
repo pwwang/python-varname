@@ -21,7 +21,6 @@ Note if you use `python < 3.8`, install `varname < 0.11`
 - Core features:
 
   - Retrieving names of variables a function/class call is assigned to from inside it, using `varname`.
-  - Retrieving variable names directly, using `nameof`
   - Detecting next immediate attribute name, using `will`
   - Fetching argument names/sources passed to a function using `argname`
 
@@ -245,31 +244,6 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     # foo.__varname__ == 'foo'
     ```
 
-### Getting variable names directly using `nameof`
-
-```python
-from varname import varname, nameof
-
-a = 1
-nameof(a) # 'a'
-
-b = 2
-nameof(a, b) # ('a', 'b')
-
-def func():
-    return varname() + '_suffix'
-
-f = func() # f == 'f_suffix'
-nameof(f)  # 'f'
-
-# get full names of (chained) attribute calls
-func.a = func
-nameof(func.a, vars_only=False) # 'func.a'
-
-func.a.b = 1
-nameof(func.a.b, vars_only=False) # 'func.a.b'
-```
-
 ### Detecting next immediate attribute name
 
 ```python
@@ -415,22 +389,27 @@ obj.argnames # ['1', '2']
 `varname` is all depending on `executing` package to look for the node.
 The node `executing` detects is ensured to be the correct one (see [this][19]).
 
-It partially works with environments where other AST magics apply, including
-`pytest`, `ipython`, `macropy`, `birdseye`, `reticulate` with `R`, etc. Neither
+It partially works with environments where other AST magics apply, including [`exec`][24] function,
+[`macropy`][21], [`birdseye`][22], [`reticulate`][23] with `R`, etc. Neither
 `executing` nor `varname` is 100% working with those environments. Use
 it at your own risk.
 
 For example:
 
-- This will not work with `pytest`:
+- This will not work:
 
   ```python
-  a = 1
-  assert nameof(a) == 'a' # pytest manipulated the ast here
+  from varname import argname
 
-  # do this instead
-  name_a = nameof(a)
-  assert name_a == 'a'
+  def getname(x):
+      print(argname("x"))
+
+  a = 1
+  exec("getname(a)")  # Cannot retrieve the node where the function is called.
+
+  ## instead
+  # from varname.helpers import exec_code
+  # exec_code("getname(a)")
   ```
 
 [1]: https://github.com/pwwang/python-varname
@@ -452,3 +431,7 @@ For example:
 [17]: https://img.shields.io/pypi/dm/varname?style=flat-square
 [19]: https://github.com/alexmojaki/executing#is-it-reliable
 [20]: https://stackoverflow.com/a/59364138/5088165
+[21]: https://github.com/lihaoyi/macropy
+[22]: https://github.com/alexmojaki/birdseye
+[23]: https://rstudio.github.io/reticulate/
+[24]: https://docs.python.org/3/library/functions.html#exec
