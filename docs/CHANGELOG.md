@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.14.0
+
+- BREAKING CHANGE: deprecate nameof (see https://github.com/pwwang/python-varname/issues/117#issuecomment-2558358294)
+- docs: remove deprecated nameof examples from README
+- chore(deps): update asttokens to version 3.0.0 and adjust dependencies
+- style: clean up unused imports and add spacing for readability for test files
+- ci: update build workflow to use Ubuntu 24.04 and adjust Python version conditions
+- chore(deps): add ipykernel dev dependency version 6.29.5 to run playground notebook
+- chore(deps): update content-hash in poetry.lock after dependency changes
+
 ## 0.13.5
 
 - deps: bump up executing to ^2.1 to fix issues with python3.13
