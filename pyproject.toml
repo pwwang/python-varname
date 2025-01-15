@@ -25,6 +25,7 @@ pure_eval = { version = "0.*", optional = true }
 pytest = "^8"
 pytest-cov = "^5"
 coverage = { version = "^7", extras = ["toml"] }
+ipykernel = "^6.29.5"
 
 [tool.poetry.extras]
 all = ["asttokens", "pure_eval"]
