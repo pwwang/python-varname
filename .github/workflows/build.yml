@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: [3.9, "3.10", 3.11, 3.12, 3.13]
@@ -46,7 +46,7 @@ jobs:
         run: |
           export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }}
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r .coverage.xml
-        if: matrix.python-version == '3.10' && github.event_name != 'pull_request'
+        if: matrix.python-version == '3.12' && github.event_name != 'pull_request'
 
   deploy:
     needs: build
@@ -54,7 +54,7 @@ jobs:
     if: github.event_name == 'release'
     strategy:
       matrix:
-        python-version: ["3.10"]
+        python-version: ["3.12"]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python # Set Python version
