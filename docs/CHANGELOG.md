@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.15.0
+
+- revert: bring nameof back (#117)
+
 ## 0.14.0
 
 - BREAKING CHANGE: deprecate nameof (see https://github.com/pwwang/python-varname/issues/117#issuecomment-2558358294)
