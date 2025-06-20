@@ -1,0 +1,3364 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../varname.core/">
+      
+      
+        <link rel="next" href="../varname.helpers/">
+      
+      
+      <link rel="icon" href="../../favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>varname.ignore - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnameignore" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="varname" class="md-header__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              varname.ignore
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="varname" class="md-nav__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            varname
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname.core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnameignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      ignore
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ignore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelem" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreElem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreElem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodule" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreModule
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreModule">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodulematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilename" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreFilename
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreFilename">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilenamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredirname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreDirname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreDirname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredirnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorestdlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreStdlib
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreStdlib">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorestdlibmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreFunction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreFunction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefunctionmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredecorated" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreDecorated
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreDecorated">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredecoratedmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodulequalname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreModuleQualname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreModuleQualname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodulequalnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilenamequalname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreFilenameQualname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreFilenameQualname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilenamequalnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreonlyqualname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreOnlyQualname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreOnlyQualname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreonlyqualnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignorecreate_ignore_elem" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_ignore_elem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelist" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreList
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelistcreate" class="md-nav__link">
+    <span class="md-ellipsis">
+      create
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelistnextframe_to_check" class="md-nav__link">
+    <span class="md-ellipsis">
+      nextframe_to_check
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelistget_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname.helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.helpers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname.utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Change Log
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnameignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      ignore
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ignore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelem" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreElem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreElem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodule" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreModule
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreModule">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodulematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilename" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreFilename
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreFilename">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilenamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredirname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreDirname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreDirname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredirnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorestdlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreStdlib
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreStdlib">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorestdlibmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefunction" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreFunction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreFunction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefunctionmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredecorated" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreDecorated
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreDecorated">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoredecoratedmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodulequalname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreModuleQualname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreModuleQualname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoremodulequalnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilenamequalname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreFilenameQualname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreFilenameQualname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorefilenamequalnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreonlyqualname" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreOnlyQualname
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreOnlyQualname">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclass_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      init_subclass
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreeleminit_subclasssubclass_init_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      subclass_init
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreelemrepr_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      repr
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignoreonlyqualnamematch" class="md-nav__link">
+    <span class="md-ellipsis">
+      match
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignorecreate_ignore_elem" class="md-nav__link">
+    <span class="md-ellipsis">
+      create_ignore_elem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelist" class="md-nav__link">
+    <span class="md-ellipsis">
+      IgnoreList
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IgnoreList">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelistcreate" class="md-nav__link">
+    <span class="md-ellipsis">
+      create
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelistnextframe_to_check" class="md-nav__link">
+    <span class="md-ellipsis">
+      nextframe_to_check
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameignoreignorelistget_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_frame
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>varname.ignore</h1>
+
+<div class="mkapi-node" id="varname.ignore">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object module plain top">
+    <div class="mkapi-object-kind module top">module</div>
+    <h2 id="varnameignore" class="mkapi-object-body module top"><span class="mkapi-object-prefix"><a href="../varname/#varname">varname</a>.</span><span class="mkapi-object-name">ignore</span></h2>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore" title="Source for varname.ignore">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>The frame ignoring system for varname</p><p>There 4 mechanisms to ignore intermediate frames to determine the desired one
+so that a variable name should be retrieved at that frame.</p>
+<ol>
+<li>Ignore frames by a given module. Any calls inside it and inside its
+   submodules will be ignored. A filename (path) to a module is also acceptable
+   and recommended when code is executed by <code>exec</code> without module available.</li>
+<li>Ignore frames by a given pair of module and a qualified name (qualname).
+   See 1) for acceptable modules. The qualname should be unique in that module.</li>
+<li>Ignore frames by a (non-decorated) function.</li>
+<li>Ignore frames by a decorated function. In this case, you can specified a
+   tuple with the function and the number of decorators of it. The decorators
+   on the wrapper function inside the decorators should also be counted.</li>
+</ol>
+<p>Any frames in <code>varname</code>, standard libraries, and frames of any expressions like
+<lambda> are ignored by default.</p>
+</div>
+    </div>
+  <div class="mkapi-section classes">
+      <div class="mkapi-section-name classes">
+          <span class="mkapi-section-name-body classes">Classes</span> 
+        </div>
+      <div class="mkapi-section-body classes"><ul class="mkapi-items">
+<li class="abstract-class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem">IgnoreElem</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">An element of the ignore list<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem" title="Source for varname.ignore.IgnoreElem">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreModule">IgnoreModule</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore calls from a module or its submodules<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModule" title="Source for varname.ignore.IgnoreModule">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreFilename">IgnoreFilename</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore calls from a module by matching its filename<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilename" title="Source for varname.ignore.IgnoreFilename">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreDirname">IgnoreDirname</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore calls from modules inside a directory<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDirname" title="Source for varname.ignore.IgnoreDirname">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreStdlib">IgnoreStdlib</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore standard libraries in sysconfig.get_python_lib(standard_lib=True)<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreStdlib" title="Source for varname.ignore.IgnoreStdlib">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreFunction">IgnoreFunction</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore a non-decorated function<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFunction" title="Source for varname.ignore.IgnoreFunction">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreDecorated">IgnoreDecorated</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore a decorated function<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDecorated" title="Source for varname.ignore.IgnoreDecorated">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreModuleQualname">IgnoreModuleQualname</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore calls by qualified name in the module<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModuleQualname" title="Source for varname.ignore.IgnoreModuleQualname">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreFilenameQualname">IgnoreFilenameQualname</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore calls with given qualname in the module with the filename<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilenameQualname" title="Source for varname.ignore.IgnoreFilenameQualname">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreOnlyQualname">IgnoreOnlyQualname</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Ignore calls that match the given qualname, across all frames.<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreOnlyQualname" title="Source for varname.ignore.IgnoreOnlyQualname">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreList">IgnoreList</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The ignore list to match the frames to see if they should be ignored<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList" title="Source for varname.ignore.IgnoreList">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section functions">
+      <div class="mkapi-section-name functions">
+          <span class="mkapi-section-name-body functions">Functions</span> 
+        </div>
+      <div class="mkapi-section-body functions"><ul class="mkapi-items">
+<li class="function"><code class="mkapi-item-name"><a href="#varname.ignore.create_ignore_elem">create_ignore_elem</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ignore_elem</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(<a href="./#varname.ignore.IgnoreElem">IgnoreElem</a>)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Create an ignore element according to the type<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.create_ignore_elem" title="Source for varname.ignore.create_ignore_elem">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreElem">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object abstract-class code top">
+    <div class="mkapi-object-kind abstract-class top">abstract class</div>
+    <h3 id="varnameignoreignoreelem" class="mkapi-object-body abstract-class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreElem</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem" title="Source for varname.ignore.IgnoreElem">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>An element of the ignore list</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="abstract-method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.match" title="Source for varname.ignore.IgnoreElem.match">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object abstract-method code">
+    <div class="mkapi-object-kind abstract-method">abstract method</div>
+    <h4 id="varnameignoreignoreelemmatch" class="mkapi-object-body abstract-method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.match" title="Source for varname.ignore.IgnoreElem.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreModule">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignoremodule" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreModule</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModule" title="Source for varname.ignore.IgnoreModule">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore calls from a module or its submodules</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreModule.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModule.match" title="Source for varname.ignore.IgnoreModule.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_1" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_1" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreModule.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoremodulematch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModule.match" title="Source for varname.ignore.IgnoreModule.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreFilename">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignorefilename" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreFilename</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilename" title="Source for varname.ignore.IgnoreFilename">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore calls from a module by matching its filename</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreFilename.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilename.match" title="Source for varname.ignore.IgnoreFilename.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_2" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_1" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_2" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreFilename.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignorefilenamematch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilename.match" title="Source for varname.ignore.IgnoreFilename.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreDirname">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignoredirname" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreDirname</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDirname" title="Source for varname.ignore.IgnoreDirname">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore calls from modules inside a directory</p><p>Currently used internally to ignore calls from standard libraries.</p>
+</div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreDirname.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDirname.match" title="Source for varname.ignore.IgnoreDirname.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_3" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_2" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_3" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreDirname.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoredirnamematch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDirname.match" title="Source for varname.ignore.IgnoreDirname.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreStdlib">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignorestdlib" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreStdlib</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreStdlib" title="Source for varname.ignore.IgnoreStdlib">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreDirname">varname.ignore.IgnoreDirname</a></span>
+
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore standard libraries in sysconfig.get_python_lib(standard_lib=True)</p><p>But we need to ignore 3rd-party packages under site-packages/.</p>
+</div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreStdlib.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreStdlib.match" title="Source for varname.ignore.IgnoreStdlib.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_4" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_3" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_4" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreStdlib.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignorestdlibmatch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreStdlib.match" title="Source for varname.ignore.IgnoreStdlib.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreFunction">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignorefunction" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreFunction</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFunction" title="Source for varname.ignore.IgnoreFunction">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore a non-decorated function</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreFunction.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFunction.match" title="Source for varname.ignore.IgnoreFunction.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_5" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_4" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_5" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreFunction.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignorefunctionmatch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFunction.match" title="Source for varname.ignore.IgnoreFunction.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreDecorated">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignoredecorated" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreDecorated</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDecorated" title="Source for varname.ignore.IgnoreDecorated">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore a decorated function</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreDecorated.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDecorated.match" title="Source for varname.ignore.IgnoreDecorated.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_6" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_5" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_6" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreDecorated.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoredecoratedmatch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreDecorated.match" title="Source for varname.ignore.IgnoreDecorated.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreModuleQualname">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignoremodulequalname" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreModuleQualname</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModuleQualname" title="Source for varname.ignore.IgnoreModuleQualname">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore calls by qualified name in the module</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreModuleQualname.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModuleQualname.match" title="Source for varname.ignore.IgnoreModuleQualname.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_7" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_6" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_7" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreModuleQualname.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoremodulequalnamematch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreModuleQualname.match" title="Source for varname.ignore.IgnoreModuleQualname.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreFilenameQualname">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignorefilenamequalname" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreFilenameQualname</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilenameQualname" title="Source for varname.ignore.IgnoreFilenameQualname">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore calls with given qualname in the module with the filename</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreFilenameQualname.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilenameQualname.match" title="Source for varname.ignore.IgnoreFilenameQualname.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_8" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_7" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_8" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreFilenameQualname.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignorefilenamequalnamematch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreFilenameQualname.match" title="Source for varname.ignore.IgnoreFilenameQualname.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreOnlyQualname">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignoreonlyqualname" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreOnlyQualname</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreOnlyQualname" title="Source for varname.ignore.IgnoreOnlyQualname">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.ignore.IgnoreElem">varname.ignore.IgnoreElem</a></span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Ignore calls that match the given qualname, across all frames.</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__">__init_subclass__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Define different attributes for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__repr__">__repr__</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Representation of the element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreOnlyQualname.match">match</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether the frame matches the ignore element<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreOnlyQualname.match" title="Source for varname.ignore.IgnoreOnlyQualname.match">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">subclass_init</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description"><strong>init</strong> function for subclasses<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.<locals>.subclass_init">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignoreeleminit_subclass_9" class="mkapi-object-body classmethod"><code class="mkapi-object-name">__init_subclass__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">attrs</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__" title="Source for varname.ignore.IgnoreElem.__init_subclass__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Define different attributes for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreeleminit_subclasssubclass_init_8" class="mkapi-object-body method"><code class="mkapi-object-name">subclass_init</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">*ign_args</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init" title="Source for varname.ignore.IgnoreElem.__init_subclass__.&lt;locals&gt;.subclass_init">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p><strong>init</strong> function for subclasses</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreElem.__repr__">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreelemrepr_9" class="mkapi-object-body method"><code class="mkapi-object-name">__repr__</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreElem.__repr__" title="Source for varname.ignore.IgnoreElem.__repr__">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Representation of the element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreOnlyQualname.match">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignoreonlyqualnamematch" class="mkapi-object-body method"><code class="mkapi-object-name">match</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreOnlyQualname.match" title="Source for varname.ignore.IgnoreOnlyQualname.match">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Whether the frame matches the ignore element</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.create_ignore_elem">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameignorecreate_ignore_elem" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">create_ignore_elem</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ignore_elem</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; <a href="./#varname.ignore.IgnoreElem">IgnoreElem</a></span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.create_ignore_elem" title="Source for varname.ignore.create_ignore_elem">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Create an ignore element according to the type</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.ignore.IgnoreList">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameignoreignorelist" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.ignore">varname.ignore</a>.</code><code class="mkapi-object-name">IgnoreList</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ignore_list</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList" title="Source for varname.ignore.IgnoreList">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>The ignore list to match the frames to see if they should be ignored</p></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="classmethod"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreList.create">create</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ignore</code>, <code class="mkapi-object-signature">ignore_lambda</code>, <code class="mkapi-object-signature">ignore_varname</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(<a href="./#varname.ignore.IgnoreList">IgnoreList</a>)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Create an IgnoreList object<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList.create" title="Source for varname.ignore.IgnoreList.create">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreList.get_frame">get_frame</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(frame)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Get the right frame by the frame number<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList.get_frame" title="Source for varname.ignore.IgnoreList.get_frame">&lt;/&gt;</a></span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#varname.ignore.IgnoreList.nextframe_to_check">nextframe_to_check</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Find the next frame to check<a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList.nextframe_to_check" title="Source for varname.ignore.IgnoreList.nextframe_to_check">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreList.create">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object classmethod code">
+    <div class="mkapi-object-kind classmethod">classmethod</div>
+    <h4 id="varnameignoreignorelistcreate" class="mkapi-object-body classmethod"><code class="mkapi-object-name">create</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ignore=None</code>, <code class="mkapi-object-signature">ignore_lambda=True</code>, <code class="mkapi-object-signature">ignore_varname=True</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList.create" title="Source for varname.ignore.IgnoreList.create">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Create an IgnoreList object</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">ignore</code>
+<span class="mkapi-item-type">(Union, optional)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">An element of the ignore list, eitherA module (or filename of a module)
+A tuple of module (or filename) and qualified name
+A function
+A tuple of function and number of decorators
+</span></li>
+
+<li><code class="mkapi-item-name">ignore_lambda</code>
+<span class="mkapi-item-type">(bool, optional)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">whether ignore lambda functions</span></li>
+
+<li><code class="mkapi-item-name">ignore_varname</code>
+<span class="mkapi-item-type">(bool, optional)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">whether the calls from this package</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(<a href="./#varname.ignore.IgnoreList">IgnoreList</a>)</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>The IgnoreList object</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreList.nextframe_to_check">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignorelistnextframe_to_check" class="mkapi-object-body method"><code class="mkapi-object-name">nextframe_to_check</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code>, <code class="mkapi-object-signature">frameinfos</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList.nextframe_to_check" title="Source for varname.ignore.IgnoreList.nextframe_to_check">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Find the next frame to check</p><p>In modst cases, the next frame to check is the next adjacent frame.
+But for IgnoreDecorated, the next frame to check should be the next
+<code>ignore[1]</code>th frame.</p>
+</div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">frame_no</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The index of current frame to check</span></li>
+
+<li><code class="mkapi-item-name">frameinfos</code>
+<span class="mkapi-item-type">(List)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The frame info objects</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(int)</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>A number for Next <code>N</code>th frame to check. 0 if no frame matched.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="varname.ignore.IgnoreList.get_frame">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <h4 id="varnameignoreignorelistget_frame" class="mkapi-object-body method"><code class="mkapi-object-name">get_frame</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame_no</code><code class="mkapi-object-parenthesis">)</code></h4>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.ignore/#varname.ignore.IgnoreList.get_frame" title="Source for varname.ignore.IgnoreList.get_frame">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Get the right frame by the frame number</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">frame_no</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The index of the frame to get</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(frame)</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>The desired frame</p></div>
+    </div>
+  <div class="mkapi-section raises">
+      <div class="mkapi-section-name raises">
+          <span class="mkapi-section-name-body raises">Raises</span> 
+        </div>
+      <div class="mkapi-section-body raises"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">VarnameRetrievingError</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">if any exceptions raised during the process.</span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>

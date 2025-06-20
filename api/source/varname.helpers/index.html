@@ -1,0 +1,898 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>varname.helpers - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../../style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnamehelpers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="varname" class="md-header__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              varname.helpers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="varname" class="md-nav__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            varname
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.ignore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.helpers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Change Log
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnamehelpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      varname.helpers
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="mkapi-node">
+<h1 id="" class="mkapi-object mkapi-object-code plain">
+<span class="mkapi-object-kind mkapi-object-kind-code">SOURCE CODE</span>
+<span class="mkapi-object-prefix">varname.</span><span class="mkapi-object-name">helpers</span>
+<span id="varname.helpers"></span><a class="mkapi-docs-link" href="../../varname.helpers">DOCS</a>
+</h1>
+
+<div class="mkapi-code">
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Some helper functions builtin based upon core features&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathLike</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">IgnoreType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ignore</span><span class="w"> </span><span class="kn">import</span> <span class="n">IgnoreList</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">argname</span><span class="p">,</span> <span class="n">varname</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span id="varname.helpers.register"></span><a class="mkapi-docs-link" title="varname.helpers.register" href="../../varname.helpers/#varname.helpers.register">DOCS</a>
+    <span class="n">cls_or_func</span><span class="p">:</span> <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">multi_vars</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator to register __varname__ to a class or function</span>
+
+<span class="sd">    When registered to a class, it can be accessed by `self.__varname__`;</span>
+<span class="sd">    while to a function, it is registered to globals, meaning that it can be</span>
+<span class="sd">    accessed directly.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame: The call stack index, indicating where this class</span>
+<span class="sd">            is instantiated relative to where the variable is finally retrieved</span>
+<span class="sd">        multi_vars: Whether allow multiple variables on left-hand side (LHS).</span>
+<span class="sd">            If `True`, this function returns a tuple of the variable names,</span>
+<span class="sd">            even there is only one variable on LHS.</span>
+<span class="sd">            If `False`, and multiple variables on LHS, a</span>
+<span class="sd">            `VarnameRetrievingError` will be raised.</span>
+<span class="sd">        raise_exc: Whether we should raise an exception if failed</span>
+<span class="sd">            to retrieve the name.</span>
+<span class="sd">        strict: Whether to only return the variable name if the result of</span>
+<span class="sd">            the call is assigned to it directly.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; @varname.register</span>
+<span class="sd">        &gt;&gt;&gt; class Foo: pass</span>
+<span class="sd">        &gt;&gt;&gt; foo = Foo()</span>
+<span class="sd">        &gt;&gt;&gt; # foo.__varname__ == &#39;foo&#39;</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; @varname.register</span>
+<span class="sd">        &gt;&gt;&gt; def func():</span>
+<span class="sd">        &gt;&gt;&gt;   return __varname__</span>
+<span class="sd">        &gt;&gt;&gt; foo = func() # foo == &#39;foo&#39;</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The wrapper function or the class/function itself</span>
+<span class="sd">        if it is specified explictly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>
+        <span class="n">orig_init</span> <span class="o">=</span> <span class="n">cls_or_func</span><span class="o">.</span><span class="fm">__init__</span>  <span class="c1"># type: ignore</span>
+
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">cls_or_func</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapped_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Wrapped init function to replace the original one&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__varname__</span> <span class="o">=</span> <span class="n">varname</span><span class="p">(</span>
+                <span class="n">frame</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span>
+                <span class="n">multi_vars</span><span class="o">=</span><span class="n">multi_vars</span><span class="p">,</span>
+                <span class="n">raise_exc</span><span class="o">=</span><span class="n">raise_exc</span><span class="p">,</span>
+                <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">orig_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">cls_or_func</span><span class="o">.</span><span class="fm">__init__</span> <span class="o">=</span> <span class="n">wrapped_init</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">cls_or_func</span>
+
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>
+
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;The wrapper to register `__varname__` to a function&quot;&quot;&quot;</span>
+            <span class="n">cls_or_func</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s2">&quot;__varname__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">varname</span><span class="p">(</span>
+                <span class="n">frame</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span>
+                <span class="n">multi_vars</span><span class="o">=</span><span class="n">multi_vars</span><span class="p">,</span>
+                <span class="n">raise_exc</span><span class="o">=</span><span class="n">raise_exc</span><span class="p">,</span>
+                <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">cls_or_func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">cls_or_func</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s2">&quot;__varname__&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="c1"># None, meaning we have other arguments</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span>
+        <span class="n">register</span><span class="p">,</span>
+        <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+        <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span>
+        <span class="n">multi_vars</span><span class="o">=</span><span class="n">multi_vars</span><span class="p">,</span>
+        <span class="n">raise_exc</span><span class="o">=</span><span class="n">raise_exc</span><span class="p">,</span>
+        <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Wrapper</span><span class="p">:</span><span id="varname.helpers.Wrapper"></span><a class="mkapi-docs-link" title="varname.helpers.Wrapper" href="../../varname.helpers/#varname.helpers.Wrapper">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper with ability to retrieve the variable name</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; foo = Wrapper(True)</span>
+<span class="sd">        &gt;&gt;&gt; # foo.name == &#39;foo&#39;</span>
+<span class="sd">        &gt;&gt;&gt; # foo.value == True</span>
+
+<span class="sd">        &gt;&gt;&gt; val = {}</span>
+<span class="sd">        &gt;&gt;&gt; bar = Wrapper(val)</span>
+<span class="sd">        &gt;&gt;&gt; # bar.name == &#39;bar&#39;</span>
+<span class="sd">        &gt;&gt;&gt; # bar.value is val</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value: The value to be wrapped</span>
+<span class="sd">        raise_exc: Whether to raise exception when varname is failed to retrieve</span>
+<span class="sd">        strict: Whether to only return the variable name if the wrapper is</span>
+<span class="sd">            assigned to it directly.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name: The variable name to which the instance is assigned</span>
+<span class="sd">        value: The value this wrapper wraps</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># This call is ignored, since it&#39;s inside varname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">varname</span><span class="p">(</span>
+            <span class="n">frame</span><span class="o">=</span><span class="n">frame</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span>
+            <span class="n">raise_exc</span><span class="o">=</span><span class="n">raise_exc</span><span class="p">,</span>
+            <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">, value=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">!r}</span><span class="s2">)&gt;&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">jsobj</span><span class="p">(</span><span id="varname.helpers.jsobj"></span><a class="mkapi-docs-link" title="varname.helpers.jsobj" href="../../varname.helpers/#varname.helpers.jsobj">DOCS</a>
+    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A wrapper to create a JavaScript-like object</span>
+
+<span class="sd">    When an argument is passed as positional argument, the name of the variable</span>
+<span class="sd">    will be used as the key, while the value will be used as the value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; obj = jsobj(a=1, b=2)</span>
+<span class="sd">        &gt;&gt;&gt; # obj == {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+<span class="sd">        &gt;&gt;&gt; # obj.a == 1</span>
+<span class="sd">        &gt;&gt;&gt; # obj.b == 2</span>
+<span class="sd">        &gt;&gt;&gt; a = 1</span>
+<span class="sd">        &gt;&gt;&gt; b = 2</span>
+<span class="sd">        &gt;&gt;&gt; obj = jsobj(a, b, c=3)</span>
+<span class="sd">        &gt;&gt;&gt; # obj == {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: 3}</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        *args: The positional arguments</span>
+<span class="sd">        vars_only: Whether to only include variables in the output</span>
+<span class="sd">        frame: The call stack index. You can understand this as the number of</span>
+<span class="sd">            wrappers around this function - 1.</span>
+<span class="sd">        **kwargs: The keyword arguments</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dict-like object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">argnames</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">argname</span><span class="p">(</span>
+        <span class="s2">&quot;args&quot;</span><span class="p">,</span>
+        <span class="n">vars_only</span><span class="o">=</span><span class="n">vars_only</span><span class="p">,</span>
+        <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">argnames</span><span class="p">,</span> <span class="n">args</span><span class="p">))</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">debug</span><span class="p">(</span><span id="varname.helpers.debug"></span><a class="mkapi-docs-link" title="varname.helpers.debug" href="../../varname.helpers/#varname.helpers.debug">DOCS</a>
+    <span class="n">var</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">more_vars</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DEBUG: &quot;</span><span class="p">,</span>
+    <span class="n">merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="nb">repr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print variable names and values.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; a = 1</span>
+<span class="sd">        &gt;&gt;&gt; b = object</span>
+<span class="sd">        &gt;&gt;&gt; print(f&#39;a={a}&#39;) # previously, we have to do</span>
+<span class="sd">        &gt;&gt;&gt; print(f&#39;{a=}&#39;)  # or with python3.8</span>
+<span class="sd">        &gt;&gt;&gt; # instead we can do:</span>
+<span class="sd">        &gt;&gt;&gt; debug(a) # DEBUG: a=1</span>
+<span class="sd">        &gt;&gt;&gt; debug(a, prefix=&#39;&#39;) # a=1</span>
+<span class="sd">        &gt;&gt;&gt; debug(a, b, merge=True) # a=1, b=&lt;object object at 0x2b9a4c89cf00&gt;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        var: The variable to print</span>
+<span class="sd">        *more_vars: Other variables to print</span>
+<span class="sd">        prefix: A prefix to print for each line</span>
+<span class="sd">        merge: Whether merge all variables in one line or not</span>
+<span class="sd">        sep: The separator between the variable name and value</span>
+<span class="sd">        repr: Print the value as `repr(var)`? otherwise `str(var)`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">var_names</span> <span class="o">=</span> <span class="n">argname</span><span class="p">(</span><span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="s2">&quot;*more_vars&quot;</span><span class="p">,</span> <span class="n">vars_only</span><span class="o">=</span><span class="n">vars_only</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+
+    <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">*</span><span class="n">more_vars</span><span class="p">)</span>
+    <span class="n">name_and_values</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}{</span><span class="n">sep</span><span class="si">}{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="nb">repr</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var_name</span><span class="si">}{</span><span class="n">sep</span><span class="si">}{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">var_names</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">merge</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name_and_values</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name_and_value</span> <span class="ow">in</span> <span class="n">name_and_values</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">name_and_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">exec_code</span><span class="p">(</span><span id="varname.helpers.exec_code"></span><a class="mkapi-docs-link" title="varname.helpers.exec_code" href="../../varname.helpers/#varname.helpers.exec_code">DOCS</a>
+    <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="nb">globals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="nb">locals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="n">sourcefile</span><span class="p">:</span> <span class="n">PathLike</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute code where source code is visible at runtime.</span>
+
+<span class="sd">    This function is useful when you want to execute some code, where you want to</span>
+<span class="sd">    retrieve the AST node of the code at runtime. This function will create a</span>
+<span class="sd">    temporary file and write the code into it, then execute the code in the</span>
+<span class="sd">    file.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from varname import varname</span>
+<span class="sd">        &gt;&gt;&gt; def func(): return varname()</span>
+<span class="sd">        &gt;&gt;&gt; exec(&#39;var = func()&#39;)  # VarnameRetrievingError:</span>
+<span class="sd">        &gt;&gt;&gt;                       #  Unable to retrieve the ast node.</span>
+<span class="sd">        &gt;&gt;&gt; from varname.helpers import code_exec</span>
+<span class="sd">        &gt;&gt;&gt; code_exec(&#39;var = func()&#39;)  # var == &#39;var&#39;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        code: The code to execute.</span>
+<span class="sd">        globals: The globals to use.</span>
+<span class="sd">        locals: The locals to use.</span>
+<span class="sd">        sourcefile: The source file to write the code into.</span>
+<span class="sd">            if not given, a temporary file will be used.</span>
+<span class="sd">            This file will be deleted after the code is executed.</span>
+<span class="sd">        frame: The call stack index. You can understand this as the number of</span>
+<span class="sd">            wrappers around this function. This is used to fetch `globals` and</span>
+<span class="sd">            `locals` from where the destination function (include the wrappers</span>
+<span class="sd">            of this function)</span>
+<span class="sd">            is called.</span>
+<span class="sd">        ignore: The intermediate calls to be ignored. See `varname.ignore`</span>
+<span class="sd">            Note that if both `globals` and `locals` are given, `frame` and</span>
+<span class="sd">            `ignore` will be ignored.</span>
+<span class="sd">        **kwargs: The keyword arguments to pass to `exec`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sourcefile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.py&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+            <span class="n">sourcefile</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sourcefile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">globals</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ignore_list</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">ignore</span><span class="p">)</span>
+        <span class="n">frame_info</span> <span class="o">=</span> <span class="n">ignore_list</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">globals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">globals</span> <span class="o">=</span> <span class="n">frame_info</span><span class="o">.</span><span class="n">f_globals</span>
+        <span class="k">if</span> <span class="nb">locals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">locals</span> <span class="o">=</span> <span class="n">frame_info</span><span class="o">.</span><span class="n">f_locals</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">sourcefile</span><span class="p">,</span> <span class="s2">&quot;exec&quot;</span><span class="p">),</span> <span class="nb">globals</span><span class="p">,</span> <span class="nb">locals</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">sourcefile</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>

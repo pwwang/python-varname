@@ -1,0 +1,1122 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>varname.core - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../../style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnamecore" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="varname" class="md-header__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              varname.core
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="varname" class="md-nav__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            varname
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.ignore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.helpers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Change Log
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnamecore" class="md-nav__link">
+    <span class="md-ellipsis">
+      varname.core
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="mkapi-node">
+<h1 id="" class="mkapi-object mkapi-object-code plain">
+<span class="mkapi-object-kind mkapi-object-kind-code">SOURCE CODE</span>
+<span class="mkapi-object-prefix">varname.</span><span class="mkapi-object-name">core</span>
+<span id="varname.core"></span><a class="mkapi-docs-link" href="../../varname.core">DOCS</a>
+</h1>
+
+<div class="mkapi-code">
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Provide core features for varname&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">executing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Source</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">bytecode_nameof</span><span class="p">,</span>
+    <span class="n">get_node</span><span class="p">,</span>
+    <span class="n">get_node_by_frame</span><span class="p">,</span>
+    <span class="n">lookfor_parent_assign</span><span class="p">,</span>
+    <span class="n">node_name</span><span class="p">,</span>
+    <span class="n">get_argument_sources</span><span class="p">,</span>
+    <span class="n">get_function_called_argname</span><span class="p">,</span>
+    <span class="n">rich_exc_message</span><span class="p">,</span>
+    <span class="n">reconstruct_func_node</span><span class="p">,</span>
+    <span class="n">ArgSourceType</span><span class="p">,</span>
+    <span class="n">VarnameRetrievingError</span><span class="p">,</span>
+    <span class="n">ImproperUseError</span><span class="p">,</span>
+    <span class="n">MultiTargetAssignmentWarning</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ignore</span><span class="w"> </span><span class="kn">import</span> <span class="n">IgnoreList</span><span class="p">,</span> <span class="n">IgnoreType</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">varname</span><span class="p">(</span><span id="varname.core.varname"></span><a class="mkapi-docs-link" title="varname.core.varname" href="../../varname.core/#varname.core.varname">DOCS</a>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">multi_vars</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the name of the variable(s) that assigned by function call or</span>
+<span class="sd">    class instantiation.</span>
+
+<span class="sd">    To debug and specify the right frame and ignore arguments, you can set</span>
+<span class="sd">    debug on and see how the frames are ignored or selected:</span>
+
+<span class="sd">    &gt;&gt;&gt; from varname import config</span>
+<span class="sd">    &gt;&gt;&gt; config.debug = True</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame: `N`th frame used to retrieve the variable name. This means</span>
+<span class="sd">            `N-1` intermediate frames will be skipped. Note that the frames</span>
+<span class="sd">            match `ignore` will not be counted. See `ignore` for details.</span>
+<span class="sd">        ignore: Frames to be ignored in order to reach the `N`th frame.</span>
+<span class="sd">            These frames will not be counted to skip within that `N-1` frames.</span>
+<span class="sd">            You can specify:</span>
+<span class="sd">            - A module (or filename of a module). Any calls from it and its</span>
+<span class="sd">                submodules will be ignored.</span>
+<span class="sd">            - A function. If it looks like it might be a decorated function,</span>
+<span class="sd">                a `MaybeDecoratedFunctionWarning` will be shown.</span>
+<span class="sd">            - Tuple of a function and a number of additional frames that should</span>
+<span class="sd">                be skipped just before reaching this function in the stack.</span>
+<span class="sd">                This is typically used for functions that have been decorated</span>
+<span class="sd">                with a &#39;classic&#39; decorator that replaces the function with</span>
+<span class="sd">                a wrapper. In that case each such decorator involved should</span>
+<span class="sd">                be counted in the number that&#39;s the second element of the tuple.</span>
+<span class="sd">            - Tuple of a module (or filename) and qualified name (qualname).</span>
+<span class="sd">                You can use Unix shell-style wildcards to match the qualname.</span>
+<span class="sd">                Otherwise the qualname must appear exactly once in the</span>
+<span class="sd">                module/file.</span>
+<span class="sd">            By default, all calls from `varname` package, python standard</span>
+<span class="sd">            libraries and lambda functions are ignored.</span>
+<span class="sd">        multi_vars: Whether allow multiple variables on left-hand side (LHS).</span>
+<span class="sd">            If `True`, this function returns a tuple of the variable names,</span>
+<span class="sd">            even there is only one variable on LHS.</span>
+<span class="sd">            If `False`, and multiple variables on LHS, a</span>
+<span class="sd">            `ImproperUseError` will be raised.</span>
+<span class="sd">        raise_exc: Whether we should raise an exception if failed</span>
+<span class="sd">            to retrieve the ast node.</span>
+<span class="sd">            Note that set this to `False` will NOT supress the exception when</span>
+<span class="sd">            the use of `varname` is improper (i.e. multiple variables on</span>
+<span class="sd">            LHS with `multi_vars` is `False`). See `Raises/ImproperUseError`.</span>
+<span class="sd">        strict: Whether to only return the variable name(s) if the result of</span>
+<span class="sd">            the call is assigned to it/them directly. For example, `a = func()`</span>
+<span class="sd">            rather than `a = [func()]`</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The variable name, or `None` when `raise_exc` is `False` and</span>
+<span class="sd">            we failed to retrieve the ast node for the variable(s).</span>
+<span class="sd">        A tuple or a hierarchy (tuple of tuples) of variable names</span>
+<span class="sd">            when `multi_vars` is `True`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        VarnameRetrievingError: When we are unable to retrieve the ast node</span>
+<span class="sd">            for the variable(s) and `raise_exc` is set to `True`.</span>
+
+<span class="sd">        ImproperUseError: When the use of `varname()` is improper, including:</span>
+<span class="sd">            - When LHS is not an `ast.Name` or `ast.Attribute` node or not a</span>
+<span class="sd">                list/tuple of them</span>
+<span class="sd">            - When there are multiple variables on LHS but `multi_vars` is False</span>
+<span class="sd">            - When `strict` is True, but the result is not assigned to</span>
+<span class="sd">                variable(s) directly</span>
+
+<span class="sd">            Note that `raise_exc=False` will NOT suppress this exception.</span>
+
+<span class="sd">        MultiTargetAssignmentWarning: When there are multiple target</span>
+<span class="sd">            in the assign node. (e.g: `a = b = func()`, in such a case,</span>
+<span class="sd">            `a == &#39;b&#39;`, may not be the case you want)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Skip one more frame, as it is supposed to be called</span>
+    <span class="c1"># inside another function</span>
+    <span class="n">refnode</span> <span class="o">=</span> <span class="n">get_node</span><span class="p">(</span><span class="n">frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ignore</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="n">raise_exc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">refnode</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raise_exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve the ast node.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">lookfor_parent_assign</span><span class="p">(</span><span class="n">refnode</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="p">:</span>  <span class="c1"># improper use</span>
+        <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Caller doesn&#39;t assign the result directly to variable(s).&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Expression is not part of an assignment.&quot;</span>
+
+        <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span><span class="n">rich_exc_message</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">refnode</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">):</span>
+        <span class="c1"># Need to actually check that there&#39;s just one</span>
+        <span class="c1"># give warnings if: a = b = func()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Multiple targets in assignment, variable name &quot;</span>
+                <span class="s2">&quot;on the very right is used. &quot;</span><span class="p">,</span>
+                <span class="n">MultiTargetAssignmentWarning</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">targets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">target</span>
+
+    <span class="n">names</span> <span class="o">=</span> <span class="n">node_name</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">(</span><span class="n">names</span><span class="p">,)</span>
+
+    <span class="k">if</span> <span class="n">multi_vars</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">names</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+            <span class="n">rich_exc_message</span><span class="p">(</span>
+                <span class="s2">&quot;Expect a single variable on left-hand side, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                <span class="n">refnode</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">will</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><span id="varname.core.will"></span><a class="mkapi-docs-link" title="varname.core.will" href="../../varname.core/#varname.core.will">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect the attribute name right immediately after a function call.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; class AwesomeClass:</span>
+<span class="sd">        &gt;&gt;&gt;     def __init__(self):</span>
+<span class="sd">        &gt;&gt;&gt;         self.will = None</span>
+
+<span class="sd">        &gt;&gt;&gt;     def permit(self):</span>
+<span class="sd">        &gt;&gt;&gt;         self.will = will()</span>
+<span class="sd">        &gt;&gt;&gt;         if self.will == &#39;do&#39;:</span>
+<span class="sd">        &gt;&gt;&gt;             # let self handle do</span>
+<span class="sd">        &gt;&gt;&gt;             return self</span>
+<span class="sd">        &gt;&gt;&gt;         raise AttributeError(</span>
+<span class="sd">        &gt;&gt;&gt;             &#39;Should do something with AwesomeClass object&#39;</span>
+<span class="sd">        &gt;&gt;&gt;         )</span>
+
+<span class="sd">        &gt;&gt;&gt;     def do(self):</span>
+<span class="sd">        &gt;&gt;&gt;         if self.will != &#39;do&#39;:</span>
+<span class="sd">        &gt;&gt;&gt;             raise AttributeError(&quot;You don&#39;t have permission to do&quot;)</span>
+<span class="sd">        &gt;&gt;&gt;         return &#39;I am doing!&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; awesome = AwesomeClass()</span>
+<span class="sd">        &gt;&gt;&gt; # AttributeError: You don&#39;t have permission to do</span>
+<span class="sd">        &gt;&gt;&gt; awesome.do()</span>
+<span class="sd">        &gt;&gt;&gt; # AttributeError: Should do something with AwesomeClass object</span>
+<span class="sd">        &gt;&gt;&gt; awesome.permit()</span>
+<span class="sd">        &gt;&gt;&gt; awesome.permit().do() == &#39;I am doing!&#39;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        frame: At which frame this function is called.</span>
+<span class="sd">        raise_exc: Raise exception we failed to detect the ast node</span>
+<span class="sd">            This will NOT supress the `ImproperUseError`</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The attribute name right after the function call.</span>
+<span class="sd">        `None` if ast node cannot be retrieved and `raise_exc` is `False`</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        VarnameRetrievingError: When `raise_exc` is `True` and we failed to</span>
+<span class="sd">            detect the attribute name (including not having one)</span>
+
+<span class="sd">        ImproperUseError: When (the wraper of) this function is not called</span>
+<span class="sd">            inside a method/property of a class instance.</span>
+<span class="sd">            Note that this exception will not be suppressed by `raise_exc=False`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">get_node</span><span class="p">(</span><span class="n">frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="n">raise_exc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raise_exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve the frame.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># try to get node inst.attr from inst.attr()</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+
+    <span class="c1"># see test_will_fail</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">raise_exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+                <span class="s2">&quot;Function `will` has to be called within &quot;</span>
+                <span class="s2">&quot;a method/property of a class.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># ast.Attribute</span>
+    <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">attr</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">nameof</span><span class="p">(</span>
+    <span class="n">var</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">nameof</span><span class="p">(</span>
+    <span class="n">var</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">more_var</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>  <span class="c1"># introduced in python 3.8</span>
+    <span class="o">*</span><span class="n">more_vars</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">nameof</span><span class="p">(</span><span id="varname.core.nameof"></span><a class="mkapi-docs-link" title="varname.core.nameof" href="../../varname.core/#varname.core.nameof">DOCS</a>
+    <span class="n">var</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">more_vars</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the names of the variables passed in</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; a = 1</span>
+<span class="sd">        &gt;&gt;&gt; nameof(a) # &#39;a&#39;</span>
+
+<span class="sd">        &gt;&gt;&gt; b = 2</span>
+<span class="sd">        &gt;&gt;&gt; nameof(a, b) # (&#39;a&#39;, &#39;b&#39;)</span>
+
+<span class="sd">        &gt;&gt;&gt; x = lambda: None</span>
+<span class="sd">        &gt;&gt;&gt; x.y = 1</span>
+<span class="sd">        &gt;&gt;&gt; nameof(x.y, vars_only=False) # &#39;x.y&#39;</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function works with the environments where source code is</span>
+<span class="sd">        available, in other words, the callee&#39;s node can be retrieved by</span>
+<span class="sd">        `executing`. In some cases, for example, running code from python</span>
+<span class="sd">        shell/REPL or from `exec`/`eval`, we try to fetch the variable name</span>
+<span class="sd">        from the bytecode. This requires only a single variable name is passed</span>
+<span class="sd">        to this function and no keyword arguments, meaning that getting full</span>
+<span class="sd">        names of attribute calls are not supported in such cases.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        var: The variable to retrieve the name of</span>
+<span class="sd">        *more_vars: Other variables to retrieve the names of</span>
+<span class="sd">        frame: The this function is called from the wrapper of it. `frame=1`</span>
+<span class="sd">            means no wrappers.</span>
+<span class="sd">            Note that the calls from standard libraries are ignored.</span>
+<span class="sd">            Also note that the wrapper has to have signature as this one.</span>
+<span class="sd">        vars_only: Whether only allow variables/attributes as arguments or</span>
+<span class="sd">            any expressions. If `False`, then the sources of the arguments</span>
+<span class="sd">            will be returned.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The names/sources of variables/expressions passed in.</span>
+<span class="sd">            If a single argument is passed, return the name/source of it.</span>
+<span class="sd">            If multiple variables are passed, return a tuple of their</span>
+<span class="sd">            names/sources.</span>
+<span class="sd">            If the argument is an attribute (e.g. `a.b`) and `vars_only` is</span>
+<span class="sd">            `True`, only `&quot;b&quot;` will returned. Set `vars_only` to `False` to</span>
+<span class="sd">            get `&quot;a.b&quot;`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        VarnameRetrievingError: When the callee&#39;s node cannot be retrieved or</span>
+<span class="sd">            trying to retrieve the full name of non attribute series calls.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Frame is anyway used in get_node</span>
+    <span class="n">frameobj</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">ignore_lambda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_varname</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+    <span class="n">node</span> <span class="o">=</span> <span class="n">get_node_by_frame</span><span class="p">(</span><span class="n">frameobj</span><span class="p">,</span> <span class="n">raise_exc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="p">:</span>
+        <span class="c1"># We can&#39;t retrieve the node by executing.</span>
+        <span class="c1"># It can be due to running code from python/shell, exec/eval or</span>
+        <span class="c1"># other environments where sourcecode cannot be reached</span>
+        <span class="c1"># make sure we keep it simple (only single variable passed and no</span>
+        <span class="c1"># full passed) to use bytecode_nameof</span>
+        <span class="c1">#</span>
+        <span class="c1"># We don&#39;t have to check keyword arguments here, as the instruction</span>
+        <span class="c1"># will then be CALL_FUNCTION_KW.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">more_vars</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bytecode_nameof</span><span class="p">(</span><span class="n">frameobj</span><span class="o">.</span><span class="n">f_code</span><span class="p">,</span> <span class="n">frameobj</span><span class="o">.</span><span class="n">f_lasti</span><span class="p">)</span>
+
+        <span class="c1"># We are anyway raising exceptions, no worries about additional burden</span>
+        <span class="c1"># of frame retrieval again</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">frameobj</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span>
+        <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+                <span class="s2">&quot;Are you trying to call nameof in REPL/python shell? &quot;</span>
+                <span class="s2">&quot;In such a case, nameof can only be called with single &quot;</span>
+                <span class="s2">&quot;argument and no keyword arguments.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;&lt;string&gt;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+                <span class="s2">&quot;Are you trying to call nameof from exec/eval? &quot;</span>
+                <span class="s2">&quot;In such a case, nameof can only be called with single &quot;</span>
+                <span class="s2">&quot;argument and no keyword arguments.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="s2">&quot;Source code unavailable, nameof can only retrieve the name of &quot;</span>
+            <span class="s2">&quot;a single variable, and argument `full` should not be specified.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">argname</span><span class="p">(</span>
+        <span class="s2">&quot;var&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;*more_vars&quot;</span><span class="p">,</span>
+        <span class="n">func</span><span class="o">=</span><span class="n">nameof</span><span class="p">,</span>
+        <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+        <span class="n">vars_only</span><span class="o">=</span><span class="n">vars_only</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="n">more_vars</span> <span class="k">else</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">argname</span><span class="p">(</span>
+    <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dispatch</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgSourceType</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">argname</span><span class="p">(</span>
+    <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">more_arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>  <span class="c1"># introduced in python 3.8</span>
+    <span class="o">*</span><span class="n">more_args</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dispatch</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">argname</span><span class="p">(</span><span id="varname.core.argname"></span><a class="mkapi-docs-link" title="varname.core.argname" href="../../varname.core/#varname.core.argname">DOCS</a>
+    <span class="n">arg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">more_args</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dispatch</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the names/sources of arguments passed to a function.</span>
+
+<span class="sd">    Instead of passing the argument variables themselves to this function</span>
+<span class="sd">    (like `argname()` does), you should pass their names instead.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        arg: and</span>
+<span class="sd">        *more_args: The names of the arguments that you want to retrieve</span>
+<span class="sd">            names/sources of.</span>
+<span class="sd">            You can also use subscripts to get parts of the results.</span>
+<span class="sd">            &gt;&gt;&gt; def func(*args, **kwargs):</span>
+<span class="sd">            &gt;&gt;&gt;     return argname(&#39;args[0]&#39;, &#39;kwargs[x]&#39;) # no quote needed</span>
+
+<span class="sd">            Star argument is also allowed:</span>
+<span class="sd">            &gt;&gt;&gt; def func(*args, x = 1):</span>
+<span class="sd">            &gt;&gt;&gt;     return argname(&#39;*args&#39;, &#39;x&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; a = b = c = 1</span>
+<span class="sd">            &gt;&gt;&gt; func(a, b, x=c) # (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</span>
+
+<span class="sd">            Note the difference:</span>
+<span class="sd">            &gt;&gt;&gt; def func(*args, x = 1):</span>
+<span class="sd">            &gt;&gt;&gt;     return argname(&#39;args&#39;, &#39;x&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; a = b = c = 1</span>
+<span class="sd">            &gt;&gt;&gt; func(a, b, x=c) # ((&#39;a&#39;, &#39;b&#39;), &#39;c&#39;)</span>
+
+<span class="sd">        func: The target function. If not provided, the AST node of the</span>
+<span class="sd">            function call will be used to fetch the function:</span>
+<span class="sd">            - If a variable (ast.Name) used as function, the `node.id` will</span>
+<span class="sd">                be used to get the function from `locals()` or `globals()`.</span>
+<span class="sd">            - If variable (ast.Name), attributes (ast.Attribute),</span>
+<span class="sd">                subscripts (ast.Subscript), and combinations of those and</span>
+<span class="sd">                literals used as function, `pure_eval` will be used to evaluate</span>
+<span class="sd">                the node</span>
+<span class="sd">            - If `pure_eval` is not installed or failed to evaluate, `eval`</span>
+<span class="sd">                will be used. A warning will be shown since unwanted side</span>
+<span class="sd">                effects may happen in this case.</span>
+<span class="sd">            You are very encouraged to always pass the function explicitly.</span>
+<span class="sd">        dispatch: If a function is a single-dispatched function, you can</span>
+<span class="sd">            specify a type for it to dispatch the real function. If this is</span>
+<span class="sd">            specified, expect `func` to be the generic function if provided.</span>
+<span class="sd">        frame: The frame where target function is called from this call.</span>
+<span class="sd">            Calls from python standard libraries are ignored.</span>
+<span class="sd">        ignore: The intermediate calls to be ignored. See `varname.ignore`</span>
+<span class="sd">        vars_only: Require the arguments to be variables only.</span>
+<span class="sd">            If False, `asttokens` is required to retrieve the source.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The argument source when no more_args passed, otherwise a tuple of</span>
+<span class="sd">        argument sources</span>
+<span class="sd">        Note that when an argument is an `ast.Constant`, `repr(arg.value)`</span>
+<span class="sd">        is returned, so `argname()` return `&#39;a&#39;` for `func(&quot;a&quot;)`</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        VarnameRetrievingError: When the ast node where the function is called</span>
+<span class="sd">            cannot be retrieved</span>
+<span class="sd">        ImproperUseError: When frame or func is incorrectly specified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ignore_list</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">ignore</span><span class="p">,</span>
+        <span class="n">ignore_lambda</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_varname</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># where func(...) is called, skip the argname() call</span>
+    <span class="n">func_frame</span> <span class="o">=</span> <span class="n">ignore_list</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">func_node</span> <span class="o">=</span> <span class="n">get_node_by_frame</span><span class="p">(</span><span class="n">func_frame</span><span class="p">)</span>
+    <span class="c1"># Only do it when func_node are available</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func_node</span><span class="p">:</span>
+        <span class="c1"># We can do something at bytecode level, when a single positional</span>
+        <span class="c1"># argument passed to both functions (argname and the target function)</span>
+        <span class="c1"># However, it&#39;s hard to ensure that there is only a single positional</span>
+        <span class="c1"># arguments passed to the target function, at bytecode level.</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot retrieve the node where the function is called.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">func_node</span> <span class="o">=</span> <span class="n">reconstruct_func_node</span><span class="p">(</span><span class="n">func_node</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">get_function_called_argname</span><span class="p">(</span><span class="n">func_frame</span><span class="p">,</span> <span class="n">func_node</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dispatch</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">dispatch</span><span class="p">)</span>
+
+    <span class="c1"># don&#39;t pass the target arguments so that we can cache the sources in</span>
+    <span class="c1"># the same call. For example:</span>
+    <span class="c1"># &gt;&gt;&gt; def func(a, b):</span>
+    <span class="c1"># &gt;&gt;&gt;   a_name = argname(a)</span>
+    <span class="c1"># &gt;&gt;&gt;   b_name = argname(b)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">argument_sources</span> <span class="o">=</span> <span class="n">get_argument_sources</span><span class="p">(</span>
+            <span class="n">Source</span><span class="o">.</span><span class="n">for_frame</span><span class="p">(</span><span class="n">func_frame</span><span class="p">),</span>
+            <span class="n">func_node</span><span class="p">,</span>
+            <span class="n">func</span><span class="p">,</span>
+            <span class="n">vars_only</span><span class="o">=</span><span class="n">vars_only</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+            <span class="s2">&quot;Have you specified the right `frame` or `func`?&quot;</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
+
+    <span class="n">out</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">farg_star</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">farg</span> <span class="ow">in</span> <span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="o">*</span><span class="n">more_args</span><span class="p">):</span>
+
+        <span class="n">farg_name</span> <span class="o">=</span> <span class="n">farg</span>
+        <span class="n">farg_subscript</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str | int</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([\w_]+)\[(.+)\]$&quot;</span><span class="p">,</span> <span class="n">farg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">farg_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">farg_subscript</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">farg_subscript</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="n">farg_subscript</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">farg_subscript</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^\*([\w_]+)$&quot;</span><span class="p">,</span> <span class="n">farg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">farg_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">farg_star</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">farg_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">argument_sources</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">farg_name</span><span class="si">!r}</span><span class="s2"> is not a valid argument &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;of </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="n">argument_sources</span><span class="p">[</span><span class="n">farg_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="si">}</span><span class="s2"> is not a variable &quot;</span>
+                <span class="s2">&quot;or an attribute.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">farg_subscript</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">farg_name</span><span class="si">}</span><span class="s2">` is not a positional argument.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">farg_subscript</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">farg_name</span><span class="si">}</span><span class="s2">` is not a keyword argument.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">farg_subscript</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="n">farg_subscript</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
+        <span class="k">elif</span> <span class="n">farg_star</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">more_args</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">farg_star</span>
+        <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>

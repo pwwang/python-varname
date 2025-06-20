@@ -1,0 +1,115 @@
+
+
+.md-typeset .admonition, .md-typeset details {
+    font-size: .7rem !important;
+}
+
+.md-typeset table:not([class]) td {
+    padding: .55em 1.25em !important;
+}
+
+.md-typeset table:not([class]) th {
+    padding: .75em 1.25em !important;
+}
+
+.mkapi-docstring{
+    line-height: 1;
+}
+.mkapi-node {
+    background-color: #f0f6fa;
+    border-top: 3px solid #559bc9;
+}
+.mkapi-node .mkapi-object-container {
+    background-color: #b4d4e9;
+    padding: .12em .4em;
+}
+.mkapi-node .mkapi-object-container .mkapi-object.code {
+    background: none;
+    border: none;
+}
+.mkapi-node .mkapi-object-container .mkapi-object.code * {
+    font-size: .65rem !important;
+}
+.mkapi-node pre {
+    line-height: 1.5;
+}
+.md-typeset pre>code {
+    overflow: visible;
+    line-height: 1.2;
+}
+.mkapi-docstring .md-typeset pre>code {
+    font-size: 0.1rem !important;
+}
+.mkapi-section-name.bases {
+    margin-top: .2em;
+}
+.mkapi-section-body.bases {
+    padding-bottom: .7em;
+    line-height: 1.3;
+}
+.mkapi-section.bases {
+    margin-bottom: .8em;
+}
+.mkapi-node * {
+    font-size: .7rem;
+}
+.mkapi-node a.mkapi-src-link {
+    word-break: keep-all;
+}
+.mkapi-docstring {
+    padding: .4em .15em !important;
+}
+.mkapi-section-name-body {
+    font-size: .72rem !important;
+}
+.mkapi-node ul.mkapi-items li {
+    line-height: 1.4 !important;
+}
+.mkapi-node ul.mkapi-items li * {
+    font-size: .65rem !important;
+}
+.mkapi-node code.mkapi-object-signature {
+    padding-right: 2px;
+}
+.mkapi-node .mkapi-code * {
+    font-size: .65rem;
+}
+.mkapi-node a.mkapi-docs-link {
+    font-size: .6rem;
+}
+.mkapi-node h1.mkapi-object.mkapi-object-code {
+    margin: .2em .3em;
+}
+.mkapi-node h1.mkapi-object.mkapi-object-code .mkapi-object-kind.mkapi-object-kind-code {
+    font-style: normal;
+    margin-right: 16px;
+}
+.mkapi-node .mkapi-item-name {
+    font-size: .7rem !important;
+    color: #555;
+    padding-right: 4px;
+}
+.md-typeset {
+    font-size: .75rem !important;
+    line-height: 1.5 !important;
+}
+.mkapi-object-kind.package.top {
+    font-size: .8rem !important;
+    color: #111;
+
+}
+.mkapi-object.package.top > h2 {
+    font-size: .8rem !important;
+}
+
+.mkapi-object-body.package.top * {
+    font-size: .75rem !important;
+}
+.mkapi-object-kind.module.top {
+    font-size: .75rem !important;
+    color: #222;
+}
+
+.mkapi-object-body.module.top * {
+    font-size: .75rem !important;
+}

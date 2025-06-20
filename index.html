@@ -1,0 +1,1266 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="api/varname.utils/">
+      
+      
+        <link rel="next" href="api/varname/">
+      
+      
+      <link rel="icon" href="favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="style.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="varname" class="md-header__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="varname" class="md-nav__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            varname
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/varname.core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/varname.ignore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/varname.helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.helpers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/varname.utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Credits
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieving-the-variable-names-using-varname" class="md-nav__link">
+    <span class="md-ellipsis">
+      Retrieving the variable names using varname(...)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-decorator-way-to-register-__varname__-to-functionsclasses" class="md-nav__link">
+    <span class="md-ellipsis">
+      The decorator way to register __varname__ to functions/classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-variable-names-directly-using-nameof" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting variable names directly using nameof
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detecting-next-immediate-attribute-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detecting next immediate attribute name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetching-argument-namessources-using-argname" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fetching argument names/sources using argname
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      Value wrapper
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-dictionary-using-jsobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating dictionary using jsobj
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-with-debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging with debug
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replacing-exec-with-exec_code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Replacing exec with exec_code
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reliability-and-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reliability and limitations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Change Log
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Credits
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieving-the-variable-names-using-varname" class="md-nav__link">
+    <span class="md-ellipsis">
+      Retrieving the variable names using varname(...)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-decorator-way-to-register-__varname__-to-functionsclasses" class="md-nav__link">
+    <span class="md-ellipsis">
+      The decorator way to register __varname__ to functions/classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-variable-names-directly-using-nameof" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting variable names directly using nameof
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detecting-next-immediate-attribute-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detecting next immediate attribute name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fetching-argument-namessources-using-argname" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fetching argument names/sources using argname
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#value-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      Value wrapper
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-dictionary-using-jsobj" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating dictionary using jsobj
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-with-debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging with debug
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replacing-exec-with-exec_code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Replacing exec with exec_code
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reliability-and-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reliability and limitations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Home</h1>
+
+<p><img alt="varname" src="logo.png" /></p>
+<p><a href="https://pypi.org/project/varname/"><img alt="Pypi" src="https://img.shields.io/pypi/v/varname?style=flat-square" /></a> <a href="https://github.com/pwwang/python-varname"><img alt="Github" src="https://img.shields.io/github/tag/pwwang/python-varname?style=flat-square" /></a> <a href="https://pypi.org/project/varname/"><img alt="PythonVers" src="https://img.shields.io/pypi/pyversions/varname?style=flat-square" /></a> <img alt="Building" src="https://img.shields.io/github/actions/workflow/status/pwwang/python-varname/build.yml?branch=master" />
+[<img alt="Docs and API" src="https://img.shields.io/github/actions/workflow/status/pwwang/python-varname/docs.yml?branch=master" />]<a href="https://pwwang.github.io/python-varname/api/varname">15</a> [<img alt="Codacy" src="https://img.shields.io/codacy/grade/6fdb19c845f74c5c92056e88d44154f7?style=flat-square" />]<a href="https://app.codacy.com/gh/pwwang/python-varname/dashboard">13</a> [<img alt="Codacy coverage" src="https://img.shields.io/codacy/coverage/6fdb19c845f74c5c92056e88d44154f7?style=flat-square" />]<a href="https://app.codacy.com/gh/pwwang/python-varname/dashboard">13</a>
+<img alt="Downloads" src="https://img.shields.io/pypi/dm/varname?style=flat-square" /></p>
+<p>Dark magics about variable names in python</p>
+<p><a href="https://pwwang.github.io/python-varname/CHANGELOG/">CHANGELOG</a> | <a href="https://pwwang.github.io/python-varname/api/varname">API</a> | <a href="https://mybinder.org/v2/gh/pwwang/python-varname/dev?filepath=playground%2Fplayground.ipynb">Playground</a> | :fire: <a href="https://stackoverflow.com/a/59364138/5088165">StackOverflow answer</a></p>
+<h3 id="installation">Installation</h3>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>varname
+</code></pre></div>
+<p>Note if you use <code>python &lt; 3.8</code>, install <code>varname &lt; 0.11</code></p>
+<h3 id="features">Features</h3>
+<ul>
+<li>
+<p>Core features:</p>
+</li>
+<li>
+<p>Retrieving names of variables a function/class call is assigned to from inside it, using <code>varname</code>.</p>
+</li>
+<li>Detecting next immediate attribute name, using <code>will</code></li>
+<li>
+<p>Fetching argument names/sources passed to a function using <code>argname</code></p>
+</li>
+<li>
+<p>Other helper APIs (built based on core features):</p>
+</li>
+<li>
+<p>A value wrapper to store the variable name that a value is assigned to, using <code>Wrapper</code></p>
+</li>
+<li>A decorator to register <code>__varname__</code> to functions/classes, using <code>register</code></li>
+<li>A helper function to create dict without explicitly specifying the key-value pairs, using <code>jsobj</code></li>
+<li>A <code>debug</code> function to print variables with their names and values</li>
+<li><code>exec_code</code> to replace <code>exec</code> where source code is available at runtime</li>
+</ul>
+<h3 id="credits">Credits</h3>
+<p>Thanks goes to these awesome people/projects:</p>
+<table>
+  <tr>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/alexmojaki/executing">
+        <img src="https://ui-avatars.com/api/?color=3333ff&background=ffffff&bold=true&name=e&size=400" width="50px;" alt=""/>
+        <br /><sub><b>executing</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/alexmojaki">
+        <img src="https://avatars0.githubusercontent.com/u/3627481?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@alexmojaki</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/breuleux">
+        <img src="https://avatars.githubusercontent.com/u/599820?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@breuleux</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/ElCuboNegro">
+        <img src="https://avatars.githubusercontent.com/u/5524219?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@ElCuboNegro</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/thewchan">
+        <img src="https://avatars.githubusercontent.com/u/49702524?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@thewchan</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/LawsOfSympathy">
+        <img src="https://avatars.githubusercontent.com/u/96355982?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@LawsOfSympathy</b></sub>
+      </a>
+    </td>
+    <td align="center" style="min-width: 75px">
+      <a href="https://github.com/elliotgunton">
+        <img src="https://avatars.githubusercontent.com/u/17798778?s=400&v=4" width="50px;" alt=""/>
+        <br /><sub><b>@elliotgunton</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+<p>Special thanks to <a href="https://github.com/HanyuuLu">@HanyuuLu</a> to give up the name <code>varname</code> in pypi for this project.</p>
+<h3 id="usage">Usage</h3>
+<h4 id="retrieving-the-variable-names-using-varname">Retrieving the variable names using <code>varname(...)</code></h4>
+<ul>
+<li>
+<p>From inside a function</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname</span><span class="w"> </span><span class="kn">import</span> <span class="n">varname</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">()</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span>  <span class="c1"># func == &#39;func&#39;</span>
+</code></pre></div>
+<p>When there are intermediate frames:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">function</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">():</span>
+    <span class="c1"># retrieve the variable name at the 2nd frame from this one</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">()</span> <span class="c1"># func == &#39;func&#39;</span>
+</code></pre></div>
+<p>Or use <code>ignore</code> to ignore the wrapped frame:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">function</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">(</span><span class="n">ignore</span><span class="o">=</span><span class="n">wrapped</span><span class="p">)</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">()</span> <span class="c1"># func == &#39;func&#39;</span>
+</code></pre></div>
+<p>Calls from standard libraries are ignored by default:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">()</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">function</span><span class="p">())</span> <span class="c1"># func == &#39;func&#39;</span>
+</code></pre></div>
+<p>Use <code>strict</code> to control whether the call should be assigned to
+the variable directly:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="n">strict</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>     <span class="c1"># OK, direct assignment, func == &#39;func&#39;</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="p">[</span><span class="n">function</span><span class="p">(</span><span class="kc">True</span><span class="p">)]</span>   <span class="c1"># Not a direct assignment, raises ImproperUseError</span>
+<span class="n">func</span> <span class="o">=</span> <span class="p">[</span><span class="n">function</span><span class="p">(</span><span class="kc">False</span><span class="p">)]</span>  <span class="c1"># OK, func == [&#39;func&#39;]</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span> <span class="n">function</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># OK, func = (&#39;func&#39;, &#39;func&#39;)</span>
+</code></pre></div>
+</li>
+<li>
+<p>Retrieving name of a class instance</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">varname</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># also able to fetch inside a method call</span>
+        <span class="n">copied</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span> <span class="c1"># copied.id == &#39;copied&#39;</span>
+        <span class="n">copied</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">varname</span><span class="p">()</span> <span class="c1"># assign id to whatever variable name</span>
+        <span class="k">return</span> <span class="n">copied</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>   <span class="c1"># foo.id == &#39;foo&#39;</span>
+
+<span class="n">foo2</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># foo2.id == &#39;foo2&#39;</span>
+</code></pre></div>
+</li>
+<li>
+<p>Multiple variables on Left-hand side</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># since v0.5.4</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">(</span><span class="n">multi_vars</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span> <span class="c1"># a == (&#39;a&#39;,)</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span> <span class="c1"># (a, b) == (&#39;a&#39;, &#39;b&#39;)</span>
+<span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span> <span class="c1"># (a, b) == (&#39;a&#39;, &#39;b&#39;)</span>
+
+<span class="c1"># hierarchy is also possible</span>
+<span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span> <span class="c1"># (a, b, c) == (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;)</span>
+</code></pre></div>
+</li>
+<li>
+<p>Some unusual use</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">func1</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span>  <span class="c1"># func == func1 == &#39;func1&#39;</span>
+<span class="c1"># if varname &lt; 0.8: func == func1 == &#39;func&#39;</span>
+<span class="c1"># a warning will be shown</span>
+<span class="c1"># since you may not want func to be &#39;func1&#39;</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">function</span><span class="p">())</span>  <span class="c1"># x == &#39;x&#39;</span>
+
+<span class="c1"># get part of the name</span>
+<span class="n">func_abc</span> <span class="o">=</span> <span class="n">function</span><span class="p">()[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>  <span class="c1"># func_abc == &#39;abc&#39;</span>
+
+<span class="c1"># function alias supported now</span>
+<span class="n">function2</span> <span class="o">=</span> <span class="n">function</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">function2</span><span class="p">()</span>  <span class="c1"># func == &#39;func&#39;</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">a</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="c1"># a.b == &#39;a.b&#39;</span>
+</code></pre></div>
+</li>
+</ul>
+<h4 id="the-decorator-way-to-register-__varname__-to-functionsclasses">The decorator way to register <code>__varname__</code> to functions/classes</h4>
+<ul>
+<li>
+<p>Registering <code>__varname__</code> to functions</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span>
+
+<span class="nd">@register</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">__varname__</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">function</span><span class="p">()</span> <span class="c1"># func == &#39;func&#39;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># arguments also allowed (frame, ignore and raise_exc)</span>
+<span class="nd">@register</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">function</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">__varname__</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">function</span><span class="p">()</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">wrapped</span><span class="p">()</span> <span class="c1"># func == &#39;func&#39;</span>
+</code></pre></div>
+</li>
+<li>
+<p>Registering <code>__varname__</code> as a class property</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@register</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">()</span>
+<span class="c1"># foo.__varname__ == &#39;foo&#39;</span>
+</code></pre></div>
+</li>
+</ul>
+<h4 id="getting-variable-names-directly-using-nameof">Getting variable names directly using <code>nameof</code></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname</span><span class="w"> </span><span class="kn">import</span> <span class="n">varname</span><span class="p">,</span> <span class="n">nameof</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">nameof</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1"># &#39;a&#39;</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">nameof</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="c1"># (&#39;a&#39;, &#39;b&#39;)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">varname</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;_suffix&#39;</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span> <span class="c1"># f == &#39;f_suffix&#39;</span>
+<span class="n">nameof</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>  <span class="c1"># &#39;f&#39;</span>
+
+<span class="c1"># get full names of (chained) attribute calls</span>
+<span class="n">func</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">func</span>
+<span class="n">nameof</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">vars_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># &#39;func.a&#39;</span>
+
+<span class="n">func</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">nameof</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">vars_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># &#39;func.a.b&#39;</span>
+</code></pre></div>
+<h4 id="detecting-next-immediate-attribute-name">Detecting next immediate attribute name</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname</span><span class="w"> </span><span class="kn">import</span> <span class="n">will</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AwesomeClass</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">will</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">permit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">will</span> <span class="o">=</span> <span class="n">will</span><span class="p">(</span><span class="n">raise_exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">will</span> <span class="o">==</span> <span class="s1">&#39;do&#39;</span><span class="p">:</span>
+            <span class="c1"># let self handle do</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Should do something with AwesomeClass object&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">will</span> <span class="o">!=</span> <span class="s1">&#39;do&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;You don&#39;t have permission to do&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;I am doing!&#39;</span>
+
+<span class="n">awesome</span> <span class="o">=</span> <span class="n">AwesomeClass</span><span class="p">()</span>
+<span class="n">awesome</span><span class="o">.</span><span class="n">do</span><span class="p">()</span> <span class="c1"># AttributeError: You don&#39;t have permission to do</span>
+<span class="n">awesome</span><span class="o">.</span><span class="n">permit</span><span class="p">()</span> <span class="c1"># AttributeError: Should do something with AwesomeClass object</span>
+<span class="n">awesome</span><span class="o">.</span><span class="n">permit</span><span class="p">()</span><span class="o">.</span><span class="n">do</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;I am doing!&#39;</span>
+</code></pre></div>
+<h4 id="fetching-argument-namessources-using-argname">Fetching argument names/sources using <code>argname</code></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname</span><span class="w"> </span><span class="kn">import</span> <span class="n">argname</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># prints: x</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">func2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">))</span>
+<span class="n">func2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">x</span><span class="p">)</span> <span class="c1"># prints: (&#39;y&#39;, &#39;x&#39;)</span>
+
+
+<span class="c1"># allow expressions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">func3</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">vars_only</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="n">func3</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="c1"># prints: (&#39;x+y&#39;, &#39;y+x&#39;)</span>
+
+
+<span class="c1"># positional and keyword arguments</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">func4</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s1">&#39;args[1]&#39;</span><span class="p">,</span> <span class="s1">&#39;kwargs[c]&#39;</span><span class="p">))</span>
+<span class="n">func4</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">)</span> <span class="c1"># prints: (&#39;x&#39;, &#39;z&#39;)</span>
+
+
+<span class="c1"># As of 0.9.0 (see: https://pwwang.github.io/python-varname/CHANGELOG/#v090)</span>
+<span class="c1"># Can also fetch the source of the argument for</span>
+<span class="c1"># __getattr__/__getitem__/__setattr/__setitem__/__add__/__lt__, etc.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Foo</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">))</span>
+
+<span class="n">Foo</span><span class="p">()</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># prints: (&quot;&#39;a&#39;&quot;, &#39;1&#39;)</span>
+</code></pre></div>
+<h4 id="value-wrapper">Value wrapper</h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">Wrapper</span>
+
+<span class="n">foo</span> <span class="o">=</span> <span class="n">Wrapper</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># foo.name == &#39;foo&#39;</span>
+<span class="c1"># foo.value == True</span>
+<span class="n">bar</span> <span class="o">=</span> <span class="n">Wrapper</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># bar.name == &#39;bar&#39;</span>
+<span class="c1"># bar.value == False</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">values_to_dict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">val</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">val</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">args</span><span class="p">}</span>
+
+<span class="n">mydict</span> <span class="o">=</span> <span class="n">values_to_dict</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">)</span>
+<span class="c1"># {&#39;foo&#39;: True, &#39;bar&#39;: False}</span>
+</code></pre></div>
+<h4 id="creating-dictionary-using-jsobj">Creating dictionary using <code>jsobj</code></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsobj</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">jsobj</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="c1"># {&#39;a&#39;: 1, &#39;b&#39;: 2}</span>
+<span class="n">jsobj</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># {&#39;a&#39;: 1, &#39;b&#39;: 2, &#39;c&#39;: 3}</span>
+</code></pre></div>
+<h4 id="debugging-with-debug">Debugging with <code>debug</code></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">debug</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;value&#39;</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">]</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="c1"># &quot;DEBUG: a=&#39;value&#39;\n&quot;</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="c1"># &quot;DEBUG: b=[&#39;val&#39;]\n&quot;</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="c1"># &quot;DEBUG: a=&#39;value&#39;\nDEBUG: b=[&#39;val&#39;]\n&quot;</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># &quot;DEBUG: a=&#39;value&#39;, b=[&#39;val&#39;]\n&quot;</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c1"># &#39;a=value\n&#39;</span>
+<span class="c1"># also debug an expression</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">a</span><span class="p">)</span>
+<span class="c1"># &quot;DEBUG: a+a=&#39;valuevalue&#39;\n&quot;</span>
+<span class="c1"># If you want to disable it:</span>
+<span class="n">debug</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="n">vars_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># ImproperUseError</span>
+</code></pre></div>
+<h4 id="replacing-exec-with-exec_code">Replacing <code>exec</code> with <code>exec_code</code></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname</span><span class="w"> </span><span class="kn">import</span> <span class="n">argname</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">varname.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">exec_code</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Obj</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argnames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">argnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s1">&#39;arg&#39;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">receive</span><span class="p">))</span>
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">Obj</span><span class="p">()</span>
+<span class="c1"># exec(&#39;obj.receive(1)&#39;)  # Error</span>
+<span class="n">exec_code</span><span class="p">(</span><span class="s1">&#39;obj.receive(1)&#39;</span><span class="p">)</span>
+<span class="n">exec_code</span><span class="p">(</span><span class="s1">&#39;obj.receive(2)&#39;</span><span class="p">)</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">argnames</span> <span class="c1"># [&#39;1&#39;, &#39;2&#39;]</span>
+</code></pre></div>
+<h3 id="reliability-and-limitations">Reliability and limitations</h3>
+<p><code>varname</code> is all depending on <code>executing</code> package to look for the node.
+The node <code>executing</code> detects is ensured to be the correct one (see <a href="https://github.com/alexmojaki/executing#is-it-reliable">this</a>).</p>
+<p>It partially works with environments where other AST magics apply, including <a href="https://docs.python.org/3/library/functions.html#exec"><code>exec</code></a> function,
+<a href="https://github.com/lihaoyi/macropy"><code>macropy</code></a>, <a href="https://github.com/alexmojaki/birdseye"><code>birdseye</code></a>, <a href="https://rstudio.github.io/reticulate/"><code>reticulate</code></a> with <code>R</code>, etc. Neither
+<code>executing</code> nor <code>varname</code> is 100% working with those environments. Use
+it at your own risk.</p>
+<p>For example:</p>
+<ul>
+<li>This will not work:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">varname</span><span class="w"> </span><span class="kn">import</span> <span class="n">argname</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">getname</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">argname</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">))</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">exec</span><span class="p">(</span><span class="s2">&quot;getname(a)&quot;</span><span class="p">)</span>  <span class="c1"># Cannot retrieve the node where the function is called.</span>
+
+<span class="c1">## instead</span>
+<span class="c1"># from varname.helpers import exec_code</span>
+<span class="c1"># exec_code(&quot;getname(a)&quot;)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="js/mkapi.js"></script>
+      
+    
+  </body>
+</html>

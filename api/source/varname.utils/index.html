@@ -1,0 +1,1322 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>varname.utils - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../../style.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnameutils" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="varname" class="md-header__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              varname.utils
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="varname" class="md-nav__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            varname
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.ignore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.helpers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname.utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Change Log
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnameutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      varname.utils
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="mkapi-node">
+<h1 id="" class="mkapi-object mkapi-object-code plain">
+<span class="mkapi-object-kind mkapi-object-kind-code">SOURCE CODE</span>
+<span class="mkapi-object-prefix">varname.</span><span class="mkapi-object-name">utils</span>
+<span id="varname.utils"></span><a class="mkapi-docs-link" href="../../varname.utils">DOCS</a>
+</h1>
+
+<div class="mkapi-code">
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Some internal utilities for varname</span>
+
+
+<span class="sd">Attributes:</span>
+
+<span class="sd">    IgnoreElemType: The type for ignore elements</span>
+<span class="sd">    IgnoreType: The type for the ignore argument</span>
+<span class="sd">    MODULE_IGNORE_ID_NAME: The name of the ignore id injected to the module.</span>
+<span class="sd">        Espectially for modules that can&#39;t be retrieved by</span>
+<span class="sd">        `inspect.getmodule(frame)`</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dis</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span><span class="p">,</span> <span class="n">singledispatch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModuleType</span><span class="p">,</span> <span class="n">FunctionType</span><span class="p">,</span> <span class="n">CodeType</span><span class="p">,</span> <span class="n">FrameType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeAlias</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeAlias</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">executing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Source</span>
+
+<span class="n">OP2MAGIC</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Add</span><span class="p">:</span> <span class="s2">&quot;__add__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Sub</span><span class="p">:</span> <span class="s2">&quot;__sub__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Mult</span><span class="p">:</span> <span class="s2">&quot;__mul__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Div</span><span class="p">:</span> <span class="s2">&quot;__truediv__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">FloorDiv</span><span class="p">:</span> <span class="s2">&quot;__floordiv__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Mod</span><span class="p">:</span> <span class="s2">&quot;__mod__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Pow</span><span class="p">:</span> <span class="s2">&quot;__pow__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">LShift</span><span class="p">:</span> <span class="s2">&quot;__lshift__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">RShift</span><span class="p">:</span> <span class="s2">&quot;__rshift__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">BitOr</span><span class="p">:</span> <span class="s2">&quot;__or__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">BitXor</span><span class="p">:</span> <span class="s2">&quot;__xor__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">BitAnd</span><span class="p">:</span> <span class="s2">&quot;__and__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">MatMult</span><span class="p">:</span> <span class="s2">&quot;__matmul__&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">CMP2MAGIC</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Eq</span><span class="p">:</span> <span class="s2">&quot;__eq__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">NotEq</span><span class="p">:</span> <span class="s2">&quot;__ne__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Lt</span><span class="p">:</span> <span class="s2">&quot;__lt__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">LtE</span><span class="p">:</span> <span class="s2">&quot;__le__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">Gt</span><span class="p">:</span> <span class="s2">&quot;__gt__&quot;</span><span class="p">,</span>
+    <span class="n">ast</span><span class="o">.</span><span class="n">GtE</span><span class="p">:</span> <span class="s2">&quot;__ge__&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">IgnoreElemType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="c1"># module</span>
+    <span class="n">ModuleType</span><span class="p">,</span>
+    <span class="c1"># filename of a module</span>
+    <span class="nb">str</span><span class="p">,</span>
+    <span class="n">Path</span><span class="p">,</span>
+    <span class="n">FunctionType</span><span class="p">,</span>
+    <span class="c1"># the module (filename) and qualname</span>
+    <span class="c1"># If module is None, then all qualname matches the 2nd element</span>
+    <span class="c1"># will be ignored. Used to ignore &lt;lambda&gt; internally</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">ModuleType</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
+    <span class="c1"># Function and number of its decorators</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">FunctionType</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+<span class="p">]</span>
+<span class="n">IgnoreType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">IgnoreElemType</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">IgnoreElemType</span><span class="p">]]</span>
+
+<span class="n">ArgSourceType</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+<span class="n">ArgSourceType</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span>
+<span class="n">ArgSourceType</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArgSourceType</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ArgSourceType</span><span class="p">]]</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="n">ASSIGN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">NamedExpr</span><span class="p">)</span>
+    <span class="n">AssignType</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ASSIGN_TYPES</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+<span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover  # Python &lt; 3.8</span>
+    <span class="n">ASSIGN_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AnnAssign</span><span class="p">)</span>
+    <span class="n">AssignType</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">ASSIGN_TYPES</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+
+<span class="n">PY311</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">MODULE_IGNORE_ID_NAME</span> <span class="o">=</span> <span class="s2">&quot;__varname_ignore_id__&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">config</span><span class="p">:</span><span id="varname.utils.config"></span><a class="mkapi-docs-link" title="varname.utils.config" href="../../varname.utils/#varname.utils.config">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Global configurations for varname</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        debug: Show debug information for frames being ignored</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">VarnameException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span><span id="varname.utils.VarnameException"></span><a class="mkapi-docs-link" title="varname.utils.VarnameException" href="../../varname.utils/#varname.utils.VarnameException">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Root exception for all varname exceptions&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">VarnameRetrievingError</span><span class="p">(</span><span class="n">VarnameException</span><span class="p">):</span><span id="varname.utils.VarnameRetrievingError"></span><a class="mkapi-docs-link" title="varname.utils.VarnameRetrievingError" href="../../varname.utils/#varname.utils.VarnameRetrievingError">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;When failed to retrieve the varname&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">QualnameNonUniqueError</span><span class="p">(</span><span class="n">VarnameException</span><span class="p">):</span><span id="varname.utils.QualnameNonUniqueError"></span><a class="mkapi-docs-link" title="varname.utils.QualnameNonUniqueError" href="../../varname.utils/#varname.utils.QualnameNonUniqueError">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;When a qualified name is used as an ignore element but references to</span>
+<span class="sd">    multiple objects in a module&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ImproperUseError</span><span class="p">(</span><span class="n">VarnameException</span><span class="p">):</span><span id="varname.utils.ImproperUseError"></span><a class="mkapi-docs-link" title="varname.utils.ImproperUseError" href="../../varname.utils/#varname.utils.ImproperUseError">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;When varname() is improperly used&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">VarnameWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span><span id="varname.utils.VarnameWarning"></span><a class="mkapi-docs-link" title="varname.utils.VarnameWarning" href="../../varname.utils/#varname.utils.VarnameWarning">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Root warning for all varname warnings&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MaybeDecoratedFunctionWarning</span><span class="p">(</span><span class="n">VarnameWarning</span><span class="p">):</span><span id="varname.utils.MaybeDecoratedFunctionWarning"></span><a class="mkapi-docs-link" title="varname.utils.MaybeDecoratedFunctionWarning" href="../../varname.utils/#varname.utils.MaybeDecoratedFunctionWarning">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;When a suspecious decorated function used as ignore function directly&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiTargetAssignmentWarning</span><span class="p">(</span><span class="n">VarnameWarning</span><span class="p">):</span><span id="varname.utils.MultiTargetAssignmentWarning"></span><a class="mkapi-docs-link" title="varname.utils.MultiTargetAssignmentWarning" href="../../varname.utils/#varname.utils.MultiTargetAssignmentWarning">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;When varname tries to retrieve variable name in</span>
+<span class="sd">    a multi-target assignment&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UsingExecWarning</span><span class="p">(</span><span class="n">VarnameWarning</span><span class="p">):</span><span id="varname.utils.UsingExecWarning"></span><a class="mkapi-docs-link" title="varname.utils.UsingExecWarning" href="../../varname.utils/#varname.utils.UsingExecWarning">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;When exec is used to retrieve function name for `argname()`&quot;&quot;&quot;</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">()</span><span id="varname.utils.cached_getmodule"></span><a class="mkapi-docs-link" title="varname.utils.cached_getmodule" href="../../varname.utils/#varname.utils.cached_getmodule">DOCS</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cached_getmodule</span><span class="p">(</span><span class="n">codeobj</span><span class="p">:</span> <span class="n">CodeType</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cached version of inspect.getmodule&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">codeobj</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_node</span><span class="p">(</span><span id="varname.utils.get_node"></span><a class="mkapi-docs-link" title="varname.utils.get_node" href="../../varname.utils/#varname.utils.get_node">DOCS</a>
+    <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">IgnoreType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">ignore_lambda</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Try to get node from the executing object.</span>
+
+<span class="sd">    This can fail when a frame is failed to retrieve.</span>
+<span class="sd">    One case should be when python code is executed in</span>
+<span class="sd">    R pacakge `reticulate`, where only first frame is kept.</span>
+
+<span class="sd">    When the node can not be retrieved, try to return the first statement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.ignore</span><span class="w"> </span><span class="kn">import</span> <span class="n">IgnoreList</span>
+
+    <span class="n">ignore</span> <span class="o">=</span> <span class="n">IgnoreList</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">ignore</span><span class="p">,</span> <span class="n">ignore_lambda</span><span class="o">=</span><span class="n">ignore_lambda</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">frameobj</span> <span class="o">=</span> <span class="n">ignore</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">VarnameRetrievingError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">get_node_by_frame</span><span class="p">(</span><span class="n">frameobj</span><span class="p">,</span> <span class="n">raise_exc</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_node_by_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span> <span class="n">raise_exc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">:</span><span id="varname.utils.get_node_by_frame"></span><a class="mkapi-docs-link" title="varname.utils.get_node_by_frame" href="../../varname.utils/#varname.utils.get_node_by_frame">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the node by frame, raise errors if possible&quot;&quot;&quot;</span>
+    <span class="n">exect</span> <span class="o">=</span> <span class="n">Source</span><span class="o">.</span><span class="n">executing</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">exect</span><span class="o">.</span><span class="n">node</span><span class="p">:</span>
+        <span class="c1"># attach the frame for better exception message</span>
+        <span class="c1"># (ie. where ImproperUseError happens)</span>
+        <span class="n">exect</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">__frame__</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="k">return</span> <span class="n">exect</span><span class="o">.</span><span class="n">node</span>
+
+    <span class="k">if</span> <span class="n">exect</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="n">exect</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">tree</span> <span class="ow">and</span> <span class="n">raise_exc</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="s2">&quot;Couldn&#39;t retrieve the call node. &quot;</span>
+            <span class="s2">&quot;This may happen if you&#39;re using some other AST magic at the &quot;</span>
+            <span class="s2">&quot;same time, such as pytest, ipython, macropy, or birdseye.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">lookfor_parent_assign</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AssignType</span><span class="p">:</span><span id="varname.utils.lookfor_parent_assign"></span><a class="mkapi-docs-link" title="varname.utils.lookfor_parent_assign" href="../../varname.utils/#varname.utils.lookfor_parent_assign">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look for an ast.Assign node in the parents&quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">):</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ASSIGN_TYPES</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span>
+
+        <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">node_name</span><span class="p">(</span><span id="varname.utils.node_name"></span><a class="mkapi-docs-link" title="varname.utils.node_name" href="../../varname.utils/#varname.utils.node_name">DOCS</a>
+    <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span>
+    <span class="n">subscript_slice</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">],</span> <span class="o">...</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the node node name.</span>
+
+<span class="sd">    Raises ImproperUseError when failed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">attr</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">List</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">subscript_slice</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">node_name</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">elts</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">List</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node_name</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">elem</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">node</span><span class="o">.</span><span class="n">elts</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span>  <span class="c1"># type: ignore</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Tuple</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">elts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">elts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">,)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node_name</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">elem</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">node</span><span class="o">.</span><span class="n">elts</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>  <span class="c1"># type: ignore</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Starred</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Slice</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">step</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span><span class="si">}</span><span class="s2">:&quot;</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="s2">&quot;:&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">slice</span><span class="p">,</span><span class="w"> </span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="s2">]&quot;</span>
+        <span class="k">except</span> <span class="n">ImproperUseError</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node_name</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">slice</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+    <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Node </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> detected, but only following nodes are supported: </span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.Name (e.g. x)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.Attribute (e.g. x.y, x be other supported nodes)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.Constant (e.g. 1, &#39;a&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.List (e.g. [x, y, z])</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.Tuple (e.g. (x, y, z))</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.Starred (e.g. *x)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  - ast.Subscript with slice of the above nodes (e.g. x[y])&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">()</span><span id="varname.utils.bytecode_nameof"></span><a class="mkapi-docs-link" title="varname.utils.bytecode_nameof" href="../../varname.utils/#varname.utils.bytecode_nameof">DOCS</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bytecode_nameof</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="n">CodeType</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cached Bytecode version of nameof</span>
+
+<span class="sd">    We are trying this version only when the sourcecode is unavisible. In most</span>
+<span class="sd">    cases, this will happen when user is trying to run a script in REPL/</span>
+<span class="sd">    python shell, with `eval`, or other circumstances where the code is</span>
+<span class="sd">    manipulated to run but sourcecode is not available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;show_caches&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="p">)</span>
+
+    <span class="n">instructions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dis</span><span class="o">.</span><span class="n">get_instructions</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="p">((</span><span class="n">current_instruction_index</span><span class="p">,</span> <span class="n">current_instruction</span><span class="p">),)</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">instruction</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">instruction</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">instructions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">instruction</span><span class="o">.</span><span class="n">offset</span> <span class="o">==</span> <span class="n">offset</span>
+    <span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">current_instruction</span><span class="o">.</span><span class="n">opname</span> <span class="o">==</span> <span class="s2">&quot;CACHE&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">current_instruction_index</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">current_instruction</span> <span class="o">=</span> <span class="n">instructions</span><span class="p">[</span><span class="n">current_instruction_index</span><span class="p">]</span>
+
+    <span class="n">pos_only_error</span> <span class="o">=</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+        <span class="s2">&quot;&#39;nameof&#39; can only be called with a single positional argument &quot;</span>
+        <span class="s2">&quot;when source code is not avaiable.&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">current_instruction</span><span class="o">.</span><span class="n">opname</span> <span class="ow">in</span> <span class="p">(</span>  <span class="c1"># pragma: no cover</span>
+        <span class="s2">&quot;CALL_FUNCTION_EX&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CALL_FUNCTION_KW&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="n">pos_only_error</span>
+
+    <span class="k">if</span> <span class="n">current_instruction</span><span class="o">.</span><span class="n">opname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="s2">&quot;CALL_FUNCTION&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CALL_METHOD&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CALL&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CALL_KW&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span><span class="s2">&quot;Did you call &#39;nameof&#39; in a weird way?&quot;</span><span class="p">)</span>
+
+    <span class="n">current_instruction_index</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">name_instruction</span> <span class="o">=</span> <span class="n">instructions</span><span class="p">[</span><span class="n">current_instruction_index</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">name_instruction</span><span class="o">.</span><span class="n">opname</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;CACHE&quot;</span><span class="p">,</span> <span class="s2">&quot;PRECALL&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">current_instruction_index</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">name_instruction</span> <span class="o">=</span> <span class="n">instructions</span><span class="p">[</span><span class="n">current_instruction_index</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">name_instruction</span><span class="o">.</span><span class="n">opname</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;KW_NAMES&quot;</span><span class="p">,</span> <span class="s2">&quot;LOAD_CONST&quot;</span><span class="p">):</span>  <span class="c1"># LOAD_CONST python 3.13</span>
+        <span class="k">raise</span> <span class="n">pos_only_error</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name_instruction</span><span class="o">.</span><span class="n">opname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;LOAD_&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span><span class="s2">&quot;Argument must be a variable or attribute&quot;</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name_instruction</span><span class="o">.</span><span class="n">argrepr</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Found the variable name </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> which is obviously wrong. &quot;</span>
+            <span class="s2">&quot;This may happen if you&#39;re using some other AST magic at the &quot;</span>
+            <span class="s2">&quot;same time, such as pytest, ipython, macropy, or birdseye.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">name</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">attach_ignore_id_to_module</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span><span id="varname.utils.attach_ignore_id_to_module"></span><a class="mkapi-docs-link" title="varname.utils.attach_ignore_id_to_module" href="../../varname.utils/#varname.utils.attach_ignore_id_to_module">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Attach the ignore id to module</span>
+
+<span class="sd">    This is useful when a module cannot be retrieved by frames using</span>
+<span class="sd">    `inspect.getmodule`, then we can use this id, which will exist in</span>
+<span class="sd">    `frame.f_globals` to check if the module matches in ignore.</span>
+
+<span class="sd">    Do it only when the __file__ is not avaiable or does not exist for</span>
+<span class="sd">    the module. Since this probably means the source is not avaiable and</span>
+<span class="sd">    `inspect.getmodule` would not work</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">module_file</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;__file__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">module_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">module_file</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="c1"># or it&#39;s already been set</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&lt;varname-ignore-</span><span class="si">{</span><span class="nb">id</span><span class="p">(</span><span class="n">module</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">frame_matches_module_by_ignore_id</span><span class="p">(</span><span id="varname.utils.frame_matches_module_by_ignore_id"></span><a class="mkapi-docs-link" title="varname.utils.frame_matches_module_by_ignore_id" href="../../varname.utils/#varname.utils.frame_matches_module_by_ignore_id">DOCS</a>
+    <span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">ModuleType</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the frame is from the module by ignore id&quot;&quot;&quot;</span>
+    <span class="n">ignore_id_attached</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">,</span> <span class="nb">object</span><span class="p">())</span>
+    <span class="n">ignore_id_from_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">MODULE_IGNORE_ID_NAME</span><span class="p">,</span> <span class="nb">object</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">ignore_id_attached</span> <span class="o">==</span> <span class="n">ignore_id_from_frame</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">()</span><span id="varname.utils.check_qualname_by_source"></span><a class="mkapi-docs-link" title="varname.utils.check_qualname_by_source" href="../../varname.utils/#varname.utils.check_qualname_by_source">DOCS</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_qualname_by_source</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span> <span class="n">modname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qualname</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a qualname in module is unique&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="o">.</span><span class="n">tree</span><span class="p">:</span>
+        <span class="c1"># no way to check it, skip</span>
+        <span class="k">return</span>
+    <span class="n">nobj</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">_qualnames</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">qualname</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nobj</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">QualnameNonUniqueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Qualname </span><span class="si">{</span><span class="n">qualname</span><span class="si">!r}</span><span class="s2"> in &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modname</span><span class="si">!r}</span><span class="s2"> refers to multiple objects.&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">debug_ignore_frame</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">frameinfo</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">FrameInfo</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span><span id="varname.utils.debug_ignore_frame"></span><a class="mkapi-docs-link" title="varname.utils.debug_ignore_frame" href="../../varname.utils/#varname.utils.debug_ignore_frame">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print the debug message for a given frame info object</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        msg: The debugging message</span>
+<span class="sd">        frameinfo: The FrameInfo object for the frame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">frameinfo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2"> [In </span><span class="si">{</span><span class="n">frameinfo</span><span class="o">.</span><span class="n">function</span><span class="si">!r}</span><span class="s2"> at &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">frameinfo</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">frameinfo</span><span class="o">.</span><span class="n">lineno</span><span class="si">}</span><span class="s2">]&quot;</span>
+        <span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">__package__</span><span class="si">}</span><span class="s2">] DEBUG: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">argnode_source</span><span class="p">(</span><span id="varname.utils.argnode_source"></span><a class="mkapi-docs-link" title="varname.utils.argnode_source" href="../../varname.utils/#varname.utils.argnode_source">DOCS</a>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the source of an argument node</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source: The executing source object</span>
+<span class="sd">        node: The node to get the source from</span>
+<span class="sd">        vars_only: Whether only allow variables and attributes</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The source of the node (node.id for ast.Name,</span>
+<span class="sd">            node.attr for ast.Attribute). Or the node itself if the source</span>
+<span class="sd">            cannot be fetched.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Index</span><span class="p">):</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Num</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Bytes</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Str</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">NameConstant</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">vars_only</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">id</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">node</span><span class="o">.</span><span class="n">attr</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">node</span>
+        <span class="p">)</span>
+
+    <span class="c1"># requires asttokens</span>
+    <span class="k">return</span> <span class="n">source</span><span class="o">.</span><span class="n">asttokens</span><span class="p">()</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_argument_sources</span><span class="p">(</span><span id="varname.utils.get_argument_sources"></span><a class="mkapi-docs-link" title="varname.utils.get_argument_sources" href="../../varname.utils/#varname.utils.get_argument_sources">DOCS</a>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span><span class="p">,</span>
+    <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">,</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">vars_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ArgSourceType</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the sources for argument from an ast.Call node</span>
+
+<span class="sd">    &gt;&gt;&gt; def func(a, b, c, d=4):</span>
+<span class="sd">    &gt;&gt;&gt;  ...</span>
+<span class="sd">    &gt;&gt;&gt; x = y = z = 1</span>
+<span class="sd">    &gt;&gt;&gt; func(y, x, c=z)</span>
+<span class="sd">    &gt;&gt;&gt; # argument_sources = {&#39;a&#39;: &#39;y&#39;, &#39;b&#39;, &#39;x&#39;, &#39;c&#39;: &#39;z&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; func(y, x, c=1)</span>
+<span class="sd">    &gt;&gt;&gt; # argument_sources = {&#39;a&#39;: &#39;y&#39;, &#39;b&#39;, &#39;x&#39;, &#39;c&#39;: ast.Num(n=1)}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># &lt;Signature (a, b, c, d=4)&gt;</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">follow_wrapped</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># func(y, x, c=z)</span>
+    <span class="c1"># [&#39;y&#39;, &#39;x&#39;], {&#39;c&#39;: &#39;z&#39;}</span>
+    <span class="n">arg_sources</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">argnode_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">argnode</span><span class="p">,</span> <span class="n">vars_only</span><span class="p">)</span> <span class="k">for</span> <span class="n">argnode</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span>
+    <span class="p">]</span>
+    <span class="n">kwarg_sources</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">argnode</span><span class="o">.</span><span class="n">arg</span><span class="p">:</span> <span class="n">argnode_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">argnode</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">vars_only</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">argnode</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">keywords</span>
+        <span class="k">if</span> <span class="n">argnode</span><span class="o">.</span><span class="n">arg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="p">}</span>
+    <span class="n">bound_args</span> <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">bind_partial</span><span class="p">(</span><span class="o">*</span><span class="n">arg_sources</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg_sources</span><span class="p">)</span>
+    <span class="n">argument_sources</span> <span class="o">=</span> <span class="n">bound_args</span><span class="o">.</span><span class="n">arguments</span>
+    <span class="c1"># see if *args and **kwargs have anything assigned</span>
+    <span class="c1"># if not, assign () and {} to them</span>
+    <span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">parameter</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">:</span>
+            <span class="n">argument_sources</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">())</span>
+        <span class="k">if</span> <span class="n">parameter</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">:</span>
+            <span class="n">argument_sources</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">return</span> <span class="n">argument_sources</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_function_called_argname</span><span class="p">(</span><span class="n">frame</span><span class="p">:</span> <span class="n">FrameType</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span><span id="varname.utils.get_function_called_argname"></span><a class="mkapi-docs-link" title="varname.utils.get_function_called_argname" href="../../varname.utils/#varname.utils.get_function_called_argname">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the function who called argname&quot;&quot;&quot;</span>
+    <span class="c1"># variable</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Name</span><span class="p">):</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="c1"># not sure how it would happen but in case</span>
+            <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot retrieve the function by </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="si">!r}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="c1"># use pure_eval</span>
+    <span class="n">pure_eval_fail_msg</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pure_eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">CannotEval</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">pure_eval_fail_msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;pure_eval&#39; is not installed.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="o">.</span><span class="n">from_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">evaluator</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">CannotEval</span><span class="p">:</span>
+            <span class="n">pure_eval_fail_msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot evaluate node </span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;using &#39;pure_eval&#39;.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># try eval</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pure_eval_fail_msg</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="s2">&quot;Using &#39;eval&#39; to get the function that calls &#39;argname&#39;. &quot;</span>
+        <span class="s2">&quot;Try calling it using a variable reference to the function, or &quot;</span>
+        <span class="s2">&quot;passing the function to &#39;argname&#39; explicitly.&quot;</span><span class="p">,</span>
+        <span class="n">UsingExecWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">expr</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">)</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="s2">&quot;&lt;ast-call&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;eval&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_globals</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_locals</span><span class="p">)</span>
+
+
+<span class="nd">@singledispatch</span><span id="varname.utils.reconstruct_func_node"></span><a class="mkapi-docs-link" title="varname.utils.reconstruct_func_node" href="../../varname.utils/#varname.utils.reconstruct_func_node">DOCS</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reconstruct_func_node</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reconstruct the ast.Call node from</span>
+
+<span class="sd">    `x.a` to `x.__getattr__(&#39;a&#39;)`</span>
+<span class="sd">    `x.a = b` to `x.__setattr__(&#39;a&#39;, b)`</span>
+<span class="sd">    `x[a]` to `x.__getitem__(a)`</span>
+<span class="sd">    `x[a] = b` to `x.__setitem__(a, 1)`</span>
+<span class="sd">    `x + a` to `x.__add__(a)`</span>
+<span class="sd">    `x &lt; a` to `x.__lt__(a)`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="n">VarnameRetrievingError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Cannot reconstruct ast.Call node from </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="s2">&quot;expecting Call, Attribute, Subscript, BinOp, Compare.&quot;</span>
+    <span class="p">)</span>
+
+
+<span class="nd">@reconstruct_func_node</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">node</span>
+
+
+<span class="nd">@reconstruct_func_node</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">)</span>
+<span class="nd">@reconstruct_func_node</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reconstruct the function node for</span>
+<span class="sd">    `x.__getitem__/__setitem__/__getattr__/__setattr__`&quot;&quot;&quot;</span>
+    <span class="n">nodemeta</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;lineno&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span>
+        <span class="s2">&quot;col_offset&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">keynode</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">slice</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">attr</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># x[1], x.a</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ctx</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">PY311</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>
+                <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="n">attr</span><span class="o">=</span><span class="p">(</span>
+                        <span class="s2">&quot;__getitem__&quot;</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="s2">&quot;__getattr__&quot;</span>
+                    <span class="p">),</span>
+                    <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                    <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">keynode</span><span class="p">],</span>
+                <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+                <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                    <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="n">attr</span><span class="o">=</span><span class="p">(</span>
+                        <span class="s2">&quot;__getitem__&quot;</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span>
+                        <span class="k">else</span> <span class="s2">&quot;__getattr__&quot;</span>
+                    <span class="p">),</span>
+                    <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                    <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">keynode</span><span class="p">],</span>
+                <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">starargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># x[a] = b, x.a = b</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;parent&quot;</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assign</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">targets</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span>  <span class="c1"># type: ignore</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ImproperUseError</span><span class="p">(</span>
+            <span class="n">rich_exc_message</span><span class="p">(</span>
+                <span class="s2">&quot;Expect `x[a] = b` or `x.a = b` directly, got &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ast</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                <span class="n">node</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">PY311</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>
+            <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">attr</span><span class="o">=</span><span class="p">(</span>
+                    <span class="s2">&quot;__setitem__&quot;</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span>
+                    <span class="k">else</span> <span class="s2">&quot;__setattr__&quot;</span>
+                <span class="p">),</span>
+                <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">keynode</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">value</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>
+            <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">attr</span><span class="o">=</span><span class="p">(</span>
+                    <span class="s2">&quot;__setitem__&quot;</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Subscript</span><span class="p">)</span>
+                    <span class="k">else</span> <span class="s2">&quot;__setattr__&quot;</span>
+                <span class="p">),</span>
+                <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">keynode</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">value</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">starargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="nd">@reconstruct_func_node</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">Compare</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Compare</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reconstruct the function node for `x &lt; a`&quot;&quot;&quot;</span>
+    <span class="c1"># When the node is identified by executing, len(ops) is always 1.</span>
+    <span class="c1"># Otherwise, the node cannot be identified.</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ops</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="n">nodemeta</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;lineno&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span>
+        <span class="s2">&quot;col_offset&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">PY311</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>
+            <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
+                <span class="n">attr</span><span class="o">=</span><span class="n">CMP2MAGIC</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
+                <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">comparators</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
+                <span class="n">attr</span><span class="o">=</span><span class="n">CMP2MAGIC</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
+                <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">comparators</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">starargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="nd">@reconstruct_func_node</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">BinOp</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">BinOp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reconstruct the function node for `x + a`&quot;&quot;&quot;</span>
+    <span class="n">nodemeta</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;lineno&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span>
+        <span class="s2">&quot;col_offset&quot;</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">PY311</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>
+            <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
+                <span class="n">attr</span><span class="o">=</span><span class="n">OP2MAGIC</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">op</span><span class="p">)],</span>
+                <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">],</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="n">func</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Attribute</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
+                <span class="n">attr</span><span class="o">=</span><span class="n">OP2MAGIC</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">op</span><span class="p">)],</span>
+                <span class="n">ctx</span><span class="o">=</span><span class="n">ast</span><span class="o">.</span><span class="n">Load</span><span class="p">(),</span>
+                <span class="o">**</span><span class="n">nodemeta</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">],</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="p">[],</span>
+            <span class="n">starargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rich_exc_message</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span><span class="p">,</span> <span class="n">context_lines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span><span id="varname.utils.rich_exc_message"></span><a class="mkapi-docs-link" title="varname.utils.rich_exc_message" href="../../varname.utils/#varname.utils.rich_exc_message">DOCS</a>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Attach the source code from the node to message to</span>
+<span class="sd">    get a rich message for exceptions</span>
+
+<span class="sd">    If package &#39;rich&#39; is not install or &#39;node.__frame__&#39; doesn&#39;t exist, fall</span>
+<span class="sd">    to plain message (with basic information), otherwise show a better message</span>
+<span class="sd">    with full information</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">__frame__</span>  <span class="c1"># type: FrameType</span>
+    <span class="n">lineno</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># type: int</span>
+    <span class="n">col_offset</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">col_offset</span>  <span class="c1"># type: int</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_filename</span>  <span class="c1"># type: str</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lines</span><span class="p">,</span> <span class="n">startlineno</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsourcelines</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="c1"># could not get source code</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">startlineno</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">startlineno</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">startlineno</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">line_range</span> <span class="o">=</span> <span class="p">(</span><span class="n">startlineno</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">startlineno</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">linenos</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="o">*</span><span class="n">line_range</span><span class="p">)))</span>  <span class="c1"># type: Tuple[str, ...]</span>
+    <span class="n">lineno_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">linenos</span><span class="p">))</span>  <span class="c1"># type: int</span>
+    <span class="n">hiline</span> <span class="o">=</span> <span class="n">lineno</span> <span class="o">-</span> <span class="n">startlineno</span>  <span class="c1"># type: int</span>
+    <span class="n">codes</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[str]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lno</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">linenos</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">hiline</span> <span class="o">-</span> <span class="n">context_lines</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">hiline</span> <span class="o">+</span> <span class="n">context_lines</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">lno</span> <span class="o">=</span> <span class="n">lno</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">lineno_width</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">hiline</span><span class="p">:</span>
+            <span class="n">codes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  &gt; | </span><span class="si">{</span><span class="n">lno</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">codes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    | </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">lineno_width</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">col_offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">^</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">codes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    | </span><span class="si">{</span><span class="n">lno</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">lineno</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">col_offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>

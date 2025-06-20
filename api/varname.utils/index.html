@@ -1,0 +1,1834 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../varname.helpers/">
+      
+      
+        <link rel="next" href="../..">
+      
+      
+      <link rel="icon" href="../../favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>varname.utils - varname</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/all.css">
+    
+      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css">
+    
+      <link rel="stylesheet" href="../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../style.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#varnameutils" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="varname" class="md-header__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            varname
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              varname.utils
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="varname" class="md-nav__button md-logo" aria-label="varname" data-md-component="logo">
+      
+  <img src="../../favicon.png" alt="logo">
+
+    </a>
+    varname
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1_1" id="__nav_1_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            varname
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname.core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.core
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname.ignore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.ignore
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname.helpers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.helpers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname.utils
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnameutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      utils
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsvarnameexception" class="md-nav__link">
+    <span class="md-ellipsis">
+      VarnameException
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsvarnameretrievingerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      VarnameRetrievingError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsqualnamenonuniqueerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      QualnameNonUniqueError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsimproperuseerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      ImproperUseError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsvarnamewarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      VarnameWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsmaybedecoratedfunctionwarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      MaybeDecoratedFunctionWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsmultitargetassignmentwarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      MultiTargetAssignmentWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsusingexecwarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      UsingExecWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilscached_getmodule" class="md-nav__link">
+    <span class="md-ellipsis">
+      cached_getmodule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_node" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_node_by_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_node_by_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilslookfor_parent_assign" class="md-nav__link">
+    <span class="md-ellipsis">
+      lookfor_parent_assign
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsnode_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      node_name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsbytecode_nameof" class="md-nav__link">
+    <span class="md-ellipsis">
+      bytecode_nameof
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsattach_ignore_id_to_module" class="md-nav__link">
+    <span class="md-ellipsis">
+      attach_ignore_id_to_module
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsframe_matches_module_by_ignore_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame_matches_module_by_ignore_id
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilscheck_qualname_by_source" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_qualname_by_source
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsdebug_ignore_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      debug_ignore_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsargnode_source" class="md-nav__link">
+    <span class="md-ellipsis">
+      argnode_source
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_argument_sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_argument_sources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_function_called_argname" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_function_called_argname
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsreconstruct_func_node" class="md-nav__link">
+    <span class="md-ellipsis">
+      reconstruct_func_node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsrich_exc_message" class="md-nav__link">
+    <span class="md-ellipsis">
+      rich_exc_message
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../varname/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    varname
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Change Log
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#varnameutils" class="md-nav__link">
+    <span class="md-ellipsis">
+      utils
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsvarnameexception" class="md-nav__link">
+    <span class="md-ellipsis">
+      VarnameException
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsvarnameretrievingerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      VarnameRetrievingError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsqualnamenonuniqueerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      QualnameNonUniqueError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsimproperuseerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      ImproperUseError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsvarnamewarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      VarnameWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsmaybedecoratedfunctionwarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      MaybeDecoratedFunctionWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsmultitargetassignmentwarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      MultiTargetAssignmentWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsusingexecwarning" class="md-nav__link">
+    <span class="md-ellipsis">
+      UsingExecWarning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilscached_getmodule" class="md-nav__link">
+    <span class="md-ellipsis">
+      cached_getmodule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_node" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_node_by_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_node_by_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilslookfor_parent_assign" class="md-nav__link">
+    <span class="md-ellipsis">
+      lookfor_parent_assign
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsnode_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      node_name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsbytecode_nameof" class="md-nav__link">
+    <span class="md-ellipsis">
+      bytecode_nameof
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsattach_ignore_id_to_module" class="md-nav__link">
+    <span class="md-ellipsis">
+      attach_ignore_id_to_module
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsframe_matches_module_by_ignore_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      frame_matches_module_by_ignore_id
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilscheck_qualname_by_source" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_qualname_by_source
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsdebug_ignore_frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      debug_ignore_frame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsargnode_source" class="md-nav__link">
+    <span class="md-ellipsis">
+      argnode_source
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_argument_sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_argument_sources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsget_function_called_argname" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_function_called_argname
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsreconstruct_func_node" class="md-nav__link">
+    <span class="md-ellipsis">
+      reconstruct_func_node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#varnameutilsrich_exc_message" class="md-nav__link">
+    <span class="md-ellipsis">
+      rich_exc_message
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>varname.utils</h1>
+
+<div class="mkapi-node" id="varname.utils">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object module plain top">
+    <div class="mkapi-object-kind module top">module</div>
+    <h2 id="varnameutils" class="mkapi-object-body module top"><span class="mkapi-object-prefix"><a href="../varname/#varname">varname</a>.</span><span class="mkapi-object-name">utils</span></h2>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils" title="Source for varname.utils">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Some internal utilities for varname</p></div>
+    </div>
+  <div class="mkapi-section classes">
+      <div class="mkapi-section-name classes">
+          <span class="mkapi-section-name-body classes">Classes</span> 
+        </div>
+      <div class="mkapi-section-body classes"><ul class="mkapi-items">
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.config">config</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Global configurations for varname<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.config" title="Source for varname.utils.config">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.VarnameException">VarnameException</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Root exception for all varname exceptions<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.VarnameException" title="Source for varname.utils.VarnameException">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.VarnameRetrievingError">VarnameRetrievingError</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">When failed to retrieve the varname<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.VarnameRetrievingError" title="Source for varname.utils.VarnameRetrievingError">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.QualnameNonUniqueError">QualnameNonUniqueError</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">When a qualified name is used as an ignore element but references tomultiple objects in a module
+<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.QualnameNonUniqueError" title="Source for varname.utils.QualnameNonUniqueError">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.ImproperUseError">ImproperUseError</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">When varname() is improperly used<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.ImproperUseError" title="Source for varname.utils.ImproperUseError">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.VarnameWarning">VarnameWarning</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Root warning for all varname warnings<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.VarnameWarning" title="Source for varname.utils.VarnameWarning">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.MaybeDecoratedFunctionWarning">MaybeDecoratedFunctionWarning</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">When a suspecious decorated function used as ignore function directly<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.MaybeDecoratedFunctionWarning" title="Source for varname.utils.MaybeDecoratedFunctionWarning">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.MultiTargetAssignmentWarning">MultiTargetAssignmentWarning</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">When varname tries to retrieve variable name ina multi-target assignment
+<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.MultiTargetAssignmentWarning" title="Source for varname.utils.MultiTargetAssignmentWarning">&lt;/&gt;</a></span></li>
+
+<li class="class"><code class="mkapi-item-name"><a href="#varname.utils.UsingExecWarning">UsingExecWarning</a></code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">When exec is used to retrieve function name for <code>argname()</code><a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.UsingExecWarning" title="Source for varname.utils.UsingExecWarning">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section functions">
+      <div class="mkapi-section-name functions">
+          <span class="mkapi-section-name-body functions">Functions</span> 
+        </div>
+      <div class="mkapi-section-body functions"><ul class="mkapi-items">
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.argnode_source">argnode_source</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">source</code>, <code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">vars_only</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(Union)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Get the source of an argument node<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.argnode_source" title="Source for varname.utils.argnode_source">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.attach_ignore_id_to_module">attach_ignore_id_to_module</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">module</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Attach the ignore id to module<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.attach_ignore_id_to_module" title="Source for varname.utils.attach_ignore_id_to_module">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.bytecode_nameof">bytecode_nameof</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">code</code>, <code class="mkapi-object-signature">offset</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Cached Bytecode version of nameof<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.bytecode_nameof" title="Source for varname.utils.bytecode_nameof">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.cached_getmodule">cached_getmodule</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">codeobj</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Cached version of inspect.getmodule<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.cached_getmodule" title="Source for varname.utils.cached_getmodule">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.check_qualname_by_source">check_qualname_by_source</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">source</code>, <code class="mkapi-object-signature">modname</code>, <code class="mkapi-object-signature">qualname</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Check if a qualname in module is unique<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.check_qualname_by_source" title="Source for varname.utils.check_qualname_by_source">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.debug_ignore_frame">debug_ignore_frame</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">msg</code>, <code class="mkapi-object-signature">frameinfo</code><code class="mkapi-object-parenthesis">)</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Print the debug message for a given frame info object<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.debug_ignore_frame" title="Source for varname.utils.debug_ignore_frame">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.frame_matches_module_by_ignore_id">frame_matches_module_by_ignore_id</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">module</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Check if the frame is from the module by ignore id<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.frame_matches_module_by_ignore_id" title="Source for varname.utils.frame_matches_module_by_ignore_id">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.get_argument_sources">get_argument_sources</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">source</code>, <code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">func</code>, <code class="mkapi-object-signature">vars_only</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(Mapping)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Get the sources for argument from an ast.Call node<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_argument_sources" title="Source for varname.utils.get_argument_sources">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.get_function_called_argname">get_function_called_argname</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">node</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(Callable)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Get the function who called argname<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_function_called_argname" title="Source for varname.utils.get_function_called_argname">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.get_node">get_node</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">ignore</code>, <code class="mkapi-object-signature">raise_exc</code>, <code class="mkapi-object-signature">ignore_lambda</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(AST)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Try to get node from the executing object.<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_node" title="Source for varname.utils.get_node">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.get_node_by_frame">get_node_by_frame</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">raise_exc</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(AST)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Get the node by frame, raise errors if possible<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_node_by_frame" title="Source for varname.utils.get_node_by_frame">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.lookfor_parent_assign">lookfor_parent_assign</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">strict</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(Union)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Look for an ast.Assign node in the parents<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.lookfor_parent_assign" title="Source for varname.utils.lookfor_parent_assign">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.node_name">node_name</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">subscript_slice</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(Union)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Get the node node name.<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.node_name" title="Source for varname.utils.node_name">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.reconstruct_func_node">reconstruct_func_node</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">node</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(Call)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Reconstruct the ast.Call node from<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.reconstruct_func_node" title="Source for varname.utils.reconstruct_func_node">&lt;/&gt;</a></span></li>
+
+<li class="function"><code class="mkapi-item-name"><a href="#varname.utils.rich_exc_message">rich_exc_message</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">msg</code>, <code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">context_lines</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Attach the source code from the node to message toget a rich message for exceptions
+<a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.rich_exc_message" title="Source for varname.utils.rich_exc_message">&lt;/&gt;</a></span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.config">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsconfig" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">config</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.config" title="Source for varname.utils.config">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Global configurations for varname</p></div>
+    </div>
+  <div class="mkapi-section attributes">
+      <div class="mkapi-section-name attributes">
+          <span class="mkapi-section-name-body attributes">Attributes</span> 
+        </div>
+      <div class="mkapi-section-body attributes"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">debug</code>
+
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Show debug information for frames being ignored</span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.VarnameException">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsvarnameexception" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">VarnameException</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.VarnameException" title="Source for varname.utils.VarnameException">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Root exception for all varname exceptions</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.VarnameRetrievingError">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsvarnameretrievingerror" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">VarnameRetrievingError</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.VarnameRetrievingError" title="Source for varname.utils.VarnameRetrievingError">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.utils.VarnameException">varname.utils.VarnameException</a></span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>When failed to retrieve the varname</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.QualnameNonUniqueError">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsqualnamenonuniqueerror" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">QualnameNonUniqueError</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.QualnameNonUniqueError" title="Source for varname.utils.QualnameNonUniqueError">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.utils.VarnameException">varname.utils.VarnameException</a></span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>When a qualified name is used as an ignore element but references tomultiple objects in a module</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.ImproperUseError">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsimproperuseerror" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">ImproperUseError</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.ImproperUseError" title="Source for varname.utils.ImproperUseError">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.utils.VarnameException">varname.utils.VarnameException</a></span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>When varname() is improperly used</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.VarnameWarning">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsvarnamewarning" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">VarnameWarning</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.VarnameWarning" title="Source for varname.utils.VarnameWarning">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base">Warning</span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Root warning for all varname warnings</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.MaybeDecoratedFunctionWarning">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsmaybedecoratedfunctionwarning" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">MaybeDecoratedFunctionWarning</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.MaybeDecoratedFunctionWarning" title="Source for varname.utils.MaybeDecoratedFunctionWarning">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.utils.VarnameWarning">varname.utils.VarnameWarning</a></span>
+
+<span class="mkapi-base">Warning</span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>When a suspecious decorated function used as ignore function directly</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.MultiTargetAssignmentWarning">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsmultitargetassignmentwarning" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">MultiTargetAssignmentWarning</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.MultiTargetAssignmentWarning" title="Source for varname.utils.MultiTargetAssignmentWarning">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.utils.VarnameWarning">varname.utils.VarnameWarning</a></span>
+
+<span class="mkapi-base">Warning</span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>When varname tries to retrieve variable name ina multi-target assignment</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.UsingExecWarning">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <h3 id="varnameutilsusingexecwarning" class="mkapi-object-body class top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">UsingExecWarning</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.UsingExecWarning" title="Source for varname.utils.UsingExecWarning">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section bases">
+      <div class="mkapi-section-name bases">
+          <span class="mkapi-section-name-body bases">Bases</span> 
+        </div>
+      <div class="mkapi-section-body bases">
+<span class="mkapi-base"><a href="./#varname.utils.VarnameWarning">varname.utils.VarnameWarning</a></span>
+
+<span class="mkapi-base">Warning</span>
+
+<span class="mkapi-base">Exception</span>
+
+<span class="mkapi-base">BaseException</span>
+</div>
+    </div>
+  <div class="mkapi-section">
+      <div class="mkapi-section-body"><p>When exec is used to retrieve function name for <code>argname()</code></p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.cached_getmodule">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilscached_getmodule" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">cached_getmodule</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">codeobj</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.cached_getmodule" title="Source for varname.utils.cached_getmodule">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Cached version of inspect.getmodule</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.get_node">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsget_node" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">get_node</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">ignore=None</code>, <code class="mkapi-object-signature">raise_exc=True</code>, <code class="mkapi-object-signature">ignore_lambda=True</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; AST</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_node" title="Source for varname.utils.get_node">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Try to get node from the executing object.</p><p>This can fail when a frame is failed to retrieve.
+One case should be when python code is executed in
+R pacakge <code>reticulate</code>, where only first frame is kept.</p>
+<p>When the node can not be retrieved, try to return the first statement.</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.get_node_by_frame">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsget_node_by_frame" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">get_node_by_frame</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">raise_exc=True</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; AST</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_node_by_frame" title="Source for varname.utils.get_node_by_frame">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Get the node by frame, raise errors if possible</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.lookfor_parent_assign">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilslookfor_parent_assign" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">lookfor_parent_assign</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">strict=True</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; Union</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.lookfor_parent_assign" title="Source for varname.utils.lookfor_parent_assign">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Look for an ast.Assign node in the parents</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.node_name">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsnode_name" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">node_name</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">subscript_slice=False</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; Union</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.node_name" title="Source for varname.utils.node_name">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Get the node node name.</p><p>Raises ImproperUseError when failed</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.bytecode_nameof">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsbytecode_nameof" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">bytecode_nameof</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">code</code>, <code class="mkapi-object-signature">offset</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.bytecode_nameof" title="Source for varname.utils.bytecode_nameof">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Cached Bytecode version of nameof</p><p>We are trying this version only when the sourcecode is unavisible. In most
+cases, this will happen when user is trying to run a script in REPL/
+python shell, with <code>eval</code>, or other circumstances where the code is
+manipulated to run but sourcecode is not available.</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.attach_ignore_id_to_module">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsattach_ignore_id_to_module" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">attach_ignore_id_to_module</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">module</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.attach_ignore_id_to_module" title="Source for varname.utils.attach_ignore_id_to_module">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Attach the ignore id to module</p><p>This is useful when a module cannot be retrieved by frames using
+<code>inspect.getmodule</code>, then we can use this id, which will exist in
+<code>frame.f_globals</code> to check if the module matches in ignore.</p>
+<p>Do it only when the <strong>file</strong> is not avaiable or does not exist for
+the module. Since this probably means the source is not avaiable and
+<code>inspect.getmodule</code> would not work</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.frame_matches_module_by_ignore_id">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsframe_matches_module_by_ignore_id" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">frame_matches_module_by_ignore_id</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">module</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; bool</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.frame_matches_module_by_ignore_id" title="Source for varname.utils.frame_matches_module_by_ignore_id">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Check if the frame is from the module by ignore id</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.check_qualname_by_source">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilscheck_qualname_by_source" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">check_qualname_by_source</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">source</code>, <code class="mkapi-object-signature">modname</code>, <code class="mkapi-object-signature">qualname</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.check_qualname_by_source" title="Source for varname.utils.check_qualname_by_source">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Check if a qualname in module is unique</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.debug_ignore_frame">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsdebug_ignore_frame" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">debug_ignore_frame</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">msg</code>, <code class="mkapi-object-signature">frameinfo=None</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.debug_ignore_frame" title="Source for varname.utils.debug_ignore_frame">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Print the debug message for a given frame info object</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">msg</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The debugging message</span></li>
+
+<li><code class="mkapi-item-name">frameinfo</code>
+<span class="mkapi-item-type">(FrameInfo, optional)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The FrameInfo object for the frame</span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.argnode_source">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsargnode_source" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">argnode_source</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">source</code>, <code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">vars_only</code><code class="mkapi-object-parenthesis">)</code></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.argnode_source" title="Source for varname.utils.argnode_source">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Get the source of an argument node</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">source</code>
+<span class="mkapi-item-type">(Source)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The executing source object</span></li>
+
+<li><code class="mkapi-item-name">node</code>
+<span class="mkapi-item-type">(AST)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">The node to get the source from</span></li>
+
+<li><code class="mkapi-item-name">vars_only</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Whether only allow variables and attributes</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(Union)</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>The source of the node (node.id for ast.Name,    node.attr for ast.Attribute). Or the node itself if the source
+    cannot be fetched.</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.get_argument_sources">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsget_argument_sources" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">get_argument_sources</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">source</code>, <code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">func</code>, <code class="mkapi-object-signature">vars_only</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; Mapping</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_argument_sources" title="Source for varname.utils.get_argument_sources">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Get the sources for argument from an ast.Call node</p><div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="o">&gt;&gt;&gt;</span>  <span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">z</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">func</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># argument_sources = {&#39;a&#39;: &#39;y&#39;, &#39;b&#39;, &#39;x&#39;, &#39;c&#39;: &#39;z&#39;}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">func</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># argument_sources = {&#39;a&#39;: &#39;y&#39;, &#39;b&#39;, &#39;x&#39;, &#39;c&#39;: ast.Num(n=1)}</span>
+</code></pre></div>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.get_function_called_argname">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsget_function_called_argname" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">get_function_called_argname</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">frame</code>, <code class="mkapi-object-signature">node</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; Callable</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.get_function_called_argname" title="Source for varname.utils.get_function_called_argname">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Get the function who called argname</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.reconstruct_func_node">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsreconstruct_func_node" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">reconstruct_func_node</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">node</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; Call</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.reconstruct_func_node" title="Source for varname.utils.reconstruct_func_node">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Reconstruct the ast.Call node from</p><p><code>x.a</code> to <code>x.__getattr__('a')</code>
+<code>x.a = b</code> to <code>x.__setattr__('a', b)</code>
+<code>x[a]</code> to <code>x.__getitem__(a)</code>
+<code>x[a] = b</code> to <code>x.__setitem__(a, 1)</code>
+<code>x + a</code> to <code>x.__add__(a)</code>
+<code>x &lt; a</code> to <code>x.__lt__(a)</code></p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="varname.utils.rich_exc_message">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <h3 id="varnameutilsrich_exc_message" class="mkapi-object-body function top"><code class="mkapi-object-prefix"><a href="#varname.utils">varname.utils</a>.</code><code class="mkapi-object-name">rich_exc_message</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">msg</code>, <code class="mkapi-object-signature">node</code>, <code class="mkapi-object-signature">context_lines=4</code><code class="mkapi-object-parenthesis">)</code><span class="mkapi-item-type"> &#x2192; str</span></h3>
+  </div>
+  <div class="mkapi-src-link">
+    <a class="mkapi-src-link" href="../source/varname.utils/#varname.utils.rich_exc_message" title="Source for varname.utils.rich_exc_message">&lt;/&gt;</a>
+  </div>
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Attach the source code from the node to message toget a rich message for exceptions</p>
+<p>If package 'rich' is not install or 'node.<strong>frame</strong>' doesn't exist, fall
+to plain message (with basic information), otherwise show a better message
+with full information</p>
+</div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../js/mkapi.js"></script>
+      
+    
+  </body>
+</html>
