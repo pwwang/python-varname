@@ -21,7 +21,7 @@ executing = "^2.0"
 asttokens = { version = "2.*", optional = true }
 pure_eval = { version = "0.*", optional = true }
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^8"
 pytest-cov = "^5"
 coverage = { version = "^7", extras = ["toml"] }
