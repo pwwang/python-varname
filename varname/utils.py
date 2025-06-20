@@ -10,6 +10,7 @@ Attributes:
         `inspect.getmodule(frame)`
 """
 import sys
+import dis
 import ast
 import warnings
 import inspect
@@ -17,7 +18,7 @@ from os import path
 from pathlib import Path
 from functools import lru_cache, singledispatch
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Tuple, Union, List, Mapping, Callable
+from typing import Tuple, Union, List, Mapping, Callable, Dict, TypeAlias
 
 from executing import Source
 
@@ -62,16 +63,16 @@ IgnoreElemType = Union[
 ]
 IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
 
-ArgSourceType = Union[ast.AST, str]
-ArgSourceType = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
-ArgSourceType = Union[ArgSourceType, Mapping[str, ArgSourceType]]
+ArgSourceType: TypeAlias = Union[ast.AST, str]
+ArgSourceType: TypeAlias = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
+ArgSourceType: TypeAlias = Union[ArgSourceType, Mapping[str, ArgSourceType]]
 
 if sys.version_info >= (3, 8):
     ASSIGN_TYPES = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
-    AssignType = Union[ASSIGN_TYPES]  # type: ignore
-else:  # pragma: no cover
+    AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
+else:  # pragma: no cover  # Python < 3.8
     ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
-    AssignType = Union[ASSIGN_TYPES]  # type: ignore
+    AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
 
 PY311 = sys.version_info >= (3, 11)
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
@@ -166,7 +167,7 @@ def get_node_by_frame(frame: FrameType, raise_exc: bool = True) -> ast.AST:
         raise VarnameRetrievingError(
             "Couldn't retrieve the call node. "
             "This may happen if you're using some other AST magic at the "
-            "same time, such as pytest, macropy, or birdseye."
+            "same time, such as pytest, ipython, macropy, or birdseye."
         )
 
     return None
@@ -241,6 +242,71 @@ def node_name(
         "  - ast.Starred (e.g. *x)\n"
         "  - ast.Subscript with slice of the above nodes (e.g. x[y])"
     )
+
+
+@lru_cache()
+def bytecode_nameof(code: CodeType, offset: int) -> str:
+    """Cached Bytecode version of nameof
+
+    We are trying this version only when the sourcecode is unavisible. In most
+    cases, this will happen when user is trying to run a script in REPL/
+    python shell, with `eval`, or other circumstances where the code is
+    manipulated to run but sourcecode is not available.
+    """
+    kwargs: Dict[str, bool] = (
+        {"show_caches": True} if sys.version_info[:2] >= (3, 11) else {}
+    )
+
+    instructions = list(dis.get_instructions(code, **kwargs))
+    ((current_instruction_index, current_instruction),) = (
+        (index, instruction)
+        for index, instruction in enumerate(instructions)
+        if instruction.offset == offset
+    )
+
+    while current_instruction.opname == "CACHE":  # pragma: no cover
+        current_instruction_index -= 1
+        current_instruction = instructions[current_instruction_index]
+
+    pos_only_error = VarnameRetrievingError(
+        "'nameof' can only be called with a single positional argument "
+        "when source code is not avaiable."
+    )
+    if current_instruction.opname in (  # pragma: no cover
+        "CALL_FUNCTION_EX",
+        "CALL_FUNCTION_KW",
+    ):
+        raise pos_only_error
+
+    if current_instruction.opname not in (
+        "CALL_FUNCTION",
+        "CALL_METHOD",
+        "CALL",
+        "CALL_KW",
+    ):
+        raise VarnameRetrievingError("Did you call 'nameof' in a weird way?")
+
+    current_instruction_index -= 1
+    name_instruction = instructions[current_instruction_index]
+    while name_instruction.opname in ("CACHE", "PRECALL"):  # pragma: no cover
+        current_instruction_index -= 1
+        name_instruction = instructions[current_instruction_index]
+
+    if name_instruction.opname in ("KW_NAMES", "LOAD_CONST"):  # LOAD_CONST python 3.13
+        raise pos_only_error
+
+    if not name_instruction.opname.startswith("LOAD_"):
+        raise VarnameRetrievingError("Argument must be a variable or attribute")
+
+    name = name_instruction.argrepr
+    if not name.isidentifier():
+        raise VarnameRetrievingError(
+            f"Found the variable name {name!r} which is obviously wrong. "
+            "This may happen if you're using some other AST magic at the "
+            "same time, such as pytest, ipython, macropy, or birdseye."
+        )
+
+    return name
 
 
 def attach_ignore_id_to_module(module: ModuleType) -> None:

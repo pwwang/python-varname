@@ -244,6 +244,31 @@ Special thanks to [@HanyuuLu][2] to give up the name `varname` in pypi for this 
     # foo.__varname__ == {foo.__varname__!r}
     ```
 
+### Getting variable names directly using `nameof`
+
+```python
+from varname import varname, nameof
+
+a = 1
+nameof(a) # {_expr!r}
+
+b = 2
+nameof(a, b) # {_expr!r}
+
+def func():
+    return varname() + '_suffix'
+
+f = func() # f == {f!r}
+nameof(f)  # {_expr!r}
+
+# get full names of (chained) attribute calls
+func.a = func
+nameof(func.a, vars_only=False) # {_expr!r}
+
+func.a.b = 1
+nameof(func.a.b, vars_only=False) # {_expr!r}
+```
+
 ### Detecting next immediate attribute name
 
 ```python
