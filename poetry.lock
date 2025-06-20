@@ -1006,12 +1006,12 @@ version = "4.13.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 optional = false
 python-versions = ">=3.8"
-groups = ["dev"]
-markers = "python_version < \"3.11\""
+groups = ["main", "dev"]
 files = [
     {file = "typing_extensions-4.13.2-py3-none-any.whl", hash = "sha256:a439e7c04b49fec3e5d3e2beaa21755cadbbdc391694e28ccdd36ca4a1408f8c"},
     {file = "typing_extensions-4.13.2.tar.gz", hash = "sha256:e6c81219bd689f51865d9e372991c540bda33a0379d5573cddb9a3a23f7caaef"},
 ]
+markers = {main = "python_version < \"3.10\"", dev = "python_version < \"3.11\""}
 
 [[package]]
 name = "wcwidth"
@@ -1052,4 +1052,4 @@ all = ["asttokens", "pure_eval"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.8"
-content-hash = "e867b86678316a12fda88a951557b39303bfaa9bd84518c97b28b001381612d0"
+content-hash = "e4df736ae3f2b0ef3f76c7b35d1b833c62dc8a01d9a74117f112623e32b0be97"

@@ -18,7 +18,12 @@ from os import path
 from pathlib import Path
 from functools import lru_cache, singledispatch
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Tuple, Union, List, Mapping, Callable, Dict, TypeAlias
+from typing import Tuple, Union, List, Mapping, Callable, Dict
+
+if sys.version_info < (3, 10):
+    from typing_extensions import TypeAlias  # pragma: no cover
+else:
+    from typing import TypeAlias
 
 from executing import Source
 
