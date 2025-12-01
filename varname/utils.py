@@ -274,14 +274,11 @@ def node_name(
             str(node_name(value)) for value in node.values
         )
     if isinstance(node, ast.Compare):
-        # When the node is identified by executing, len(ops) is always 1.
-        # Otherwise, the node cannot be identified.
-        assert len(node.ops) == 1
-        return (
-            f"{node_name(node.left)} "
-            f"{OP2SYMBOL[type(node.ops[0])]} "
-            f"{node_name(node.comparators[0])}"
-        )
+        parts = [str(node_name(node.left))]
+        for op, comparator in zip(node.ops, node.comparators):
+            parts.append(OP2SYMBOL[type(op)])
+            parts.append(str(node_name(comparator)))
+        return " ".join(parts)
     if isinstance(node, ast.UnaryOp):
         return f"{OP2SYMBOL[type(node.op)]}{node_name(node.operand)}"
 

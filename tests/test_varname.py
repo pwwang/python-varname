@@ -273,6 +273,8 @@ def test_subscript():
     assert c.value == "c[b < 1 and b > 0]"
     c[b < 1 or b > 0] = func()
     assert c.value == "c[b < 1 or b > 0]"
+    c[0 < b < 2] = func()
+    assert c.value == "c[0 < b < 2]"
 
 
 def test_unusual():
