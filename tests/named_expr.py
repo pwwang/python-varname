@@ -2,7 +2,9 @@
 
 from varname import varname
 
+
 def function():
     return varname()
+
 
 a = [b := function(), c := function()]

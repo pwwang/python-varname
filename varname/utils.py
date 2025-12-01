@@ -271,7 +271,7 @@ def node_name(
         )
     if isinstance(node, ast.BoolOp):
         return f" {OP2SYMBOL[type(node.op)]} ".join(
-            node_name(value) for value in node.values
+            str(node_name(value)) for value in node.values
         )
     if isinstance(node, ast.Compare):
         # When the node is identified by executing, len(ops) is always 1.
