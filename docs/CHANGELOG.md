@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.15.1
+
+- chore: bump executing to v2.2.1
+- feat: enhanced Subscript Support for Dynamic Indexing for varname (#119)
+
 ## 0.15.0
 
 - revert: bring nameof back (#117)
