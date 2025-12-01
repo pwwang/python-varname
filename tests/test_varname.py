@@ -122,12 +122,14 @@ def test_multi_vars_lhs():
     assert (a, b, x.c) == ("a", "b", "x.c")
 
     # Not all LHS are variables
+    def fn(x):
+        return 1
     y = {}
     with pytest.raises(
         ImproperUseError,
-        match=r"Node 'y\[BinOp\]' detected",
+        match=r"Node 'y\[Call\]' detected",
     ):
-        y[1 + 1] = function()
+        y[fn(a)] = function()
 
 
 def test_raise_exc():
@@ -251,6 +253,26 @@ def test_subscript():
     assert c.value == "c[:4]"
     c[:] = func()
     assert c.value == "c[:]"
+    # BinOp in subscript
+    c[b + 1] = func()
+    assert c.value == "c[b + 1]"
+    c[b is not c] = func()
+    # Compare in subscript
+    assert c.value == "c[b is not c]"
+    c[b == 1] = func()
+    assert c.value == "c[b == 1]"
+    c[b < 1] = func()
+    assert c.value == "c[b < 1]"
+    # UnaryOp in subscript
+    c[-b] = func()
+    assert c.value == "c[-b]"
+    c[~b] = func()
+    assert c.value == "c[~b]"
+    # BoolOp in subscript
+    c[b < 1 and b > 0] = func()
+    assert c.value == "c[b < 1 and b > 0]"
+    c[b < 1 or b > 0] = func()
+    assert c.value == "c[b < 1 or b > 0]"
 
 
 def test_unusual():

@@ -43,6 +43,42 @@ OP2MAGIC = {
     ast.MatMult: "__matmul__",
 }
 
+OP2SYMBOL = {
+    # BinOp
+    ast.Add: "+",
+    ast.Sub: "-",
+    ast.Mult: "*",
+    ast.Div: "/",
+    ast.FloorDiv: "//",
+    ast.Mod: "%",
+    ast.Pow: "**",
+    ast.LShift: "<<",
+    ast.RShift: ">>",
+    ast.BitOr: "|",
+    ast.BitXor: "^",
+    ast.BitAnd: "&",
+    ast.MatMult: "@",
+    # BoolOp
+    ast.And: "and",
+    ast.Or: "or",
+    # UnaryOp
+    ast.UAdd: "+",
+    ast.USub: "-",
+    ast.Invert: "~",
+    ast.Not: "not ",
+    # Compare
+    ast.Eq: "==",
+    ast.NotEq: "!=",
+    ast.Lt: "<",
+    ast.LtE: "<=",
+    ast.Gt: ">",
+    ast.GtE: ">=",
+    ast.Is: "is",
+    ast.IsNot: "is not",
+    ast.In: "in",
+    ast.NotIn: "not in",
+}
+
 CMP2MAGIC = {
     ast.Eq: "__eq__",
     ast.NotEq: "__ne__",
@@ -229,6 +265,25 @@ def node_name(
             if node.upper is not None
             else ":"
         )
+    if isinstance(node, ast.BinOp):
+        return (
+            f"{node_name(node.left)} {OP2SYMBOL[type(node.op)]} {node_name(node.right)}"
+        )
+    if isinstance(node, ast.BoolOp):
+        return f" {OP2SYMBOL[type(node.op)]} ".join(
+            node_name(value) for value in node.values
+        )
+    if isinstance(node, ast.Compare):
+        # When the node is identified by executing, len(ops) is always 1.
+        # Otherwise, the node cannot be identified.
+        assert len(node.ops) == 1
+        return (
+            f"{node_name(node.left)} "
+            f"{OP2SYMBOL[type(node.ops[0])]} "
+            f"{node_name(node.comparators[0])}"
+        )
+    if isinstance(node, ast.UnaryOp):
+        return f"{OP2SYMBOL[type(node.op)]}{node_name(node.operand)}"
 
     name = type(node).__name__
     if isinstance(node, ast.Subscript):
@@ -245,7 +300,9 @@ def node_name(
         "  - ast.List (e.g. [x, y, z])\n"
         "  - ast.Tuple (e.g. (x, y, z))\n"
         "  - ast.Starred (e.g. *x)\n"
-        "  - ast.Subscript with slice of the above nodes (e.g. x[y])"
+        "  - ast.Subscript with slice of the above nodes (e.g. x[y])\n"
+        "  - ast.Subscript with ast.BinOp/ast.BoolOp/ast.Compare/ast.UnaryOp "
+        "(e.g. x[y + 1], x[y and z])"
     )
 
 
