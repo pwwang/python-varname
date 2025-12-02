@@ -239,6 +239,8 @@ def node_name(
         return node.id
     if isinstance(node, ast.Attribute):
         return f"{node_name(node.value)}.{node.attr}"
+    if isinstance(node, ast.Index):
+        return repr(node.value.value)
     if isinstance(node, ast.Constant):
         return repr(node.value)
     if isinstance(node, (ast.List, ast.Tuple)) and not subscript_slice:
