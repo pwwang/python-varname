@@ -284,10 +284,15 @@ def node_name(
 
     name = type(node).__name__
     if isinstance(node, ast.Subscript):
+        node_slice = node.slice
+        if isinstance(node_slice, ast.Index):
+            node_slice = node.slice.value
+        elif isinstance(node_slice, ast.ExtSlice):
+            node_slice = ast.Tuple(node_slice.dims)
         try:
-            return f"{node_name(node.value)}[{node_name(node.slice, True)}]"
+            return f"{node_name(node.value)}[{node_name(node_slice, True)}]"
         except ImproperUseError:
-            name = f"{node_name(node.value)}[{type(node.slice).__name__}]"
+            name = f"{node_name(node.value)}[{type(node_slice).__name__}]"
 
     raise ImproperUseError(
         f"Node {name!r} detected, but only following nodes are supported: \n"
