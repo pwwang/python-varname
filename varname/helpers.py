@@ -11,6 +11,15 @@ from .ignore import IgnoreList
 from .core import argname, varname
 
 
+__all__ = [
+    "register",
+    "Wrapper",
+    "jsobj",
+    "debug",
+    "exec_code",
+]
+
+
 def register(
     cls_or_func: Optional[Type] = None,
     frame: int = 1,
