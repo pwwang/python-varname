@@ -2088,7 +2088,7 @@ wheels = [
 
 [[package]]
 name = "varname"
-version = "1.0.0a1"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "executing" },
