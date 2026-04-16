@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.0.0
+
+- chore: migrate poetry to uv for dep management
+- feat: drop python 3.8 support
+- fix: fix named expressions in assignment types
+- style: fix type annotations
+- chore: update `__all__` exports in `__init__.py` and `helpers.py`
+
 ## 0.15.1
 
 - chore: bump executing to v2.2.1
