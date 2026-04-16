@@ -101,8 +101,8 @@ export/
 *.queue.txt
 site/
 
-# poetry
-# poetry.lock
+# uv
+# uv.lock
 
 # backup files
 *.bak

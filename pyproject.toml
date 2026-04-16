@@ -1,35 +1,44 @@
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry]
+[project]
 name = "varname"
 version = "0.15.1"
 description = "Dark magics about variable names in python."
-authors = [ "pwwang <pwwang@pwwang.com>",]
-license = "MIT"
+authors = [
+    {name = "pwwang", email = "pwwang@pwwang.com"},
+]
+license = {text = "MIT"}
 readme = "README.md"
-homepage = "https://github.com/pwwang/python-varname"
-repository = "https://github.com/pwwang/python-varname"
+requires-python = ">=3.8"
+dependencies = [
+    "executing>=2.1",
+    "typing_extensions>=4.13; python_version < '3.10'",
+]
 
-[tool.poetry.build]
-generate-setup-file = true
+[project.optional-dependencies]
+all = ["asttokens==3.*", "pure_eval==0.*"]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-executing = "^2.1"
-asttokens = { version = "3.*", optional = true }
-pure_eval = { version = "0.*", optional = true }
-typing_extensions = { version = "^4.13", markers = "python_version < '3.10'" }
+[project.urls]
+Homepage = "https://github.com/pwwang/python-varname"
+Repository = "https://github.com/pwwang/python-varname"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8"
-pytest-cov = "^5"
-coverage = { version = "^7", extras = ["toml"] }
-ipykernel = "^6.29.5"
-
-[tool.poetry.extras]
-all = ["asttokens", "pure_eval"]
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "coverage[toml]>=7",
+    "ipykernel>=6.29.5",
+    "flake8>=5.0.4",
+    "mypy>=1.14.1",
+]
+docs = [
+    "mkapi-fix>=0.1.1",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.6",
+    "pymdown-extensions>=10.15",
+]
 
 [tool.pytest.ini_options]
 addopts = "-vv -p no:asyncio -W error::UserWarning --cov-config=.coveragerc --cov=varname --cov-report xml:.coverage.xml --cov-report term-missing"
