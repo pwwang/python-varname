@@ -108,12 +108,8 @@ ArgSourceType: TypeAlias = Union[ast.AST, str]
 ArgSourceType: TypeAlias = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
 ArgSourceType: TypeAlias = Union[ArgSourceType, Mapping[str, ArgSourceType]]
 
-if sys.version_info >= (3, 8):
-    ASSIGN_TYPES = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
-    AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
-else:  # pragma: no cover  # Python < 3.8
-    ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
-    AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
+ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
+AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
 
 PY311 = sys.version_info >= (3, 11)
 MODULE_IGNORE_ID_NAME = "__varname_ignore_id__"
