@@ -56,3 +56,6 @@ strict_optional = false
 line-length = 88
 target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
 include = '\.pyi?$'
+
+[tool.pyright]
+ignore = [ "tests/**" ]
