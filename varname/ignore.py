@@ -17,6 +17,7 @@ Any frames in `varname`, standard libraries, and frames of any expressions like
 <lambda> are ignored by default.
 
 """
+
 import sys
 import inspect
 import warnings
@@ -24,7 +25,7 @@ from os import path
 from pathlib import Path
 from fnmatch import fnmatch
 from abc import ABC, abstractmethod
-from typing import List, Union
+from typing import List, Union, Optional
 from types import FrameType, ModuleType, FunctionType
 
 from executing import Source
@@ -32,10 +33,11 @@ from executing import Source
 try:
     import sysconfig  # 3.10+
 except ImportError:  # pragma: no cover
-    from distutils import sysconfig
+    from distutils import sysconfig  # type: ignore
+
     STANDLIB_PATH = sysconfig.get_python_lib(standard_lib=True)
 else:
-    STANDLIB_PATH = sysconfig.get_path('stdlib')
+    STANDLIB_PATH = sysconfig.get_path("stdlib")
 
 from .utils import (
     IgnoreElemType,
@@ -51,6 +53,13 @@ from .utils import (
 
 class IgnoreElem(ABC):
     """An element of the ignore list"""
+
+    module: ModuleType
+    filename: str
+    dirname: str
+    func: FunctionType
+    n_decor: int
+    qualname: str
 
     def __init_subclass__(cls, attrs: List[str]) -> None:
         """Define different attributes for subclasses"""
@@ -120,9 +129,7 @@ class IgnoreFilename(IgnoreElem, attrs=["filename"]):
         frame = frameinfos[frame_no].frame
 
         # in case of symbolic links
-        return path.realpath(frame.f_code.co_filename) == path.realpath(
-            self.filename
-        )
+        return path.realpath(frame.f_code.co_filename) == path.realpath(self.filename)
 
 
 class IgnoreDirname(IgnoreElem, attrs=["dirname"]):
@@ -220,9 +227,7 @@ class IgnoreModuleQualname(IgnoreElem, attrs=["module", "qualname"]):
         if module and module != self.module:
             return False
 
-        if not module and not frame_matches_module_by_ignore_id(
-            frame, self.module
-        ):
+        if not module and not frame_matches_module_by_ignore_id(frame, self.module):
             return False
 
         source = Source.for_frame(frame)
@@ -231,7 +236,10 @@ class IgnoreModuleQualname(IgnoreElem, attrs=["module", "qualname"]):
         return fnmatch(source.code_qualname(frame.f_code), self.qualname)
 
 
-class IgnoreFilenameQualname(IgnoreElem, attrs=["filename", "qualname"]):
+class IgnoreFilenameQualname(
+    IgnoreElem,
+    attrs=["filename", "qualname"],
+):  # pragma: no cover
     """Ignore calls with given qualname in the module with the filename"""
 
     def match(self, frame_no: int, frameinfos: List[inspect.FrameInfo]) -> bool:
@@ -284,7 +292,7 @@ def create_ignore_elem(ignore_elem: IgnoreElemType) -> IgnoreElem:
 
     if isinstance(ignore_elem[0], ModuleType):
         return IgnoreModuleQualname(*ignore_elem)  # type: ignore
-    if isinstance(ignore_elem[0], (Path, str)):
+    if isinstance(ignore_elem[0], (Path, str)):  # pragma: no cover
         return IgnoreFilenameQualname(*ignore_elem)  # type: ignore
     if ignore_elem[0] is None:
         return IgnoreOnlyQualname(*ignore_elem)
@@ -298,7 +306,7 @@ class IgnoreList:
     @classmethod
     def create(
         cls,
-        ignore: IgnoreType = None,
+        ignore: Optional[IgnoreType] = None,
         ignore_lambda: bool = True,
         ignore_varname: bool = True,
     ) -> "IgnoreList":
@@ -324,9 +332,9 @@ class IgnoreList:
             IgnoreStdlib(STANDLIB_PATH)  # type: ignore
         ]  # type: List[IgnoreElem]
         if ignore_varname:
-            ignore_list.append(create_ignore_elem(sys.modules[__package__]))
+            ignore_list.append(create_ignore_elem(sys.modules[__package__ or __name__]))
         if ignore_lambda:
-            ignore_list.append(create_ignore_elem((None, "*<lambda>")))
+            ignore_list.append(create_ignore_elem((None, "*<lambda>")))  # type: ignore
         for ignore_elem in ignore:
             ignore_list.append(create_ignore_elem(ignore_elem))
 
@@ -355,19 +363,15 @@ class IgnoreList:
         for ignore_elem in self.ignore_list:
             matched = ignore_elem.match(frame_no, frameinfos)  # type: ignore
             if matched and isinstance(ignore_elem, IgnoreDecorated):
-                debug_ignore_frame(
-                    f"Ignored by {ignore_elem!r}", frameinfos[frame_no]
-                )
+                debug_ignore_frame(f"Ignored by {ignore_elem!r}", frameinfos[frame_no])
                 return ignore_elem.n_decor + 1
 
             if matched:
-                debug_ignore_frame(
-                    f"Ignored by {ignore_elem!r}", frameinfos[frame_no]
-                )
+                debug_ignore_frame(f"Ignored by {ignore_elem!r}", frameinfos[frame_no])
                 return 1
         return 0
 
-    def get_frame(self, frame_no: int) -> FrameType:
+    def get_frame(self, frame_no: int) -> Optional[FrameType]:
         """Get the right frame by the frame number
 
         Args:
@@ -397,9 +401,7 @@ class IgnoreList:
                     debug_ignore_frame("Gotcha!", frames[i])
                     return frames[i].frame
 
-                debug_ignore_frame(
-                    f"Skipping ({frame_no - 1} more to skip)", frames[i]
-                )
+                debug_ignore_frame(f"Skipping ({frame_no - 1} more to skip)", frames[i])
                 i += 1
 
         except Exception as exc:

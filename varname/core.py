@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 import re
 import warnings
-from typing import Any, List, Union, Tuple, Type, Callable, overload
+from typing import Any, List, Union, Tuple, Type, Callable, Optional, overload
 
 from executing import Source
 
@@ -27,11 +27,11 @@ from .ignore import IgnoreList, IgnoreType
 
 def varname(
     frame: int = 1,
-    ignore: IgnoreType = None,
+    ignore: IgnoreType | None = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
     strict: bool = True,
-) -> Union[str, Tuple[Union[str, Tuple], ...]]:
+) -> Optional[Union[str, Tuple[Union[str, Tuple], ...]]]:
     """Get the name of the variable(s) that assigned by function call or
     class instantiation.
 
@@ -148,10 +148,10 @@ def varname(
             )
         )
 
-    return names[0]
+    return names[0]  # type: ignore
 
 
-def will(frame: int = 1, raise_exc: bool = True) -> str:
+def will(frame: int = 1, raise_exc: bool = True) -> Optional[str]:
     """Detect the attribute name right immediately after a function call.
 
     Examples:
@@ -204,7 +204,7 @@ def will(frame: int = 1, raise_exc: bool = True) -> str:
         return None
 
     # try to get node inst.attr from inst.attr()
-    node = node.parent
+    node = node.parent  # type: ignore
 
     # see test_will_fail
     if not isinstance(node, ast.Attribute):
@@ -309,12 +309,12 @@ def nameof(
         # We don't have to check keyword arguments here, as the instruction
         # will then be CALL_FUNCTION_KW.
         if not more_vars:
-            return bytecode_nameof(frameobj.f_code, frameobj.f_lasti)
+            return bytecode_nameof(frameobj.f_code, frameobj.f_lasti)  # type: ignore
 
         # We are anyway raising exceptions, no worries about additional burden
         # of frame retrieval again
-        source = frameobj.f_code.co_filename
-        if source == "<stdin>":
+        source = frameobj.f_code.co_filename  # type: ignore
+        if source == "<stdin>":  # pragma: no cover
             raise VarnameRetrievingError(
                 "Are you trying to call nameof in REPL/python shell? "
                 "In such a case, nameof can only be called with single "
@@ -345,10 +345,10 @@ def nameof(
 def argname(
     arg: str,
     *,
-    func: Callable = None,
-    dispatch: Type = None,
+    func: Optional[Callable] = None,
+    dispatch: Optional[Type] = None,
     frame: int = 1,
-    ignore: IgnoreType = None,
+    ignore: Optional[IgnoreType] = None,
     vars_only: bool = True,
 ) -> ArgSourceType:  # pragma: no cover
     ...
@@ -360,10 +360,10 @@ def argname(
     more_arg: str,
     /,  # introduced in python 3.8
     *more_args: str,
-    func: Callable = None,
-    dispatch: Type = None,
+    func: Optional[Callable] = None,
+    dispatch: Optional[Type] = None,
     frame: int = 1,
-    ignore: IgnoreType = None,
+    ignore: Optional[IgnoreType] = None,
     vars_only: bool = True,
 ) -> Tuple[ArgSourceType, ...]:  # pragma: no cover
     ...
@@ -372,10 +372,10 @@ def argname(
 def argname(
     arg: str,
     *more_args: str,
-    func: Callable = None,
-    dispatch: Type = None,
+    func: Optional[Callable] = None,
+    dispatch: Optional[Type] = None,
     frame: int = 1,
-    ignore: IgnoreType = None,
+    ignore: Optional[IgnoreType] = None,
     vars_only: bool = True,
 ) -> Union[ArgSourceType, Tuple[ArgSourceType, ...]]:
     """Get the names/sources of arguments passed to a function.
@@ -456,10 +456,10 @@ def argname(
     func_node = reconstruct_func_node(func_node)
 
     if not func:
-        func = get_function_called_argname(func_frame, func_node)
+        func = get_function_called_argname(func_frame, func_node)  # type: ignore
 
     if dispatch:
-        func = func.dispatch(dispatch)
+        func = func.dispatch(dispatch)  # type: ignore
 
     # don't pass the target arguments so that we can cache the sources in
     # the same call. For example:
@@ -468,9 +468,9 @@ def argname(
     # >>>   b_name = argname(b)
     try:
         argument_sources = get_argument_sources(
-            Source.for_frame(func_frame),
+            Source.for_frame(func_frame),  # type: ignore
             func_node,
-            func,
+            func,  # type: ignore
             vars_only=vars_only,
         )
     except Exception as err:
@@ -483,13 +483,13 @@ def argname(
     for farg in (arg, *more_args):
 
         farg_name = farg
-        farg_subscript = None  # type: str | int
+        farg_subscript = None  # type: Optional[str]
         match = re.match(r"^([\w_]+)\[(.+)\]$", farg)
         if match:
             farg_name = match.group(1)
             farg_subscript = match.group(2)
-            if farg_subscript.isdigit():
-                farg_subscript = int(farg_subscript)
+            if farg_subscript.isdigit():  # type: ignore
+                farg_subscript = int(farg_subscript)  # type: ignore
         else:
             match = re.match(r"^\*([\w_]+)$", farg)
             if match:

@@ -4,7 +4,7 @@ from __future__ import annotations
 import inspect
 from functools import partial, wraps
 from os import PathLike
-from typing import Any, Callable, Dict, Tuple, Type, Union
+from typing import Any, Callable, Dict, Tuple, Type, Union, Optional
 
 from .utils import IgnoreType
 from .ignore import IgnoreList
@@ -12,9 +12,9 @@ from .core import argname, varname
 
 
 def register(
-    cls_or_func: type = None,
+    cls_or_func: Optional[Type] = None,
     frame: int = 1,
-    ignore: IgnoreType = None,
+    ignore: Optional[IgnoreType] = None,
     multi_vars: bool = False,
     raise_exc: bool = True,
     strict: bool = True,
@@ -130,7 +130,7 @@ class Wrapper:
         self,
         value: Any,
         frame: int = 1,
-        ignore: IgnoreType = None,
+        ignore: Optional[IgnoreType] = None,
         raise_exc: bool = True,
         strict: bool = True,
     ):
@@ -240,12 +240,12 @@ def debug(
 
 def exec_code(
     code: str,
-    globals: Dict[str, Any] = None,
-    locals: Dict[str, Any] = None,
+    globals: Optional[Dict[str, Any]] = None,
+    locals: Optional[Dict[str, Any]] = None,
     /,
-    sourcefile: PathLike | str = None,
+    sourcefile: Optional[PathLike | str] = None,
     frame: int = 1,
-    ignore: IgnoreType = None,
+    ignore: Optional[IgnoreType] = None,
     **kwargs: Any,
 ) -> None:
     """Execute code where source code is visible at runtime.
@@ -297,9 +297,9 @@ def exec_code(
         ignore_list = IgnoreList.create(ignore)
         frame_info = ignore_list.get_frame(frame)
         if globals is None:
-            globals = frame_info.f_globals
+            globals = frame_info.f_globals  # type: ignore
         if locals is None:
-            locals = frame_info.f_locals
+            locals = frame_info.f_locals  # type: ignore
 
     try:
         exec(compile(code, sourcefile, "exec"), globals, locals, **kwargs)

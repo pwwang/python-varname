@@ -9,6 +9,7 @@ Attributes:
         Espectially for modules that can't be retrieved by
         `inspect.getmodule(frame)`
 """
+
 import sys
 import dis
 import ast
@@ -18,10 +19,10 @@ from os import path
 from pathlib import Path
 from functools import lru_cache, singledispatch
 from types import ModuleType, FunctionType, CodeType, FrameType
-from typing import Tuple, Union, List, Mapping, Callable, Dict
+from typing import Tuple, Union, List, Mapping, Callable, Dict, Optional
 
-if sys.version_info < (3, 10):
-    from typing_extensions import TypeAlias  # pragma: no cover
+if sys.version_info < (3, 10):  # pragma: no cover
+    from typing_extensions import TypeAlias
 else:
     from typing import TypeAlias
 
@@ -104,9 +105,15 @@ IgnoreElemType = Union[
 ]
 IgnoreType = Union[IgnoreElemType, List[IgnoreElemType]]
 
-ArgSourceType: TypeAlias = Union[ast.AST, str]
-ArgSourceType: TypeAlias = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
-ArgSourceType: TypeAlias = Union[ArgSourceType, Mapping[str, ArgSourceType]]
+ArgSourceType: TypeAlias = Union[ast.AST, str]  # type: ignore
+ArgSourceType: TypeAlias = Union[  # type: ignore
+    ArgSourceType,
+    Tuple[ArgSourceType, ...],
+]
+ArgSourceType: TypeAlias = Union[  # type: ignore
+    ArgSourceType,
+    Mapping[str, ArgSourceType],
+]
 
 ASSIGN_TYPES = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
 AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
@@ -167,10 +174,10 @@ def cached_getmodule(codeobj: CodeType):
 
 def get_node(
     frame: int,
-    ignore: IgnoreType = None,
+    ignore: Optional[IgnoreType] = None,
     raise_exc: bool = True,
     ignore_lambda: bool = True,
-) -> ast.AST:
+) -> Optional[ast.AST]:
     """Try to get node from the executing object.
 
     This can fail when a frame is failed to retrieve.
@@ -181,23 +188,26 @@ def get_node(
     """
     from .ignore import IgnoreList
 
-    ignore = IgnoreList.create(ignore, ignore_lambda=ignore_lambda)
+    ignore = IgnoreList.create(ignore, ignore_lambda=ignore_lambda)  # type: ignore
     try:
-        frameobj = ignore.get_frame(frame)
+        frameobj = ignore.get_frame(frame)  # type: ignore
     except VarnameRetrievingError:
         return None
 
     return get_node_by_frame(frameobj, raise_exc)
 
 
-def get_node_by_frame(frame: FrameType, raise_exc: bool = True) -> ast.AST:
+def get_node_by_frame(
+    frame: Optional[FrameType],
+    raise_exc: bool = True,
+) -> Optional[ast.AST]:
     """Get the node by frame, raise errors if possible"""
-    exect = Source.executing(frame)
+    exect = Source.executing(frame)  # type: ignore
 
     if exect.node:
         # attach the frame for better exception message
         # (ie. where ImproperUseError happens)
-        exect.node.__frame__ = frame
+        exect.node.__frame__ = frame  # type: ignore
         return exect.node
 
     if exect.source.text and exect.source.tree and raise_exc:  # pragma: no cover
@@ -213,7 +223,7 @@ def get_node_by_frame(frame: FrameType, raise_exc: bool = True) -> ast.AST:
 def lookfor_parent_assign(node: ast.AST, strict: bool = True) -> AssignType:
     """Look for an ast.Assign node in the parents"""
     while hasattr(node, "parent"):
-        node = node.parent
+        node = node.parent  # type: ignore
 
         if isinstance(node, ASSIGN_TYPES):
             return node
@@ -253,13 +263,15 @@ def node_name(
             if node.lower is not None
             and node.upper is not None
             and node.step is not None
-            else f"{node_name(node.lower)}:{node_name(node.upper)}"
-            if node.lower is not None and node.upper is not None
-            else f"{node_name(node.lower)}:"
-            if node.lower is not None
-            else f":{node_name(node.upper)}"
-            if node.upper is not None
-            else ":"
+            else (
+                f"{node_name(node.lower)}:{node_name(node.upper)}"
+                if node.lower is not None and node.upper is not None
+                else (
+                    f"{node_name(node.lower)}:"
+                    if node.lower is not None
+                    else f":{node_name(node.upper)}" if node.upper is not None else ":"
+                )
+            )
         )
     if isinstance(node, ast.BinOp):
         return (
@@ -385,9 +397,7 @@ def attach_ignore_id_to_module(module: ModuleType) -> None:
     setattr(module, MODULE_IGNORE_ID_NAME, f"<varname-ignore-{id(module)})")
 
 
-def frame_matches_module_by_ignore_id(
-    frame: FrameType, module: ModuleType
-) -> bool:
+def frame_matches_module_by_ignore_id(frame: FrameType, module: ModuleType) -> bool:
     """Check if the frame is from the module by ignore id"""
     ignore_id_attached = getattr(module, MODULE_IGNORE_ID_NAME, object())
     ignore_id_from_frame = frame.f_globals.get(MODULE_IGNORE_ID_NAME, object())
@@ -395,9 +405,7 @@ def frame_matches_module_by_ignore_id(
 
 
 @lru_cache()
-def check_qualname_by_source(
-    source: Source, modname: str, qualname: str
-) -> None:
+def check_qualname_by_source(source: Source, modname: str, qualname: str) -> None:
     """Check if a qualname in module is unique"""
     if not source.tree:
         # no way to check it, skip
@@ -405,12 +413,11 @@ def check_qualname_by_source(
     nobj = list(source._qualnames.values()).count(qualname)
     if nobj > 1:
         raise QualnameNonUniqueError(
-            f"Qualname {qualname!r} in "
-            f"{modname!r} refers to multiple objects."
+            f"Qualname {qualname!r} in " f"{modname!r} refers to multiple objects."
         )
 
 
-def debug_ignore_frame(msg: str, frameinfo: inspect.FrameInfo = None) -> None:
+def debug_ignore_frame(msg: str, frameinfo: Optional[inspect.FrameInfo] = None) -> None:
     """Print the debug message for a given frame info object
 
     Args:
@@ -459,9 +466,7 @@ def argnode_source(
         return (
             node.id
             if isinstance(node, ast.Name)
-            else node.attr
-            if isinstance(node, ast.Attribute)
-            else node
+            else node.attr if isinstance(node, ast.Attribute) else node
         )
 
     # requires asttokens
@@ -488,9 +493,7 @@ def get_argument_sources(
     signature = inspect.signature(func, follow_wrapped=False)
     # func(y, x, c=z)
     # ['y', 'x'], {'c': 'z'}
-    arg_sources = [
-        argnode_source(source, argnode, vars_only) for argnode in node.args
-    ]
+    arg_sources = [argnode_source(source, argnode, vars_only) for argnode in node.args]
     kwarg_sources = {
         argnode.arg: argnode_source(source, argnode.value, vars_only)
         for argnode in node.keywords
@@ -512,9 +515,7 @@ def get_function_called_argname(frame: FrameType, node: ast.Call) -> Callable:
     """Get the function who called argname"""
     # variable
     if isinstance(node.func, ast.Name):
-        func = frame.f_locals.get(
-            node.func.id, frame.f_globals.get(node.func.id)
-        )
+        func = frame.f_locals.get(node.func.id, frame.f_globals.get(node.func.id))
         if func is None:  # pragma: no cover
             # not sure how it would happen but in case
             raise VarnameRetrievingError(
@@ -534,8 +535,7 @@ def get_function_called_argname(frame: FrameType, node: ast.Call) -> Callable:
             return evaluator[node.func]
         except CannotEval:
             pure_eval_fail_msg = (
-                f"Cannot evaluate node {ast.dump(node.func)} "
-                "using 'pure_eval'."
+                f"Cannot evaluate node {ast.dump(node.func)} " "using 'pure_eval'."
             )
 
     # try eval
@@ -583,9 +583,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
         "col_offset": node.col_offset,
     }
     keynode = (
-        node.slice
-        if isinstance(node, ast.Subscript)
-        else ast.Constant(value=node.attr)
+        node.slice if isinstance(node, ast.Subscript) else ast.Constant(value=node.attr)
     )
 
     # x[1], x.a
@@ -606,7 +604,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
                 keywords=[],
             )
         else:  # pragma: no cover
-            return ast.Call(  # type: ignore
+            return ast.Call(
                 func=ast.Attribute(
                     value=node.value,
                     attr=(
@@ -619,8 +617,8 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
                 ),
                 args=[keynode],
                 keywords=[],
-                starargs=None,
-                kwargs=None,
+                starargs=None,  # type: ignore
+                kwargs=None,  # type: ignore
             )
 
     # x[a] = b, x.a = b
@@ -631,8 +629,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
     ):
         raise ImproperUseError(
             rich_exc_message(
-                "Expect `x[a] = b` or `x.a = b` directly, got "
-                f"{ast.dump(node)}.",
+                "Expect `x[a] = b` or `x.a = b` directly, got " f"{ast.dump(node)}.",
                 node,
             )
         )
@@ -642,9 +639,7 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
             func=ast.Attribute(
                 value=node.value,
                 attr=(
-                    "__setitem__"
-                    if isinstance(node, ast.Subscript)
-                    else "__setattr__"
+                    "__setitem__" if isinstance(node, ast.Subscript) else "__setattr__"
                 ),
                 ctx=ast.Load(),
                 **nodemeta,
@@ -657,17 +652,15 @@ def _(node: Union[ast.Attribute, ast.Subscript]) -> ast.Call:
             func=ast.Attribute(
                 value=node.value,
                 attr=(
-                    "__setitem__"
-                    if isinstance(node, ast.Subscript)
-                    else "__setattr__"
+                    "__setitem__" if isinstance(node, ast.Subscript) else "__setattr__"
                 ),
                 ctx=ast.Load(),
                 **nodemeta,
             ),
             args=[keynode, node.parent.value],  # type: ignore
             keywords=[],
-            starargs=None,
-            kwargs=None,
+            starargs=None,  # type: ignore
+            kwargs=None,  # type: ignore
         )
 
 
@@ -703,8 +696,8 @@ def _(node: ast.Compare) -> ast.Call:
             ),
             args=[node.comparators[0]],
             keywords=[],
-            starargs=None,
-            kwargs=None,
+            starargs=None,  # type: ignore
+            kwargs=None,  # type: ignore
         )
 
 
@@ -737,8 +730,8 @@ def _(node: ast.BinOp) -> ast.Call:
             ),
             args=[node.right],
             keywords=[],
-            starargs=None,
-            kwargs=None,
+            starargs=None,  # type: ignore
+            kwargs=None,  # type: ignore
         )
 
 
@@ -750,9 +743,9 @@ def rich_exc_message(msg: str, node: ast.AST, context_lines: int = 4) -> str:
     to plain message (with basic information), otherwise show a better message
     with full information
     """
-    frame = node.__frame__  # type: FrameType
-    lineno = node.lineno - 1  # type: int
-    col_offset = node.col_offset  # type: int
+    frame = node.__frame__  # type: FrameType  # type: ignore
+    lineno = node.lineno - 1  # type: int  # type: ignore
+    col_offset = node.col_offset  # type: int  # type: ignore
     filename = frame.f_code.co_filename  # type: str
     try:
         lines, startlineno = inspect.getsourcelines(frame)
