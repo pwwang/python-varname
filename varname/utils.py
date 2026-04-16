@@ -108,7 +108,7 @@ ArgSourceType: TypeAlias = Union[ast.AST, str]
 ArgSourceType: TypeAlias = Union[ArgSourceType, Tuple[ArgSourceType, ...]]
 ArgSourceType: TypeAlias = Union[ArgSourceType, Mapping[str, ArgSourceType]]
 
-ASSIGN_TYPES = (ast.Assign, ast.AnnAssign)
+ASSIGN_TYPES = (ast.Assign, ast.AnnAssign, ast.NamedExpr)
 AssignType: TypeAlias = Union[ASSIGN_TYPES]  # type: ignore
 
 PY311 = sys.version_info >= (3, 11)
